@@ -1,0 +1,17 @@
+.nav-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: -.5rem;
+  margin-left: .75rem;
+}
+
+@media (max-width: 800px) {
+  .nav-buttons {
+    margin-right: -.3rem;
+  }
+}
+
+.nav-buttons svg {
+  vertical-align: -.16em;
+}

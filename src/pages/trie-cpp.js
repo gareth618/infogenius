@@ -2,9 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 import { Layout } from '@components/layout';
-import { Article, Pagination } from '@components/articles';
+import { Article } from '@components/articles';
 
-function HomePage() {
+function TrieArticle() {
   const articleMetadata = {
     title: 'Trie în C++. Problema Xor Max de pe InfoArena',
     slug: '/trie-cpp',
@@ -42,22 +42,19 @@ function HomePage() {
   return (
     <>
       <Helmet htmlAttributes={{ lang: 'ro-RO' }}>
-        <title>InfoGenius – Blog despre informatică și programare</title>
+        <title>{articleMetadata.title} – InfoGenius</title>
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="description" content="InfoGenius este un blog despre informatică și programare, unde prezentăm algoritmi celebri, rezolvăm probleme de olimpiadă și scriem tutoriale despre limbajul C++." />
-        <meta name="keywords" content="informatică, programare, algoritmică, olimpiadă, c++" />
-        <meta name="author" content="Iulian Oleniuc" />
+        <meta name="description" content={articleMetadata.excerpt} />
+        <meta name="keywords" content={articleMetadata.keywords.join(', ')} />
+        <meta name="author" content={articleMetadata.author} />
       </Helmet>
       <Layout displaySidebar={true}>
-        <Article metadata={articleMetadata} display="preview" />
-        <Article metadata={articleMetadata} display="preview" />
-        <Article metadata={articleMetadata} display="preview" />
-        <Pagination older={true} newer={true} />
+        <Article metadata={articleMetadata} display="full" />
       </Layout>
     </>
   );
 }
 
-export default HomePage;
+export default TrieArticle;

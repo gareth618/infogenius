@@ -1,0 +1,45 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.pagination a {
+  display: block;
+  padding: .5rem 1rem;
+  background: royalblue;
+  border-radius: .5rem;
+  color: white;
+}
+
+.pagination a:hover {
+  background: cornflowerblue;
+}
+
+.pagination svg {
+  vertical-align: -.2em;
+  margin: 0 .3em;
+}
+
+.pagination .older svg {
+  margin-left: 0;
+}
+
+.pagination .newer svg {
+  margin-right: 0;
+}
+
+@media (min-width: 401px) {
+  .small {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .large {
+    display: none;
+  }
+  .pagination div {
+    width: 47.5%;
+  }
+}

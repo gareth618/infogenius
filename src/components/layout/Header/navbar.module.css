@@ -1,0 +1,48 @@
+.logo-container {
+  height: 100%;
+  max-height: 40px;
+}
+
+.logo-container img {
+  height: 100%;
+}
+
+.logo-container span {
+  margin-left: .3rem;
+  color: white;
+  font-size: 0;
+  font-weight: bold;
+  transition: font-size .3s;
+  cursor: default;
+}
+
+.logo-container:hover span {
+  font-size: inherit;
+}
+
+.nav-container {
+  width: fit-content;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  height: 30px;
+  transition: 1s;
+  transition-property: height, opacity, visibility;
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    width: calc(90vw - 200px);
+    justify-content: flex-end;
+  }
+}
+
+.navbar.searching {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}

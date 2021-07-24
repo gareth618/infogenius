@@ -1,0 +1,22 @@
+.themes-btn {
+  display: block;
+  height: 2.2rem;
+  margin: 0 .5rem;
+  font-size: 22px;
+}
+
+@media (min-width: 801px) {
+  .themes-btn {
+    position: fixed;
+    right: 0;
+    bottom: 10px;
+
+    width: 4%;
+    height: 40px;
+    margin: 0;
+
+    border: none;
+    border-radius: .5rem 0 0 .5rem;
+    background: #222;
+  }
+}

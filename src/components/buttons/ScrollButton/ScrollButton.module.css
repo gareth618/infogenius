@@ -1,0 +1,21 @@
+.scroll-btn {
+  position: fixed;
+  bottom: 70px;
+  transition: right .3s;
+  
+  display: block;
+  margin: 0;
+  width: 4%;
+  height: 40px;
+
+  font-size: 22px;
+  border: none;
+  border-radius: .5rem 0 0 .5rem;
+  background: #222;
+}
+
+@media (max-width: 800px) {
+  .scroll-btn {
+    display: none;
+  }
+}

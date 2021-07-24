@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+  outline: none;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Quicksand', sans-serif;
+  line-height: 1.618;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+input {
+  font-family: 'Quicksand', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(at top left, cornflowerblue 0%, royalblue 100%) no-repeat center center fixed;
+}

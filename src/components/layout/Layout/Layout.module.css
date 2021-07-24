@@ -1,0 +1,61 @@
+.page-container {
+  --background: white;
+  --sidebar: moccasin;
+  --title: #282828;
+  --text: #383838;
+  --link: dodgerblue;
+
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 80px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, .3);
+  background: var(--background);
+}
+
+@media (max-width: 800px) {
+  .page-container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1350px) {
+  .page-container {
+    width: 1200px;
+  }
+}
+
+.main-area {
+  display: flex;
+}
+
+.content {
+  margin: 5%;
+  width: calc(85% - 200px);
+}
+
+@media (max-width: 1000px) {
+  .content {
+    width: 100%;
+  }
+}
+
+.no-sidebar .content {
+  width: 100%;
+}
+
+.sidebar {
+  margin: 5% 5% 5% 0;
+  width: 200px;
+  border-radius: .5rem;
+  background: var(--sidebar);
+}
+
+@media (max-width: 1000px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+.no-sidebar .sidebar {
+  display: none;
+}
