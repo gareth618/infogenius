@@ -7,5 +7,5 @@ export {
   ScrollButton,
   ThemesButton,
   SearchButton,
-  BurgerButton,
+  BurgerButton
 };
