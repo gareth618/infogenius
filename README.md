@@ -7,5 +7,5 @@
 </p>
 
 <p align="center">
-  <a href="https://infogenius.ro"? is the #1 competitive programming blog in Romania.
+  <a href="https://infogenius.ro">InfoGenius</a> is the #1 competitive programming blog in Romania.
 </p>
