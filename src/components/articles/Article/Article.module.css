@@ -1,12 +1,23 @@
-.article {
-  margin-bottom: max(6%, 1.5rem);
-}
-
-.article img {
+.preview img {
   display: block;
   max-width: 100%;
-  margin: 0 0 1rem 0;
+  margin: 0;
   border-radius: .5rem;
+}
+
+.article {
+  margin-bottom: 2rem;
+}
+
+.article p {
+  font-family: 'Merriweather', serif;
+  color: var(--text);
+}
+
+@media (min-width: 801px) {
+  .article p {
+    text-align: justify;
+  }
 }
 
 .title {
@@ -29,15 +40,9 @@ a:hover .title {
   color: var(--link);
 }
 
-.content p {
-  font-family: 'Merriweather', serif;
-  color: var(--text);
-}
-
-@media (min-width: 801px) {
-  .content p {
-    text-align: justify;
-  }
+.content {
+  margin-top: 2rem;
+  margin-bottom: -2rem;
 }
 
 .content h2 {

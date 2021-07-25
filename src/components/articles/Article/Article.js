@@ -31,29 +31,39 @@ function Article({ metadata, display }) {
     </React.Fragment>
   );
 
-  const thumbnailAndTitle =
-    <>
-      <GatsbyImage image={thumbnail} alt={metadata.title} />
-      <h1 className={styles.title}>{metadata.title}</h1>
-    </>;
-
-  return (
-    <article className={styles.article}>
-      {display === 'preview'
-        ? <Link to={metadata.slug}>{thumbnailAndTitle}</Link>
-        : thumbnailAndTitle}
-      <div className={styles.metadata}>
-        de {metadata.author} | {metadata.date} | {categories}
-      </div>
-      {display === 'preview'
-        ? <div className={styles.content}><p>{metadata.excerpt}</p></div>
-        : <div
-            className={styles.content}
-            style={{ marginTop: '2rem', marginBottom: 'min(-6%, -1.5rem)' }}
-            dangerouslySetInnerHTML={{ __html: metadata.content }}
-          />}
-    </article>
-  );
+  if (display === 'preview') {
+    return (
+      <article className={styles.article}>
+        <div className={styles.preview}>
+          <Link to={metadata.slug}>
+            <GatsbyImage image={thumbnail} alt={metadata.title} />
+            <h1 className={styles.title}>{metadata.title}</h1>
+          </Link>
+          <div className={styles.metadata}>
+            de {metadata.author} | {metadata.date} | {categories}
+          </div>
+          <p>{metadata.excerpt}</p>
+        </div>
+      </article>
+    );
+  }
+  if (display === 'full') {
+    return (
+      <article className={styles.article}>
+        <div className={styles.preview}>
+          <GatsbyImage image={thumbnail} alt={metadata.title} />
+          <h1 className={styles.title}>{metadata.title}</h1>
+          <div className={styles.metadata}>
+            de {metadata.author} | {metadata.date} | {categories}
+          </div>
+        </div>
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: metadata.content }}
+        />
+      </article>
+    );
+  }
 }
 
 export default Article;
