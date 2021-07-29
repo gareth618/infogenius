@@ -15,7 +15,8 @@
 ## TODO
 
 - [x] add pages
-- [ ] add `robots.txt`
+- [x] add `robots.txt`
+- [x] add sitemap
 - [ ] add ESM
 - [ ] refactoring
 - [ ] add pagination

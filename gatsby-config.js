@@ -3,7 +3,7 @@ module.exports = {
     title: 'InfoGenius',
     motto: 'Blog despre informatică și programare',
     author: 'Iulian Oleniuc',
-    url: 'https://infogenius.ro/',
+    siteUrl: 'https://infogenius.ro/',
     description: 'InfoGenius este un blog despre informatică și programare, unde prezentăm algoritmi celebri, rezolvăm probleme de olimpiadă și scriem tutoriale despre limbajul C++.',
     keywords: ['informatică', 'programare', 'algoritmică', 'olimpiadă', 'c++'],
     categories: [
@@ -59,7 +59,41 @@ module.exports = {
         path: 'content'
       },
     },
-    'gatsby-plugin-sitemap',
+    {
+      resolve: 'gatsby-plugin-robots-txt',
+      options: {
+        host: 'https://infogenius.ro',
+        sitemap: 'https://infogenius.ro/sitemap.xml',
+        policy: [
+          {
+            userAgent: '*',
+            disallow: [
+              '/termeni-conditii/',
+              '/politica-cookies/',
+              '/contact/',
+              '/despre/',
+              '/category/',
+              '/tag/',
+              '/page/'
+            ]
+          }
+        ]
+      }
+    },
+    {
+      resolve: 'gatsby-plugin-sitemap',
+      options: {
+        excludes: [
+          '/termeni-conditii/',
+          '/politica-cookies/',
+          '/contact/',
+          '/despre/',
+          '/category/*',
+          '/tag/*',
+          '/page/*'
+        ]
+      }
+    },
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-image',
     'gatsby-plugin-sharp',
