@@ -12,16 +12,11 @@
   Demo of the new version available <a href="https://nervous-kalam-d2cf8e.netlify.app/">here</a>.
 </p>
 
-- Article.js
-  - thumbnail
-  - title
-  - author, date, categs
-  - excerpt / content
+## TODO
 
-- index.js (query all articles)
-  - Article
-  - excerpt
-
-- article.js (query article id)
-  - Article
-  - content
+- [x] add pages
+- [ ] add pagination
+- [ ] add `robots.txt`
+- [ ] add ESM
+- [ ] add donations
+- [ ] add some Explicit parsing (headers, paragraphs, math, media)

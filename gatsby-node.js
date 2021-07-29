@@ -20,11 +20,16 @@ exports.createSchemaCustomization = ({ actions }) => {
       excerpt: String!
       content: String!
     }
+    type ExplicitPage implements Node {
+      slug: String!
+      title: String!
+      content: String!
+    }
   `);
 };
 
 exports.onCreateNode = async ({ node, actions, loadNodeContent, createNodeId, createContentDigest }) => {
-  if (/articles\/.+\/index.exp/.test(node.relativePath)) {
+  if (/articles\/.+\/index\.exp/.test(node.relativePath)) {
     const text = await loadNodeContent(node);
     const info = getArticleInfo(text);
     const slug = node.relativePath.slice('articles/'.length, -'/index.exp'.length);
@@ -36,13 +41,30 @@ exports.onCreateNode = async ({ node, actions, loadNodeContent, createNodeId, cr
       internal: {
         type: 'ExplicitArticle',
         contentDigest: createContentDigest(text)
-      },
+      }
+    });
+  }
+  else if (/pages\/.+\/index\.exp/.test(node.relativePath)) {
+    const text = await loadNodeContent(node);
+    const slug = node.relativePath.slice('pages/'.length, -'/index.exp'.length);
+    const title = text.slice('NAME: '.length, text.indexOf('\n'));
+    const content = text.slice(text.indexOf('\n') + 2);
+
+    actions.createNode({
+      slug,
+      title,
+      content,
+      id: createNodeId(text),
+      internal: {
+        type: 'ExplicitPage',
+        contentDigest: createContentDigest(text)
+      }
     });
   }
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-  const result = await graphql(`
+  const articlesResult = await graphql(`
     query GetArticleSlugs {
       allExplicitArticle(sort: {fields: date, order: DESC}) {
         edges {
@@ -53,7 +75,7 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `);
-  const articleSlugs = result.data.allExplicitArticle.edges.map(edge => edge.node.slug);
+  const articleSlugs = articlesResult.data.allExplicitArticle.edges.map(edge => edge.node.slug);
 
   articleSlugs.forEach(slug => {
     actions.createPage({
@@ -144,6 +166,29 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     });
   }
+
+  const pagesResult = await graphql(`
+    query GetPageSlugs {
+      allExplicitPage {
+        edges {
+          node {
+            slug
+          }
+        }
+      }
+    }  
+  `);
+  const pageSlugs = pagesResult.data.allExplicitPage.edges.map(edge => edge.node.slug);
+
+  pageSlugs.forEach(slug => {
+    actions.createPage({
+      path: `/${slug}/`,
+      component: path.resolve('./src/templates/PagePage.js'),
+      context: {
+        slug
+      }
+    });
+  });
 };
 
 function slugify(str) {
