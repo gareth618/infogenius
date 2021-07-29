@@ -41,7 +41,7 @@ function Footer() {
 
   const pagesList = pages.map(page =>
     <li key={uuidv4()}>
-      <Link to={page.slug}>
+      <Link to={`/${page.slug}/`}>
         {page.name}
       </Link>
     </li>

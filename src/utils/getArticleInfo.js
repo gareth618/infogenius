@@ -30,4 +30,4 @@ function getArticleInfo(str) {
   };
 }
 
-module.exports.getArticleInfo = getArticleInfo;
+export default getArticleInfo;

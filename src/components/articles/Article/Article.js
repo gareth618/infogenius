@@ -46,7 +46,7 @@ function Article({ info, images, displayFull }) {
     return (
       <article className={styles.article}>
         <div className={styles.preview}>
-          <Link to={info.slug}>
+          <Link to={`/${info.slug}/`}>
             <GatsbyImage image={thumbnail} alt={info.title} />
             <h1 className={styles.title}>{info.title}</h1>
           </Link>
