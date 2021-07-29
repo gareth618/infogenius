@@ -15,8 +15,10 @@
 ## TODO
 
 - [x] add pages
-- [ ] add pagination
 - [ ] add `robots.txt`
 - [ ] add ESM
+- [ ] refactoring
+- [ ] add pagination
 - [ ] add donations
+- [ ] add tags
 - [ ] add some Explicit parsing (headers, paragraphs, math, media)

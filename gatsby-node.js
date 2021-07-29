@@ -143,6 +143,7 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve('./src/templates/ArticleList.js'),
       context: {
         homePage: false,
+        title: category,
         articlePreviews: categoryMap[category]
       }
     });
@@ -151,9 +152,9 @@ exports.createPages = async ({ graphql, actions }) => {
   const tagMap = { };
   for (article of articlePreviews) {
     for (tag of article.info.tags) {
-      if (tagMap[category] == null)
-        tagMap[category] = [];
-      tagMap[category].push(article);
+      if (tagMap[tag] == null)
+        tagMap[tag] = [];
+      tagMap[tag].push(article);
     }
   }
   for (tag in tagMap) {
@@ -162,6 +163,7 @@ exports.createPages = async ({ graphql, actions }) => {
       component: path.resolve('./src/templates/ArticleList.js'),
       context: {
         homePage: false,
+        title: tag,
         articlePreviews: tagMap[tag]
       }
     });
