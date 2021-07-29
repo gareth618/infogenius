@@ -9,11 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faFacebook, faYoutube, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 function Footer() {
-  const query = useStaticQuery(
+  const data = useStaticQuery(
     graphql`
-      query {
+      query FooterQuery {
         site {
           siteMetadata {
+            title
             pages {
               name
               slug
@@ -30,12 +31,12 @@ function Footer() {
     `
   ).site.siteMetadata;
 
-  const pages = query.pages;
+  const pages = data.pages;
   const icons = [
-    { img: faFacebook, color: 'dodgerblue', alt: 'FaceBook', url: query.social.facebook },
-    { img: faTwitter, color: 'deepskyblue', alt: 'Twitter', url: query.social.twitter },
-    { img: faGithub, color: 'darkviolet', alt: 'GitHub', url: query.social.github },
-    { img: faYoutube, color: 'red', alt: 'YouTube', url: query.social.youtube }
+    { img: faFacebook, color: 'dodgerblue', alt: 'FaceBook', url: data.social.facebook },
+    { img: faTwitter, color: 'deepskyblue', alt: 'Twitter', url: data.social.twitter },
+    { img: faGithub, color: 'darkviolet', alt: 'GitHub', url: data.social.github },
+    { img: faYoutube, color: 'red', alt: 'YouTube', url: data.social.youtube }
   ];
 
   const pagesList = pages.map(page =>
@@ -64,7 +65,7 @@ function Footer() {
 
       <div className={styles.footerInfo}>
         <div className={styles.copyright}>
-          © 2017-{new Date().getFullYear()} <Link to="/">InfoGenius.ro</Link>
+          © 2017-{new Date().getFullYear()} <Link to="/">{data.title}.ro</Link>
         </div>
         <ul className={styles.social}>
           {iconsList}

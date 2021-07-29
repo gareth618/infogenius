@@ -10,23 +10,25 @@ function Pagination({ older, newer }) {
     return <div style={{ marginTop: 'min(-6%, -1.5rem)' }} />;
   }
 
-  const olderLink =
+  const olderLink = (
     <div className={styles.older} style={{ visibility: older ? 'visible' : 'hidden' }}>
       <Link to="/page/3">
         <FontAwesomeIcon icon={faAngleDoubleLeft} />
         <span className={styles.small}>Older</span>
         <span className={styles.large}>Articole mai vechi</span>
       </Link>
-    </div>;
+    </div>
+  );
 
-  const newerLink =
+  const newerLink = (
     <div className={styles.newer} style={{ visibility: newer ? 'visible' : 'hidden' }}>
       <Link to="/page/1">
         <span className={styles.small}>Newer</span>
         <span className={styles.large}>Articole mai noi</span>
         <FontAwesomeIcon icon={faAngleDoubleRight} />
       </Link>
-    </div>;
+    </div>
+  );
 
   return (
     <div className={styles.pagination}>

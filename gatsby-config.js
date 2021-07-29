@@ -1,25 +1,29 @@
 module.exports = {
   siteMetadata: {
     title: 'InfoGenius',
-    siteUrl: 'https://infogenius.ro',
+    motto: 'Blog despre informatică și programare',
+    author: 'Iulian Oleniuc',
+    url: 'https://infogenius.ro/',
+    description: 'InfoGenius este un blog despre informatică și programare, unde prezentăm algoritmi celebri, rezolvăm probleme de olimpiadă și scriem tutoriale despre limbajul C++.',
+    keywords: ['informatică', 'programare', 'algoritmică', 'olimpiadă', 'c++'],
     categories: [
-      { name: 'Algoritmică și structuri de date', shortName: 'Algoritmică', slug: '/algoritmica-structuri-de-date' },
-      { name: 'Probleme de olimpiadă', shortName: 'Olimpiadă', slug: '/probleme-olimpiada' },
-      { name: 'Limbajul C++', shortName: 'C++', slug: '/limbajul-cpp' },
-      { name: 'Admitere Iași', shortName: 'Admitere', slug: '/admitere-iasi' },
-      { name: 'Diverse', shortName: 'Diverse', slug: '/diverse' }
+      { name: 'Algoritmică și structuri de date', shortName: 'Algoritmică' },
+      { name: 'Probleme de olimpiadă', shortName: 'Olimpiadă' },
+      { name: 'Limbajul C++', shortName: 'C++' },
+      { name: 'Admitere Iași', shortName: 'Admitere' },
+      { name: 'Diverse', shortName: 'Diverse' }
     ],
     pages: [
-      { name: 'Termeni și condiții', slug: '/termeni-conditii' },
-      { name: 'Politica cookies', slug: '/politica-cookies' },
-      { name: 'Contact', slug: '/contact' },
-      { name: 'Despre', slug: '/despre' }
+      { name: 'Termeni și condiții', slug: '/termeni-conditii/' },
+      { name: 'Politica cookies', slug: '/politica-cookies/' },
+      { name: 'Contact', slug: '/contact/' },
+      { name: 'Despre', slug: '/despre/' }
     ],
     social: {
       facebook: 'https://www.facebook.com/infogenius.ro/',
       twitter: 'https://twitter.com/Gareth618',
       github: 'https://github.com/Gareth618/',
-      youtube: 'https://www.youtube.com/channel/UCdJ5X4TcLzU99dxNOB9n4yQ'
+      youtube: 'https://www.youtube.com/channel/UCdJ5X4TcLzU99dxNOB9n4yQ/'
     }
   },
   plugins: [
@@ -30,14 +34,15 @@ module.exports = {
         alias: {
           '@assets': 'src/assets',
           '@components': 'src/components',
-          '@styles': 'src/styles'
+          '@styles': 'src/styles',
+          '@utils': 'src/utils'
         }
       }
     },
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
-        icon: 'src/assets/brand/favicon.svg'
+        icon: 'src/assets/favicon.svg'
       }
     },
     {
@@ -46,15 +51,13 @@ module.exports = {
         name: 'pages',
         path: 'src/pages'
       },
-      __key: 'pages'
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        name: 'images',
-        path: 'src/assets/images'
+        name: 'content',
+        path: 'content'
       },
-      __key: 'images'
     },
     'gatsby-plugin-sitemap',
     'gatsby-plugin-react-helmet',

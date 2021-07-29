@@ -1,66 +1,60 @@
 import React from 'react';
+import { Link } from 'gatsby';
 import uuidv4 from 'uuid';
 
-import { graphql, useStaticQuery, Link } from 'gatsby';
+import slugify from '@utils/slugify';
+import renderExplicit from '@utils/renderExplicit';
+
 import { GatsbyImage } from 'gatsby-plugin-image';
 import * as styles from './Article.module.css';
 
-function Article({ metadata, display }) {
-  const thumbnail = useStaticQuery(
-    graphql`
-      query {
-        file(relativePath: {eq: "trie.png"}) {
-          childImageSharp {
-            gatsbyImageData(
-              layout: FULL_WIDTH
-              placeholder: NONE
-              formats: WEBP
-            )
-          }
-        }
-      }
-    `
-  ).file.childImageSharp.gatsbyImageData;
+function Article({ info, images, displayFull }) {
+  const infoDate = new Date(info.date);
+  const dateDD = infoDate.getDate().toString().padStart(2, '0');
+  const dateMM = (infoDate.getMonth() + 1).toString().padStart(2, '0');
+  const dateYY = infoDate.getFullYear();
+  const date = `${dateDD}/${dateMM}/${dateYY}`;
 
-  const categories = metadata.categories.map((categ, index) =>
+  const thumbnail = images.find(image => image.name === 'index').data;
+
+  const categories = info.categories.map((category, index) =>
     <React.Fragment key={uuidv4()}>
       {index > 0 ? ', ' : ''}
-      <Link to={categ.slug}>
-        {categ.name}
+      <Link to={`/category/${slugify(category)}/`}>
+        {category}
       </Link>
     </React.Fragment>
   );
 
-  if (display === 'preview') {
+  if (displayFull) {
     return (
       <article className={styles.article}>
         <div className={styles.preview}>
-          <Link to={metadata.slug}>
-            <GatsbyImage image={thumbnail} alt={metadata.title} />
-            <h1 className={styles.title}>{metadata.title}</h1>
-          </Link>
+          <GatsbyImage image={thumbnail} alt={info.title} />
+          <h1 className={styles.title}>{info.title}</h1>
           <div className={styles.metadata}>
-            de {metadata.author} | {metadata.date} | {categories}
+            de {info.author} | {date} | {categories}
           </div>
-          <p>{metadata.excerpt}</p>
+        </div>
+        <div className={styles.content}>
+          {renderExplicit(info.content)}
         </div>
       </article>
     );
   }
-  if (display === 'full') {
+  else {
     return (
       <article className={styles.article}>
         <div className={styles.preview}>
-          <GatsbyImage image={thumbnail} alt={metadata.title} />
-          <h1 className={styles.title}>{metadata.title}</h1>
+          <Link to={info.slug}>
+            <GatsbyImage image={thumbnail} alt={info.title} />
+            <h1 className={styles.title}>{info.title}</h1>
+          </Link>
           <div className={styles.metadata}>
-            de {metadata.author} | {metadata.date} | {categories}
+            de {info.author} | {date} | {categories}
           </div>
+          <p>{info.excerpt}</p>
         </div>
-        <div
-          className={styles.content}
-          dangerouslySetInnerHTML={{ __html: metadata.content }}
-        />
       </article>
     );
   }

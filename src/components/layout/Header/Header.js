@@ -1,8 +1,10 @@
 import React from 'react';
 import { graphql, useStaticQuery, Link } from 'gatsby';
-import uuidv4 from 'uuid';
 
-import Logo from '@assets/brand/logo.svg';
+import uuidv4 from 'uuid';
+import slugify from '@utils/slugify';
+
+import Logo from '@assets/logo.svg';
 import * as styleHeader from './header.module.css';
 import * as styleNavbar from './navbar.module.css';
 import * as styleCategs from './categs.module.css';
@@ -22,7 +24,6 @@ function Header({ pageContainerRef }) {
           categories {
             name
             shortName
-            slug
           }
         }
       }
@@ -63,7 +64,7 @@ function Header({ pageContainerRef }) {
 
   const categoriesLarge = categories.map(categ =>
     <li key={uuidv4()}>
-      <Link to={categ.slug}>
+      <Link to={`/category/${slugify(categ.name)}/`}>
         <span className={styleCategs.medScreen}>{categ.shortName}</span>
         <span className={styleCategs.bigScreen}>{categ.name}</span>
       </Link>
@@ -71,7 +72,7 @@ function Header({ pageContainerRef }) {
   );
   const categoriesSmall = categories.map(categ =>
     <li key={uuidv4()}>
-      <Link to={categ.slug}>
+      <Link to={`/category/${slugify(categ.name)}/`}>
         {categ.name}
       </Link>
     </li>
