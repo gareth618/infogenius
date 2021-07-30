@@ -14,7 +14,11 @@ export function dateToString(date) {
 
 export function getExcerpt(content) {
   const sanitizedContent = content.replace(/[*_$[\]+\-`]/g, '');
-  return sanitizedContent.slice(0, 260 + sanitizedContent.slice(260).indexOf(' ')) + '…';
+  let excerpt = sanitizedContent.slice(0, 260 + sanitizedContent.slice(260).indexOf(' '));
+  while (/[^a-zA-z0-9]/.test(excerpt.slice(-1))) {
+    excerpt = excerpt.slice(0, -1);
+  }
+  return excerpt + '…';
 };
 
 export function getArticleInfo(str) {

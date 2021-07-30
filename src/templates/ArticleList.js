@@ -4,20 +4,22 @@ import { graphql, Link } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import uuidv4 from 'uuid';
 
+import { Layout } from '@components/layout';
+import { Pagination } from '@components/buttons';
+
 import { dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
-import { Layout } from '@components/layout';
 import * as styles from '@styles/article.module.css';
 import { explicit } from '@styles/explicit.module.css';
 
-function ArticleList({ data, pageContext: { pageTitle, articles } }) {
+function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
   const siteMeta = data.site.siteMetadata;
   const helmetTitle = pageTitle === ''
     ? `${siteMeta.title} – ${siteMeta.motto}`
     : `${pageTitle} – ${siteMeta.title}`;
 
-  const articlePreviews = articles.map(article => {
+  const articlePreviews = articles.map((article, index) => {
     const thumbnail = article.images.find(image => image.name === 'index').data;
     const categories = categoriesToJSX(article.info.categories);
     const date = dateToString(new Date(article.info.date));
@@ -26,7 +28,7 @@ function ArticleList({ data, pageContext: { pageTitle, articles } }) {
       <article key={uuidv4()} style={{ marginBottom: '2rem' }}>
         <div className={styles.preview}>
           <Link to={`/${article.info.slug}/`}>
-            <GatsbyImage image={thumbnail} alt={article.info.title} />
+            <GatsbyImage image={thumbnail} alt={article.info.title} loading={index > 0 ? "lazy" : "eager"} />
             <h1 className={styles.title}>{article.info.title}</h1>
           </Link>
           <div className={styles.metadata}>de {article.info.author} | {date} | {categories}</div>
@@ -51,6 +53,10 @@ function ArticleList({ data, pageContext: { pageTitle, articles } }) {
       </Helmet>
       <Layout displaySidebar>
         {articlePreviews}
+        <Pagination
+          olderPage={olderPage}
+          newerPage={newerPage}
+        />
       </Layout>
     </>
   );

@@ -32,7 +32,7 @@ function Article({ data, pageContext: { info, images } }) {
       <Layout displaySidebar>
         <article>
           <div className={styles.preview}>
-            <GatsbyImage image={thumbnail} alt={info.title} />
+            <GatsbyImage image={thumbnail} alt={info.title} loading="eager" />
             <h1 className={styles.title}>{info.title}</h1>
             <div className={styles.metadata}>de {info.author} | {date} | {categories}</div>
           </div>

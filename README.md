@@ -19,8 +19,7 @@
 - [x] add sitemap
 - [x] add ESM
 - [x] refactoring
-- [ ] fix image overflow bug
-- [ ] add pagination
+- [x] add pagination
 - [ ] add donations
 - [ ] add tags
 - [ ] add some Explicit parsing (headers, paragraphs, math, media)

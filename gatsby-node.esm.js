@@ -80,14 +80,27 @@ export async function createPages({ graphql, actions }) {
     });
   });
 
-  actions.createPage({
-    path: '/',
-    component: resolve('./src/templates/ArticleList.js'),
-    context: {
-      pageTitle: '',
-      articles
+  const createPagination = (basePath, title, articles) => {
+    const pageToUrl = page => {
+      return page === 1 ? basePath : `${basePath}page/${page}/`
+    };
+    const ARTICLES_ON_PAGE = 2;
+    const pageCount = Math.floor(articles.length / ARTICLES_ON_PAGE) + (articles.length % ARTICLES_ON_PAGE > 0 ? 1 : 0);
+    for (let i = 0; i < articles.length; i += ARTICLES_ON_PAGE) {
+      const currentPage = i / ARTICLES_ON_PAGE + 1;
+      actions.createPage({
+        path: pageToUrl(currentPage),
+        component: resolve('./src/templates/ArticleList.js'),
+        context: {
+          pageTitle: title,
+          articles: articles.slice(i, i + ARTICLES_ON_PAGE),
+          olderPage: currentPage < pageCount ? pageToUrl(currentPage + 1) : null,
+          newerPage: currentPage > 1 ? pageToUrl(currentPage - 1) : null
+        }
+      });
     }
-  });
+  };
+  createPagination('/', '', articles);
 
   const categoryMap = { };
   for (const article of articles) {
@@ -99,14 +112,11 @@ export async function createPages({ graphql, actions }) {
     }
   }
   for (const category in categoryMap) {
-    actions.createPage({
-      path: `/category/${slugify(category)}/`,
-      component: resolve('./src/templates/ArticleList.js'),
-      context: {
-        pageTitle: category,
-        articles: categoryMap[category]
-      }
-    });
+    createPagination(
+      `/category/${slugify(category)}/`,
+      category,
+      categoryMap[category]
+    );
   }
 
   const tagMap = { };
@@ -119,13 +129,10 @@ export async function createPages({ graphql, actions }) {
     }
   }
   for (const tag in tagMap) {
-    actions.createPage({
-      path: `/tag/${slugify(tag)}/`,
-      component: resolve('./src/templates/ArticleList.js'),
-      context: {
-        pageTitle: tag,
-        articles: tagMap[tag]
-      }
-    });
+    createPagination(
+      `/tag/${slugify(tag)}/`,
+      tag,
+      tagMap[tag]
+    );
   }
 };

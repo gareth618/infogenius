@@ -5,14 +5,14 @@ import * as styles from './Pagination.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
-function Pagination({ older, newer }) {
-  if (!older && !newer) {
-    return <div style={{ marginTop: 'min(-6%, -1.5rem)' }} />;
+function Pagination({ olderPage, newerPage }) {
+  if (olderPage == null && newerPage == null) {
+    return <div style={{ marginTop: '-2rem' }} />;
   }
 
   const olderLink = (
-    <div className={styles.older} style={{ visibility: older ? 'visible' : 'hidden' }}>
-      <Link to="/page/3">
+    <div className={styles.older} style={{ visibility: olderPage == null ? 'hidden' : 'visible' }}>
+      <Link to={olderPage}>
         <FontAwesomeIcon icon={faAngleDoubleLeft} />
         <span className={styles.small}>Older</span>
         <span className={styles.large}>Articole mai vechi</span>
@@ -21,8 +21,8 @@ function Pagination({ older, newer }) {
   );
 
   const newerLink = (
-    <div className={styles.newer} style={{ visibility: newer ? 'visible' : 'hidden' }}>
-      <Link to="/page/1">
+    <div className={styles.newer} style={{ visibility: newerPage == null ? 'hidden' : 'visible' }}>
+      <Link to={newerPage}>
         <span className={styles.small}>Newer</span>
         <span className={styles.large}>Articole mai noi</span>
         <FontAwesomeIcon icon={faAngleDoubleRight} />
