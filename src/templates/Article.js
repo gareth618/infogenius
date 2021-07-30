@@ -9,6 +9,7 @@ import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
 import * as styles from '@styles/article.module.css';
+import { explicit } from '@styles/explicit.module.css';
 
 function Article({ data, pageContext: { info, images } }) {
   const siteTitle = data.site.siteMetadata.title;
@@ -29,13 +30,13 @@ function Article({ data, pageContext: { info, images } }) {
       </Helmet>
 
       <Layout displaySidebar>
-        <article className={styles.article}>
+        <article>
           <div className={styles.preview}>
             <GatsbyImage image={thumbnail} alt={info.title} />
             <h1 className={styles.title}>{info.title}</h1>
             <div className={styles.metadata}>de {info.author} | {date} | {categories}</div>
           </div>
-          <div className={styles.content}>
+          <div className={explicit} style={{ marginTop: '2rem' }}>
             {render(info.content, images)}
           </div>
         </article>

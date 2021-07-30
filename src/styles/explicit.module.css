@@ -1,0 +1,21 @@
+.explicit p,
+.explicit h2,
+.explicit h3,
+.explicit h4,
+.explicit h5,
+.explicit h6 {
+  font-family: 'Merriweather', serif;
+  color: var(--text);
+}
+
+@media (min-width: 801px) {
+  .explicit p {
+    text-align: justify;
+  }
+}
+
+.explicit h2 { margin-top: 2.0rem; font-size: 1.7rem; }
+.explicit h3 { margin-top: 1.9rem; font-size: 1.6rem; }
+.explicit h4 { margin-top: 1.8rem; font-size: 1.5rem; }
+.explicit h5 { margin-top: 1.7rem; font-size: 1.4rem; }
+.explicit h6 { margin-top: 1.6rem; font-size: 1.3rem; }

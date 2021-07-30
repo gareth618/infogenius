@@ -9,6 +9,7 @@ import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
 import * as styles from '@styles/article.module.css';
+import { explicit } from '@styles/explicit.module.css';
 
 function ArticleList({ data, pageContext: { pageTitle, articles } }) {
   const siteMeta = data.site.siteMetadata;
@@ -22,13 +23,15 @@ function ArticleList({ data, pageContext: { pageTitle, articles } }) {
     const date = dateToString(new Date(article.info.date));
 
     return (
-      <article key={uuidv4()} className={styles.article}>
+      <article key={uuidv4()} style={{ marginBottom: '2rem' }}>
         <div className={styles.preview}>
           <Link to={`/${article.info.slug}/`}>
             <GatsbyImage image={thumbnail} alt={article.info.title} />
             <h1 className={styles.title}>{article.info.title}</h1>
           </Link>
           <div className={styles.metadata}>de {article.info.author} | {date} | {categories}</div>
+        </div>
+        <div className={explicit}>
           <p>{article.info.excerpt}</p>
         </div>
       </article>

@@ -5,24 +5,9 @@
   border-radius: .5rem;
 }
 
-.article {
-  margin-bottom: 2rem;
-}
-
-.article p {
-  font-family: 'Merriweather', serif;
-  color: var(--text);
-}
-
-@media (min-width: 801px) {
-  .article p {
-    text-align: justify;
-  }
-}
-
 .title {
   margin: 1rem 0 .5rem 0;
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   color: var(--title);
 }
 
@@ -38,16 +23,4 @@ a:hover .title {
 
 .metadata a:hover {
   color: var(--link);
-}
-
-.content {
-  margin-top: 2rem;
-  margin-bottom: -2rem;
-}
-
-.content h2 {
-  margin-top: 2rem;
-  font-family: 'Merriweather', serif;
-  font-size: 1.8rem;
-  color: var(--text);
 }

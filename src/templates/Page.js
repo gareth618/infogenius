@@ -4,7 +4,7 @@ import { graphql } from 'gatsby';
 
 import { Layout } from '@components/layout';
 import render from '@utils/explicit';
-import * as styles from '@styles/page.module.css';
+import { explicit } from '@styles/explicit.module.css';
 
 function Page({ data, pageContext: { info, images } }) {
   const siteTitle = data.site.siteMetadata.title;
@@ -18,8 +18,12 @@ function Page({ data, pageContext: { info, images } }) {
       </Helmet>
       <Layout displaySidebar>
         <article>
-          <h1 className={styles.title}>{info.title}</h1>
-          <div className={styles.content}>{render(info.content, images)}</div>
+          <h1 style={{ margin: 0, fontSize: '1.9rem', color: 'var(--title)' }}>
+            {info.title}
+          </h1>
+          <div className={explicit} style={{ margin: '2rem 0 -1rem 0' }}>
+            {render(info.content, images)}
+          </div>
         </article>
       </Layout>
     </>
