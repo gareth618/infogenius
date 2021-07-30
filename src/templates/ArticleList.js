@@ -1,24 +1,39 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import uuidv4 from 'uuid';
 
+import { dateToString } from '@utils/helpers';
+import { categoriesToJSX } from '@utils/jsxHelpers';
+
 import { Layout } from '@components/layout';
-import { Article } from '@components/articles';
+import * as styles from '@styles/article.module.css';
 
-function ArticleList({ pageContext, data }) {
+function ArticleList({ data, pageContext: { pageTitle, articles } }) {
   const siteMeta = data.site.siteMetadata;
-  const helmetTitle = pageContext.homePage
+  const helmetTitle = pageTitle === ''
     ? `${siteMeta.title} – ${siteMeta.motto}`
-    : `${pageContext.title} – ${siteMeta.title}`;
+    : `${pageTitle} – ${siteMeta.title}`;
 
-  const articlePreviews = pageContext.articlePreviews.map(entry =>
-    <Article
-      key={uuidv4()}
-      info={entry.info}
-      images={entry.images}
-    />
-  );
+  const articlePreviews = articles.map(article => {
+    const thumbnail = article.images.find(image => image.name === 'index').data;
+    const categories = categoriesToJSX(article.info.categories);
+    const date = dateToString(new Date(article.info.date));
+
+    return (
+      <article key={uuidv4()} className={styles.article}>
+        <div className={styles.preview}>
+          <Link to={`/${article.info.slug}/`}>
+            <GatsbyImage image={thumbnail} alt={article.info.title} />
+            <h1 className={styles.title}>{article.info.title}</h1>
+          </Link>
+          <div className={styles.metadata}>de {article.info.author} | {date} | {categories}</div>
+          <p>{article.info.excerpt}</p>
+        </div>
+      </article>
+    );
+  });
 
   return (
     <>
@@ -41,7 +56,7 @@ function ArticleList({ pageContext, data }) {
 export default ArticleList;
 
 export const pageQuery = graphql`
-  query HomePageQuery {
+  query ArticleListQuery {
     site {
       siteMetadata {
         title

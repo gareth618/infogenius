@@ -1,10 +1,4 @@
 export const siteMetadata = {
-  title: 'InfoGenius',
-  motto: 'Blog despre informatică și programare',
-  author: 'Iulian Oleniuc',
-  siteUrl: 'https://infogenius.ro/',
-  description: 'InfoGenius este un blog despre informatică și programare, unde prezentăm algoritmi celebri, rezolvăm probleme de olimpiadă și scriem tutoriale despre limbajul C++.',
-  keywords: ['informatică', 'programare', 'algoritmică', 'olimpiadă', 'c++'],
   categories: [
     { name: 'Algoritmică și structuri de date', shortName: 'Algoritmică' },
     { name: 'Probleme de olimpiadă', shortName: 'Olimpiadă' },
@@ -23,39 +17,46 @@ export const siteMetadata = {
     twitter: 'https://twitter.com/Gareth618',
     github: 'https://github.com/Gareth618/',
     youtube: 'https://www.youtube.com/channel/UCdJ5X4TcLzU99dxNOB9n4yQ/'
-  }
+  },
+  title: 'InfoGenius',
+  motto: 'Blog despre informatică și programare',
+  author: 'Iulian Oleniuc',
+  siteUrl: 'https://infogenius.ro/',
+  description: 'InfoGenius este un blog despre informatică și programare, unde prezentăm algoritmi celebri, rezolvăm probleme de olimpiadă și scriem tutoriale despre limbajul C++.',
+  keywords: ['informatică', 'programare', 'algoritmică', 'olimpiadă', 'c++']
 };
+
 export const plugins = [
   {
     resolve: 'gatsby-plugin-alias-imports',
     options: {
       extensions: ['js'],
       alias: {
-        '@assets': 'src/assets',
-        '@components': 'src/components',
-        '@styles': 'src/styles',
-        '@utils': 'src/utils'
+        '@assets': './src/assets',
+        '@components': './src/components',
+        '@styles': './src/styles',
+        '@utils': './src/utils'
       }
     }
   },
   {
     resolve: 'gatsby-plugin-manifest',
     options: {
-      icon: 'src/assets/favicon.svg'
+      icon: './src/assets/favicon.svg'
     }
   },
   {
     resolve: 'gatsby-source-filesystem',
     options: {
       name: 'pages',
-      path: 'src/pages'
+      path: './src/pages'
     },
   },
   {
     resolve: 'gatsby-source-filesystem',
     options: {
       name: 'content',
-      path: 'content'
+      path: './content'
     },
   },
   {

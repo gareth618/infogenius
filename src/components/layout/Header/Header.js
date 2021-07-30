@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, useStaticQuery, Link } from 'gatsby';
 
 import uuidv4 from 'uuid';
-import slugify from '@utils/slugify';
+import { slugify } from '@utils/helpers';
 
 import Logo from '@assets/logo.svg';
 import * as styleHeader from './header.module.css';
@@ -18,7 +18,7 @@ import { BurgerButton } from '@components/buttons';
 
 function Header({ pageContainerRef }) {
   const categories = useStaticQuery(graphql`
-    query {
+    query HeaderQuery {
       site {
         siteMetadata {
           categories {

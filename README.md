@@ -18,7 +18,7 @@
 - [x] add `robots.txt`
 - [x] add sitemap
 - [x] add ESM
-- [ ] refactoring
+- [x] refactoring
 - [ ] fix image overflow bug
 - [ ] add pagination
 - [ ] add donations
