@@ -1,10 +1,11 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
+import uuidv4 from 'uuid';
 
 import render from '@utils/explicit';
-import { dateToString } from '@utils/helpers';
+import { slugify, dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
@@ -40,6 +41,16 @@ function Article({ data, pageContext: { info, images } }) {
             {render(info.content, images)}
           </div>
         </article>
+
+        <ul className={styles.tags}>
+          {info.tags.map(tag => (
+            <li key={uuidv4()}>
+              <Link to={`/tag/${slugify(tag)}/`}>
+                {tag}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </Layout>
     </>
   );

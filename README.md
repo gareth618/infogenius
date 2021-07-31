@@ -21,5 +21,5 @@
 - [x] refactoring
 - [x] add pagination
 - [ ] add donations
-- [ ] add tags
+- [x] add tags
 - [ ] add some Explicit parsing (headers, paragraphs, math, media)

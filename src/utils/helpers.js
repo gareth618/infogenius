@@ -50,6 +50,8 @@ export function slugify(str) {
   return str
     .toLowerCase()
     .replace(/\+/g, 'p')
+    .replace(/\./g, '')
+    .replace(/'/g, '')
     .replace(/ă/g, 'a')
     .replace(/â/g, 'a')
     .replace(/î/g, 'i')
