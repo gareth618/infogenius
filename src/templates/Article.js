@@ -9,6 +9,8 @@ import { slugify, dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
+import { Donations } from '@components/forms';
+
 import * as styles from '@styles/article.module.css';
 import { explicit } from '@styles/explicit.module.css';
 
@@ -51,6 +53,8 @@ function Article({ data, pageContext: { info, images } }) {
             </li>
           ))}
         </ul>
+
+        <Donations />
       </Layout>
     </>
   );

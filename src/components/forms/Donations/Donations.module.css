@@ -1,0 +1,63 @@
+.donation-form {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  border-radius: .5rem;
+  background: radial-gradient(at bottom right, royalblue 0%, cornflowerblue 100%);
+}
+
+.donation-text {
+  color: white;
+}
+
+.donation-text h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.6rem;
+}
+
+.donation-text p {
+  margin: 1rem 0 0 0;
+  font-size: 1rem;
+  line-height: 1.3;
+  text-align: justify;
+}
+
+.donation-link {
+  margin-left: 1rem;
+}
+
+.donation-link a {
+  display: inline-flex;
+  align-items: center;
+  width: 150px;
+  height: 100%;
+}
+
+.donation-link img {
+  vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+  .donation-form {
+    flex-wrap: wrap;
+  }
+  .donation-text {
+    width: 100%;
+  }
+  .donation-text h2 {
+    text-align: center;
+  }
+  .donation-text p {
+    text-align: center;
+  }
+  .donation-link {
+    margin-top: 1rem;
+    margin-left: 0;
+    width: 100%;
+  }
+  .donation-link a {
+    display: block;
+    margin: 0 auto;
+  }
+}

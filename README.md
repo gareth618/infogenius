@@ -20,6 +20,6 @@
 - [x] add ESM
 - [x] refactoring
 - [x] add pagination
-- [ ] add donations
+- [x] add donations
 - [x] add tags
 - [ ] add some Explicit parsing (headers, paragraphs, math, media)
