@@ -4,15 +4,15 @@ import { graphql, Link } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import uuidv4 from 'uuid';
 
-import render from '@utils/explicit';
+import * as styles from '@styles/article.module.css';
+import * as stylesExplicit from '@styles/explicit.module.css';
+
+import render from '@explicit/renderer';
 import { slugify, dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
 import { Donations } from '@components/forms';
-
-import * as styles from '@styles/article.module.css';
-import { explicit } from '@styles/explicit.module.css';
 
 function Article({ data, pageContext: { info, images } }) {
   const siteTitle = data.site.siteMetadata.title;
@@ -39,7 +39,7 @@ function Article({ data, pageContext: { info, images } }) {
             <h1 className={styles.title}>{info.title}</h1>
             <div className={styles.metadata}>de {info.author} | {date} | {categories}</div>
           </div>
-          <div className={explicit} style={{ marginTop: '2rem' }}>
+          <div className={stylesExplicit.explicit} style={{ marginTop: '2rem' }}>
             {render(info.content, images)}
           </div>
         </article>

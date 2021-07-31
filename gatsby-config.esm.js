@@ -35,7 +35,8 @@ export const plugins = [
         '@assets': './src/assets',
         '@components': './src/components',
         '@styles': './src/styles',
-        '@utils': './src/utils'
+        '@utils': './src/utils',
+        '@explicit': './src/explicit',
       }
     }
   },

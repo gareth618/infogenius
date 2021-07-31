@@ -4,14 +4,14 @@ import { graphql, Link } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 import uuidv4 from 'uuid';
 
+import * as styles from '@styles/article.module.css';
+import * as stylesExplicit from '@styles/explicit.module.css';
+
 import { Layout } from '@components/layout';
 import { Pagination } from '@components/buttons';
 
 import { dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
-
-import * as styles from '@styles/article.module.css';
-import { explicit } from '@styles/explicit.module.css';
 
 function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
   const siteMeta = data.site.siteMetadata;
@@ -33,7 +33,7 @@ function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newe
           </Link>
           <div className={styles.metadata}>de {article.info.author} | {date} | {categories}</div>
         </div>
-        <div className={explicit}>
+        <div className={stylesExplicit.explicit}>
           <p>{article.info.excerpt}</p>
         </div>
       </article>
