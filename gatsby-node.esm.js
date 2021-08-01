@@ -1,6 +1,5 @@
 import { resolve } from 'path';
-import getArticles from './src/utils/getArticles';
-import getPages from './src/utils/getPages';
+import { getArticles, getPages } from './src/utils/getPosts';
 import { slugify, getArticleInfo, getPageInfo } from './src/utils/helpers';
 
 export function createSchemaCustomization({ actions }) {

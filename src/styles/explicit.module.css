@@ -28,3 +28,9 @@
 .explicit .img-container img {
   border-radius: .5rem;
 }
+
+.explicit video {
+  display: block;
+  margin: 1rem auto;
+  border-radius: .5rem;
+}

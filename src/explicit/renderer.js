@@ -1,5 +1,51 @@
-import parse from './parser';
+import React from 'react';
+import uuidv4 from 'uuid';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
-export default function render(str, images) {
-  return parse(str, images);
+import parse from './parser';
+import * as styles from '@styles/explicit.module.css';
+
+function renderAST(ast, media) {
+  const sons = ast.sons == null ? null : ast.sons.map(son =>
+    <React.Fragment key={uuidv4()}>
+      {renderAST(son, media)}
+    </React.Fragment>
+  );
+
+  if (ast.tag === 'root') {
+    return <>{sons}</>;
+  }
+
+  if (ast.tag === 'p') {
+    return <p>{ast.content}</p>
+  }
+
+  if (ast.tag === 'h2') return <h2>{ast.content}</h2>;
+  if (ast.tag === 'h3') return <h3>{ast.content}</h3>;
+  if (ast.tag === 'h4') return <h4>{ast.content}</h4>;
+  if (ast.tag === 'h5') return <h5>{ast.content}</h5>;
+  if (ast.tag === 'h6') return <h6>{ast.content}</h6>;
+
+  if (ast.tag === 'png') {
+    return (
+      <div className={styles.imgContainer} style={{ width: ast.width }}>
+        <GatsbyImage image={ast.image} alt={ast.alt} />
+      </div>
+    );
+  }
+
+  if (ast.tag === 'mp4') {
+    return (
+      <video style={{ width: ast.width }} autoPlay muted loop draggable>
+        <source src={ast.url} type="video/mp4" />
+      </video>
+    );
+  }
+
+  return <></>;
+}
+
+export default function render(str, media) {
+  const ast = parse('root', 0, str, media);
+  return renderAST(ast, media);
 };

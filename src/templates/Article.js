@@ -14,7 +14,7 @@ import { categoriesToJSX } from '@utils/jsxHelpers';
 import { Layout } from '@components/layout';
 import { Donations } from '@components/forms';
 
-function Article({ data, pageContext: { info, images } }) {
+function Article({ data, pageContext: { info, images, videos, scripts } }) {
   const siteTitle = data.site.siteMetadata.title;
   const thumbnail = images.find(image => image.name === 'index').data;
   const categories = categoriesToJSX(info.categories);
@@ -40,7 +40,10 @@ function Article({ data, pageContext: { info, images } }) {
             <div className={styles.metadata}>de {info.author} | {date} | {categories}</div>
           </div>
           <div className={stylesExplicit.explicit} style={{ marginTop: '2rem' }}>
-            {render(info.content, images)}
+            {render(info.content, {
+              path: `./../../content/articles/${info.slug}/`,
+              images, videos, scripts
+            })}
           </div>
         </article>
 

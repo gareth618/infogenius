@@ -6,7 +6,7 @@ import * as styles from '@styles/explicit.module.css';
 import render from '@explicit/renderer';
 import { Layout } from '@components/layout';
 
-function Page({ data, pageContext: { info, images } }) {
+function Page({ data, pageContext: { info, images, videos, scripts } }) {
   const siteTitle = data.site.siteMetadata.title;
   return (
     <>
@@ -22,7 +22,10 @@ function Page({ data, pageContext: { info, images } }) {
             {info.title}
           </h1>
           <div className={styles.explicit} style={{ margin: '2rem 0 -1rem 0' }}>
-            {render(info.content, images)}
+            {render(info.content, {
+              path: `./../../content/articles/${info.slug}/`,
+              images, videos, scripts
+            })}
           </div>
         </article>
       </Layout>

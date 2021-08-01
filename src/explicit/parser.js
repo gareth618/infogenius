@@ -1,9 +1,4 @@
-import React from 'react';
-import uuidv4 from 'uuid';
-import { GatsbyImage } from 'gatsby-plugin-image';
-
 import parsePara from './paragraph';
-import * as styles from '@styles/explicit.module.css';
 
 function escapeToHTML(str) {
   return str
@@ -12,8 +7,8 @@ function escapeToHTML(str) {
     .replace(/>/g, '&gt;');
 }
 
-const TAG_SON = {
-  ''          : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
+const TAG_SONS = {
+  'root'      : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
   '[+quote]'  : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
   '[+spoiler]': ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
   '[+item]'   : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
@@ -21,9 +16,13 @@ const TAG_SON = {
   '[+right]'  : ['p']
 };
 
-function parseSons(str, images, tag) {
+function parseSons(tag, str, media) {
+  const ast = {
+    tag,
+    atts: [],
+    sons: []
+  };
   str += '\n\n';
-  let html = [];
   let i = 0;
   let lastNewline = -1;
   while (true) {
@@ -34,25 +33,21 @@ function parseSons(str, images, tag) {
       i++;
     }
     if (i === str.length) break;
-    for (const son of TAG_SON[tag]) {
-      const res = parse(str.slice(i), images, son, i - lastNewline - 1);
+    for (const son of TAG_SONS[tag]) {
+      const res = parse(son, i - lastNewline - 1, str.slice(i), media);
       if (res != null) {
-        html.push(
-          <React.Fragment key={uuidv4()}>
-            {res.html}
-          </React.Fragment>
-        );
-        i += res.length;
+        ast.sons.push(res.ast);
+        i += res.len;
         break;
       }
     }
   }
-  return html;
+  return ast;
 }
 
-export default function parse(str, images, tag = '', tagTabSize = 0) {
-  if (tag === '') {
-    return parseSons(str, images, '');
+export default function parse(tag, tagTabSize, str, media) {
+  if (tag === 'root') {
+    return parseSons(tag, str, media);
   }
 
   if (tag === 'p') {
@@ -60,8 +55,11 @@ export default function parse(str, images, tag = '', tagTabSize = 0) {
     str = str.slice(0, nextEmptyLine);
     str = escapeToHTML(str);
     return {
-      html: <p>{parsePara(str)}</p>,
-      length: nextEmptyLine
+      ast: {
+        tag: 'p',
+        content: parsePara(str)
+      },
+      len: nextEmptyLine
     };
   }
 
@@ -70,16 +68,15 @@ export default function parse(str, images, tag = '', tagTabSize = 0) {
     str = str.slice(0, nextEmptyLine);
     if (str.match(/#{2,6} \S/)?.index !== 0) return null;
     if (str.indexOf('\n') !== -1) return null;
+
     const h = str.indexOf(' ');
     str = escapeToHTML(str.slice(h + 1));
     return {
-      html:
-        h === 2 ? <h2>{parsePara(str)}</h2> :
-        h === 3 ? <h3>{parsePara(str)}</h3> :
-        h === 4 ? <h4>{parsePara(str)}</h4> :
-        h === 5 ? <h5>{parsePara(str)}</h5> :
-        h === 6 ? <h6>{parsePara(str)}</h6> : <></>,
-      length: nextEmptyLine
+      ast: {
+        tag: `h${h}`,
+        content: parsePara(str)
+      },
+      len: nextEmptyLine
     };
   }
 
@@ -91,29 +88,38 @@ export default function parse(str, images, tag = '', tagTabSize = 0) {
     const match = str.match(/!\[(?<alt>.*)\]\((?<url>((?!\()(?!\)).)*)\)/);
     const alt = escapeToHTML(match.groups.alt);
     const url = match.groups.url;
+    if (!/([a-z0-9]+-)*[a-z0-9]\.(png|mp4|js)/.test(url)) return null;
 
-    // if (!/([a-z0-9]+\-)*[a-z0-9]\.(png|gif|mp4|js)/.test(url)) return null;
-    if (!/([a-z0-9]+-)*[a-z0-9]\.png/.test(url)) return null;
-    // if (/(png|gif)/.test(url.slice(-3)) && !/[1-9]\d*; .*/.test(alt)) return null;
-    if (/png/.test(url.slice(-3)) && !/[1-9]\d*; .*/.test(alt)) return null;
-    // if (/mp4/.test(url.slice(-3)) && !/[1-9]\d*/.test(alt)) return null;
-    // if (/js/.test(url.slice(-2)) && alt !== '') return null;
-    const image = images.find(image => image.name === url.slice(0, -4));
-    if (image == null) return null;
+    if (url.slice(-3) === 'png') {
+      if (!/[1-9]\d*; .*/.test(alt)) return null;
+      const image = media.images.find(image => image.name === url.slice(0, -4));
+      if (image == null) return null;
+      const pos = alt.indexOf(';');
+      return {
+        ast: {
+          tag: 'png',
+          image: image.data,
+          width: parseInt(alt.slice(0, pos)),
+          alt: alt.slice(pos + 2)
+        },
+        len: nextEmptyLine
+      };
+    }
 
-    const pos = alt.indexOf(';');
-    return {
-      html:
-        <div
-          className={styles.imgContainer}
-          style={{ width: parseInt(alt.slice(0, pos)) }}
-        >
-          <GatsbyImage
-            image={image.data}
-            alt={alt.slice(pos + 2)}
-          />
-        </div>,
-      length: nextEmptyLine
-    };
+    if (url.slice(-3) === 'mp4') {
+      if (!/[1-9]\d*/.test(alt)) return null;
+      const video = media.videos.find(video => video.name === url.slice(0, -4));
+      if (video == null) return null;
+      return {
+        ast: {
+          tag: 'mp4',
+          url: video.url,
+          width: parseInt(alt)
+        },
+        len: nextEmptyLine
+      };
+    }
+
+    // if (url.slice(-2) === 'js' && alt !== '') return null;
   }
 };
