@@ -1,4 +1,35 @@
-async function getPost(type, graphql, slug) {
+import { toCamelCase } from './helpers';
+
+export async function getImportedScripts(graphql) {
+  const result = await graphql(`
+    query GetIndexJS {
+      file(relativePath: {eq: "index.js"}) {
+        name
+        internal {
+          content
+        }
+      }
+    }
+  `);
+  const content = result.data.file.internal.content;
+
+  const lft = content.indexOf('{');
+  const rgh = content.indexOf('}');
+  const imports = content.slice(lft + 2, rgh - 1);
+
+  const importedScripts = [];
+  const lines = imports.split('\n');
+  for (const line of lines) {
+    let script = line.trim();
+    if (script.slice(-1) === ',') {
+      script = script.slice(0, -1);
+    }
+    importedScripts.push(script);
+  }
+  return importedScripts;
+};
+
+async function getPost(type, graphql, importedScripts, slug) {
   const Type = type === 'article'
     ? 'Article'
     : 'Page';
@@ -66,25 +97,33 @@ async function getPost(type, graphql, slug) {
         edges {
           node {
             name
-            publicURL
           }
         }
       }
     }
   `);
 
+  const images = resultPNG.data.allFile.edges.map(edge => ({
+    name: edge.node.name,
+    data: edge.node.childImageSharp.gatsbyImageData
+  }));
+  const videos = resultMP4.data.allFile.edges.map(edge => ({
+    name: edge.node.name,
+    url: edge.node.publicURL
+  }));
+  const scripts = resultJS.data.allFile.edges
+    .map(edge => toCamelCase(edge.node.name))
+    .filter(name => importedScripts.includes(name));
+
   return {
-    info: resultEXP.data[`explicit${Type}`],
-    images: resultPNG.data.allFile.edges.map(edge => ({
-      name: edge.node.name,
-      data: edge.node.childImageSharp.gatsbyImageData
-    })),
-    videos: resultMP4.data.allFile.edges.map(edge => ({ name: edge.node.name, url: edge.node.publicURL })),
-    scripts: resultJS.data.allFile.edges.map(edge => ({ name: edge.node.name, url: edge.node.publicURL }))
+    ...resultEXP.data[`explicit${Type}`],
+    images,
+    videos,
+    scripts
   };
 }
 
-export async function getArticles(graphql) {
+export async function getArticles(graphql, importedScripts) {
   const result = await graphql(`
     query GetArticles {
       allExplicitArticle(sort: {fields: date, order: DESC}) {
@@ -96,10 +135,12 @@ export async function getArticles(graphql) {
       }
     }
   `);
-  return await Promise.all(result.data.allExplicitArticle.edges.map(edge => getPost('article', graphql, edge.node.slug)));
+  return await Promise.all(result.data.allExplicitArticle.edges.map(edge =>
+    getPost('article', graphql, importedScripts, edge.node.slug)
+  ));
 };
 
-export async function getPages(graphql) {
+export async function getPages(graphql, importedScripts) {
   const result = await graphql(`
     query GetPages {
       allExplicitPage {
@@ -111,5 +152,7 @@ export async function getPages(graphql) {
       }
     }
   `);
-  return await Promise.all(result.data.allExplicitPage.edges.map(edge => getPost('page', graphql, edge.node.slug)));
+  return await Promise.all(result.data.allExplicitPage.edges.map(edge =>
+    getPost('page', graphql, importedScripts, edge.node.slug)
+  ));
 };

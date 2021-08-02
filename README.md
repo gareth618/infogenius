@@ -14,12 +14,5 @@
 
 ## TODO
 
-- [x] add pages
-- [x] add `robots.txt`
-- [x] add sitemap
-- [x] add ESM
-- [x] refactoring
-- [x] add pagination
-- [x] add donations
-- [x] add tags
-- [ ] add some Explicit parsing (headers, paragraphs, math, media)
+- [ ] configure KaTeX
+- [ ] improve P5

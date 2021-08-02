@@ -8,7 +8,7 @@ import * as styles from './Footer.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faFacebook, faYoutube, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
-function Footer() {
+export default function Footer() {
   const data = useStaticQuery(
     graphql`
       query FooterQuery {
@@ -75,6 +75,4 @@ function Footer() {
       <CookieNotice />
     </footer>
   );
-}
-
-export default Footer;
+};

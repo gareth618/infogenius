@@ -1,3 +1,14 @@
+export function toCamelCase(str) {
+  const arr = str.split('');
+  arr[0] = arr[0].toUpperCase();
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i - 1] === '-') {
+      arr[i] = arr[i].toUpperCase();
+    }
+  }
+  return arr.join('').replace(/-/g, '');
+};
+
 export function stringToDate(str) {
   const ddd = str.slice(0, 2);
   const mmm = str.slice(3, 5);

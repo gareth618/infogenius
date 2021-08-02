@@ -4,7 +4,7 @@ import * as styles from './ScrollButton.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHandPointUp } from '@fortawesome/free-solid-svg-icons';
 
-function ScrollButton({ right }) {
+export default function ScrollButton({ right }) {
   const scrollBack = () => {
     document.documentElement.scrollTo({
       top: 0,
@@ -27,6 +27,4 @@ function ScrollButton({ right }) {
       />
     </button>
   );
-}
-
-export default ScrollButton;
+};

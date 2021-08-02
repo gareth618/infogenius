@@ -2,7 +2,7 @@ import React from 'react';
 import { StaticImage } from 'gatsby-plugin-image';
 import * as styles from './Donations.module.css';
 
-function Donations() {
+export default function Donations() {
   return (
     <div className={styles.donationForm}>
       <div className={styles.donationText}>
@@ -19,6 +19,4 @@ function Donations() {
       </div>
     </div>
   );
-}
-
-export default Donations;
+};

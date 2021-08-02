@@ -16,7 +16,7 @@ import { ThemesButton } from '@components/buttons';
 import { SearchButton } from '@components/buttons';
 import { BurgerButton } from '@components/buttons';
 
-function Header({ pageContainerRef }) {
+export default function Header({ pageContainerRef }) {
   const categories = useStaticQuery(graphql`
     query HeaderQuery {
       site {
@@ -118,6 +118,4 @@ function Header({ pageContainerRef }) {
       </ul>
     </>
   );
-}
-
-export default Header;
+};

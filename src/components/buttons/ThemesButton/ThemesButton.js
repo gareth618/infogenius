@@ -31,7 +31,7 @@ const THEMES = [
   }
 ];
 
-function ThemesButton({ pageContainerRef }) {
+export default function ThemesButton({ pageContainerRef }) {
   const [themeId, setThemeId] = React.useState(0);
   React.useEffect(() => {
     const storedThemeId = localStorage.getItem('InfoGenius.themeId');
@@ -59,6 +59,4 @@ function ThemesButton({ pageContainerRef }) {
       />
     </button>
   );
-}
-
-export default ThemesButton;
+};

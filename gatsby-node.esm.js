@@ -1,6 +1,6 @@
 import { resolve } from 'path';
-import { getArticles, getPages } from './src/utils/getPosts';
 import { slugify, getArticleInfo, getPageInfo } from './src/utils/helpers';
+import { getImportedScripts, getArticles, getPages } from './src/utils/getPosts';
 
 export function createSchemaCustomization({ actions }) {
   actions.createTypes(`
@@ -20,13 +20,6 @@ export function createSchemaCustomization({ actions }) {
       content: String!
     }
   `);
-};
-
-export function onCreatePage({ page, actions }) {
-  if (process.env.NODE_ENV !== 'production' && page.path === '/404/') {
-    page.matchPath = '/*';
-    actions.createPage(page);
-  }
 };
 
 export async function onCreateNode({ node, actions, loadNodeContent, createNodeId, createContentDigest }) {
@@ -58,26 +51,29 @@ export async function onCreateNode({ node, actions, loadNodeContent, createNodeI
       }
     });
   }
+  else if (node.relativePath === 'index.js') {
+    await loadNodeContent(node);
+  }
 };
 
 export async function createPages({ graphql, actions }) {
-  const articles = await getArticles(graphql);
-  articles.forEach(article => {
+  const importedScripts = await getImportedScripts(graphql);
+  const articles = await getArticles(graphql, importedScripts);
+  for (const article of articles) {
     actions.createPage({
-      path: `/${article.info.slug}/`,
+      path: `/${article.slug}/`,
       component: resolve('./src/templates/Article.js'),
       context: article
     });
-  });
-
-  const pages = await getPages(graphql);
-  pages.forEach(page => {
+  }
+  const pages = await getPages(graphql, importedScripts);
+  for (const page of pages) {
     actions.createPage({
-      path: `/${page.info.slug}/`,
+      path: `/${page.slug}/`,
       component: resolve('./src/templates/Page.js'),
       context: page
     });
-  });
+  }
 
   const createPagination = (basePath, title, articles) => {
     const pageToUrl = page => {
@@ -103,7 +99,7 @@ export async function createPages({ graphql, actions }) {
 
   const categoryMap = { };
   for (const article of articles) {
-    for (const category of article.info.categories) {
+    for (const category of article.categories) {
       if (categoryMap[category] == null) {
         categoryMap[category] = [];
       }
@@ -120,7 +116,7 @@ export async function createPages({ graphql, actions }) {
 
   const tagMap = { };
   for (const article of articles) {
-    for (const tag of article.info.tags) {
+    for (const tag of article.tags) {
       if (tagMap[tag] == null) {
         tagMap[tag] = [];
       }
@@ -133,5 +129,12 @@ export async function createPages({ graphql, actions }) {
       tag,
       tagMap[tag]
     );
+  }
+};
+
+export function onCreatePage({ page, actions }) {
+  if (process.env.NODE_ENV !== 'production' && page.path === '/404/') {
+    page.matchPath = '/*';
+    actions.createPage(page);
   }
 };

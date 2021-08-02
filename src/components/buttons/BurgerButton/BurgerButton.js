@@ -1,7 +1,7 @@
 import React from 'react';
 import * as styles from './BurgerButton.module.css';
 
-function BurgerButton({ onClick }) {
+export default function BurgerButton({ onClick }) {
   const [clicked, setClicked] = React.useState(false);
   return (
     <button
@@ -15,6 +15,4 @@ function BurgerButton({ onClick }) {
       <div className={styles.bar3} />
     </button>
   );
-}
-
-export default BurgerButton;
+};

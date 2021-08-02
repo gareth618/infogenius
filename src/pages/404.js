@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { graphql } from 'gatsby';
 import { Layout } from '@components/layout';
 
-function NotFoundPage({ data }) {
+export default function NotFoundPage({ data }) {
   const title = data.site.siteMetadata.title;
   return (
     <>
@@ -26,9 +26,7 @@ function NotFoundPage({ data }) {
       </Layout>
     </>
   );
-}
-
-export default NotFoundPage;
+};
 
 export const pageQuery = graphql`
   query GetTitle {

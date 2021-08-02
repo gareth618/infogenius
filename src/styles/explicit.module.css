@@ -20,17 +20,34 @@
 .explicit h5 { margin: 1.7rem 0 1rem 0; font-size: 1.4rem; }
 .explicit h6 { margin: 1.6rem 0 1rem 0; font-size: 1.3rem; }
 
-.explicit .img-container {
+.explicit .img-wrapper {
   margin: 1rem auto;
   max-width: 100%;
 }
 
-.explicit .img-container img {
+.explicit .img-wrapper img {
   border-radius: .5rem;
 }
 
 .explicit video {
   display: block;
   margin: 1rem auto;
+  max-width: 100%;
   border-radius: .5rem;
+}
+
+.explicit .math-wrapper {
+  color: var(--text);
+  overflow-x: scroll;
+}
+
+.explicit .script-wrapper {
+  margin: 1rem auto;
+  overflow-x: scroll;
+  width: fit-content;
+  border-radius: .5rem;
+}
+
+.explicit canvas {
+  display: block;
 }

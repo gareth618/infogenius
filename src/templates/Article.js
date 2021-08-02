@@ -14,19 +14,19 @@ import { categoriesToJSX } from '@utils/jsxHelpers';
 import { Layout } from '@components/layout';
 import { Donations } from '@components/forms';
 
-function Article({ data, pageContext: { info, images, videos, scripts } }) {
+export default function Article({ data, pageContext }) {
   const siteTitle = data.site.siteMetadata.title;
-  const thumbnail = images.find(image => image.name === 'index').data;
-  const categories = categoriesToJSX(info.categories);
-  const date = dateToString(new Date(info.date));
+  const thumbnail = pageContext.images.find(image => image.name === 'index').data;
+  const categories = categoriesToJSX(pageContext.categories);
+  const date = dateToString(new Date(pageContext.date));
 
   return (
     <>
       <Helmet htmlAttributes={{ lang: 'ro-RO' }}>
-        <title>{info.title} – {siteTitle}</title>
-        <meta name="description" content={info.excerpt} />
-        <meta name="keywords" content={info.tags.join(', ')} />
-        <meta name="author" content={info.author} />
+        <title>{pageContext.title} – {siteTitle}</title>
+        <meta name="description" content={pageContext.excerpt} />
+        <meta name="keywords" content={pageContext.tags.join(', ')} />
+        <meta name="author" content={pageContext.author} />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -35,20 +35,21 @@ function Article({ data, pageContext: { info, images, videos, scripts } }) {
       <Layout displaySidebar>
         <article>
           <div className={styles.preview}>
-            <GatsbyImage image={thumbnail} alt={info.title} loading="eager" />
-            <h1 className={styles.title}>{info.title}</h1>
-            <div className={styles.metadata}>de {info.author} | {date} | {categories}</div>
+            <GatsbyImage image={thumbnail} alt={pageContext.title} loading="eager" />
+            <h1 className={styles.title}>{pageContext.title}</h1>
+            <div className={styles.metadata}>de {pageContext.author} | {date} | {categories}</div>
           </div>
           <div className={stylesExplicit.explicit} style={{ marginTop: '2rem' }}>
-            {render(info.content, {
-              path: `./../../content/articles/${info.slug}/`,
-              images, videos, scripts
+            {render(pageContext.content, {
+              images: pageContext.images,
+              videos: pageContext.videos,
+              scripts: pageContext.scripts
             })}
           </div>
         </article>
 
         <ul className={styles.tags}>
-          {info.tags.map(tag => (
+          {pageContext.tags.map(tag => (
             <li key={uuidv4()}>
               <Link to={`/tag/${slugify(tag)}/`}>
                 {tag}
@@ -61,9 +62,7 @@ function Article({ data, pageContext: { info, images, videos, scripts } }) {
       </Layout>
     </>
   );
-}
-
-export default Article;
+};
 
 export const pageQuery = graphql`
   query ArticleQuery {

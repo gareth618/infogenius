@@ -10,6 +10,7 @@ import '@fontsource/merriweather/700.css';
 import '@fontsource/merriweather/700-italic.css';
 
 import '@styles/global.css';
+import 'katex/dist/katex.min.css';
 import * as styles from './Layout.module.css';
 
 function PageContainer({ displaySidebar, pageContainerRef, children }) {
@@ -24,7 +25,7 @@ function PageContainer({ displaySidebar, pageContainerRef, children }) {
   );
 }
 
-function Layout({ displaySidebar, children }) {
+export default function Layout({ displaySidebar, children }) {
   const pageContainerRef = React.useRef(null);
   return (
     <>
@@ -37,6 +38,4 @@ function Layout({ displaySidebar, children }) {
       <Header pageContainerRef={pageContainerRef} />
     </>
   );
-}
-
-export default Layout;
+};

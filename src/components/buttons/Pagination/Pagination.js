@@ -5,7 +5,7 @@ import * as styles from './Pagination.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
-function Pagination({ olderPage, newerPage }) {
+export default function Pagination({ olderPage, newerPage }) {
   if (olderPage == null && newerPage == null) {
     return <div style={{ marginTop: '-2rem' }} />;
   }
@@ -36,6 +36,4 @@ function Pagination({ olderPage, newerPage }) {
       {newerLink}
     </div>
   );
-}
-
-export default Pagination;
+};

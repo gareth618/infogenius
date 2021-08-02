@@ -4,7 +4,7 @@ import * as styles from './SearchForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
-function SearchForm({ innerRef, onClick, searching }) {
+export default function SearchForm({ innerRef, onClick, searching }) {
   return (
     <form className={styles.searchForm + (searching ? ' ' + styles.searching : '' )}>
       <input
@@ -25,6 +25,4 @@ function SearchForm({ innerRef, onClick, searching }) {
       </button>
     </form>
   );
-}
-
-export default SearchForm;
+};

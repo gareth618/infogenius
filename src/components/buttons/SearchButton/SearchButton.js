@@ -4,7 +4,7 @@ import * as styles from './SearchButton.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-function SearchButton({ onClick }) {
+export default function SearchButton({ onClick }) {
   return (
     <button
       className={styles.searchBtn}
@@ -19,6 +19,4 @@ function SearchButton({ onClick }) {
       />
     </button>
   );
-}
-
-export default SearchButton;
+};

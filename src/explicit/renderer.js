@@ -5,19 +5,30 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 import parse from './parser';
 import * as styles from '@styles/explicit.module.css';
 
-function renderAST(ast, media) {
+import p5 from 'p5';
+import * as scripts from './../../content';
+
+function ScriptWrapper({ script }) {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    new p5(scripts[script], ref.current);
+  }, [script, ref]);
+  return <div className={styles.scriptWrapper} ref={ref} />;
+}
+
+function renderAST(ast) {
   const sons = ast.sons == null ? null : ast.sons.map(son =>
     <React.Fragment key={uuidv4()}>
-      {renderAST(son, media)}
+      {renderAST(son)}
     </React.Fragment>
   );
 
   if (ast.tag === 'root') {
-    return <>{sons}</>;
+    return sons;
   }
 
   if (ast.tag === 'p') {
-    return <p>{ast.content}</p>
+    return <p>{ast.content}</p>;
   }
 
   if (ast.tag === 'h2') return <h2>{ast.content}</h2>;
@@ -26,9 +37,18 @@ function renderAST(ast, media) {
   if (ast.tag === 'h5') return <h5>{ast.content}</h5>;
   if (ast.tag === 'h6') return <h6>{ast.content}</h6>;
 
+  if (ast.tag === 'math') {
+    return (
+      <div
+        className={styles.mathWrapper}
+        dangerouslySetInnerHTML={{ __html: ast.math }}
+      />
+    );
+  }
+
   if (ast.tag === 'png') {
     return (
-      <div className={styles.imgContainer} style={{ width: ast.width }}>
+      <div className={styles.imgWrapper} style={{ width: ast.width }}>
         <GatsbyImage image={ast.image} alt={ast.alt} />
       </div>
     );
@@ -42,10 +62,14 @@ function renderAST(ast, media) {
     );
   }
 
+  if (ast.tag === 'js') {
+    return <ScriptWrapper script={ast.script} />;
+  }
+
   return <></>;
 }
 
 export default function render(str, media) {
-  const ast = parse('root', 0, str, media);
-  return renderAST(ast, media);
+  const ast = parse(str, media);
+  return renderAST(ast);
 };

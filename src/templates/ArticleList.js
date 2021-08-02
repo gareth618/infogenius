@@ -13,7 +13,7 @@ import { Pagination } from '@components/buttons';
 import { dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
-function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
+export default function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
   const siteMeta = data.site.siteMetadata;
   const helmetTitle = pageTitle === ''
     ? `${siteMeta.title} – ${siteMeta.motto}`
@@ -21,20 +21,20 @@ function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newe
 
   const articlePreviews = articles.map((article, index) => {
     const thumbnail = article.images.find(image => image.name === 'index').data;
-    const categories = categoriesToJSX(article.info.categories);
-    const date = dateToString(new Date(article.info.date));
+    const categories = categoriesToJSX(article.categories);
+    const date = dateToString(new Date(article.date));
 
     return (
       <article key={uuidv4()} style={{ marginBottom: '2rem' }}>
         <div className={styles.preview}>
-          <Link to={`/${article.info.slug}/`}>
-            <GatsbyImage image={thumbnail} alt={article.info.title} loading={index > 0 ? "lazy" : "eager"} />
-            <h1 className={styles.title}>{article.info.title}</h1>
+          <Link to={`/${article.slug}/`}>
+            <GatsbyImage image={thumbnail} alt={article.title} loading={index > 0 ? "lazy" : "eager"} />
+            <h1 className={styles.title}>{article.title}</h1>
           </Link>
-          <div className={styles.metadata}>de {article.info.author} | {date} | {categories}</div>
+          <div className={styles.metadata}>de {article.author} | {date} | {categories}</div>
         </div>
         <div className={stylesExplicit.explicit}>
-          <p>{article.info.excerpt}</p>
+          <p>{article.excerpt}</p>
         </div>
       </article>
     );
@@ -60,9 +60,7 @@ function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newe
       </Layout>
     </>
   );
-}
-
-export default ArticleList;
+};
 
 export const pageQuery = graphql`
   query ArticleListQuery {

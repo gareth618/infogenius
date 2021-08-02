@@ -1,7 +1,7 @@
 import React from 'react';
 import * as styles from './CookieNotice.module.css';
 
-function CookieNotice() {
+export default function CookieNotice() {
   const [accepted, setAccepted] = React.useState(true);
   React.useEffect(() => {
     const storedAccepted = localStorage.getItem('InfoGenius.cookiesAccepted');
@@ -32,6 +32,4 @@ function CookieNotice() {
       </button>
     </div>
   );
-}
-
-export default CookieNotice;
+};

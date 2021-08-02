@@ -1,4 +1,6 @@
+import katex from 'katex';
 import parsePara from './paragraph';
+import { toCamelCase } from '@utils/helpers';
 
 function escapeToHTML(str) {
   return str
@@ -16,7 +18,7 @@ const TAG_SONS = {
   '[+right]'  : ['p']
 };
 
-function parseSons(tag, str, media) {
+function parseSons(str, media, tag) {
   const ast = {
     tag,
     atts: [],
@@ -34,7 +36,7 @@ function parseSons(tag, str, media) {
     }
     if (i === str.length) break;
     for (const son of TAG_SONS[tag]) {
-      const res = parse(son, i - lastNewline - 1, str.slice(i), media);
+      const res = parse(str.slice(i), media, son, i - lastNewline - 1);
       if (res != null) {
         ast.sons.push(res.ast);
         i += res.len;
@@ -45,9 +47,9 @@ function parseSons(tag, str, media) {
   return ast;
 }
 
-export default function parse(tag, tagTabSize, str, media) {
+export default function parse(str, media, tag = 'root', tagTabSize = 0) {
   if (tag === 'root') {
-    return parseSons(tag, str, media);
+    return parseSons(str, media, tag);
   }
 
   if (tag === 'p') {
@@ -80,6 +82,28 @@ export default function parse(tag, tagTabSize, str, media) {
     };
   }
 
+  if (tag === '$$') {
+    const nextEmptyLine = str.indexOf('\n\n');
+    str = str.slice(0, nextEmptyLine);
+    if (!/\$\$.*\S.*\$\$(\.|,|!|\?)?/s.test(str)) return null;
+    try {
+      const last = str.slice(-1);
+      const math = last === '$'
+        ? `${str.slice(2, -2)}`
+        : `${str.slice(2, -3)} \\text{${last}}`;
+      return {
+        ast: {
+          tag: 'math',
+          math: katex.renderToString(math, { displayMode: true })
+        },
+        len: nextEmptyLine
+      };
+    }
+    catch (err) {
+      return null;
+    }
+  }
+
   if (tag === '![]()') {
     const nextEmptyLine = str.indexOf('\n\n');
     str = str.slice(0, nextEmptyLine);
@@ -92,7 +116,8 @@ export default function parse(tag, tagTabSize, str, media) {
 
     if (url.slice(-3) === 'png') {
       if (!/[1-9]\d*; .*/.test(alt)) return null;
-      const image = media.images.find(image => image.name === url.slice(0, -4));
+      const name = url.slice(0, -4);
+      const image = media.images.find(image => image.name === name);
       if (image == null) return null;
       const pos = alt.indexOf(';');
       return {
@@ -108,7 +133,8 @@ export default function parse(tag, tagTabSize, str, media) {
 
     if (url.slice(-3) === 'mp4') {
       if (!/[1-9]\d*/.test(alt)) return null;
-      const video = media.videos.find(video => video.name === url.slice(0, -4));
+      const name = url.slice(0, -4);
+      const video = media.videos.find(video => video.name === name);
       if (video == null) return null;
       return {
         ast: {
@@ -120,6 +146,17 @@ export default function parse(tag, tagTabSize, str, media) {
       };
     }
 
-    // if (url.slice(-2) === 'js' && alt !== '') return null;
+    if (url.slice(-2) === 'js') {
+      if (alt !== '') return null;
+      const name = toCamelCase(url.slice(0, -3));
+      if (media.scripts.indexOf(name) === -1) return null;
+      return {
+        ast: {
+          tag: 'js',
+          script: name
+        },
+        len: nextEmptyLine
+      };
+    }
   }
 };
