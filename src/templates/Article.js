@@ -12,7 +12,7 @@ import { slugify, dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
-import { Donations } from '@components/forms';
+import { Donations } from '@components/others';
 
 export default function Article({ data, pageContext }) {
   const siteTitle = data.site.siteMetadata.title;

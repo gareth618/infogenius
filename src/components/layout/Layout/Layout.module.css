@@ -29,8 +29,8 @@
 }
 
 .content {
-  margin: 5%;
-  width: calc(85% - 200px);
+  padding: 5%;
+  width: calc(95% - 200px);
 }
 
 @media (max-width: 1000px) {

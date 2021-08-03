@@ -232,11 +232,11 @@ Iată și o animație care simulează modul în care este generat un chibrit ran
 
 Probabilitatea ca $x$ să primească o anumită valoare fixată de noi este practic inversul lungimii intervalului, adică $2 / t$. Similar, probabilitatea ca $\theta$ să primească o anumită valoare este $2 / \pi$. Cum cele două evenimente sunt independente, probabilitatea ca întreaga pereche $(x, \theta)$ să aibă o anumită valoare este egală cu produsul dintre $2 / t$ și $2 / \pi$, adică $4 / t \pi$.
 
-$$\begin{align}
+$$\begin{align*}
   & \Pr\{\mathrm{dist}(P) = x \text{ și } \mathrm{angle}(P) = \theta\}\\
   =\, & \Pr\{\mathrm{dist}(P) = x\} \cdot \Pr\{\mathrm{angle}(P) = \theta\}\\
   =\, & \frac{2}{t} \cdot \frac{2}{\pi} = \frac{4}{t \pi}
-\end{align}$$
+\end{align*}$$
 
 Acum, trebuie să găsim o relație în funcție de $x$ și $\theta$ care să ne spună dacă chibritul nostru intersectează într-adevăr vreo linie verticală. Observăm ușor că intersecția are loc doar dacă $x$ este mai mic sau egal cu distanța de la capătul stâng al chibritului la verticala care trece prin mijlocul său. Cea din urmă poate fi exprimată drept $(l / 2) \sin \theta$.
 
@@ -244,10 +244,10 @@ Acum, trebuie să găsim o relație în funcție de $x$ și $\theta$ care să ne
 
 Tot ce ne mai rămâne de făcut este să evaluăm funcția obținută anterior, $4 / t \pi$, în toate punctele $(x, \theta)$ cu proprietatea că $\theta \in [0, \pi / 2]$ și $x \in [0, (l / 2) \sin \theta]$, după care să însumăm aceste valori. Ăsta e genul de lucru pe care-l face o integrală (dublă):
 
-$$\begin{align}
+$$\begin{align*}
   \Pr &= \int_0^{\pi / 2} \int_0^{(l / 2) \sin \theta} \frac{4}{t \pi} \, dx \, d \theta\\
   &= \int_0^{\pi / 2} \frac{2l}{t \pi} \sin \theta \, d \theta\\
   &= \frac{2l}{t \pi}
-\end{align}$$
+\end{align*}$$
 
 **Sfârșit!** Dacă aveți vreo întrebare despre ce am discutat în articolul de astăzi, o puteți adresa mai jos, într-un comentariu. Iar dacă vi s-a părut un articol interesant, nu uitați să-i dați un share pe FaceBook :smile: Și, Happy Pi Day! :party:

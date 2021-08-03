@@ -5,16 +5,8 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 import parse from './parser';
 import * as styles from '@styles/explicit.module.css';
 
-import p5 from 'p5';
+import { SketchWrapper } from '@components/others';
 import * as scripts from './../../content';
-
-function ScriptWrapper({ script }) {
-  const ref = React.useRef(null);
-  React.useEffect(() => {
-    new p5(scripts[script], ref.current);
-  }, [script, ref]);
-  return <div className={styles.scriptWrapper} ref={ref} />;
-}
 
 function renderAST(ast) {
   const sons = ast.sons == null ? null : ast.sons.map(son =>
@@ -63,7 +55,7 @@ function renderAST(ast) {
   }
 
   if (ast.tag === 'js') {
-    return <ScriptWrapper script={ast.script} />;
+    return <SketchWrapper sketch={scripts[ast.script]} />;
   }
 
   return <></>;

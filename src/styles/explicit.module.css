@@ -8,6 +8,10 @@
   color: var(--text);
 }
 
+.explicit p {
+  overflow-x: scroll;
+}
+
 @media (min-width: 801px) {
   .explicit p {
     text-align: justify;
@@ -27,6 +31,7 @@
 
 .explicit .img-wrapper img {
   border-radius: .5rem;
+  display: block;
 }
 
 .explicit video {
@@ -41,10 +46,11 @@
   overflow-x: scroll;
 }
 
-.explicit .script-wrapper {
+.explicit .sketch-wrapper {
   margin: 1rem auto;
-  overflow-x: scroll;
   width: fit-content;
+  max-width: 100%;
+  overflow-x: scroll;
   border-radius: .5rem;
 }
 

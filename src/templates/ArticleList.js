@@ -7,8 +7,8 @@ import uuidv4 from 'uuid';
 import * as styles from '@styles/article.module.css';
 import * as stylesExplicit from '@styles/explicit.module.css';
 
+import { Pagination } from '@components/others';
 import { Layout } from '@components/layout';
-import { Pagination } from '@components/buttons';
 
 import { dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
