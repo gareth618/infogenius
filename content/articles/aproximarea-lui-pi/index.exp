@@ -63,7 +63,7 @@ Fie un pătrat oarecare $P$, de latură $2r$, și fie $C$ cercul înscris în p�
 
 De ce? Păi, mai întâi trebuie să calculăm ariile celor două figuri. Aria cercului este $A_C = \pi r^2$, iar aria pătratului este $A_P = 4 r^2$. Așadar, raportul dintre cele două arii este $\pi / 4$. Și, cred că este destul de intuitiv faptul că acest raport de arii este chiar probabilitatea căutată de noi. (E clar că dacă aria cercului este $A_C / A_P$ din aria pătratului, atunci doar $A_C / A_P$ puncte din interiorul lui $P$ se vor afla și în $C$.)
 
-$$\Pr\{A \in \mathrm{Int} \, C\} = \frac{A_C}{A_P} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}$$
+$$\Pr\{A \in \operatorname{Int} \, C\} = \frac{A_C}{A_P} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}$$
 
 ### Algoritm
 
@@ -233,8 +233,8 @@ Iată și o animație care simulează modul în care este generat un chibrit ran
 Probabilitatea ca $x$ să primească o anumită valoare fixată de noi este practic inversul lungimii intervalului, adică $2 / t$. Similar, probabilitatea ca $\theta$ să primească o anumită valoare este $2 / \pi$. Cum cele două evenimente sunt independente, probabilitatea ca întreaga pereche $(x, \theta)$ să aibă o anumită valoare este egală cu produsul dintre $2 / t$ și $2 / \pi$, adică $4 / t \pi$.
 
 $$\begin{align*}
-  & \Pr\{\mathrm{dist}(P) = x \text{ și } \mathrm{angle}(P) = \theta\}\\
-  =\, & \Pr\{\mathrm{dist}(P) = x\} \cdot \Pr\{\mathrm{angle}(P) = \theta\}\\
+  & \Pr\{\operatorname{dist}(P) = x \text{ și } \operatorname{angle}(P) = \theta\}\\
+  =\, & \Pr\{\operatorname{dist}(P) = x\} \cdot \Pr\{\operatorname{angle}(P) = \theta\}\\
   =\, & \frac{2}{t} \cdot \frac{2}{\pi} = \frac{4}{t \pi}
 \end{align*}$$
 

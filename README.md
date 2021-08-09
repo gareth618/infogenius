@@ -11,8 +11,3 @@
   <br />
   Demo of the new version available <a href="https://nervous-kalam-d2cf8e.netlify.app/">here</a>.
 </p>
-
-## TODO
-
-- [ ] configure KaTeX
-- [ ] improve P5
