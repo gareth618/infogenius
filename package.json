@@ -12,8 +12,10 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@fontsource/inter": "^4.5.0",
     "@fontsource/merriweather": "^4.5.0",
     "@fontsource/quicksand": "^4.5.0",
+    "@fontsource/source-code-pro": "^4.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",

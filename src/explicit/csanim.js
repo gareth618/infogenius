@@ -32,6 +32,54 @@ export default class CSanim {
     return points;
   }
 
+  static getTreeCoords(nodes, edges, nodeSize, paddingH = nodeSize * 1.5, paddingV = nodeSize * 1.75) {
+    const width = new Array(nodes);
+    const getNodeWidth = node => {
+      let sum = -paddingH;
+      for (const son of edges[node]) {
+        getNodeWidth(son);
+        sum += width[son] + paddingH;
+      }
+      width[node] = Math.max(sum, nodeSize);
+    };
+    getNodeWidth(0);
+
+    const treeX = new Array(nodes);
+    const treeY = new Array(nodes);
+    const getSubtreeCoords = (node, x, y) => {
+      treeX[node] = x;
+      treeY[node] = y;
+      let sum = x - width[node] / 2;
+      for (const son of edges[node]) {
+        getSubtreeCoords(son, sum + width[son] / 2, y + paddingV + nodeSize);
+        sum += width[son] + paddingH;
+      }
+      if (edges[node].length > 0) {
+        treeX[node] = edges[node].length % 2 === 1
+          ? treeX[edges[node][Math.floor(edges[node].length / 2)]]
+          : (
+            treeX[edges[node][edges[node].length / 2]] +
+            treeX[edges[node][edges[node].length / 2 - 1]]
+          ) / 2;
+      }
+    };
+    getSubtreeCoords(0, 0, 0);
+    for (let i = 1; i < nodes; i++) {
+      treeX[i] -= treeX[0];
+    }
+    treeX[0] = 0;
+
+    const getSubtreeHeight = node => {
+      let max = 0;
+      for (const son of edges[node]) {
+        max = Math.max(max, getSubtreeHeight(son) + 1);
+      }
+      return max;
+    };
+    const height = getSubtreeHeight(0);
+    return [width[0], height * paddingV + (height + 1) * nodeSize, treeX, treeY];
+  }
+
   constructor(w, h) {
     this.w = w;
     this.h = h;
@@ -70,6 +118,13 @@ export default class CSanim {
     changeColorTo(color) { return this.animate('color', color); }
     changeTextColorTo(color) { return this.animate('textColor', color); }
     changeTextBoxColorTo(color) { return this.animate('textBoxColor', color); }
+
+    changeTextTo(text) {
+      return this.animate('newTextOpacity', 255,
+        shape => { shape.newText = text; shape.newTextOpacity = 0; },
+        shape => { shape.text = text; shape.newText = undefined; shape.newTextOpacity = undefined; }
+      );
+    }
 
     fadeIn() {
       return this.animate('opacity', 255,
@@ -120,13 +175,6 @@ export default class CSanim {
       }
       p5.rotate(this.angle == null ? 0 : -this.angle);
       p5.translate(-this.position[0], -this.position[1]);
-    }
-
-    changeTextTo(text) {
-      return this.animate('newTextOpacity', 255,
-        shape => { shape.newText = text; shape.newTextOpacity = 0; },
-        shape => { shape.text = text; shape.newText = undefined; shape.newTextOpacity = undefined; }
-      );
     }
 
     moveTo(position) {
@@ -193,37 +241,56 @@ export default class CSanim {
       this.text = text;
       this.textSize = 20;
       this.textColor = CSanim.WHITE;
+      this.align = 'center';
     }
 
     draw(p5) {
-      let textNorm = '';
-      let textBold = '';
-      let textItal = '';
-      let insideBold = false;
-      let insideItal = false;
-      for (let i = 0; i < this.text.length; i++) {
-        if (this.text[i] === '*' && this.text[i + 1] === '*') {
-          insideBold = !insideBold;
-          i++;
+      const drawText = text => {
+        let textNorm = '';
+        let textBold = '';
+        let textItal = '';
+        let insideBold = false;
+        let insideItal = false;
+        for (let i = 0; i < text.length; i++) {
+          if (text[i] === '*' && text[i + 1] === '*') {
+            insideBold = !insideBold;
+            i++;
+          }
+          else if (text[i] === '_' && text[i + 1] === '_') {
+            insideItal = !insideItal;
+            i++;
+          }
+          else {
+            textNorm += insideBold || insideItal ? ' ' : text[i];
+            textBold += insideBold ? text[i] : ' ';
+            textItal += insideItal ? text[i] : ' ';
+          }
         }
-        else if (this.text[i] === '_' && this.text[i + 1] === '_') {
-          insideItal = !insideItal;
-          i++;
-        }
-        else {
-          textNorm += insideBold || insideItal ? ' ' : this.text[i];
-          textBold += insideBold ? this.text[i] : ' ';
-          textItal += insideItal ? this.text[i] : ' ';
-        }
-      }
-      p5.fill(...this.textColor, this.opacity == null ? 255 : this.opacity);
+        p5.textSize(this.textSize);
+        p5.text(textNorm, ...this.position);
+        p5.textStyle(p5.BOLD);
+        p5.text(textBold, ...this.position);
+        p5.textStyle(p5.ITALIC);
+        p5.text(textItal, ...this.position);
+        p5.textStyle(p5.NORMAL);
+      };
       p5.textSize(this.textSize);
-      p5.text(textNorm, ...this.position);
-      p5.textStyle(p5.BOLD);
-      p5.text(textBold, ...this.position);
-      p5.textStyle(p5.ITALIC);
-      p5.text(textItal, ...this.position);
-      p5.textStyle(p5.NORMAL);
+      if (this.align === 'left') {
+        p5.textAlign(p5.LEFT, p5.TOP);
+      }
+      if (this.newText != null) {
+        p5.fill(...this.textColor, 255 - this.newTextOpacity);
+        drawText(this.text);
+        p5.fill(...this.textColor, this.newTextOpacity);
+        drawText(this.newText);
+      }
+      else {
+        p5.fill(...this.textColor, this.opacity == null ? 255 : this.opacity);
+        drawText(this.text);
+      }
+      if (this.align === 'left') {
+        p5.textAlign(p5.CENTER, p5.CENTER);
+      }
     }
   };
 
@@ -243,24 +310,26 @@ export default class CSanim {
       p5.strokeWeight(this.weight);
       p5.line(...this.beg, ...this.end);
       const angle = p5.atan2(this.end[1] - this.beg[1], this.end[0] - this.beg[0]);
-      const arrowLength = Math.min(p5.dist(...this.beg, ...this.end) / 10, 10);
-      p5.translate(+this.end[0], +this.end[1]);
-      p5.rotate(+this.angle);
-      p5.rotate(+150);
-      p5.line(0, 0, arrowLength, arrowLength);
-      p5.rotate(-300);
-      p5.line(0, 0, arrowLength, arrowLength);
-      p5.rotate(+150);
-      if (this.newColor != null) {
-        p5.stroke(this.newColor[0], this.newColor[1], this.newColor[2], this.newColor[7]);
-        p5.rotate(+150);
-        p5.line(0, 0, arrowLength, arrowLength);
-        p5.rotate(-300);
-        p5.line(0, 0, arrowLength, arrowLength);
-        p5.rotate(+150);
+      if (this.arrow) {
+        const arrowLength = Math.min(p5.dist(...this.beg, ...this.end) / 10, 10);
+        p5.translate(+this.end[0], +this.end[1]);
+        p5.rotate(+(angle - 150));
+        p5.line(0, 0, arrowLength, 0);
+        p5.rotate(-(angle - 150));
+        p5.rotate(+(angle + 150));
+        p5.line(0, 0, arrowLength, 0);
+        p5.rotate(-(angle + 150));
+        if (this.newColor != null) {
+          p5.stroke(this.newColor[0], this.newColor[1], this.newColor[2], this.newColor[7]);
+          p5.rotate(+(angle - 150));
+          p5.line(0, 0, arrowLength, 0);
+          p5.rotate(-(angle - 150));
+          p5.rotate(+(angle + 150));
+          p5.line(0, 0, arrowLength, 0);
+          p5.rotate(-(angle + 150));
+        }
+        p5.translate(-this.end[0], -this.end[1]);
       }
-      p5.rotate(-this.angle);
-      p5.translate(-this.end[0], -this.end[1]);
       if (this.newColor != null) {
         p5.stroke(this.newColor[0], this.newColor[1], this.newColor[2]);
         p5.line(this.newColor[3], this.newColor[4], this.newColor[5], this.newColor[6]);
@@ -275,17 +344,17 @@ export default class CSanim {
       p5.textSize(this.textSize);
       if (this.newText != null) {
         p5.fill(...this.textBoxColor, 255 - this.newTextOpacity);
-        p5.rect(0, 0, this.text === '' ? 0 : this.text.length * this.textSize / 2 + 15, this.textSize + 5, this.weight);
+        p5.rect(0, 0, this.text === '' ? 0 : this.text.length * this.textSize / 2 + 25, this.textSize + 5, this.weight);
         p5.fill(...this.textColor, 255 - this.newTextOpacity);
         p5.text(this.text, 0, 0);
         p5.fill(...this.textBoxColor, this.newTextOpacity);
-        p5.rect(0, 0, this.newText === '' ? 0 : this.newText.length * this.textSize / 2 + 15, this.textSize + 5, this.weight);
+        p5.rect(0, 0, this.newText === '' ? 0 : this.newText.length * this.textSize / 2 + 25, this.textSize + 5, this.weight);
         p5.fill(...this.textColor, this.newTextOpacity);
         p5.text(this.newText, 0, 0);
       }
       else {
         p5.fill(...this.textBoxColor, this.opacity == null ? 255 : this.opacity);
-        p5.rect(0, 0, this.text === '' ? 0 : this.text.length * this.textSize / 2 + 15, this.textSize + 5, this.weight);
+        p5.rect(0, 0, this.text === '' ? 0 : this.text.length * this.textSize / 2 + 25, this.textSize + 5, this.weight);
         p5.fill(...this.textColor, this.opacity == null ? 255 : this.opacity);
         p5.text(this.text, 0, 0);
       }
@@ -437,16 +506,22 @@ export default class CSanim {
       p5.rectMode(p5.CENTER);
       p5.ellipseMode(p5.CENTER);
       p5.textAlign(p5.CENTER, p5.CENTER);
-      p5.textFont('monospace');
+      p5.textFont("'Source Code Pro', monospace");
     };
 
+    let fps = 1;
     let crtFrame = 0;
     p5.draw = () => {
       p5.background(paused ? 75 : 30);
       if (!active) {
+        p5.fill(...CSanim.BLUE);
+        p5.circle(this.w / 2, this.h / 2, 70);
         p5.fill(250);
-        p5.textSize(25);
-        p5.text('Click pentru' + (this.w > 300 ? ' ' : '\n') + 'a începe!', this.w / 2, this.h / 2);
+        p5.triangle(
+          this.w / 2 - 12, this.h / 2 - 20,
+          this.w / 2 - 12, this.h / 2 + 20,
+          this.w / 2 + 22, this.h / 2
+        );
         p5.cursor(p5.HAND);
       }
       else {
@@ -455,7 +530,11 @@ export default class CSanim {
             shape.draw(p5);
           }
         }
-        if (++crtFrame === this.frames.length) {
+        if (crtFrame === this.toSave) {
+          p5.save('ss.png');
+        }
+        crtFrame += fps;
+        if (crtFrame >= this.frames.length) {
           active = false;
         }
       }
@@ -477,6 +556,23 @@ export default class CSanim {
           paused = true;
         }
       }
-    }
+    };
+
+    p5.keyPressed = () => {
+      if (active && !paused) {
+        if (p5.keyCode === p5.LEFT_ARROW) {
+          crtFrame = Math.max(crtFrame - 180, 0);
+        }
+        if (p5.keyCode === p5.RIGHT_ARROW) {
+          crtFrame = Math.min(crtFrame + 180, this.frames.length - 1);
+        }
+        if (p5.keyCode === p5.UP_ARROW) {
+          fps = Math.min(fps + 1, 5);
+        }
+        if (p5.keyCode === p5.DOWN_ARROW) {
+          fps = Math.max(fps - 1, 1);
+        }
+      }
+    };
   }
 };

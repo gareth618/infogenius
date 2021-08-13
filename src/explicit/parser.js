@@ -1,6 +1,6 @@
 import katex from 'katex';
-import parsePara from './paragraph';
 import { toCamelCase } from '@utils/helpers';
+import { parsePara } from './paragraph';
 
 function escapeToHTML(str) {
   return str
@@ -59,7 +59,7 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
     return {
       ast: {
         tag: 'p',
-        content: parsePara(str)
+        sons: [parsePara(str)]
       },
       len: nextEmptyLine
     };
@@ -76,7 +76,7 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
     return {
       ast: {
         tag: `h${h}`,
-        content: parsePara(str)
+        sons: [parsePara(str)]
       },
       len: nextEmptyLine
     };

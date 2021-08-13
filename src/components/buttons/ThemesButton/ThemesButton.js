@@ -14,7 +14,8 @@ const THEMES = [
       sidebar: 'moccasin',
       title: '#282828',
       text: '#444',
-      link: 'dodgerblue'
+      link: 'dodgerblue',
+      code: '#e8e8e8'
     }
   },
   {
@@ -26,7 +27,8 @@ const THEMES = [
       sidebar: '#333',
       title: '#e8e8e8',
       text: '#eee',
-      link: 'skyblue'
+      link: 'skyblue',
+      code: '#383838'
     }
   }
 ];

@@ -11,3 +11,15 @@
   <br />
   Demo of the new version available <a href="https://nervous-kalam-d2cf8e.netlify.app/">here</a>.
 </p>
+
+## TODO
+
+- [ ] fix punctuation after katex bug
+- [ ] add header anchors
+- [ ] add center/right
+- [ ] add quotes
+- [ ] add spoilers
+- [ ] add prism
+- [ ] add variants
+- [ ] add lists
+- [ ] add tables

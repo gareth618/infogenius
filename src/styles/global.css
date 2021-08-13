@@ -42,3 +42,11 @@ body {
   margin: 0;
   background: radial-gradient(at top left, cornflowerblue 0%, royalblue 100%) no-repeat center center fixed;
 }
+
+.os-macos { display: none; }
+.os-linux { display: none; }
+.os-other { display: none; }
+
+.katex-display {
+  margin: 0 !important;
+}

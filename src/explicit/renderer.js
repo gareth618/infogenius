@@ -3,6 +3,7 @@ import uuidv4 from 'uuid';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
 import parse from './parser';
+import { renderPara } from './paragraph';
 import * as styles from '@styles/explicit.module.css';
 
 import { SketchWrapper } from '@components/others';
@@ -20,14 +21,14 @@ function renderAST(ast) {
   }
 
   if (ast.tag === 'p') {
-    return <p>{ast.content}</p>;
+    return <p>{renderPara(ast.sons[0])}</p>;
   }
 
-  if (ast.tag === 'h2') return <h2>{ast.content}</h2>;
-  if (ast.tag === 'h3') return <h3>{ast.content}</h3>;
-  if (ast.tag === 'h4') return <h4>{ast.content}</h4>;
-  if (ast.tag === 'h5') return <h5>{ast.content}</h5>;
-  if (ast.tag === 'h6') return <h6>{ast.content}</h6>;
+  if (ast.tag === 'h2') return <h2>{renderPara(ast.sons[0])}</h2>;
+  if (ast.tag === 'h3') return <h3>{renderPara(ast.sons[0])}</h3>;
+  if (ast.tag === 'h4') return <h4>{renderPara(ast.sons[0])}</h4>;
+  if (ast.tag === 'h5') return <h5>{renderPara(ast.sons[0])}</h5>;
+  if (ast.tag === 'h6') return <h6>{renderPara(ast.sons[0])}</h6>;
 
   if (ast.tag === 'math') {
     return (

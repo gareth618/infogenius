@@ -8,24 +8,20 @@
   color: var(--text);
 }
 
-.explicit p {
-  overflow-x: scroll;
-}
-
 @media (min-width: 801px) {
   .explicit p {
     text-align: justify;
   }
 }
 
-.explicit h2 { margin: 2.0rem 0 1rem 0; font-size: 1.7rem; }
-.explicit h3 { margin: 1.9rem 0 1rem 0; font-size: 1.6rem; }
-.explicit h4 { margin: 1.8rem 0 1rem 0; font-size: 1.5rem; }
-.explicit h5 { margin: 1.7rem 0 1rem 0; font-size: 1.4rem; }
-.explicit h6 { margin: 1.6rem 0 1rem 0; font-size: 1.3rem; }
+.explicit h2 { margin: 2.0rem 0 1.1rem 0; font-size: 1.7rem; }
+.explicit h3 { margin: 1.9rem 0 1.1rem 0; font-size: 1.6rem; }
+.explicit h4 { margin: 1.8rem 0 1.1rem 0; font-size: 1.5rem; }
+.explicit h5 { margin: 1.7rem 0 1.1rem 0; font-size: 1.4rem; }
+.explicit h6 { margin: 1.6rem 0 1.1rem 0; font-size: 1.3rem; }
 
 .explicit .img-wrapper {
-  margin: 1rem auto;
+  margin: 1.3rem auto;
   max-width: 100%;
 }
 
@@ -36,18 +32,19 @@
 
 .explicit video {
   display: block;
-  margin: 1rem auto;
+  margin: 1.3rem auto;
   max-width: 100%;
   border-radius: .5rem;
 }
 
 .explicit .math-wrapper {
+  margin: 1.3rem auto;
   color: var(--text);
   overflow-x: scroll;
 }
 
 .explicit .sketch-wrapper {
-  margin: 1rem auto;
+  margin: 1.3rem auto;
   width: fit-content;
   max-width: 100%;
   overflow-x: scroll;
@@ -56,4 +53,46 @@
 
 .explicit canvas {
   display: block;
+}
+
+.explicit code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 85%;
+  padding: .2rem .4rem;
+  border-radius: .25rem;
+  background: var(--code);
+}
+
+.explicit kbd {
+  font-family: 'Inter', sans-serif;
+  font-size: 85%;
+  padding: calc(.2rem - 1px) calc(.4rem - 1px);
+  border-radius: .25rem;
+  background: var(--code);
+  border: 1px solid var(--text);
+}
+
+.explicit .twemoji {
+  margin: 0 .1em;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.1em;
+}
+
+.explicit a {
+  color: var(--link);
+}
+
+.explicit a:hover {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  text-decoration-thickness: 1px;
+}
+
+.explicit .strk {
+  text-decoration: line-through;
+}
+
+.explicit .high {
+  color: limegreen;
 }

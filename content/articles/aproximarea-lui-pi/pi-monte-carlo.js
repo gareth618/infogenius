@@ -44,7 +44,7 @@ export default function PiMonteCarlo(p5) {
     }
   };
 
-  p5.keyTyped = () => {
+  p5.keyPressed = () => {
     if (!paused && (p5.key === 'r' || p5.key === 'R')) {
       inside = 0;
       total = 0;

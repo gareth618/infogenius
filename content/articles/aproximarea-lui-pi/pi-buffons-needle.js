@@ -62,7 +62,7 @@ export default function PiBuffonsNeedle(p5) {
     }
   };
 
-  p5.keyTyped = () => {
+  p5.keyPressed = () => {
     if (!paused && (p5.key === 'r' || p5.key === 'R')) {
       good = 0;
       total = 0;
