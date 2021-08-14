@@ -70,7 +70,10 @@ function fixKatexBug(ast) {
       if (ast.sons[i - 1].tag === 'pText') {
         const strLft = ast.sons[i - 1].content;
         if (strLft.length > 0) {
-          const pos = strLft.lastIndexOf(' ');
+          const pos = Math.max(
+            strLft.lastIndexOf(' '),
+            strLft.lastIndexOf('\n')
+          );
           if (pos !== -1) {
             ast.sons[i].lft = strLft.slice(pos + 1);
             ast.sons[i - 1].content = strLft.slice(0, pos + 1);
@@ -81,8 +84,10 @@ function fixKatexBug(ast) {
       if (ast.sons[i + 1].tag === 'pText') {
         const strRgh = ast.sons[i + 1].content;
         if (strRgh.length > 0) {
-          const pos = strRgh.indexOf(' ');
-          if (pos !== -1) {
+          let pos1 = strRgh.indexOf(' ' ); if (pos1 === -1) pos1 = 1e9;
+          let pos2 = strRgh.indexOf('\n'); if (pos2 === -1) pos2 = 1e9;
+          const pos = Math.min(pos1, pos2);
+          if (pos !== 1e9) {
             ast.sons[i].rgh = strRgh.slice(0, pos);
             ast.sons[i + 1].content = strRgh.slice(pos);
           }

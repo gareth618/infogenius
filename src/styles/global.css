@@ -49,4 +49,5 @@ body {
 
 .katex-display {
   margin: 0 !important;
+  padding: 5px 0;
 }
