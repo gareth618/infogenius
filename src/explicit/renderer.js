@@ -62,7 +62,41 @@ function renderAST(ast) {
   return <></>;
 }
 
+function fixKatexBug(ast) {
+  if (ast.sons == null) return;
+  for (let i = 1; i < ast.sons.length - 1; i++) {
+    if (ast.sons[i].tag === 'pMath') {
+      ast.sons[i].lft = '';
+      if (ast.sons[i - 1].tag === 'pText') {
+        const strLft = ast.sons[i - 1].content;
+        if (strLft.length > 0) {
+          const pos = strLft.lastIndexOf(' ');
+          if (pos !== -1) {
+            ast.sons[i].lft = strLft.slice(pos + 1);
+            ast.sons[i - 1].content = strLft.slice(0, pos + 1);
+          }
+        }
+      }
+      ast.sons[i].rgh = '';
+      if (ast.sons[i + 1].tag === 'pText') {
+        const strRgh = ast.sons[i + 1].content;
+        if (strRgh.length > 0) {
+          const pos = strRgh.indexOf(' ');
+          if (pos !== -1) {
+            ast.sons[i].rgh = strRgh.slice(0, pos);
+            ast.sons[i + 1].content = strRgh.slice(pos);
+          }
+        }
+      }
+    }
+  }
+  for (const son of ast.sons) {
+    fixKatexBug(son);
+  }
+}
+
 export default function render(str, media) {
   const ast = parse(str, media);
+  fixKatexBug(ast);
   return renderAST(ast);
 };

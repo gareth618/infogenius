@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'gatsby';
 import uuidv4 from 'uuid';
 import katex from 'katex';
+import { katexify } from '@utils/helpers';
 import * as styles from '@styles/explicit.module.css';
 
 function renderText(str) {
@@ -24,9 +25,14 @@ function renderCode(str) {
   return <code>{str.replace(/``/g, '`').trim()}</code>;
 }
 
-function renderMath(str) {
+function renderMath(str, lft, rgh) {
   str = str.slice(1, -1);
-  try { return <span dangerouslySetInnerHTML={{ __html: katex.renderToString(str) }} /> }
+  try { return <span dangerouslySetInnerHTML={{ __html: katex.renderToString(
+    (lft === '' || lft == null ? '' : katexify(lft))
+    + ' ' + str + ' ' +
+    (rgh === '' || rgh == null ? '' : katexify(rgh)),
+    { trust: true }
+  ) }} /> }
   catch (err) { return `$${str}$`; }
 }
 
@@ -254,7 +260,7 @@ export function renderPara(ast) {
   for (const son of ast.sons) {
     if (son.tag === 'pText') jsx.push(<React.Fragment key={uuidv4()}>{renderText(son.content)}</React.Fragment>);
     if (son.tag === 'pCode') jsx.push(<React.Fragment key={uuidv4()}>{renderCode(son.content)}</React.Fragment>);
-    if (son.tag === 'pMath') jsx.push(<React.Fragment key={uuidv4()}>{renderMath(son.content)}</React.Fragment>);
+    if (son.tag === 'pMath') jsx.push(<React.Fragment key={uuidv4()}>{renderMath(son.content, son.lft, son.rgh)}</React.Fragment>);
     if (son.tag === 'pKbrd') jsx.push(<React.Fragment key={uuidv4()}>{renderKbrd(son.content)}</React.Fragment>);
     if (son.tag === 'pEmoj') jsx.push(<React.Fragment key={uuidv4()}>{renderEmoj(son.content)}</React.Fragment>);
     if (son.tag === 'pLink') jsx.push(

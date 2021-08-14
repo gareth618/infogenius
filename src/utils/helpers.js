@@ -70,3 +70,7 @@ export function slugify(str) {
     .replace(/ț/g, 't')
     .replace(/ /g, '-');
 };
+
+export function katexify(str) {
+  return `\\htmlStyle{font-family: 'Merriweather'; font-size: 1rem;}{${str}}`;
+};

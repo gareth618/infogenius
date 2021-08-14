@@ -14,7 +14,7 @@
 
 ## TODO
 
-- [ ] fix punctuation after katex bug
+- [x] fix punctuation after katex bug
 - [ ] add header anchors
 - [ ] add center/right
 - [ ] add quotes

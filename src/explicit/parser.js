@@ -1,5 +1,5 @@
 import katex from 'katex';
-import { toCamelCase } from '@utils/helpers';
+import { toCamelCase, katexify } from '@utils/helpers';
 import { parsePara } from './paragraph';
 
 function escapeToHTML(str) {
@@ -90,11 +90,11 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
       const last = str.slice(-1);
       const math = last === '$'
         ? `${str.slice(2, -2)}`
-        : `${str.slice(2, -3)} \\text{${last}}`;
+        : `${str.slice(2, -3)} ${katexify(last)}`;
       return {
         ast: {
           tag: 'math',
-          math: katex.renderToString(math, { displayMode: true })
+          math: katex.renderToString(math, { trust: true, displayMode: true })
         },
         len: nextEmptyLine
       };
