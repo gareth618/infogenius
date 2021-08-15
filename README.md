@@ -16,9 +16,9 @@
 
 - [x] fix punctuation after katex bug
 - [x] add header anchors
-- [ ] add center/right
-- [ ] add quotes
-- [ ] add spoilers
+- [x] add center/right
+- [x] add quotes
+- [x] add horizontal lines
 - [ ] improve excerpt generation
 - [ ] add prism
 - [ ] add variants

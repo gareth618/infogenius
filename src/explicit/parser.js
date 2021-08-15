@@ -9,13 +9,97 @@ function escapeToHTML(str) {
 }
 
 const TAG_SONS = {
-  'root'      : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
-  '[+quote]'  : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
-  '[+spoiler]': ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
-  '[+item]'   : ['##', '$$', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', '[+spoiler]', 'p'],
+  'root'      : ['##', '$$', '---', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', 'p'],
+  '[+quote]'  : ['##', '$$', '---', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', 'p'],
+  '[+item]'   : ['##', '$$', '---', '![]()', '[+list]', '[+code]', '[+variants]', '[+table]', '[+center]', '[+right]', '[+quote]', 'p'],
   '[+center]' : ['p'],
   '[+right]'  : ['p']
 };
+
+const TAG_ATTS = {
+  '[+list]': [
+    {
+      name: 'type',
+      vals: ['bullet', '(a|A|1|i|I)(\\.|\\))', '\\*\\*(a|A|1|i|I)(\\.|\\))\\*\\*', 'none'],
+      dflt: 'bullet'
+    },
+    {
+      name: 'space',
+      vals: ['no', 'yes'],
+      dflt: 'no'
+    }
+  ],
+  '[+code]': [
+    {
+      name: 'lang',
+      vals: [
+        'html', 'css', 'js', 'json',
+        'shell', 'batch', 'powershell',
+        'c', 'cpp', 'java', 'python',
+        'latex', 'md',
+        'asm6502', 'none'
+      ],
+      dflt: 'none'
+    },
+    {
+      name: 'numb',
+      vals: ['no', 'yes'],
+      dflt: 'yes'
+    },
+    {
+      name: 'high',
+      vals: ['([1-9]\\d*(\\-[1-9]\\d*)?, )*[1-9]\\d*(\\-[1-9]\\d*)?'],
+      dflt: ''
+    },
+    {
+      name: 'crop',
+      vals: ['no', 'yes'],
+      dflt: 'no'
+    },
+    {
+      name: 'name',
+      vals: ['((?!; ).)+'],
+      dflt: ''
+    }
+  ]
+};
+
+function getTagRegex(tag) {
+  let regex = '';
+  if (TAG_ATTS[tag] != null) {
+    regex = '(';
+    for (const att of TAG_ATTS[tag]) {
+      regex += att.name + ': (';
+      for (const val of att.vals) {
+        regex += val + '|';
+      }
+      regex = regex.slice(0, -1) + ')|';
+    }
+    regex = regex.slice(0, -1) + ')';
+    regex = `(\\((?<att>(${regex}; )*${regex})?\\))?`;
+  }
+  return new RegExp(tag
+    .replace('[', '\\[')
+    .replace(']', '\\]')
+    .replace('+', '\\+') + regex + '\\n');
+}
+
+// function getAttsFromString(str, tag) {
+//   const atts = { };
+//   if (TAG_ATTS[tag] != null) {
+//     for (const att of TAG_ATTS[tag]) {
+//       atts[att.name] = att.dflt;
+//     }
+//   }
+//   if (str != null) {
+//     const attArray = str.split('; ');
+//     for (const entry of attArray) {
+//       const [name, val] = entry.split(': ');
+//       atts[name] = val;
+//     }
+//   }
+//   return atts;
+// }
 
 function parseSons(str, media, tag) {
   const ast = {
@@ -102,6 +186,16 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
     }
   }
 
+  if (tag === '---') {
+    const nextEmptyLine = str.indexOf('\n\n');
+    str = str.slice(0, nextEmptyLine);
+    if (str !== '---') return null;
+    return {
+      ast: { tag: 'hr' },
+      len: nextEmptyLine
+    };
+  }
+
   if (tag === '![]()') {
     const nextEmptyLine = str.indexOf('\n\n');
     str = str.slice(0, nextEmptyLine);
@@ -157,4 +251,24 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
       };
     }
   }
+
+  if (tag !== '[+center]' && tag !== '[+right]' && tag !== '[+quote]') return;
+
+  const regex = getTagRegex(tag);
+  const match = str.match(regex);
+  if (match?.index !== 0) return null;
+  // const atts = getAttsFromString(match.groups?.att, tag);
+
+  const endStr = '\n' + new Array(tagTabSize).fill(' ').join('') + tag.replace('+', '-');
+  const endPos = str.indexOf(endStr + '\n\n');
+  if (endPos === -1) return null;
+
+  const content = str.slice(str.indexOf('\n') + 1, endPos + 1);
+  if (content.match(/\S/) == null) return null;
+  const tagEnd = endPos + endStr.length;
+
+  return {
+    ast: parseSons(content, media, tag),
+    len: tagEnd
+  };
 };

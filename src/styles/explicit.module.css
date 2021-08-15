@@ -36,7 +36,7 @@
 }
 
 .explicit .img-wrapper {
-  margin: 1.3rem auto;
+  margin: 1rem auto;
   max-width: 100%;
 }
 
@@ -47,19 +47,19 @@
 
 .explicit video {
   display: block;
-  margin: 1.3rem auto;
+  margin: 1rem auto;
   max-width: 100%;
   border-radius: .5rem;
 }
 
 .explicit .math-wrapper {
-  margin: 1.3rem auto;
+  margin: 1rem auto;
   color: var(--text);
   overflow-x: scroll;
 }
 
 .explicit .sketch-wrapper {
-  margin: 1.3rem auto;
+  margin: 1rem auto;
   width: fit-content;
   max-width: 100%;
   overflow-x: scroll;
@@ -111,3 +111,28 @@
 .explicit .high {
   color: limegreen;
 }
+
+.explicit .center p {
+  text-align: center;
+}
+
+.explicit .right p {
+  text-align: right;
+}
+
+.explicit hr {
+  margin: 1rem 0;
+  border: 1px solid var(--text);
+  border-radius: 1px;
+}
+
+.explicit blockquote {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: .5rem;
+  background: var(--quote);
+  border-left: 4px solid var(--link);
+}
+
+.explicit blockquote > *:first-child { margin-top: 0; }
+.explicit blockquote > *:last-child { margin-bottom: 0; }

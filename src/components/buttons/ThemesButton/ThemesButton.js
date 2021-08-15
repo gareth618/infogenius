@@ -15,7 +15,8 @@ const THEMES = [
       title: '#282828',
       text: '#444',
       link: 'dodgerblue',
-      code: '#e8e8e8'
+      code: '#e8e8e8',
+      quote: '#eff0ff'
     }
   },
   {
@@ -28,7 +29,8 @@ const THEMES = [
       title: '#e8e8e8',
       text: '#eee',
       link: 'skyblue',
-      code: '#383838'
+      code: '#383838',
+      quote: '#285078'
     }
   }
 ];

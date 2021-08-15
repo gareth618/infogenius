@@ -20,8 +20,24 @@ function renderAST(ast) {
     return sons;
   }
 
+  if (ast.tag === '[+center]') {
+    return <div className={styles.center}>{sons}</div>;
+  }
+
+  if (ast.tag === '[+right]') {
+    return <div className={styles.right}>{sons}</div>;
+  }
+
+  if (ast.tag === '[+quote]') {
+    return <blockquote>{sons}</blockquote>
+  }
+
   if (ast.tag === 'p') {
     return <p>{renderPara(ast.sons[0])}</p>;
+  }
+
+  if (ast.tag === 'hr') {
+    return <hr />;
   }
 
   if (ast.tag === 'h2') return <h2 id={`header-${ast.id}`}><a href={`#header-${ast.id}`}>{renderPara(ast.sons[0])}</a></h2>;
