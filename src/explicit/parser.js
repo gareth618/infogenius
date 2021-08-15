@@ -1,4 +1,3 @@
-import katex from 'katex';
 import { toCamelCase, katexify } from '@utils/helpers';
 import { parsePara } from './paragraph';
 
@@ -88,13 +87,12 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
     if (!/\$\$.*\S.*\$\$(\.|,|!|\?)?/s.test(str)) return null;
     try {
       const last = str.slice(-1);
-      const math = last === '$'
-        ? `${str.slice(2, -2)}`
-        : `${str.slice(2, -3)} ${katexify(last)}`;
       return {
         ast: {
           tag: 'math',
-          math: katex.renderToString(math, { trust: true, displayMode: true })
+          math: last === '$'
+            ? katexify(str.slice(2, -2), 'display', '', '')
+            : katexify(str.slice(2, -3), 'display', '', last)
         },
         len: nextEmptyLine
       };

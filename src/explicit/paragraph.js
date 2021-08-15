@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import uuidv4 from 'uuid';
-import katex from 'katex';
 import { katexify } from '@utils/helpers';
 import * as styles from '@styles/explicit.module.css';
 
@@ -27,12 +26,7 @@ function renderCode(str) {
 
 function renderMath(str, lft, rgh) {
   str = str.slice(1, -1);
-  try { return <span dangerouslySetInnerHTML={{ __html: katex.renderToString(
-    (lft === '' || lft == null ? '' : katexify(lft))
-    + ' ' + str + ' ' +
-    (rgh === '' || rgh == null ? '' : katexify(rgh)),
-    { trust: true }
-  ) }} /> }
+  try { return <span dangerouslySetInnerHTML={{ __html: katexify(str, 'inline', lft || '', rgh || '') }} /> }
   catch (err) { return `$${str}$`; }
 }
 
@@ -173,6 +167,9 @@ export function parsePara(str) {
               rght[brckBeg] = brckEnd;
               rght[paraBeg] = paraEnd;
               mark.fill('.', paraBeg + 1, paraEnd);
+              if (str.slice(paraEnd + 1, paraEnd + 5) === 'TODO') {
+                mark.fill('?', paraEnd + 1, paraEnd + 5);
+              }
               for (let j = brckBeg + 1; j < brckEnd; j++) {
                 if (/[[\]().]/.test(mark[j])) {
                   mark[j] = ' ';

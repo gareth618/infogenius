@@ -1,3 +1,5 @@
+import katex from 'katex';
+
 export function toCamelCase(str) {
   const arr = str.split('');
   arr[0] = arr[0].toUpperCase();
@@ -71,6 +73,17 @@ export function slugify(str) {
     .replace(/ /g, '-');
 };
 
-export function katexify(str) {
-  return `\\htmlStyle{font-family: 'Merriweather'; font-size: 1rem;}{${str}}`;
+export function katexify(math, mode, lft, rgh) {
+  if (lft !== '') math = `\\htmlStyle{font-family: 'Merriweather'; font-size: 1rem;}{${lft}} ` + math;
+  let html = katex.renderToString(math, { displayMode: (mode === 'display' ? true : false), trust: true });
+  if (rgh !== '') {
+    let pos = html.length;
+    for (let i = 0; i < (mode === 'inline' ? 3 : 4); i++) {
+      pos = html.slice(0, pos).lastIndexOf('</span>');
+    }
+    html = html.slice(0, pos)
+      + `<span class="enclosing" style="font-family: 'Merriweather'; font-size: 1rem;"><span class="mclose">${rgh}</span></span>`
+      + html.slice(pos);
+  }
+  return html;
 };
