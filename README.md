@@ -15,10 +15,11 @@
 ## TODO
 
 - [x] fix punctuation after katex bug
-- [ ] add header anchors
+- [x] add header anchors
 - [ ] add center/right
 - [ ] add quotes
 - [ ] add spoilers
+- [ ] improve excerpt generation
 - [ ] add prism
 - [ ] add variants
 - [ ] add lists

@@ -24,11 +24,11 @@ function renderAST(ast) {
     return <p>{renderPara(ast.sons[0])}</p>;
   }
 
-  if (ast.tag === 'h2') return <h2>{renderPara(ast.sons[0])}</h2>;
-  if (ast.tag === 'h3') return <h3>{renderPara(ast.sons[0])}</h3>;
-  if (ast.tag === 'h4') return <h4>{renderPara(ast.sons[0])}</h4>;
-  if (ast.tag === 'h5') return <h5>{renderPara(ast.sons[0])}</h5>;
-  if (ast.tag === 'h6') return <h6>{renderPara(ast.sons[0])}</h6>;
+  if (ast.tag === 'h2') return <h2 id={`header-${ast.id}`}><a href={`#header-${ast.id}`}>{renderPara(ast.sons[0])}</a></h2>;
+  if (ast.tag === 'h3') return <h3 id={`header-${ast.id}`}><a href={`#header-${ast.id}`}>{renderPara(ast.sons[0])}</a></h3>;
+  if (ast.tag === 'h4') return <h4 id={`header-${ast.id}`}><a href={`#header-${ast.id}`}>{renderPara(ast.sons[0])}</a></h4>;
+  if (ast.tag === 'h5') return <h5 id={`header-${ast.id}`}><a href={`#header-${ast.id}`}>{renderPara(ast.sons[0])}</a></h5>;
+  if (ast.tag === 'h6') return <h6 id={`header-${ast.id}`}><a href={`#header-${ast.id}`}>{renderPara(ast.sons[0])}</a></h6>;
 
   if (ast.tag === 'math') {
     return (
@@ -101,8 +101,19 @@ function fixKatexBug(ast) {
   }
 }
 
+function makeAnchors(ast, cnt) {
+  if (ast.sons == null) return;
+  for (const son of ast.sons) {
+    if (son.tag[0] === 'h') {
+      son.id = ++cnt.val;
+    }
+    makeAnchors(son, cnt);
+  }
+}
+
 export default function render(str, media) {
   const ast = parse(str, media);
   fixKatexBug(ast);
+  makeAnchors(ast, { val: 0 });
   return renderAST(ast);
 };
