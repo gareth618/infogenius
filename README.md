@@ -19,8 +19,26 @@
 - [x] add center/right
 - [x] add quotes
 - [x] add horizontal lines
-- [ ] improve excerpt generation
+- [x] improve excerpt generation
 - [ ] add prism
 - [ ] add variants
 - [ ] add lists
 - [ ] add tables
+
+---
+
+- [ ] improve Explicit highlighter
+- [ ] remove Explicit parser repo
+
+---
+
+- [ ] search engine (Algola)
+- [ ] comments (FireBase)
+- [ ] push notifications
+- [ ] refactoring
+
+---
+
+- [ ] rewrite articles
+- [ ] launch (Netlify)
+- [ ] make this a Gatsby starter :zany_face:

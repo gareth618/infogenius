@@ -3,6 +3,7 @@ AUTHOR: Iulian Oleniuc
 DATE: 03/10/2020
 CATEGORIES: Algoritmică și structuri de date, Matematică
 TAGS: cmmdc, descompunere în factori primi, funcții multiplicative, indicatorul lui euler, numărul divizorilor, numere prime, suma divizorilor
+DESCRIPTION: Astăzi vă voi prezenta câteva aplicații interesante la descompunerea unui număr întreg în factori primi, printre care indicatorul lui Euler.
 
 În acest articol voi prezenta câteva aplicații mai interesante la [descompunerea unui număr întreg în factori primi](factorizare-cpp): numărul divizorilor, suma divizorilor și indicatorul lui Euler. Ne vom axa pe demonstrarea formulelor pentru calculul acestor funcții, și implicit pe modul în care putem deduce aceste formule.
 

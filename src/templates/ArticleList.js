@@ -10,6 +10,7 @@ import * as stylesExplicit from '@styles/explicit.module.css';
 import { Pagination } from '@components/others';
 import { Layout } from '@components/layout';
 
+import { getExcerpt } from '@explicit/renderer';
 import { dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
@@ -34,7 +35,7 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
           <div className={styles.metadata}>de {article.author} | {date} | {categories}</div>
         </div>
         <div className={stylesExplicit.explicit}>
-          <p>{article.excerpt}</p>
+          {getExcerpt(article)}
         </div>
       </article>
     );

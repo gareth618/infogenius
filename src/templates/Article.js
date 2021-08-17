@@ -24,7 +24,7 @@ export default function Article({ data, pageContext }) {
     <>
       <Helmet htmlAttributes={{ lang: 'ro-RO' }}>
         <title>{pageContext.title} – {siteTitle}</title>
-        <meta name="description" content={pageContext.excerpt} />
+        <meta name="description" content={pageContext.description.replace(/--/g, '–').replace(/\.\.\./g, '…')} />
         <meta name="keywords" content={pageContext.tags.join(', ')} />
         <meta name="author" content={pageContext.author} />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />

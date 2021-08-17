@@ -3,6 +3,7 @@ AUTHOR: Iulian Oleniuc
 DATE: 06/02/2021
 CATEGORIES: Algoritmică și structuri de date
 TAGS: arbori, recursivitate, șiruri de caractere, structuri de date, sume parțiale, trie, xor
+DESCRIPTION: Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră compactă...
 
 În acest articol voi prezenta structura de date numită trie, precum și câteva aplicații interesante ale acesteia. Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră compactă. Din acest motiv, putem spune că tria este o structură de date de tip __dicționar__. Avantajul principal al acesteia este complexitatea căutării unui cuvânt, care este liniară în lungimea sa, nedepinzând de mărimea dicționarului. De aici și numele structurii (__trie__ provine de la __re**trie**val__).
 

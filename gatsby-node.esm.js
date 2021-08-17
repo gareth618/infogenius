@@ -11,8 +11,8 @@ export function createSchemaCustomization({ actions }) {
       date: Date!
       categories: [String!]!
       tags: [String!]!
+      description: String!
       content: String!
-      excerpt: String!
     }
     type ExplicitPage implements Node {
       slug: String!

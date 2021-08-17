@@ -133,3 +133,80 @@ export default function render(str, media) {
   makeAnchors(ast, { val: 0 });
   return renderAST(ast);
 };
+
+export function getExcerpt(article) {
+  const ast = parse(article.content, {
+    images: article.images,
+    videos: article.videos,
+    scripts: article.scripts
+  });
+  fixKatexBug(ast);
+
+  const excAST = { tag: 'p', sons: [{ tag: 'para', sons: [] }] };
+  for (const son of ast.sons) {
+    if (son.tag === 'p') {
+      excAST.sons[0].sons.push(...son.sons[0].sons);
+      excAST.sons[0].sons.push({ tag: 'pText', content: ' ' });
+    }
+  }
+
+  const MAX = 260;
+  let cnt = 0;
+  const dfs = ast => {
+    for (const son of ast.sons) {
+      if (/(para|pBold|pItal|pStrk|pHigh)/.test(son.tag)) {
+        dfs(son);
+      }
+      else if (son.tag === 'pLink') {
+        son.url = '';
+        dfs(son);
+      }
+      else if (son.tag === 'pText') {
+        son.content = son.content.replace(/\n/g, ' ');
+        const tokens = son.content.split(' ');
+        let newContent = '';
+        let index = 0;
+        for (const token of tokens) {
+          const now = token + (++index === tokens.length ? '' : ' ');
+          newContent += now;
+          cnt += now.length;
+          if (cnt > MAX) break;
+        }
+        son.content = newContent;
+      }
+      else if (son.tag === 'pCode') {
+        cnt += son.content.length;
+      }
+      else if (son.tag === 'pMath') {
+        cnt += son.content.length / 3;
+        cnt += son.lft.length;
+        cnt += son.rgh.length;
+      }
+      else if (son.tag === 'pKbrd') {
+        cnt += son.content.length / 2;
+      }
+      else if (son.tag === 'pEmoj') {
+        cnt += 2;
+      }
+      if (cnt > MAX) {
+        while (son !== ast.sons[ast.sons.length - 1]) {
+          ast.sons.pop();
+        }
+        break;
+      }
+    }
+  };
+  dfs(excAST);
+
+  const lastSon = excAST.sons[0].sons[excAST.sons[0].sons.length - 1];
+  if (lastSon.tag === 'pText') {
+    while (/[^a-zA-Z0-9]/.test(lastSon.content[lastSon.content.length - 1])) {
+      lastSon.content = lastSon.content.slice(0, -1);
+    }
+    lastSon.content += '...';
+  }
+  else {
+    excAST.sons[0].sons.push({ tag: 'pText', content: '...' });
+  }
+  return renderAST(excAST);
+};

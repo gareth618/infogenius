@@ -25,29 +25,21 @@ export function dateToString(date) {
   return `${ddd}/${mmm}/${yyy}`;
 };
 
-export function getExcerpt(content) {
-  const sanitizedContent = content.replace(/[*_$[\]+\-`]/g, '');
-  let excerpt = sanitizedContent.slice(0, 260 + sanitizedContent.slice(260).indexOf(' '));
-  while (/[^a-zA-z0-9]/.test(excerpt.slice(-1))) {
-    excerpt = excerpt.slice(0, -1);
-  }
-  return excerpt + '…';
-};
-
 export function getArticleInfo(str) {
   const pos1 = str.indexOf('\n');
   const pos2 = pos1 + 1 + str.slice(pos1 + 1).indexOf('\n');
   const pos3 = pos2 + 1 + str.slice(pos2 + 1).indexOf('\n');
   const pos4 = pos3 + 1 + str.slice(pos3 + 1).indexOf('\n');
   const pos5 = pos4 + 1 + str.slice(pos4 + 1).indexOf('\n');
+  const pos6 = pos5 + 1 + str.slice(pos5 + 1).indexOf('\n');
   return {
     title: str.slice('TITLE: '.length, pos1),
     author: str.slice(pos1 + 'AUTHOR: '.length + 1, pos2),
     date: stringToDate(str.slice(pos2 + 'DATE: '.length + 1, pos3)),
     categories: str.slice(pos3 + 'CATEGORIES: '.length + 1, pos4).split(', '),
     tags: str.slice(pos4 + 'TAGS: '.length + 1, pos5).split(', '),
-    content: str.slice(pos5 + 2),
-    excerpt: getExcerpt(str.slice(pos5 + 2))
+    description: str.slice(pos5 + 'DESCRIPTION: '.length + 1, pos6),
+    content: str.slice(pos6 + 2)
   };
 };
 

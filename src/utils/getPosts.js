@@ -44,8 +44,8 @@ async function getPost(type, graphql, importedScripts, slug) {
           date
           categories
           tags
+          description
           content
-          excerpt
         }
       }
     `)
