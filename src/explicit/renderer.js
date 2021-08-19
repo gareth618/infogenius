@@ -1,4 +1,5 @@
 import React from 'react';
+import prism from 'prismjs';
 import uuidv4 from 'uuid';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
@@ -73,6 +74,23 @@ function renderAST(ast) {
 
   if (ast.tag === 'js') {
     return <SketchWrapper sketch={scripts[ast.script]} />;
+  }
+
+  if (ast.tag === '[+code]') {
+    return (
+      <div style={{ borderRadius: '.5rem', background: '#181818' }}>
+        <div style={{ display: 'flex' }}>
+          <div style={{ width: '15px', height: '15px', borderRadius: '50%', margin: '.7rem .2rem .7rem 1rem', background: '#ff605c' }} />
+          <div style={{ width: '15px', height: '15px', borderRadius: '50%', margin: '.7rem .2rem', background: '#ffbd44' }} />
+          <div style={{ width: '15px', height: '15px', borderRadius: '50%', margin: '.7rem .2rem', background: '#00ca4e' }} />
+        </div>
+        <pre className={styles.code} style={{ marginTop: 0, borderRadius: '0 0 .5rem .5rem' }}>
+          <code className={'language-javascript'} dangerouslySetInnerHTML={{
+            __html: prism.highlight(ast.code, prism.languages.javascript, 'javascript')
+          }} />
+        </pre>
+      </div>
+    );
   }
 
   return <></>;

@@ -107,7 +107,7 @@ Acum că avem calculată această informație, ne este mai ușor să rezumăm ce
 
 Iată cum arată sursa completă pentru problema Trie:
 
-[+code](title: trie.cpp; lang: cpp; numb: yes; wrap: yes)
+[+code](title: trie.cpp; lang: cpp; numb: yes; crop: yes)
     #include <bits/stdc++.h>
     using namespace std;
 
@@ -181,7 +181,7 @@ Iată cum arată sursa completă pentru problema Trie:
 
 Iată și o implementare mai puțin populară, în care funcțiile sunt implementate iterativ. Aici, nodurile sunt ținute într-un vector alocat dinamic, iar pointerii sunt de fapt indici în acest vector. Dezavantajul este că această metodă de stocare a nodurilor nu ne permite să eliberăm efectiv memorie în urma unui `erase`. Nodurile sunt eliminate doar conceptual, prin ștergerea muchiei către primul nod dintre rădăcină și `node` care are `lvs`-ul `0`.
 
-[+code](title: trie.cpp; lang: cpp; numb: yes; wrap: yes)
+[+code](title: trie.cpp; lang: cpp; numb: yes; crop: yes)
     #include <bits/stdc++.h>
     using namespace std;
 
@@ -317,7 +317,7 @@ Am colorat cu portocaliu nodurile în care am ajuns alegând valoarea $\neg x$ �
 
 Iată mai jos o sursă de 100 de puncte la problema Xor Max. Complexitatea finală a algoritmului este de ordinul $O(n \log n)$, unde $\log$-ul vine de la numărul de biți ai unui număr, care este totodată înălțimea triei.
 
-[+code](title: xormax.cpp; lang: cpp; numb: yes; wrap: yes)
+[+code](title: xormax.cpp; lang: cpp; numb: yes; crop: yes)
     #include <bits/stdc++.h>
     using namespace std;
 

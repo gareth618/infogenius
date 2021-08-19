@@ -72,7 +72,7 @@
   display: block;
 }
 
-.explicit code {
+.explicit p code {
   font-family: 'Source Code Pro', monospace;
   font-size: 85%;
   padding: .2rem .4rem;
@@ -127,6 +127,21 @@
   margin: 1rem 0;
   border: 1px solid var(--text);
   border-radius: 1px;
+}
+
+.explicit .code {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #222;
+  border-radius: .5rem;
+  overflow-x: scroll;
+}
+
+.explicit .code code {
+  font-family: 'Source Code Pro', monospace;
+  text-shadow: none;
+  background: transparent;
+  line-height: 1.4;
 }
 
 .explicit blockquote {

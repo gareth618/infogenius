@@ -57,7 +57,12 @@ const TAG_ATTS = {
       dflt: 'no'
     },
     {
-      name: 'name',
+      name: 'title',
+      vals: ['((?!; ).)+'],
+      dflt: ''
+    },
+    {
+      name: 'label',
       vals: ['((?!; ).)+'],
       dflt: ''
     }
@@ -84,22 +89,22 @@ function getTagRegex(tag) {
     .replace('+', '\\+') + regex + '\\n');
 }
 
-// function getAttsFromString(str, tag) {
-//   const atts = { };
-//   if (TAG_ATTS[tag] != null) {
-//     for (const att of TAG_ATTS[tag]) {
-//       atts[att.name] = att.dflt;
-//     }
-//   }
-//   if (str != null) {
-//     const attArray = str.split('; ');
-//     for (const entry of attArray) {
-//       const [name, val] = entry.split(': ');
-//       atts[name] = val;
-//     }
-//   }
-//   return atts;
-// }
+function getAttsFromString(str, tag) {
+  const atts = { };
+  if (TAG_ATTS[tag] != null) {
+    for (const att of TAG_ATTS[tag]) {
+      atts[att.name] = att.dflt;
+    }
+  }
+  if (str != null) {
+    const attArray = str.split('; ');
+    for (const entry of attArray) {
+      const [name, val] = entry.split(': ');
+      atts[name] = val;
+    }
+  }
+  return atts;
+}
 
 function parseSons(str, media, tag) {
   const ast = {
@@ -252,12 +257,12 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
     }
   }
 
-  if (tag !== '[+center]' && tag !== '[+right]' && tag !== '[+quote]') return;
+  if (tag !== '[+center]' && tag !== '[+right]' && tag !== '[+quote]' && tag !== '[+code]') return;
 
   const regex = getTagRegex(tag);
   const match = str.match(regex);
   if (match?.index !== 0) return null;
-  // const atts = getAttsFromString(match.groups?.att, tag);
+  const atts = getAttsFromString(match.groups?.att, tag);
 
   const endStr = '\n' + new Array(tagTabSize).fill(' ').join('') + tag.replace('+', '-');
   const endPos = str.indexOf(endStr + '\n\n');
@@ -266,6 +271,41 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
   const content = str.slice(str.indexOf('\n') + 1, endPos + 1);
   if (content.match(/\S/) == null) return null;
   const tagEnd = endPos + endStr.length;
+
+  if (tag === '[+code]') {
+    const lines = content.slice(0, -1).split('\n');
+    let minTab = 1e9;
+    for (const line of lines) {
+      if (line !== '') {
+        let crtTab = 0;
+        while (crtTab < line.length && line[crtTab] === ' ') {
+          crtTab++;
+        }
+        minTab = Math.min(minTab, crtTab);
+      }
+    }
+    let code = '';
+    for (const line of lines) {
+      code += line.slice(minTab) + '\n';
+    }
+    code = code.slice(0, -1);
+
+    // // PrismJS is so shitty that I need to wait until I
+    // // learn Gatsby to finish the code highlighting part
+    // let classes = `lang-${atts.lang}`;
+    // if (atts.numb === 'yes') classes += ' numb';
+    // if (atts.crop === 'yes') classes += ' crop';
+    // // TODO: use `high` and `name`
+    // return {
+    //   html: `<pre class="${classes}"><code>${code}</code></pre>`,
+    //   length: tagEnd
+    // };
+
+    return {
+      ast: { tag, code },
+      len: tagEnd
+    };
+  }
 
   return {
     ast: parseSons(content, media, tag),

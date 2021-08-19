@@ -76,7 +76,7 @@ Iată și o vizualizare a acestui algoritm! Pentru a pune pauză, dați click un
 
 Mai jos aveți și codul sursă pentru această animație, scris în JavaScript și P5.JS. Dacă vreți să vă jucați cu el, dar nu sunteți familiarizați cu cele două, vă recomand să citiți [acest](fractali-p5js) articol.
 
-[+code](title: pi-monte-carlo.js; lang: js; numb: yes; wrap: yes)
+[+code](title: pi-monte-carlo.js; lang: js; numb: yes; crop: yes)
   let inside = 0;
   let total = 0;
 
@@ -146,7 +146,7 @@ Am încercat și eu experimentul, cu două serii de câte $100$ de chibrituri, �
 
 Iată și codul, în caz că vreți să aruncați o privire peste el:
 
-[+code](title: pi-buffons-needle.js; lang: js; numb: yes; wrap: yes)
+[+code](title: pi-buffons-needle.js; lang: js; numb: yes; crop: yes)
   let good = 0;
   let total = 0;
 
