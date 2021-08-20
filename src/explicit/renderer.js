@@ -7,7 +7,7 @@ import parse from './parser';
 import { renderPara } from './paragraph';
 import * as styles from '@styles/explicit.module.css';
 
-import { SketchWrapper } from '@components/others';
+import { Sketch } from '@components/explicit';
 import * as scripts from './../../content';
 
 function renderAST(ast) {
@@ -73,7 +73,7 @@ function renderAST(ast) {
   }
 
   if (ast.tag === 'js') {
-    return <SketchWrapper sketch={scripts[ast.script]} />;
+    return <Sketch script={scripts[ast.script]} />;
   }
 
   if (ast.tag === '[+code]') {

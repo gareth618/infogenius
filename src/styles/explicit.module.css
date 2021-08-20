@@ -60,14 +60,6 @@
   overflow-x: scroll;
 }
 
-.explicit .sketch-wrapper {
-  margin: 1rem auto;
-  width: fit-content;
-  max-width: 100%;
-  overflow-x: scroll;
-  border-radius: .5rem;
-}
-
 .explicit canvas {
   display: block;
 }
