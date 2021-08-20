@@ -23,7 +23,7 @@ export const siteMetadata = {
   author: 'Iulian Oleniuc',
   siteUrl: 'https://infogenius.ro/',
   description: 'InfoGenius este un blog despre informatică și programare, unde prezentăm algoritmi celebri, rezolvăm probleme de olimpiadă și scriem tutoriale despre limbajul C++.',
-  keywords: ['informatică', 'programare', 'algoritmică', 'olimpiadă', 'c++']
+  keywords: ['informatică', 'programare', 'algoritmică', 'matematică', 'olimpiadă', 'c++']
 };
 
 export const plugins = [

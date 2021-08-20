@@ -20,6 +20,7 @@
 - [x] add quotes
 - [x] add horizontal lines
 - [x] improve excerpt generation
+- [ ] title as Explicit
 - [ ] add prism
 - [ ] add variants
 - [ ] add lists

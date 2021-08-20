@@ -1,6 +1,6 @@
 import { resolve } from 'path';
-import { slugify, getArticleInfo, getPageInfo } from './src/utils/helpers';
-import { getImportedScripts, getArticles, getPages } from './src/utils/getPosts';
+import { slugify } from './src/utils/helpers';
+import { getImportedSketches, getArticles, getPages, getArticleInfo, getPageInfo } from './src/utils/posts';
 
 export function createSchemaCustomization({ actions }) {
   actions.createTypes(`
@@ -27,29 +27,33 @@ export async function onCreateNode({ node, actions, loadNodeContent, createNodeI
     const text = await loadNodeContent(node);
     const slug = node.relativePath.slice('articles/'.length, -'/index.exp'.length);
     const info = getArticleInfo(text);
-    actions.createNode({
-      slug,
-      ...info,
-      id: createNodeId(text),
-      internal: {
-        type: 'ExplicitArticle',
-        contentDigest: createContentDigest(text)
-      }
-    });
+    if (info != null) {
+      actions.createNode({
+        slug,
+        ...info,
+        id: createNodeId(text),
+        internal: {
+          type: 'ExplicitArticle',
+          contentDigest: createContentDigest(text)
+        }
+      });
+    }
   }
   else if (/pages\/.+\/index\.exp/.test(node.relativePath)) {
     const text = await loadNodeContent(node);
     const slug = node.relativePath.slice('pages/'.length, -'/index.exp'.length);
     const info = getPageInfo(text);
-    actions.createNode({
-      slug,
-      ...info,
-      id: createNodeId(text),
-      internal: {
-        type: 'ExplicitPage',
-        contentDigest: createContentDigest(text)
-      }
-    });
+    if (info != null) {
+      actions.createNode({
+        slug,
+        ...info,
+        id: createNodeId(text),
+        internal: {
+          type: 'ExplicitPage',
+          contentDigest: createContentDigest(text)
+        }
+      });
+    }
   }
   else if (node.relativePath === 'index.js') {
     await loadNodeContent(node);
@@ -57,8 +61,8 @@ export async function onCreateNode({ node, actions, loadNodeContent, createNodeI
 };
 
 export async function createPages({ graphql, actions }) {
-  const importedScripts = await getImportedScripts(graphql);
-  const articles = await getArticles(graphql, importedScripts);
+  const importedSketches = await getImportedSketches(graphql);
+  const articles = await getArticles(graphql, importedSketches);
   for (const article of articles) {
     actions.createPage({
       path: `/${article.slug}/`,
@@ -66,7 +70,7 @@ export async function createPages({ graphql, actions }) {
       context: article
     });
   }
-  const pages = await getPages(graphql, importedScripts);
+  const pages = await getPages(graphql, importedSketches);
   for (const page of pages) {
     actions.createPage({
       path: `/${page.slug}/`,
@@ -76,21 +80,19 @@ export async function createPages({ graphql, actions }) {
   }
 
   const createPagination = (basePath, title, articles) => {
-    const pageToUrl = page => {
-      return page === 1 ? basePath : `${basePath}page/${page}/`
-    };
     const ARTICLES_ON_PAGE = 2;
+    const pageToURL = page => page === 1 ? basePath : `${basePath}page/${page}/`;
     const pageCount = Math.floor(articles.length / ARTICLES_ON_PAGE) + (articles.length % ARTICLES_ON_PAGE > 0 ? 1 : 0);
     for (let i = 0; i < articles.length; i += ARTICLES_ON_PAGE) {
       const currentPage = i / ARTICLES_ON_PAGE + 1;
       actions.createPage({
-        path: pageToUrl(currentPage),
+        path: pageToURL(currentPage),
         component: resolve('./src/templates/ArticleList.js'),
         context: {
           pageTitle: title,
           articles: articles.slice(i, i + ARTICLES_ON_PAGE),
-          olderPage: currentPage < pageCount ? pageToUrl(currentPage + 1) : null,
-          newerPage: currentPage > 1 ? pageToUrl(currentPage - 1) : null
+          olderPage: currentPage < pageCount ? pageToURL(currentPage + 1) : null,
+          newerPage: currentPage > 1 ? pageToURL(currentPage - 1) : null
         }
       });
     }

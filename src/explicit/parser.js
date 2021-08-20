@@ -246,7 +246,7 @@ export default function parse(str, media, tag = 'root', tagTabSize = 0) {
     if (url.slice(-2) === 'js') {
       if (alt !== '') return null;
       const name = toCamelCase(url.slice(0, -3));
-      if (media.scripts.indexOf(name) === -1) return null;
+      if (media.sketches.indexOf(name) === -1) return null;
       return {
         ast: {
           tag: 'js',

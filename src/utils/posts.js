@@ -1,6 +1,6 @@
-import { toCamelCase } from './helpers';
+import { toCamelCase, stringToDate, dateToString } from './helpers';
 
-export async function getImportedScripts(graphql) {
+export async function getImportedSketches(graphql) {
   const result = await graphql(`
     query GetIndexJS {
       file(relativePath: {eq: "index.js"}) {
@@ -17,23 +17,20 @@ export async function getImportedScripts(graphql) {
   const rgh = content.indexOf('}');
   const imports = content.slice(lft + 2, rgh - 1);
 
-  const importedScripts = [];
+  const importedSketches = [];
   const lines = imports.split('\n');
   for (const line of lines) {
-    let script = line.trim();
-    if (script.slice(-1) === ',') {
-      script = script.slice(0, -1);
+    let sketch = line.trim();
+    if (sketch.slice(-1) === ',') {
+      sketch = sketch.slice(0, -1);
     }
-    importedScripts.push(script);
+    importedSketches.push(sketch);
   }
-  return importedScripts;
+  return importedSketches;
 };
 
-async function getPost(type, graphql, importedScripts, slug) {
-  const Type = type === 'article'
-    ? 'Article'
-    : 'Page';
-
+async function getPost(type, graphql, importedSketches, slug) {
+  const Type = type === 'article' ? 'Article' : 'Page';
   const resultEXP = type === 'article'
     ? await graphql(`
       query GetArticleEXP {
@@ -58,7 +55,6 @@ async function getPost(type, graphql, importedScripts, slug) {
         }
       }
     `);
-
   const resultPNG = await graphql(`
     query Get${Type}PNG {
       allFile(filter: {relativeDirectory: {eq: "${type}s/${slug}"}, extension: {eq: "png"}}) {
@@ -77,7 +73,6 @@ async function getPost(type, graphql, importedScripts, slug) {
       }
     }
   `);
-
   const resultMP4 = await graphql(`
     query Get${Type}MP4 {
       allFile(filter: {relativeDirectory: {eq: "${type}s/${slug}"}, extension: {eq: "mp4"}}) {
@@ -90,7 +85,6 @@ async function getPost(type, graphql, importedScripts, slug) {
       }
     }
   `);
-
   const resultJS = await graphql(`
     query Get${Type}JS {
       allFile(filter: {relativeDirectory: {eq: "${type}s/${slug}"}, extension: {eq: "js"}}) {
@@ -111,19 +105,21 @@ async function getPost(type, graphql, importedScripts, slug) {
     name: edge.node.name,
     url: edge.node.publicURL
   }));
-  const scripts = resultJS.data.allFile.edges
+  const sketches = resultJS.data.allFile.edges
     .map(edge => toCamelCase(edge.node.name))
-    .filter(name => importedScripts.includes(name));
+    .filter(name => importedSketches.includes(name));
 
-  return {
+  const post = {
     ...resultEXP.data[`explicit${Type}`],
-    images,
-    videos,
-    scripts
+    media: { images, videos, sketches }
   };
+  if (type === 'article') {
+    post.date = dateToString(new Date(post.date));
+  }
+  return post;
 }
 
-export async function getArticles(graphql, importedScripts) {
+export async function getArticles(graphql, importedSketches) {
   const result = await graphql(`
     query GetArticles {
       allExplicitArticle(sort: {fields: date, order: DESC}) {
@@ -136,11 +132,11 @@ export async function getArticles(graphql, importedScripts) {
     }
   `);
   return await Promise.all(result.data.allExplicitArticle.edges.map(edge =>
-    getPost('article', graphql, importedScripts, edge.node.slug)
+    getPost('article', graphql, importedSketches, edge.node.slug)
   ));
 };
 
-export async function getPages(graphql, importedScripts) {
+export async function getPages(graphql, importedSketches) {
   const result = await graphql(`
     query GetPages {
       allExplicitPage {
@@ -153,6 +149,36 @@ export async function getPages(graphql, importedScripts) {
     }
   `);
   return await Promise.all(result.data.allExplicitPage.edges.map(edge =>
-    getPost('page', graphql, importedScripts, edge.node.slug)
+    getPost('page', graphql, importedSketches, edge.node.slug)
   ));
+};
+
+export function getArticleInfo(str) {
+  const match = str.match(new RegExp(
+    'TITLE: (?<title>.*)\\n' +
+    'AUTHOR: (?<author>.*)\\n' +
+    'DATE: (?<date>\\d\\d\\/\\d\\d\\/\\d\\d\\d\\d)\\n' +
+    'CATEGORIES: (?<categories>.*)\\n' +
+    'TAGS: (?<tags>.*)\\n' +
+    'DESCRIPTION: (?<description>.*)\\n\\n'
+  ));
+  if (match == null || match.index !== 0) return null;
+  return {
+    title: match.groups.title,
+    author: match.groups.author,
+    date: stringToDate(match.groups.date),
+    categories: match.groups.categories.split(', '),
+    tags: match.groups.tags.split(', '),
+    description: match.groups.description.replace(/--/g, '–').replace(/\.\.\./g, '…'),
+    content: str.slice(match[0].length)
+  }
+};
+
+export function getPageInfo(str) {
+  const match = str.match(/TITLE: (?<title>.*)\n\n/);
+  if (match == null || match.index !== 0) return null;
+  return {
+    title: match.groups.title,
+    content: str.slice(match[0].length)
+  };
 };

@@ -11,7 +11,6 @@ import { Pagination } from '@components/others';
 import { Layout } from '@components/layout';
 
 import { getExcerpt } from '@explicit/renderer';
-import { dateToString } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
 export default function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
@@ -21,18 +20,16 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
     : `${pageTitle} – ${siteMeta.title}`;
 
   const articlePreviews = articles.map((article, index) => {
-    const thumbnail = article.images.find(image => image.name === 'index').data;
+    const thumbnail = article.media.images.find(image => image.name === 'index')?.data;
     const categories = categoriesToJSX(article.categories);
-    const date = dateToString(new Date(article.date));
-
     return (
       <article key={uuidv4()} style={{ marginBottom: '2rem' }}>
         <div className={styles.preview}>
           <Link to={`/${article.slug}/`}>
-            <GatsbyImage image={thumbnail} alt={article.title} loading={index > 0 ? "lazy" : "eager"} />
+            {thumbnail && <GatsbyImage image={thumbnail} alt={article.title} loading={index > 0 ? "lazy" : "eager"} />}
             <h1 className={styles.title}>{article.title}</h1>
           </Link>
-          <div className={styles.metadata}>de {article.author} | {date} | {categories}</div>
+          <div className={styles.metadata}>de {article.author} | {article.date} | {categories}</div>
         </div>
         <div className={stylesExplicit.explicit}>
           {getExcerpt(article)}

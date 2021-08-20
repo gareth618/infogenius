@@ -153,11 +153,7 @@ export default function render(str, media) {
 };
 
 export function getExcerpt(article) {
-  const ast = parse(article.content, {
-    images: article.images,
-    videos: article.videos,
-    scripts: article.scripts
-  });
+  const ast = parse(article.content, article.media);
   fixKatexBug(ast);
 
   const excAST = { tag: 'p', sons: [{ tag: 'para', sons: [] }] };
