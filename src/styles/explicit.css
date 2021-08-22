@@ -1,0 +1,137 @@
+.explicit p,
+.explicit li {
+  color: var(--text);
+  font-family: 'Merriweather', serif;
+}
+
+@media (min-width: 801px) {
+  .explicit p {
+    text-align: justify;
+  }
+}
+
+.explicit .center p { text-align: center; }
+.explicit .right p { text-align: right; }
+
+.explicit h2,
+.explicit h3,
+.explicit h4,
+.explicit h5,
+.explicit h6 {
+  margin-bottom: 1rem;
+  padding-top: 80px;
+  color: var(--text);
+  font-family: 'Merriweather', serif;
+}
+
+.explicit h2 { margin-top: calc(1.0rem - 80px); font-size: 1.7rem; }
+.explicit h3 { margin-top: calc(0.9rem - 80px); font-size: 1.6rem; }
+.explicit h4 { margin-top: calc(0.8rem - 80px); font-size: 1.5rem; }
+.explicit h5 { margin-top: calc(0.7rem - 80px); font-size: 1.4rem; }
+.explicit h6 { margin-top: calc(0.6rem - 80px); font-size: 1.3rem; }
+
+.explicit a {
+  color: var(--link);
+}
+
+.explicit a:hover {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  text-decoration-thickness: 1px;
+}
+
+.explicit h2 a,
+.explicit h3 a,
+.explicit h4 a,
+.explicit h5 a,
+.explicit h6 a {
+  color: inherit;
+}
+
+.explicit h2 a:hover,
+.explicit h3 a:hover,
+.explicit h4 a:hover,
+.explicit h5 a:hover,
+.explicit h6 a:hover {
+  text-underline-offset: 2px;
+  text-decoration-thickness: 3px;
+}
+
+.explicit ul,
+.explicit ol {
+  padding-inline-start: 2.5rem;
+}
+
+.explicit .not-spaced-list > li > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.explicit .bold-list > li::marker {
+  font-weight: bold;
+}
+
+.explicit blockquote {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-left: 4px solid var(--link);
+  border-radius: .5rem;
+  background: var(--quote);
+}
+
+.explicit blockquote > *:first-child { margin-top: 0; }
+.explicit blockquote > *:last-child { margin-bottom: 0; }
+
+.explicit hr {
+  margin: 1rem 0;
+  border: 1px solid var(--text);
+  border-radius: 1px;
+}
+
+.explicit .img-wrapper {
+  margin: 1rem auto;
+  max-width: 100%;
+}
+
+.explicit .img-wrapper img {
+  display: block;
+  border-radius: .5rem;
+}
+
+.explicit video {
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  border-radius: .5rem;
+}
+
+.explicit .math-wrapper {
+  margin: 1rem auto;
+  color: var(--text);
+  overflow-x: scroll;
+}
+
+/*
+.explicit .code {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #222;
+  border-radius: .5rem;
+  overflow-x: scroll;
+}
+
+.explicit .code code {
+  font-family: 'Source Code Pro', monospace;
+  text-shadow: none;
+  background: transparent;
+  line-height: 1.4;
+}
+*/
+
+.explicit h2:first-child,
+.explicit h3:first-child,
+.explicit h4:first-child,
+.explicit h5:first-child,
+.explicit h6:first-child {
+  margin-top: -80px;
+}

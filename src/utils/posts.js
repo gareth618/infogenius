@@ -1,4 +1,4 @@
-import { toCamelCase, stringToDate, dateToString } from './helpers';
+import { sanitize, toCamelCase, stringToDate, dateToString } from './helpers';
 
 export async function getImportedSketches(graphql) {
   const result = await graphql(`
@@ -162,21 +162,21 @@ export function getArticleInfo(str) {
     'TAGS: (?<tags>.*)\\n' +
     'DESCRIPTION: (?<description>.*)\\n\\n'
   ));
-  if (match == null || match.index !== 0) return null;
+  if (match == null || match.index !== 0) return undefined;
   return {
     title: match.groups.title,
     author: match.groups.author,
     date: stringToDate(match.groups.date),
     categories: match.groups.categories.split(', '),
     tags: match.groups.tags.split(', '),
-    description: match.groups.description.replace(/--/g, '–').replace(/\.\.\./g, '…'),
+    description: sanitize(match.groups.description),
     content: str.slice(match[0].length)
   }
 };
 
 export function getPageInfo(str) {
   const match = str.match(/TITLE: (?<title>.*)\n\n/);
-  if (match == null || match.index !== 0) return null;
+  if (match == null || match.index !== 0) return undefined;
   return {
     title: match.groups.title,
     content: str.slice(match[0].length)

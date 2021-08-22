@@ -1,14 +1,14 @@
-TITLE: Doi algoritmi pentru aproximarea numărului pi!
+TITLE: Doi algoritmi pentru aproximarea numărului $\pi$!
 AUTHOR: Iulian Oleniuc
 DATE: 14/03/2021
 CATEGORIES: Diverse, Matematică
 TAGS: algoritmi probabilistici, buffon's needle, integrale, matematică, monte carlo, numărul pi, p5.js, serii
 DESCRIPTION: Pi este raportul dintre circumferința și diametrul unui cerc. În acest articol vă voi prezenta câteva metode de aproximare a numărului pi.
 
-[+quote]
+>>>
   **Nimeni:** Nimic.
   **InfoGenius:** Astăzi, pe 14 martie, se sărbătorește ziua numărului $\pi$!
-[-quote]
+<<<
 
 Pi este un număr care nu are nevoie de nicio introducere. El este definit drept raportul dintre circumferința și diametrul unui cerc, motiv pentru care această constantă apare adesea în formule și ecuații matematice, dar și fizice.
 
@@ -18,11 +18,11 @@ De fapt, în fizică, $\pi$ apare de cele mai multe ori înmulțit cu $2$. Din a
 
 Cum $\pi \approx 3.14$, matematicienii s-au gândit ca, pe data de 14 a 3-a a fiecărui an, să celebrăm ziua numărului pi. Întâmplător sau nu, această zi are o semnificație deosebită pentru comunitatea științifică:
 
-[+list]
-  [+item]**14 martie 1879:** S-a născut Albert Einstein.[-item]
-  [+item]**14 martie 2018:** A murit Stephen Hawking.[-item]
-  [+item]**14 martie 1994:** S-a lansat prima versiune oficială de Linux![-item]
-[-list]
++++
+  > **14 martie 1879:** S-a născut Albert Einstein.
+  > **14 martie 2018:** A murit Stephen Hawking.
+  > **14 martie 1994:** S-a lansat prima versiune oficială de Linux!
+---
 
 ## Despre aproximarea numărului pi
 
@@ -76,7 +76,7 @@ Iată și o vizualizare a acestui algoritm! Pentru a pune pauză, dați click un
 
 Mai jos aveți și codul sursă pentru această animație, scris în JavaScript și P5.JS. Dacă vreți să vă jucați cu el, dar nu sunteți familiarizați cu cele două, vă recomand să citiți [acest](fractali-p5js) articol.
 
-[+code](title: pi-monte-carlo.js; lang: js; numb: yes; crop: yes)
+``` js -> pi-monte-carlo.js
   let inside = 0;
   let total = 0;
 
@@ -130,7 +130,7 @@ Mai jos aveți și codul sursă pentru această animație, scris în JavaScript 
       rect(0, 0, 400, 402.5);
     }
   }
-[-code]
+^^^
 
 ## Metoda Buffon's Needle
 
@@ -146,7 +146,7 @@ Am încercat și eu experimentul, cu două serii de câte $100$ de chibrituri, �
 
 Iată și codul, în caz că vreți să aruncați o privire peste el:
 
-[+code](title: pi-buffons-needle.js; lang: js; numb: yes; crop: yes)
+``` js -> pi-buffons-needle.js
   let good = 0;
   let total = 0;
 
@@ -217,7 +217,7 @@ Iată și codul, în caz că vreți să aruncați o privire peste el:
       resetBackground();
     }
   }
-[-code]
+^^^
 
 ### Demonstrație
 

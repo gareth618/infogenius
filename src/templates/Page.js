@@ -2,8 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { graphql } from 'gatsby';
 
-import * as styles from '@styles/explicit.module.css';
-import render from '@explicit/renderer';
+import { render } from '@explicit';
 import { Layout } from '@components/layout';
 
 export default function Page({ data, pageContext: page }) {
@@ -19,9 +18,9 @@ export default function Page({ data, pageContext: page }) {
       <Layout displaySidebar>
         <article>
           <h1 style={{ margin: 0, fontSize: '2.5rem', color: 'var(--title)' }}>
-            {page.title}
+            {render(page.title)}
           </h1>
-          <div className={styles.explicit} style={{ margin: '2rem 0 -1rem 0' }}>
+          <div className="explicit" style={{ margin: '2rem 0 -1rem 0' }}>
             {render(page.content, page.media)}
           </div>
         </article>

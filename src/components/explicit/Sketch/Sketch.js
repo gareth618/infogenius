@@ -9,7 +9,7 @@ export default function Sketch({ script }) {
     ref.current.children[0].style.borderRadius = '.5rem';
     if (myP5.mousePressed != null) {
       const mousePressed = myP5.mousePressed;
-      myP5.mousePressed = null;
+      myP5.mousePressed = undefined;
       ref.current.addEventListener('click', mousePressed);
     }
     if (myP5.keyPressed != null) {

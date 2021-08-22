@@ -25,6 +25,31 @@ export function toCamelCase(str) {
   return arr.join('').replace(/-/g, '');
 };
 
+export function sanitize(str) {
+  return str
+    .replace(/--/g, '–')
+    .replace(/\.\.\./g, '…');
+};
+
+export function trimPost(str) {
+  return str
+    .replace(/\t/g, '  ')
+    .split('\n')
+    .map(line => line.trimEnd())
+    .join('\n');
+};
+
+export function hasOnly(str, chr) {
+  return (str.match(new RegExp(chr, 'g')) || []).length === str.length;
+};
+
+export function escapeToHTML(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+};
+
 export function slugify(str) {
   return str
     .toLowerCase()
@@ -40,7 +65,7 @@ export function slugify(str) {
 };
 
 export function katexify(math, mode, lft, rgh) {
-  if (lft !== '') math = `\\htmlStyle{font-family: 'Merriweather'; font-size: 1rem;}{${lft}} ` + math;
+  if (lft !== '') math = `\\htmlClass{katexified}{${lft}} ` + math;
   let html = katex.renderToString(math, { displayMode: (mode === 'display' ? true : false), trust: true });
   if (rgh !== '') {
     let pos = html.length;
@@ -48,7 +73,7 @@ export function katexify(math, mode, lft, rgh) {
       pos = html.slice(0, pos).lastIndexOf('</span>');
     }
     html = html.slice(0, pos)
-      + `<span class="enclosing" style="font-family: 'Merriweather'; font-size: 1rem;"><span class="mclose">${rgh}</span></span>`
+      + `<span class="enclosing katexified"><span class="mclose">${rgh}</span></span>`
       + html.slice(pos);
   }
   return html;

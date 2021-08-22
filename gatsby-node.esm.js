@@ -91,8 +91,8 @@ export async function createPages({ graphql, actions }) {
         context: {
           pageTitle: title,
           articles: articles.slice(i, i + ARTICLES_ON_PAGE),
-          olderPage: currentPage < pageCount ? pageToURL(currentPage + 1) : null,
-          newerPage: currentPage > 1 ? pageToURL(currentPage - 1) : null
+          olderPage: currentPage < pageCount ? pageToURL(currentPage + 1) : undefined,
+          newerPage: currentPage > 1 ? pageToURL(currentPage - 1) : undefined
         }
       });
     }

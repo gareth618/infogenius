@@ -1,6 +1,6 @@
 import React from 'react';
-import { graphql, useStaticQuery, Link } from 'gatsby';
 import uuidv4 from 'uuid';
+import { graphql, useStaticQuery, Link } from 'gatsby';
 
 import { CookieNotice } from '@components/forms';
 import * as styles from './Footer.module.css';

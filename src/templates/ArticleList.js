@@ -1,17 +1,16 @@
 import React from 'react';
+import uuidv4 from 'uuid';
+
 import { Helmet } from 'react-helmet';
 import { graphql, Link } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
-import uuidv4 from 'uuid';
 
-import * as styles from '@styles/article.module.css';
-import * as stylesExplicit from '@styles/explicit.module.css';
-
-import { Pagination } from '@components/others';
-import { Layout } from '@components/layout';
-
-import { getExcerpt } from '@explicit/renderer';
+import { render, renderExcerpt } from '@explicit';
 import { categoriesToJSX } from '@utils/jsxHelpers';
+
+import { Layout } from '@components/layout';
+import { Pagination } from '@components/others';
+import * as styles from '@styles/article.module.css';
 
 export default function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
   const siteMeta = data.site.siteMetadata;
@@ -27,12 +26,12 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
         <div className={styles.preview}>
           <Link to={`/${article.slug}/`}>
             {thumbnail && <GatsbyImage image={thumbnail} alt={article.title} loading={index > 0 ? "lazy" : "eager"} />}
-            <h1 className={styles.title}>{article.title}</h1>
+            <h1 className={styles.title}>{render(article.title)}</h1>
           </Link>
           <div className={styles.metadata}>de {article.author} | {article.date} | {categories}</div>
         </div>
-        <div className={stylesExplicit.explicit}>
-          {getExcerpt(article)}
+        <div className="explicit">
+          {renderExcerpt(article.content, article.media)}
         </div>
       </article>
     );

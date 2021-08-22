@@ -20,10 +20,10 @@
 - [x] add quotes
 - [x] add horizontal lines
 - [x] improve excerpt generation
-- [ ] title as Explicit
+- [x] title as Explicit
 - [ ] add prism
 - [ ] add variants
-- [ ] add lists
+- [x] add lists
 - [ ] add tables
 
 ---
@@ -36,7 +36,7 @@
 - [ ] search engine (Algola)
 - [ ] comments (FireBase)
 - [ ] push notifications
-- [ ] refactoring
+- [x] refactoring
 
 ---
 

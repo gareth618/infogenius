@@ -1,7 +1,9 @@
 import React from 'react';
 import { Header } from '@components/layout';
 import { Footer } from '@components/layout';
+import * as styles from './Layout.module.css';
 
+import '@fontsource/inter/500.css';
 import '@fontsource/quicksand/600.css';
 import '@fontsource/quicksand/700.css';
 
@@ -15,12 +17,11 @@ import '@fontsource/source-code-pro/500-italic.css';
 import '@fontsource/source-code-pro/700.css';
 import '@fontsource/source-code-pro/700-italic.css';
 
-import '@fontsource/inter/500.css';
-
 import '@styles/global.css';
+import '@styles/explicit.css';
+
 import 'katex/dist/katex.min.css';
 import 'prismjs/themes/prism-okaidia.css';
-import * as styles from './Layout.module.css';
 
 function PageContainer({ displaySidebar, pageContainerRef, children }) {
   return (

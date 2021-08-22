@@ -1,8 +1,8 @@
 import React from 'react';
-import { graphql, useStaticQuery, Link } from 'gatsby';
-
 import uuidv4 from 'uuid';
+
 import { slugify } from '@utils/helpers';
+import { graphql, useStaticQuery, Link } from 'gatsby';
 
 import Logo from '@assets/logo.svg';
 import * as stylesHeader from './header.module.css';

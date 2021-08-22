@@ -47,7 +47,64 @@ body {
 .os-linux { display: none; }
 .os-other { display: none; }
 
+code {
+  padding: .2rem .4rem;
+  color: var(--text);
+  background: var(--code);
+  border-radius: .25rem;
+  font-size: 85%;
+  font-family: 'Source Code Pro', monospace;
+}
+
+kbd {
+  padding: calc(.2rem - 1px) calc(.4rem - 1px) calc(.3rem - 2px) calc(.4rem - 1px);
+  color: var(--text);
+  background: var(--code);
+  border: 1px solid var(--text);
+  border-bottom: 2px solid var(--text);
+  border-radius: .25rem;
+  font-size: 85%;
+  font-family: 'Inter', sans-serif;
+}
+
+abbr {
+  position: relative;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-style: dashed;
+  text-decoration-skip-ink: none;
+}
+
+.twemoji {
+  margin: 0 .1em;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.1em;
+}
+
+.strk {
+  text-decoration: line-through;
+}
+
+.high {
+  padding: .2rem .4rem;
+  font-size: 85%;
+  color: var(--background);
+  background: var(--text);
+  border-radius: .25rem;
+}
+
 .katex-display {
   margin: 0 !important;
   padding: 5px 0;
+}
+
+.katexified {
+  font-size: 1rem;
+  font-family: 'Merriweather', serif;
+}
+
+h1 .katexified {
+  font-size: 1.8rem;
+  font-family: 'Quicksand', sans-serif;
 }

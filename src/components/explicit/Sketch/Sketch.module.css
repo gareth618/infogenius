@@ -5,3 +5,7 @@
   overflow-x: scroll;
   border-radius: .5rem;
 }
+
+.sketch canvas {
+  display: block;
+}
