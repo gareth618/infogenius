@@ -111,23 +111,6 @@
   overflow-x: scroll;
 }
 
-/*
-.explicit .code {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: #222;
-  border-radius: .5rem;
-  overflow-x: scroll;
-}
-
-.explicit .code code {
-  font-family: 'Source Code Pro', monospace;
-  text-shadow: none;
-  background: transparent;
-  line-height: 1.4;
-}
-*/
-
 .explicit h2:first-child,
 .explicit h3:first-child,
 .explicit h4:first-child,

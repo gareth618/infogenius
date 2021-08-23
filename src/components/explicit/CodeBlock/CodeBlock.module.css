@@ -1,0 +1,14 @@
+.code-block {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #222;
+  border-radius: .5rem;
+  overflow-x: scroll;
+}
+
+.code-block code {
+  font-family: 'Source Code Pro', monospace;
+  text-shadow: none;
+  background: transparent;
+  line-height: 1.4;
+}

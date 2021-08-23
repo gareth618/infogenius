@@ -1,2 +1,3 @@
 import { loadableSketch as Sketch } from './Sketch/loadable';
-export { Sketch };
+import CodeBlock from './CodeBlock/CodeBlock.js';
+export { Sketch, CodeBlock };

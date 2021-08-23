@@ -6,6 +6,7 @@ import renderInline from './inline-renderer';
 
 import * as sketches from './../../content';
 import { Sketch } from '@components/explicit';
+import { CodeBlock } from '@components/explicit';
 
 export default function renderBlocks(ast) {
   if (ast.tag === 'p') return <p>{renderInline(ast.sons)}</p>;
@@ -41,6 +42,16 @@ export default function renderBlocks(ast) {
   }
   if (ast.tag === 'js') {
     return <Sketch script={sketches[ast.sketch]} />;
+  }
+
+  if (ast.tag === 'code-block') {
+    return <CodeBlock info={{
+      code: ast.code,
+      high: ast.high,
+      crop: ast.crop,
+      title: ast.title,
+      label: ast.label
+    }} />;
   }
 
   if (ast.tag === 'list') {
