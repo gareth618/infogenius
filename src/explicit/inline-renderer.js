@@ -3,7 +3,7 @@ import uuidv4 from 'uuid';
 import { Link } from 'gatsby';
 
 import { EMOJIS } from './inline-parser';
-import { sanitize, escapeToHTML, katexify } from '@utils/helpers';
+import { sanitize, followsRegex, katexify } from '@utils/helpers';
 
 function renderText(str) {
   const arr = sanitize(str)
@@ -32,24 +32,23 @@ function renderMath(str, lft, rgh) {
 
 function renderKbrd(str) {
   str = str.slice(1, -1);
-  if (/w\(\S+\) m\(\S+\) l\(\S+\)/.test(str)) {
-    const tokens = str.split(' ');
-    const wndws = tokens[0].slice(2, -1);
-    const macos = tokens[1].slice(2, -1)
-      .replace('Cmd'   , '⌘')
-      .replace('Ctrl'  , '⌃')
-      .replace('Option', '⌥')
-      .replace('Shift' , '⇧');
-    const linux = tokens[2].slice(2, -1);
-    return (
-      <kbd>
-        <span className="os-other">{wndws}</span>
-        <span className="os-macos">{macos}</span>
-        <span className="os-linux">{linux}</span>
-      </kbd>
-    );
-  }
-  return <kbd>{str}</kbd>;
+  const test1 = followsRegex(str, /w\((?<wndws>\S+)\) l\((?<linux>\S+)\) m\((?<macos>\S+)\)/);
+  const test2 = followsRegex(str, /wl\((?<other>\S+)\) m\((?<macos>\S+)\)/);
+  if (test1 == null && test2 == null) return <kbd>{str}</kbd>;
+  const wndws = test1 != null ? test1.wndws : test2.other;
+  const linux = test1 != null ? test1.linux : test2.other;
+  const macos = test1 != null ? test1.macos : test2.macos
+    .replace('Cmd'   , '⌘')
+    .replace('Ctrl'  , '⌃')
+    .replace('Option', '⌥')
+    .replace('Shift' , '⇧');
+  return (
+    <kbd>
+      <span className="os-other">{wndws}</span>
+      <span className="os-macos">{macos}</span>
+      <span className="os-linux">{linux}</span>
+    </kbd>
+  );
 }
 
 function renderEmoj(str) {
@@ -70,7 +69,7 @@ export default function renderInline(sons) {
     if (son.tag === 'math') jsx.push(<React.Fragment key={uuidv4()}>{renderMath(son.content, son.lft, son.rgh)}</React.Fragment>);
     if (son.tag === 'kbrd') jsx.push(<React.Fragment key={uuidv4()}>{renderKbrd(son.content)}</React.Fragment>);
     if (son.tag === 'emoj') jsx.push(<React.Fragment key={uuidv4()}>{renderEmoj(son.content)}</React.Fragment>);
-    if (son.tag === 'abbr') jsx.push(<abbr title={sanitize(escapeToHTML(son.alt))}>{renderInline(son.sons)}</abbr>);
+    if (son.tag === 'abbr') jsx.push(<abbr title={sanitize(son.alt)}>{renderInline(son.sons)}</abbr>);
     if (son.tag === 'link') jsx.push(
       son.url === '' ? <React.Fragment key={uuidv4()}>{renderInline(son.sons)}</React.Fragment> :
       son.url[0] === '/' ? <Link key={uuidv4()} to={son.url}>{renderInline(son.sons)}</Link> :

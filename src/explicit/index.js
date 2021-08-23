@@ -7,7 +7,7 @@ import { trimPost } from '@utils/helpers';
 function makeAnchors(ast, cnt) {
   if (ast.sons == null) return ast;
   for (const son of ast.sons) {
-    if (/h\d/.test(son.tag)) {
+    if (/h[2-6]/.test(son.tag)) {
       son.id = ++cnt.val;
     }
     makeAnchors(son, cnt);
@@ -154,13 +154,11 @@ function fixLists(ast) {
 }
 
 export function render(str, media) {
-  str = trimPost(str);
   return media == null
     ? renderInline(fixKatexBug({ tag: 'root', sons: parseInline(str) }).sons)
-    : renderBlocks(makeAnchors(fixLists(fixKatexBug(parseBlocks(str, media))), { val: 0 }));
+    : renderBlocks(makeAnchors(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), { val: 0 }));
 };
 
 export function renderExcerpt(str, media) {
-  str = trimPost(str);
-  return renderBlocks(getExcerpt(fixKatexBug(parseBlocks(str, media))));
+  return renderBlocks(getExcerpt(fixKatexBug(parseBlocks(trimPost(str), media))));
 };

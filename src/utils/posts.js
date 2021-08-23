@@ -154,15 +154,15 @@ export async function getPages(graphql, importedSketches) {
 };
 
 export function getArticleInfo(str) {
-  const match = str.match(new RegExp(
-    'TITLE: (?<title>.*)\\n' +
-    'AUTHOR: (?<author>.*)\\n' +
-    'DATE: (?<date>\\d\\d\\/\\d\\d\\/\\d\\d\\d\\d)\\n' +
-    'CATEGORIES: (?<categories>.*)\\n' +
-    'TAGS: (?<tags>.*)\\n' +
-    'DESCRIPTION: (?<description>.*)\\n\\n'
-  ));
-  if (match == null || match.index !== 0) return undefined;
+  const match = str.match(
+    'TITLE: (?<title>.*)\\n'
+    + 'AUTHOR: (?<author>.*)\\n'
+    + 'DATE: (?<date>\\d\\d\\/\\d\\d\\/\\d\\d\\d\\d)\\n'
+    + 'CATEGORIES: (?<categories>.*)\\n'
+    + 'TAGS: (?<tags>.*)\\n'
+    + 'DESCRIPTION: (?<description>.*)\\n\\n'
+  );
+  if (match == null || match.index !== 0) return;
   return {
     title: match.groups.title,
     author: match.groups.author,
@@ -176,7 +176,7 @@ export function getArticleInfo(str) {
 
 export function getPageInfo(str) {
   const match = str.match(/TITLE: (?<title>.*)\n\n/);
-  if (match == null || match.index !== 0) return undefined;
+  if (match == null || match.index !== 0) return;
   return {
     title: match.groups.title,
     content: str.slice(match[0].length)

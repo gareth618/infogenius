@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { slugify } from './src/utils/helpers';
+import { followsRegex, slugify } from './src/utils/helpers';
 import { getImportedSketches, getArticles, getPages, getArticleInfo, getPageInfo } from './src/utils/posts';
 
 export function createSchemaCustomization({ actions }) {
@@ -23,13 +23,15 @@ export function createSchemaCustomization({ actions }) {
 };
 
 export async function onCreateNode({ node, actions, loadNodeContent, createNodeId, createContentDigest }) {
-  if (/articles\/.+\/index\.exp/.test(node.relativePath)) {
+  if (node.relativePath == null) return;
+  const testArticle = followsRegex(node.relativePath, /articles\/(?<slug>[a-z\d]+(-[a-z\d]+)*)\/index\.exp/);
+  const testPage = followsRegex(node.relativePath, /pages\/(?<slug>[a-z\d]+(-[a-z\d]+)*)\/index\.exp/);
+  if (testArticle != null) {
     const text = await loadNodeContent(node);
-    const slug = node.relativePath.slice('articles/'.length, -'/index.exp'.length);
     const info = getArticleInfo(text);
     if (info != null) {
       actions.createNode({
-        slug,
+        slug: testArticle.slug,
         ...info,
         id: createNodeId(text),
         internal: {
@@ -39,13 +41,12 @@ export async function onCreateNode({ node, actions, loadNodeContent, createNodeI
       });
     }
   }
-  else if (/pages\/.+\/index\.exp/.test(node.relativePath)) {
+  else if (testPage != null) {
     const text = await loadNodeContent(node);
-    const slug = node.relativePath.slice('pages/'.length, -'/index.exp'.length);
     const info = getPageInfo(text);
     if (info != null) {
       actions.createNode({
-        slug,
+        slug: testPage.slug,
         ...info,
         id: createNodeId(text),
         internal: {

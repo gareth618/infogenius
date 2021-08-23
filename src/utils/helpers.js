@@ -14,42 +14,6 @@ export function dateToString(date) {
   return `${ddd}/${mmm}/${yyy}`;
 };
 
-export function toCamelCase(str) {
-  const arr = str.split('');
-  arr[0] = arr[0].toUpperCase();
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i - 1] === '-') {
-      arr[i] = arr[i].toUpperCase();
-    }
-  }
-  return arr.join('').replace(/-/g, '');
-};
-
-export function sanitize(str) {
-  return str
-    .replace(/--/g, '–')
-    .replace(/\.\.\./g, '…');
-};
-
-export function trimPost(str) {
-  return str
-    .replace(/\t/g, '  ')
-    .split('\n')
-    .map(line => line.trimEnd())
-    .join('\n');
-};
-
-export function hasOnly(str, chr) {
-  return (str.match(new RegExp(chr, 'g')) || []).length === str.length;
-};
-
-export function escapeToHTML(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-};
-
 export function slugify(str) {
   return str
     .toLowerCase()
@@ -62,6 +26,38 @@ export function slugify(str) {
     .replace(/ș/g, 's')
     .replace(/ț/g, 't')
     .replace(/ /g, '-');
+};
+
+export function trimPost(str) {
+  return str
+    .replace(/\t/g, '  ')
+    .split('\n')
+    .map(line => line.trimEnd());
+};
+
+export function sanitize(str) {
+  return str
+    .replace(/--/g, '–')
+    .replace(/\.\.\./g, '…');
+};
+
+export function toCamelCase(str) {
+  const arr = str.split('');
+  arr[0] = arr[0].toUpperCase();
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i - 1] === '-') {
+      arr[i] = arr[i].toUpperCase();
+    }
+  }
+  return arr.join('').replace(/-/g, '');
+};
+
+export function followsRegex(str, regex) {
+  if (regex.flags !== '') return;
+  const match = str.match(regex);
+  if (match == null) return;
+  if (match[0].length < str.length) return;
+  return match.groups || [];
 };
 
 export function katexify(math, mode, lft, rgh) {

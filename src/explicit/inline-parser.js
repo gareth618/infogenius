@@ -1,4 +1,5 @@
 import katex from 'katex';
+import { followsRegex } from '@utils/helpers';
 
 export const EMOJIS = {
   yey   : '1f600',
@@ -64,7 +65,7 @@ export default function parseInline(str) {
   const valid = url => {
     if (url === '') return true;
     if (url === '.') return true;
-    if (!/([\w$.*!',()+-])+/.test(url)) return false;
+    if (followsRegex(url, /[\w$.*!',()+-]+/) == null) return false;
     try {
       new URL(url);
       return true;
