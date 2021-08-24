@@ -5,6 +5,36 @@ CATEGORIES: Diverse, Matematică
 TAGS: algoritmi probabilistici, buffon's needle, integrale, matematică, monte carlo, numărul pi, p5.js, serii
 DESCRIPTION: Pi este raportul dintre circumferința și diametrul unui cerc. În acest articol vă voi prezenta câteva metode de aproximare a numărului pi.
 
+``` javascript -> my-amazing-script.js
+  let i = 10;
+> i++;
+  console.log(i); // 11
+> console.log('(?<hmm>regex)');
+  let i = 10;
+> i++;
+  console.log(i); // 11
+> console.log('(?<hmm>regex)');
+  let i = 10;
+> i++;
+  console.log(i); // 11
+> console.log('(?<hmm>regex)');
+```
+
+``` javascript -> Căutarea binară -- varianta iterativă
+  let i = 10;
+> i++;
+  console.log(i); // 11
+> console.log('(?<hmm>regex)');
+  let i = 10;
+> i++;
+  console.log(i); // 11
+> console.log('(?<hmm>regex)');
+  let i = 10;
+> i++;
+  console.log(i); // 11
+> console.log('(?<hmm>regex)');
+^^^
+
 >>>
   **Nimeni:** Nimic.
   **InfoGenius:** Astăzi, pe 14 martie, se sărbătorește ziua numărului $\pi$!
@@ -19,9 +49,9 @@ De fapt, în fizică, $\pi$ apare de cele mai multe ori înmulțit cu $2$. Din a
 Cum $\pi \approx 3.14$, matematicienii s-au gândit ca, pe data de 14 a 3-a a fiecărui an, să celebrăm ziua numărului pi. Întâmplător sau nu, această zi are o semnificație deosebită pentru comunitatea științifică:
 
 +++
-  > **14 martie 1879:** S-a născut Albert Einstein.
-  > **14 martie 2018:** A murit Stephen Hawking.
-  > **14 martie 1994:** S-a lansat prima versiune oficială de Linux!
+> **14 martie 1879:** S-a născut Albert Einstein.
+> **14 martie 2018:** A murit Stephen Hawking.
+> **14 martie 1994:** S-a lansat prima versiune oficială de Linux!
 ---
 
 ## Despre aproximarea numărului pi

@@ -1,14 +1,54 @@
 .code-block {
   margin: 1rem 0;
   padding: 1rem;
-  background: #222;
+  background: #1c1c1c;
   border-radius: .5rem;
   overflow-x: scroll;
 }
 
 .code-block code {
-  font-family: 'Source Code Pro', monospace;
+  padding: 0;
+  line-height: 1.4 !important;
   text-shadow: none;
   background: transparent;
-  line-height: 1.4;
+  font-family: 'Source Code Pro', monospace !important;
 }
+
+.macos-window {
+  background: #111;
+  border-radius: .5rem;
+}
+
+.macos-window .code-block {
+  margin-top: 0;
+  border-radius: 0 0 .5rem .5rem;
+}
+
+.macos-topbar {
+  position: relative;
+  padding: .7rem 0;
+  color: #eee;
+  font-size: 12px;
+  line-height: 1;
+  text-align: center;
+}
+
+.macos-menu {
+  display: flex;
+  position: absolute;
+}
+
+.macos-menu div {
+  margin: 0 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.macos-menu div:first-child {
+  margin-left: 1rem;
+}
+
+.macos-circle-1 { background: #ff605c; }
+.macos-circle-2 { background: #ffbd44; }
+.macos-circle-3 { background: #00ca4e; }

@@ -15,6 +15,24 @@ function makeAnchors(ast, cnt) {
   return ast;
 }
 
+function fixLists(ast) {
+  if (ast.sons == null) return ast;
+  ast.sons.forEach(son => fixLists(son));
+  if (ast.tag !== 'list') return ast;
+  if (ast.sons.every(son => son.tag === 'item-small')) ast.spaced = false;
+  else {
+    ast.spaced = true;
+    if (ast.sons.every(son => (
+      (son.sons.length === 1 && son.sons[0].tag === 'p') ||
+      (son.sons.length === 2 && son.sons[0].tag === 'p' && son.sons[1].tag === 'list' && !son.sons[1].spaced)
+    ))) ast.spaced = false;
+    if (ast.sons.every(son => (
+      (son.sons.length === 1 && son.sons[0].tag === 'p')
+    ))) ast.spaced = true;
+  }
+  return ast;
+}
+
 function fixKatexBug(ast) {
   if (ast.sons == null) return ast;
   ast.sons.forEach(son => {
@@ -133,24 +151,6 @@ function getExcerpt(ast) {
     excAST.sons.push({ tag: 'text', content: '...' });
   }
   return excAST;
-}
-
-function fixLists(ast) {
-  if (ast.sons == null) return ast;
-  for (const son of ast.sons) {
-    fixLists(son);
-  }
-  if (ast.tag === 'list') {
-    ast.spaced = false;
-    for (const son of ast.sons) {
-      if (son.tag !== 'list-small') {
-        if (son.sons.length === 1 && !son.sons[0].tag === 'p') { ast.spaced = true; break; }
-        if (son.sons.length === 2 && !(son.sons[0].tag === 'p' && son.sons[1].tag === 'list' && !son.sons[1].spaced)) { ast.spaced = true; break; }
-        if (son.sons.length > 2) { ast.spaced = true; break; }
-      }
-    }
-  }
-  return ast;
 }
 
 export function render(str, media) {

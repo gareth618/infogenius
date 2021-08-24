@@ -57,7 +57,7 @@ export function followsRegex(str, regex) {
   const match = str.match(regex);
   if (match == null) return;
   if (match[0].length < str.length) return;
-  return match.groups || [];
+  return match.groups || { };
 };
 
 export function katexify(math, mode, lft, rgh) {

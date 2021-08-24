@@ -62,6 +62,15 @@
   padding-inline-start: 2.5rem;
 }
 
+@media (max-width: 800px) {
+  .explicit > ul,
+  .explicit > ol,
+  .explicit blockquote > ul,
+  .explicit blockquote > ol {
+    padding-inline-start: 1.2rem;
+  }
+}
+
 .explicit .not-spaced-list > li > * {
   margin-top: 0;
   margin-bottom: 0;
@@ -84,6 +93,8 @@
 
 .explicit hr {
   margin: 1rem 0;
+  height: 2px;
+  background: var(--text);
   border: 1px solid var(--text);
   border-radius: 1px;
 }

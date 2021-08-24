@@ -21,7 +21,7 @@
 - [x] add horizontal lines
 - [x] improve excerpt generation
 - [x] title as Explicit
-- [ ] add prism
+- [x] add prism (almost done)
 - [ ] add variants
 - [x] add lists
 - [ ] add tables

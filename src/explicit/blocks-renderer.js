@@ -5,8 +5,7 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 import renderInline from './inline-renderer';
 
 import * as sketches from './../../content';
-import { Sketch } from '@components/explicit';
-import { CodeBlock } from '@components/explicit';
+import { Sketch, CodeBlock, CodeVariants } from '@components/explicit';
 
 export default function renderBlocks(ast) {
   if (ast.tag === 'p') return <p>{renderInline(ast.sons)}</p>;
@@ -44,16 +43,6 @@ export default function renderBlocks(ast) {
     return <Sketch script={sketches[ast.sketch]} />;
   }
 
-  if (ast.tag === 'code-block') {
-    return <CodeBlock info={{
-      code: ast.code,
-      high: ast.high,
-      crop: ast.crop,
-      title: ast.title,
-      label: ast.label
-    }} />;
-  }
-
   if (ast.tag === 'list') {
     const items = ast.sons.map(son => <li key={uuidv4()}>{renderBlocks(son)}</li>);
     if (ast.type === 'bullet') return <ul className={ast.spaced ? '' : 'not-spaced-list'} style={{ listStyleType: 'disc' }}>{items}</ul>;
@@ -73,6 +62,23 @@ export default function renderBlocks(ast) {
       >
         {items}
       </ol>
+    );
+  }
+
+  if (ast.tag === 'code-block') {
+    const info = { ...ast };
+    delete info.tag;
+    return <CodeBlock info={info} />;
+  }
+  if (ast.tag === 'code-variants') {
+    return (
+      <CodeVariants>
+        {ast.sons.map(son => {
+          const info = { ...ast };
+          delete info.tag;
+          return <CodeBlock key={uuidv4()} info={info} />;
+        })}
+      </CodeVariants>
     );
   }
 

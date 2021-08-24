@@ -3,18 +3,25 @@ import prism from 'prismjs';
 import * as styles from './CodeBlock.module.css';
 
 export default function CodeBlock({ info }) {
+  const codeBlock = (
+    <pre className={styles.codeBlock}>
+      <code className={`language-${info.lang}`} dangerouslySetInnerHTML={{
+        __html: prism.highlight(info.code.join('\n'), prism.languages[info.lang], info.lang)
+      }} />
+    </pre>
+  );
+  if (info.title == null) return codeBlock;
   return (
-    <div style={{ borderRadius: '.5rem', background: '#181818' }}>
-      <div style={{ display: 'flex' }}>
-        <div style={{ width: '15px', height: '15px', borderRadius: '50%', margin: '.7rem .2rem .7rem 1rem', background: '#ff605c' }} />
-        <div style={{ width: '15px', height: '15px', borderRadius: '50%', margin: '.7rem .2rem', background: '#ffbd44' }} />
-        <div style={{ width: '15px', height: '15px', borderRadius: '50%', margin: '.7rem .2rem', background: '#00ca4e' }} />
+    <div className={styles.macosWindow}>
+      <div className={styles.macosTopbar}>
+        <div className={styles.macosMenu}>
+          <div className={styles.macosCircle1} />
+          <div className={styles.macosCircle2} />
+          <div className={styles.macosCircle3} />
+        </div>
+        {info.title}
       </div>
-      <pre className={styles.codeBlock} style={{ marginTop: 0, borderRadius: '0 0 .5rem .5rem' }}>
-        <code className="language-javascript" dangerouslySetInnerHTML={{
-          __html: prism.highlight(info.code, prism.languages.javascript, 'javascript')
-        }} />
-      </pre>
+      {codeBlock}
     </div>
   );
 };

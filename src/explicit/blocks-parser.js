@@ -25,16 +25,15 @@ const END_TAGS = {
   right : ['p']
 };
 
-// const LANGS = [
-//   'html', 'css', 'js', 'json',
-//   'shell', 'batch', 'powershell',
-//   'c', 'cpp', 'java', 'python',
-//   'latex', 'md',
-//   'asm6502', 'none'
-// ];
+const LANGS = [
+  'html', 'css', 'javascript', 'json',
+  'shell', 'batch', 'powershell',
+  'c', 'cpp', 'java', 'python',
+  'latex', 'md',
+  'asm6502', 'none'
+];
 
 function parseSons(content, media, tag) {
-  content.push('');
   content.push('');
   const sons = [];
   let i = 0;
@@ -45,6 +44,7 @@ function parseSons(content, media, tag) {
       if (!['p', 'math-block', 'list'].includes(sons[sons.length - 1]?.tag) && son === 'hr') continue;
       if (sons[sons.length - 1]?.tag === 'hr' && !['p', 'math', 'list'].includes(son)) continue;
       if (sons[sons.length - 1]?.tag === 'list' && son === 'list') continue;
+      if (['h2', 'h3', 'h4', 'h5', 'h6'].includes(sons[sons.length - 1]?.tag) && son === 'h') continue;
       const res = parseBlocks(content.slice(i), media, son);
       if (res != null) {
         i += res.len;
@@ -135,34 +135,32 @@ export default function parseBlocks(content, media, tag = 'root') {
     content = content.slice(0, endPos);
     if (content.length > 1) return;
 
-    const matchStr = content[0].match(/!\[(?<txt>.*)\]\((?<url>.*)\)/);
-    if (matchStr?.index !== 0) return;
-    const txt = sanitize(matchStr.groups.txt);
-    const url = matchStr.groups.url;
+    const matchStr = followsRegex(content[0], /!\[(?<txt>.*)\]\((?<url>.*)\)/);
+    if (matchStr == null) return;
+    const txt = sanitize(matchStr.txt);
+    const url = matchStr.url;
 
-    const matchUrl = url.match(/(?<file>[a-z\d]+(-[a-z\d]+)*)\.(png|mp4|js)/);
-    if (matchUrl?.index !== 0) return;
-    const file = matchUrl.groups.file;
+    const matchUrl = followsRegex(url, /(?<file>[a-z\d]+(-[a-z\d]+)*)\.(?<ext>png|mp4|js)/);
+    if (matchUrl == null) return;
+    const file = matchUrl.file;
+    const ext = matchUrl.ext;
 
-    if (url.slice(-3) === 'png') {
-      const match = txt.match(/(?<wid>[1-9]\d*); (?<alt>\S(.*\S)?)/);
-      if (match?.index !== 0) return;
-      const wid = match.groups.wid;
-      const alt = match.groups.alt;
+    if (ext === 'png') {
+      const match = followsRegex(txt, /(?<wid>[1-9]\d*); (?<alt>\S(.*\S)?)/);
+      if (match == null) return;
       const image = media.images.find(image => image.name === file);
       if (image == null) return;
       return {
         ast: {
           tag: 'png',
           image: image.data,
-          width: parseInt(wid),
-          alt
+          width: parseInt(match.wid),
+          alt: match.alt
         },
         len: endPos + 1
       };
     }
-
-    if (url.slice(-3) === 'mp4') {
+    else if (ext === 'mp4') {
       if (followsRegex(txt, /[1-9]\d*/) == null) return;
       const video = media.videos.find(video => video.name === file);
       if (video == null) return;
@@ -175,8 +173,7 @@ export default function parseBlocks(content, media, tag = 'root') {
         len: endPos + 1
       };
     }
-
-    if (url.slice(-2) === 'js') {
+    else if (ext === 'js') {
       if (txt !== '') return;
       const sketch = toCamelCase(file);
       if (media.sketches.indexOf(sketch) === -1) return;
@@ -194,6 +191,7 @@ export default function parseBlocks(content, media, tag = 'root') {
     const endPos = content.findIndex((line, index) => line === '<<<' && content[index + 1] === '');
     if (endPos === -1) return;
     content = content.slice(0, endPos);
+
     if (content[0].slice(0, 3) !== '>>>') return;
     const type
       = content[0].slice(3) === '' ? 'quote'
@@ -202,6 +200,7 @@ export default function parseBlocks(content, media, tag = 'root') {
       : undefined;
     if (type == null) return;
     content = content.slice(1);
+
     if (content.every(line => line === '')) return;
     if (content.some(line => line !== '' && line.slice(0, 2) !== '  ')) return;
     return {
@@ -214,6 +213,7 @@ export default function parseBlocks(content, media, tag = 'root') {
     const endPos = content.findIndex((line, index) => line === '---' && content[index + 1] === '');
     if (endPos === -1) return;
     content = content.slice(0, endPos);
+
     if (content[0].slice(0, 3) !== '+++') return;
     const type
       = content[0].slice(3) === '' ? 'bullet'
@@ -221,31 +221,10 @@ export default function parseBlocks(content, media, tag = 'root') {
       : undefined;
     if (type == null) return;
     content = content.slice(1);
-    if (content.every(line => line === '')) return;
-    if (content.some(line => !(line === '' || line === '~~~' || line.slice(0, 2) === '  '))) return;
 
-    const delims = content
-      .map((line, index) => ({ line, index }))
-      .filter(entry => entry.line === '~~~')
-      .map(entry => entry.index);
-    if (delims.length > 0) {
-      delims.unshift(-1);
-      delims.push(content.length);
-      const items = delims.slice(0, -1).map((delim, index) => content.slice(delim + 1, delims[index + 1]));
-      if (items.some(item => item.every(line => line === ''))) return;
-      return {
-        ast: {
-          tag: 'list',
-          type,
-          sons: items.map(item => parseSons(item.map(line => line.slice(2)), media, 'item'))
-        },
-        len: endPos + 2
-      };
-    }
-    else {
-      if (content.some(line => !/ {2}> \S/.test(line.slice(0, 5)))) return;
-      const items = content.map(line => line.slice(4));
-      if (items.length === 1) return;
+    if (content.every(line => /> \S/.test(line.slice(0, 3)))) {
+      const items = content.map(line => line.slice(2));
+      if (items.length === 0) return;
       return {
         ast: {
           tag: 'list',
@@ -258,85 +237,78 @@ export default function parseBlocks(content, media, tag = 'root') {
         len: endPos + 2
       };
     }
+    else {
+      const delims = content
+        .map((line, index) => ({ line, index }))
+        .filter(entry => entry.line === '~~~')
+        .map(entry => entry.index);
+      delims.unshift(-1);
+      delims.push(content.length);
+      const items = delims.slice(0, -1).map((delim, index) => content.slice(delim + 1, delims[index + 1]));
+      if (items.some(item => item.every(line => line === ''))) return;
+      if (items.some(item => item.some(line => line !== '' && line.slice(0, 2) !== '  '))) return;
+      return {
+        ast: {
+          tag: 'list',
+          type,
+          sons: items.map(item => parseSons(item.map(line => line.slice(2)), media, 'item'))
+        },
+        len: endPos + 2
+      };
+    }
   }
 
-  // if (tag === 'code') {
-  //   const tab = new Array(tabSize).fill(' ').join('');
-  //   let endPos1 = str.indexOf('\n' + tab + '```\n\n'); if (endPos1 === -1) endPos1 = 1e9;
-  //   let endPos2 = str.indexOf('\n' + tab + '^^^\n\n'); if (endPos2 === -1) endPos2 = 1e9;
-  //   const endPos = Math.min(endPos1, endPos2);
-  //   if (endPos === 1e9) return undefined;
-  //   str = str.slice(0, endPos);
+  if (tag === 'code') {
+    const endPos = content.findIndex((line, index) => ['```', '^^^'].includes(line) && content[index + 1] === '');
+    if (endPos === -1) return;
+    content = content.slice(0, endPos + 1);
 
-  //   const lines = str.split('\n');
-  //   const match = lines.map(line => line.match(new RegExp(
-  //     tab + '(?<crop>```|^^^)'
-  //     + '(?<lang>' + LANGS.join('|') + ')'
-  //     + '( -> (?<title>\\S(.*\\S)?)( -> (?<label>\\S(.*\\S)?))?)?'
-  //   )));
-  //   const delim = [];
-  //   for (let i = 0; i < lines.length; i++) {
-  //     if (match[i]?.index === 0) {
-  //       delim.push(i);
-  //     }
-  //     else if (lines[i] !== '' && lines[i] !== `${tab}  ` && lines[i] !== `${tab}> `) {
-  //       return undefined;
-  //     }
-  //   }
+    const delims = content
+      .map((line, index) => ({ line, index }))
+      .filter(entry => ['```', '^^^'].includes(entry.line.slice(0, 3)))
+      .map(entry => entry.index);
+    const matches = delims.slice(0, -1).map(delim => followsRegex(content[delim], new RegExp(
+      '(?<crop>```|\\^\\^\\^) (?<lang>' + LANGS.join('|') + ')'
+      + '( -> (?<title>\\S(.*\\S)?))?'
+      + '( => (?<label>\\S(.*\\S)?))?$'
+    )));
+    matches.push({ crop: content[endPos] });
+    if (matches.some(match => match == null)) return;
+    if (matches[0].crop === '^^^') return;
 
-  //   if (delim[0] !== 0) return undefined;
-  //   if (match[0].groups.crop === '^^^') return undefined;
-  //   delim.push(lines.length);
-  //   for (let i = 1; i < delim.length; i++) {
-  //     let allEmptyLines = true;
-  //     for (let j = delim[i - 1] + 1; j < delim[i]; j++) {
-  //       if (lines[j] !== '') {
-  //         allEmptyLines = false;
-  //         break;
-  //       }
-  //     }
-  //     if (allEmptyLines) return undefined;
-  //   }
+    const items = delims.slice(0, -1).map((delim, index) => content.slice(delim + 1, delims[index + 1]));
+    if (items.some(item => item.every(line => line === ''))) return;
+    if (items.some(item => item.some(line => line !== '' && !['  ', '> '].includes(line.slice(0, 2))))) return;
+    if (items.length === 1 && matches[0].label != null) return;
+    if (items.length > 1 && matches.some(match => match.label == null)) return;
+    if (items.length > 1 && matches.some(match => match.title == null) && matches.some(match => match.title != null)) return;
 
-  //   const getCodeBlock = index => {
-  //     const codeLines = lines.slice(delim[index] + 1, delim[index + 1]);
-  //     return {
-  //       tag: 'code-block',
-  //       code: codeLines,
-  //       high: codeLines.map(line => line === `${tab}> `),
-  //       crop: lines[delim[index + 1]].slice(0, tabSize + 3) === `${tab}^^^`,
-  //       title: match[delim[index]].groups.title,
-  //       label: match[delim[index]].groups.label
-  //     };
-  //   };
+    const getCodeBlock = index => ({
+      tag: 'code-block',
+      code: items[index].map(line => line.slice(2)),
+      high: items[index].map(line => line.slice(0, 2) === '> '),
+      crop: matches[index + 1].crop === '^^^',
+      lang: matches[index].lang,
+      title: sanitize(matches[index].title),
+      label: matches[index].label
+    });
 
-  //   if (delim.length === 2) {
-  //     if (match[delim[0]].groups.label != null) return undefined;
-  //     return {
-  //       ast: getCodeBlock(0),
-  //       len: endPos + `\n${tab}^^^\n\n`.length
-  //     };
-  //   }
-  //   else {
-  //     let cropCount = 0;
-  //     let titleCount = 0;
-  //     let labelCount = 0;
-  //     for (let i = 0; i < delim.length - 1; i++) {
-  //       cropCount += lines[delim[i + 1]].slice(0, tabSize + 3) === `${tab}^^^`;
-  //       titleCount += match[delim[i]].groups.title != null;
-  //       labelCount += match[delim[i]].groups.label != null;
-  //     }
-  //     if (!(cropCount === 0 || cropCount === delim.length - 1)) return undefined;
-  //     if (!(titleCount === 0 || titleCount === delim.length - 1)) return undefined;
-  //     if (labelCount !== delim.length - 1) return undefined;
-  //     const sons = [];
-  //     for (let i = 0; i < delim.length - 1; i++) {
-  //       sons.push(getCodeBlock(i));
-  //     }
-  //     return {
-  //       ast: { tag: 'code-variants', sons },
-  //       len: endPos + `\n${tab}^^^\n\n`.length
-  //     };
-  //   }
-  // }
-};
+    if (items.length === 1) {
+      return {
+        ast: getCodeBlock(0),
+        len: endPos + 2
+      };
+    }
+    const sons = [];
+    for (let i = 0; i < delims.length - 1; i++) {
+      sons.push(getCodeBlock(i));
+    }
+    return {
+      ast: {
+        tag: 'code-variants',
+        sons
+      },
+      len: endPos + 2
+    };
+  }
+}
