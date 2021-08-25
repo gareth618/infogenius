@@ -18,9 +18,9 @@ const MID_TAGS = {
 };
 
 const END_TAGS = {
-  root  : ['math-block', 'png', 'mp4', 'js', 'quote', 'center', 'right', 'code-block', 'list', 'p'],
-  quote : ['math-block', 'png', 'mp4', 'js', 'quote', 'center', 'right', 'code-block', 'list', 'p'],
-  item  : ['math-block', 'png', 'mp4', 'js', 'quote', 'center', 'right', 'code-block', 'list', 'p'],
+  root  : ['math', 'media', 'block', 'code', 'list', 'p'],
+  quote : ['math', 'media', 'block', 'code', 'list', 'p'],
+  item  : ['math', 'media', 'block', 'code', 'list', 'p'],
   center: ['p'],
   right : ['p']
 };
@@ -265,6 +265,7 @@ export default function parseBlocks(content, media, tag = 'root') {
       .map((line, index) => ({ line, index }))
       .filter(entry => ['```', '^^^'].includes(entry.line.slice(0, 3)))
       .map(entry => entry.index);
+    if (delims[0] !== 0) return;
     const matches = delims.slice(0, -1).map(delim => followsRegex(content[delim], new RegExp(
       '(?<crop>```|\\^\\^\\^) (?<lang>' + LANGS.join('|') + ')'
       + '( -> (?<title>\\S(.*\\S)?))?'

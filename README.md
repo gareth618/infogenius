@@ -22,14 +22,9 @@
 - [x] improve excerpt generation
 - [x] title as Explicit
 - [x] add lists
-- [ ] add tables
-
----
-
-- [ ] add snippet crop
-- [ ] add line numbers
-- [ ] add line highlighting
+- [x] add code blocks
 - [ ] add variants
+- [ ] add tables
 
 ---
 
@@ -41,7 +36,6 @@
 - [ ] search engine (Algola)
 - [ ] comments (FireBase)
 - [ ] push notifications
-- [x] refactoring
 
 ---
 
