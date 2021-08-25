@@ -3,7 +3,6 @@
   padding: 1rem;
   background: #1c1c1c;
   border-radius: .5rem;
-  overflow-x: scroll;
 }
 
 .code-block code {
@@ -12,6 +11,7 @@
   text-shadow: none;
   background: transparent;
   font-family: 'Source Code Pro', monospace !important;
+  white-space: inherit !important;
 }
 
 .macos-window {

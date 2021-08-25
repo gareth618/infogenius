@@ -27,10 +27,9 @@ const END_TAGS = {
 
 const LANGS = [
   'html', 'css', 'javascript', 'json',
-  'shell', 'batch', 'powershell',
   'c', 'cpp', 'java', 'python',
-  'latex', 'md',
-  'asm6502', 'none'
+  'bash', 'asm6502', 'text',
+  'latex', 'markdown'
 ];
 
 function parseSons(content, media, tag) {
@@ -41,10 +40,9 @@ function parseSons(content, media, tag) {
     while (i < content.length && content[i] === '') i++;
     if (i === content.length) break;
     for (const son of sons.length > 0 ? MID_TAGS[tag] : BEG_TAGS[tag]) {
-      if (!['p', 'math-block', 'list'].includes(sons[sons.length - 1]?.tag) && son === 'hr') continue;
-      if (sons[sons.length - 1]?.tag === 'hr' && !['p', 'math', 'list'].includes(son)) continue;
       if (sons[sons.length - 1]?.tag === 'list' && son === 'list') continue;
       if (['h2', 'h3', 'h4', 'h5', 'h6'].includes(sons[sons.length - 1]?.tag) && son === 'h') continue;
+      if (['h2', 'h3', 'h4', 'h5', 'h6', 'hr'].includes(sons[sons.length - 1]?.tag) && son === 'hr') continue;
       const res = parseBlocks(content.slice(i), media, son);
       if (res != null) {
         i += res.len;
@@ -289,7 +287,7 @@ export default function parseBlocks(content, media, tag = 'root') {
       high: items[index].map(line => line.slice(0, 2) === '> '),
       crop: matches[index + 1].crop === '^^^',
       lang: matches[index].lang,
-      title: sanitize(matches[index].title),
+      title: matches[index].title == null ? undefined : sanitize(matches[index].title),
       label: matches[index].label
     });
 

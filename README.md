@@ -21,10 +21,15 @@
 - [x] add horizontal lines
 - [x] improve excerpt generation
 - [x] title as Explicit
-- [x] add prism (almost done)
-- [ ] add variants
 - [x] add lists
 - [ ] add tables
+
+---
+
+- [ ] add snippet crop
+- [ ] add line numbers
+- [ ] add line highlighting
+- [ ] add variants
 
 ---
 

@@ -1,2 +1,2 @@
 const requireESM = require('esm')(module);
-module.exports = requireESM('./gatsby-config.esm.js');
+module.exports = requireESM('./gatsby-config.esm');
