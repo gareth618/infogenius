@@ -71,15 +71,7 @@ export default function renderBlocks(ast) {
     return <CodeBlock info={info} />;
   }
   if (ast.tag === 'code-variants') {
-    return (
-      <CodeVariants>
-        {ast.sons.map(son => {
-          const info = { ...ast };
-          delete info.tag;
-          return <CodeBlock key={uuidv4()} info={info} />;
-        })}
-      </CodeVariants>
-    );
+    return <CodeVariants items={ast.sons} />;
   }
 
   const sons = ast.sons && ast.sons.map(son => <React.Fragment key={uuidv4()}>{renderBlocks(son)}</React.Fragment>);

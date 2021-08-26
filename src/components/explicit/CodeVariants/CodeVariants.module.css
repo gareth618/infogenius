@@ -1,0 +1,28 @@
+.buttons-container {
+  display: flex;
+  margin: 1rem 0 0 0;
+}
+
+.button {
+  display: block;
+  padding: 1rem 0 1rem 1rem;
+  color: white;
+  background: #1c1c1c;
+  line-height: 1;
+  font-weight: bold;
+  font-size: .85rem;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.button:first-child {
+  border-top-left-radius: .5rem;
+}
+
+.button:last-child {
+  padding-right: 1rem;
+  border-top-right-radius: .5rem;
+}
+
+.button:hover {
+  color: lightskyblue;
+}

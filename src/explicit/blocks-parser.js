@@ -242,6 +242,7 @@ export default function parseBlocks(content, media, tag = 'root') {
         .map(entry => entry.index);
       delims.unshift(-1);
       delims.push(content.length);
+
       const items = delims.slice(0, -1).map((delim, index) => content.slice(delim + 1, delims[index + 1]));
       if (items.some(item => item.every(line => line === ''))) return;
       if (items.some(item => item.some(line => line !== '' && line.slice(0, 2) !== '  '))) return;
@@ -266,9 +267,10 @@ export default function parseBlocks(content, media, tag = 'root') {
       .filter(entry => ['```', '^^^'].includes(entry.line.slice(0, 3)))
       .map(entry => entry.index);
     if (delims[0] !== 0) return;
+
     const matches = delims.slice(0, -1).map(delim => followsRegex(content[delim], new RegExp(
       '(?<crop>```|\\^\\^\\^) (?<lang>' + LANGS.join('|') + ')'
-      + '( -> (?<title>\\S(.*\\S)?))?'
+      + '( -> (?<title>(?![=>])\\S(((?![=>]).)*(?![=>])\\S)?))?'
       + '( => (?<label>\\S(.*\\S)?))?$'
     )));
     matches.push({ crop: content[endPos] });
@@ -279,8 +281,11 @@ export default function parseBlocks(content, media, tag = 'root') {
     if (items.some(item => item.every(line => line === ''))) return;
     if (items.some(item => item.some(line => line !== '' && !['  ', '> '].includes(line.slice(0, 2))))) return;
     if (items.length === 1 && matches[0].label != null) return;
-    if (items.length > 1 && matches.some(match => match.label == null)) return;
-    if (items.length > 1 && matches.some(match => match.title == null) && matches.some(match => match.title != null)) return;
+    const someLabelNull = matches.slice(0, -1).some(match => match.label == null);
+    const someTitleNull = matches.slice(0, -1).some(match => match.title == null);
+    const someTitleFull = matches.slice(0, -1).some(match => match.title != null);
+    if (items.length > 1 && someLabelNull) return;
+    if (items.length > 1 && someTitleNull && someTitleFull) return;
 
     const getCodeBlock = index => ({
       tag: 'code-block',
@@ -300,7 +305,9 @@ export default function parseBlocks(content, media, tag = 'root') {
     }
     const sons = [];
     for (let i = 0; i < delims.length - 1; i++) {
-      sons.push(getCodeBlock(i));
+      const codeBlock = getCodeBlock(i);
+      delete codeBlock.tag;
+      sons.push(codeBlock);
     }
     return {
       ast: {

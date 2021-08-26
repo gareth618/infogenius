@@ -25,6 +25,10 @@ export default function CodeBlock({ info }) {
   if (info.title != null) preClasses.push(styles.numbered);
   if (info.title != null) preClasses.push(styles[`digits${info.code.length.toString().length}`]);
 
+  const preStyles = ['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'scroll' };
+  if (info.label != null) preStyles.borderTopLeftRadius = 0;
+  if (info.label != null && info.title == null) preStyles.marginTop = 0;
+
   const html = prism
     .highlight(info.code.join('\n'), prism.languages[info.lang], info.lang)
     .split('\n').map((line, index) => (
@@ -51,7 +55,7 @@ export default function CodeBlock({ info }) {
       </button>
       <pre
         className={preClasses.join(' ')}
-        style={['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'scroll' }}
+        style={preStyles}
       >
         <code
           className={`language-${info.lang}`}
@@ -63,7 +67,10 @@ export default function CodeBlock({ info }) {
 
   if (info.title == null) return codeBlock;
   return (
-    <div className={styles.macosWindow}>
+    <div
+      className={styles.macosWindow}
+      style={info.label == null ? { } : { borderTopLeftRadius: 0 } }
+    >
       <div className={styles.macosTopbar}>
         <div className={styles.macosMenu}>
           <div className={styles.macosCircle1} />

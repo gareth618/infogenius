@@ -42,7 +42,6 @@
   border-right: 1px solid #888;
   color: #ccc;
   text-align: right;
-  box-sizing: content-box;
 }
 
 .digits-1 div { padding-left: calc(3.7rem + 1px); }
@@ -58,7 +57,8 @@
 
 .macos-window .code-block {
   margin-top: 0;
-  border-radius: 0 0 .5rem .5rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .macos-topbar {

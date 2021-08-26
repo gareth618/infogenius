@@ -23,7 +23,7 @@
 - [x] title as Explicit
 - [x] add lists
 - [x] add code blocks
-- [ ] add variants
+- [x] add variants
 - [ ] add tables
 
 ---

@@ -7,6 +7,60 @@ DESCRIPTION: Testez PrismJS.
 
 Testez PrismJS.
 
+``` html -> Some code... => HTML
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>InfoGenius.ro</title>
+    </head>
+  </html>
+``` css -> Some code... => CSS
+  @media (min-width: 801px) {
+    .explicit p {
+      text-align: justify;
+    }
+  }
+``` javascript -> Some code... => JavaScript
+  const age = new Date().getUTCFullYear() - 2002;
+  const name = 'Gareth'
+  console.log(`Hi, ${name} of age ${age}!`);
+``` json -> Some code... => JSON
+  {
+    "editor.fontSize": 20,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.suggestSelection": "first",
+    "editor.renderWhitespace": "none",
+    "editor.tabSize": 2,
+    "editor.minimap.enabled": false
+  }
+```
+
+``` cpp => Linux
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    cout << '\n';
+    return 0;
+  }
+``` cpp => MacOS
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    cout << '\r';
+    return 0;
+  }
+``` cpp => Windows
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+    cout << "\r\n";
+    return 0;
+  }
+```
+
 ``` text -> text
   lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 ```
