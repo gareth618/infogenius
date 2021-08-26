@@ -2,25 +2,25 @@ import parseInline from './inline-parser';
 import { sanitize, toCamelCase, followsRegex, katexify } from '@utils/helpers';
 
 const BEG_TAGS = {
-  root  : ['math', 'block', 'code', 'list', 'p'],
-  quote : ['h', 'math', 'block', 'code', 'list', 'p'],
+  root  : ['math', 'block', 'code', 'list', 'table', 'p'],
+  quote : ['math', 'block', 'code', 'list', 'table', 'h', 'p'],
   item  : ['p'],
   center: ['p'],
   right : ['p']
 };
 
 const MID_TAGS = {
-  root  : ['h', 'hr', 'math', 'media', 'block', 'code', 'list', 'p'],
-  quote : ['h', 'hr', 'math', 'media', 'block', 'code', 'list', 'p'],
-  item  : ['h', 'hr', 'math', 'media', 'block', 'code', 'list', 'p'],
+  root  : ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
+  quote : ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
+  item  : ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
   center: ['p'],
   right : ['p']
 };
 
 const END_TAGS = {
-  root  : ['math', 'media', 'block', 'code', 'list', 'p'],
-  quote : ['math', 'media', 'block', 'code', 'list', 'p'],
-  item  : ['math', 'media', 'block', 'code', 'list', 'p'],
+  root  : ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
+  quote : ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
+  item  : ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
   center: ['p'],
   right : ['p']
 };
@@ -313,6 +313,47 @@ export default function parseBlocks(content, media, tag = 'root') {
       ast: {
         tag: 'code-variants',
         sons
+      },
+      len: endPos + 2
+    };
+  }
+
+  if (tag === 'table') {
+    const endPos = content.findIndex((line, index) => line === '!!!' && content[index + 1] === '');
+    if (endPos === -1) return;
+    if (content[0] !== '???') return;
+    content = content.slice(1, endPos);
+
+    const delims = content
+      .map((line, index) => ({ line, index }))
+      .filter(entry => entry.line === '~~~')
+      .map(entry => entry.index);
+    delims.unshift(-1);
+    delims.push(content.length);
+
+    const rows = delims.slice(0, -1).map((delim, index) => content.slice(delim + 1, delims[index + 1]));
+    if (rows.some(row => row.length === 0)) return;
+    const cells = rows.map(row => row.map(line => {
+      const match = followsRegex(line,
+        / {2}(?<type>[lLcCrR])( (?<rowSpan>[1-9]\d*)( (?<colSpan>[1-9]\d*))?)? > (?<content>\S.*)/
+      );
+      if (match == null) return undefined;
+      return {
+        align:
+          /[lL]/.test(match.type) ? 'left' :
+          /[cC]/.test(match.type) ? 'center' :
+          /[rR]/.test(match.type) ? 'right' : '',
+        header: /[LCR]/.test(match.type),
+        rowSpan: match.rowSpan == null ? 1 : parseInt(match.rowSpan),
+        colSpan: match.colSpan == null ? 1 : parseInt(match.colSpan),
+        content: parseInline(match.content)
+      };
+    }));
+    if (cells.some(row => row.some(cell => cell == null))) return;
+    return {
+      ast: {
+        tag: 'table',
+        sons: cells
       },
       len: endPos + 2
     };

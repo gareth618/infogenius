@@ -43,6 +43,15 @@ export default function renderBlocks(ast) {
     return <Sketch script={sketches[ast.sketch]} />;
   }
 
+  if (ast.tag === 'code-block') {
+    const info = { ...ast };
+    delete info.tag;
+    return <CodeBlock info={info} />;
+  }
+  if (ast.tag === 'code-variants') {
+    return <CodeVariants items={ast.sons} />;
+  }
+
   if (ast.tag === 'list') {
     const items = ast.sons.map(son => <li key={uuidv4()}>{renderBlocks(son)}</li>);
     if (ast.type === 'bullet') return <ul className={ast.spaced ? '' : 'not-spaced-list'} style={{ listStyleType: 'disc' }}>{items}</ul>;
@@ -65,13 +74,21 @@ export default function renderBlocks(ast) {
     );
   }
 
-  if (ast.tag === 'code-block') {
-    const info = { ...ast };
-    delete info.tag;
-    return <CodeBlock info={info} />;
-  }
-  if (ast.tag === 'code-variants') {
-    return <CodeVariants items={ast.sons} />;
+  if (ast.tag === 'table') {
+    return (
+      <div className="table-wrapper">
+        <table>
+          {ast.sons.map(row => (
+            <tr key={uuidv4()}>
+              {row.map(cell => cell.header
+                ? <th key={uuidv4()} rowSpan={cell.rowSpan} colSpan={cell.colSpan} style={{ textAlign: cell.align }}>{renderInline(cell.content)}</th>
+                : <td key={uuidv4()} rowSpan={cell.rowSpan} colSpan={cell.colSpan} style={{ textAlign: cell.align }}>{renderInline(cell.content)}</td>
+              )}
+            </tr>
+          ))}
+        </table>
+      </div>
+    );
   }
 
   const sons = ast.sons && ast.sons.map(son => <React.Fragment key={uuidv4()}>{renderBlocks(son)}</React.Fragment>);

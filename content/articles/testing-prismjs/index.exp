@@ -7,6 +7,15 @@ DESCRIPTION: Testez PrismJS.
 
 Testez PrismJS.
 
+``` bash
+  cd Desktop
+  mkdir InfoGenius
+  cd InfoGenius
+  mkdir BadArticles
+  cd BadArticles
+  ls | wc -l # 0
+```
+
 ``` html -> Some code... => HTML
   <!DOCTYPE html>
   <html>

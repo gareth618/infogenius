@@ -21,6 +21,11 @@
   padding: 0 1rem;
 }
 
+.dollars div::before {
+  content: '$ ';
+  color: #ccc;
+}
+
 .cropped {
   max-height: 400px;
   overflow-y: scroll;

@@ -14,20 +14,6 @@
 
 ## TODO
 
-- [x] fix punctuation after katex bug
-- [x] add header anchors
-- [x] add center/right
-- [x] add quotes
-- [x] add horizontal lines
-- [x] improve excerpt generation
-- [x] title as Explicit
-- [x] add lists
-- [x] add code blocks
-- [x] add variants
-- [ ] add tables
-
----
-
 - [ ] improve Explicit highlighter
 - [ ] remove Explicit parser repo
 

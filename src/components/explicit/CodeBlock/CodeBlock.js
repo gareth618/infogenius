@@ -24,6 +24,7 @@ export default function CodeBlock({ info }) {
   if (info.crop) preClasses.push(styles.cropped);
   if (info.title != null) preClasses.push(styles.numbered);
   if (info.title != null) preClasses.push(styles[`digits${info.code.length.toString().length}`]);
+  if (info.lang === 'bash' && info.code[0] !== '#!/bin/bash') preClasses.push(styles.dollars);
 
   const preStyles = ['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'scroll' };
   if (info.label != null) preStyles.borderTopLeftRadius = 0;

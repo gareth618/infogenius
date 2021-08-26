@@ -80,6 +80,28 @@
   font-weight: bold;
 }
 
+.explicit .table-wrapper {
+  margin: 1rem 0;
+  overflow-x: scroll;
+}
+
+.explicit table {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+.explicit td,
+.explicit th {
+  padding: 1rem;
+  border: 2px solid var(--text);
+  color: var(--text);
+  background: var(--background);
+  font-family: 'Merriweather', serif;
+}
+
+.explicit td { background: var(--td); }
+.explicit th { background: var(--th); }
+
 .explicit blockquote {
   margin: 1rem 0;
   padding: 1rem;
