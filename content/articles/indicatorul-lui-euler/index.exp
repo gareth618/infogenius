@@ -180,4 +180,6 @@ $$\varphi(n) = \prod_{i = 1}^k \varphi(p_i^{e_i}) = \prod_{i = 1}^k p_i^{e_i - 1
 
 Problema Fracții am explicat-o [aici](ciurul-lui-eratostene-cpp/#aplicatie-la-ciurul-lui-eratostene-problema-fractii-de-pe-infoarena-7). De asemenea, un exercițiu bun este să adaptați [Ciurul lui Eratostene](ciurul-lui-eratostene-cpp) din problema Fracții pentru a calcula eficient suma și numărul divizorilor tuturor numerelor naturale de la $1$ la $n$. În plus, o aplicație importantă a indicatorului lui Euler este [Teorema lui Euler]()TODO, care e foarte utilă în calculul inversului modular, despre care voi scrie într-un articol viitor.
 
+===
+
 Dacă aveți vreo întrebare despre cele trei aplicații la descompunerea în factori primi, nu ezitați să o adresați mai jos, într-un comentariu :smile: Iar dacă vi s-a părut un articol interesant, nu uitați să-i dați un share pe FaceBook!
