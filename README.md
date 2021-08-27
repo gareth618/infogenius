@@ -14,17 +14,10 @@
 
 ## TODO
 
-- [ ] improve Explicit highlighter
-- [ ] remove Explicit parser repo
-
----
-
 - [ ] search engine (Algola)
 - [ ] comments (FireBase)
 - [ ] push notifications
-
----
-
 - [ ] rewrite articles
+- [ ] make old redirects (?)
 - [ ] launch (Netlify)
 - [ ] make this a Gatsby starter :zany_face:

@@ -1,4 +1,3 @@
-
 TITLE: Trie în C++. Problema Xor Max de pe InfoArena
 AUTHOR: Iulian Oleniuc
 DATE: 06/02/2021
@@ -22,28 +21,28 @@ Am ales să pun literele în __noduri__ pentru a desena mai ușor tria, însă c
 
 Deocamdată, clasa `Trie` are nevoie de doi membri privați: `cnt` (numărul de cuvinte care se termină în nodul curent) și un vector de pointeri `next`, de lungime $\Sigma$, unde `next[i]` ne spune în ce nod ne ducem dacă urmăm legătura corespunzătoare celei de-a `i`-a litere din alfabet. Dacă `next[i]` este `nullptr`, înseamnă că nu există tranziție către litera `i`.
 
-[+code](lang: cpp; numb: no)
-    class Trie {
-        int cnt = 0;
-        Trie *next[26] = {};
-    };
-[-code]
+``` cpp
+  class Trie {
+      int cnt = 0;
+      Trie *next[26] = {};
+  };
+```
 
 ### Funcția `insert`
 
 Această funcție, la fel ca și următoarele, primește ca parametri un string `str` și poziția curentă din acesta (`pos`). Funcția `insert` inserează recursiv cuvântul `str` în trie, astfel: Dacă poziția curentă este egală cu lungimea string-ului, înseamnă că ne-am terminat treaba, așa că incrementăm `cnt`-ul din nodul curent și ne oprim. Altfel, urmăm muchia către litera curentă (`str[pos] - 'a'`), și continuăm inserarea din nodul următor, începând cu poziția `pos + 1`. Înainte de asta, avem grijă să creăm nodul `next[str[pos] - 'a']`, în caz că acesta nu exista deja.
 
-[+code](lang: cpp; numb: yes)
-    void insert(const string& str, int pos = 0) {
-        if (pos == (int) str.size())
-            cnt++;
-        else {
-            if (!next[str[pos] - 'a'])
-                next[str[pos] - 'a'] = new Trie;
-            next[str[pos] - 'a']->insert(str, pos + 1);
-        }
-    }
-[-code]
+``` cpp -> Funcția insert
+  void insert(const string& str, int pos = 0) {
+      if (pos == (int) str.size())
+          cnt++;
+      else {
+          if (!next[str[pos] - 'a'])
+              next[str[pos] - 'a'] = new Trie;
+          next[str[pos] - 'a']->insert(str, pos + 1);
+      }
+  }
+```
 
 Iată o super animație marca InfoGenius, care arată cum este construită tria de mai sus prin inserări succesive:
 
@@ -53,29 +52,29 @@ Iată o super animație marca InfoGenius, care arată cum este construită tria 
 
 Funcția `count` returnează numărul de apariții ale cuvântului `str` în trie. Pentru a face asta, trebuie ca mai întâi să ajungem în nodul în care se termină cuvântul dat, iar apoi să returnăm `cnt`-ul din acesta. Așadar, funcția `count` va semăna foarte mult cu `insert`, numai că aici, dacă nu există tranziție din nodul curent către litera următoare, returnăm `0` și ne oprim, deoarece `str` nu se găsește în trie.
 
-[+code](lang: cpp; numb: yes)
-    int count(const string& str, int pos = 0) {
-        if (pos == (int) str.size())
-            return cnt;
-        if (!next[str[pos] - 'a'])
-            return 0;
-        return next[str[pos] - 'a']->count(str, pos + 1);
-    }
-[-code]
+``` cpp -> Funcția count
+  int count(const string& str, int pos = 0) {
+      if (pos == (int) str.size())
+          return cnt;
+      if (!next[str[pos] - 'a'])
+          return 0;
+      return next[str[pos] - 'a']->count(str, pos + 1);
+  }
+```
 
 ### Funcția `lcp`
 
 Funcția `lcp` trebuie să returneze lungimea celui mai lung prefix comun al lui `str` cu un cuvânt din trie. Deja ar trebui să fie clar cum facem asta: Coborâm în trie până când ne blocăm într-un nod fără tranziție către următoarea literă sau până când ajungem la finalul string-ului. Ce returnăm de fapt este lungimea lanțului de la rădăcină până la nodul în care ne oprim.
 
-[+code](lang: cpp; numb: yes)
-    int lcp(const string& str, int pos = 0) {
-        if (pos == (int) str.size())
-            return 0;
-        if (!next[str[pos] - 'a'])
-            return 0;
-        return 1 + next[str[pos] - 'a']->lcp(str, pos + 1);
-    }
-[-code]
+``` cpp -> Funcția lcp
+  int lcp(const string& str, int pos = 0) {
+      if (pos == (int) str.size())
+          return 0;
+      if (!next[str[pos] - 'a'])
+          return 0;
+      return 1 + next[str[pos] - 'a']->lcp(str, pos + 1);
+  }
+```
 
 ### Funcția `erase`
 
@@ -89,182 +88,182 @@ Haideți să mai adăugăm un membru privat la clasa `Trie`, notat cu `lvs` (de 
 
 Acum că avem calculată această informație, ne este mai ușor să rezumăm ce trebuie să facem concret în funcția `erase`: Coborâm în trie până în nodul în care se termină `str`, decrementând valorile `lvs` întâlnite pe parcurs. După ce ajungm în `node`, îl decrementăm pe `cnt` și ne întoarcem în rădăcină pe același traseu, ștergând nodurile al căror `lvs` a devenit `0`.
 
-[+code](lang: cpp; numb: yes)
-    void erase(const string& str, int pos = 0) {
-        lvs--;
-        if (pos == (int) str.size())
-            cnt--;
-        else {
-            next[str[pos] - 'a']->erase(str, pos + 1);
-            if (!next[str[pos] - 'a']->lvs) {
-                delete next[str[pos] - 'a'];
-                next[str[pos] - 'a'] = nullptr;
-            }
-        }
-    }
-[-code]
+``` cpp -> Funcția erase
+  void erase(const string& str, int pos = 0) {
+      lvs--;
+      if (pos == (int) str.size())
+          cnt--;
+      else {
+          next[str[pos] - 'a']->erase(str, pos + 1);
+          if (!next[str[pos] - 'a']->lvs) {
+              delete next[str[pos] - 'a'];
+              next[str[pos] - 'a'] = nullptr;
+          }
+      }
+  }
+```
 
 ### Sursa completă
 
 Iată cum arată sursa completă pentru problema Trie:
 
-[+code](title: trie.cpp; lang: cpp; numb: yes; crop: yes)
-    #include <bits/stdc++.h>
-    using namespace std;
+``` cpp -> trie.cpp
+  #include <bits/stdc++.h>
+  using namespace std;
 
-    ifstream fin("trie.in");
-    ofstream fout("trie.out");
+  ifstream fin("trie.in");
+  ofstream fout("trie.out");
 
-    class Trie {
-        int cnt = 0;
-        int lvs = 0;
-        Trie *next[26] = {};
+  class Trie {
+      int cnt = 0;
+      int lvs = 0;
+      Trie *next[26] = {};
 
-    public:
-        void insert(const string& str, int pos = 0) {
-            lvs++;
-            if (pos == (int) str.size())
-                cnt++;
-            else {
-                if (!next[str[pos] - 'a'])
-                    next[str[pos] - 'a'] = new Trie;
-                next[str[pos] - 'a']->insert(str, pos + 1);
-            }
-        }
+  public:
+      void insert(const string& str, int pos = 0) {
+          lvs++;
+          if (pos == (int) str.size())
+              cnt++;
+          else {
+              if (!next[str[pos] - 'a'])
+                  next[str[pos] - 'a'] = new Trie;
+              next[str[pos] - 'a']->insert(str, pos + 1);
+          }
+      }
 
-        void erase(const string& str, int pos = 0) {
-            lvs--;
-            if (pos == (int) str.size())
-                cnt--;
-            else {
-                next[str[pos] - 'a']->erase(str, pos + 1);
-                if (!next[str[pos] - 'a']->lvs) {
-                    delete next[str[pos] - 'a'];
-                    next[str[pos] - 'a'] = nullptr;
-                }
-            }
-        }
+      void erase(const string& str, int pos = 0) {
+          lvs--;
+          if (pos == (int) str.size())
+              cnt--;
+          else {
+              next[str[pos] - 'a']->erase(str, pos + 1);
+              if (!next[str[pos] - 'a']->lvs) {
+                  delete next[str[pos] - 'a'];
+                  next[str[pos] - 'a'] = nullptr;
+              }
+          }
+      }
 
-        int count(const string& str, int pos = 0) {
-            if (pos == (int) str.size())
-                return cnt;
-            if (!next[str[pos] - 'a'])
-                return 0;
-            return next[str[pos] - 'a']->count(str, pos + 1);
-        }
+      int count(const string& str, int pos = 0) {
+          if (pos == (int) str.size())
+              return cnt;
+          if (!next[str[pos] - 'a'])
+              return 0;
+          return next[str[pos] - 'a']->count(str, pos + 1);
+      }
 
-        int lcp(const string& str, int pos = 0) {
-            if (pos == (int) str.size())
-                return 0;
-            if (!next[str[pos] - 'a'])
-                return 0;
-            return 1 + next[str[pos] - 'a']->lcp(str, pos + 1);
-        }
-    };
+      int lcp(const string& str, int pos = 0) {
+          if (pos == (int) str.size())
+              return 0;
+          if (!next[str[pos] - 'a'])
+              return 0;
+          return 1 + next[str[pos] - 'a']->lcp(str, pos + 1);
+      }
+  };
 
-    int main() {
-        Trie trie;
-        int type; string str;
-        while (fin >> type >> str)
-            if (!type)
-                trie.insert(str);
-            else if (type == 1)
-                trie.erase(str);
-            else if (type == 2)
-                fout << trie.count(str) << '\n';
-            else
-                fout << trie.lcp(str) << '\n';
-        return 0;
-    }
-[-code]
+  int main() {
+      Trie trie;
+      int type; string str;
+      while (fin >> type >> str)
+          if (!type)
+              trie.insert(str);
+          else if (type == 1)
+              trie.erase(str);
+          else if (type == 2)
+              fout << trie.count(str) << '\n';
+          else
+              fout << trie.lcp(str) << '\n';
+      return 0;
+  }
+^^^
 
 ## Implementare alternativă
 
 Iată și o implementare mai puțin populară, în care funcțiile sunt implementate iterativ. Aici, nodurile sunt ținute într-un vector alocat dinamic, iar pointerii sunt de fapt indici în acest vector. Dezavantajul este că această metodă de stocare a nodurilor nu ne permite să eliberăm efectiv memorie în urma unui `erase`. Nodurile sunt eliminate doar conceptual, prin ștergerea muchiei către primul nod dintre rădăcină și `node` care are `lvs`-ul `0`.
 
-[+code](title: trie.cpp; lang: cpp; numb: yes; crop: yes)
-    #include <bits/stdc++.h>
-    using namespace std;
+``` cpp -> trie.cpp
+  #include <bits/stdc++.h>
+  using namespace std;
 
-    ifstream fin("trie.in");
-    ofstream fout("trie.out");
+  ifstream fin("trie.in");
+  ofstream fout("trie.out");
 
-    class Trie {
-        struct Node {
-            int cnt = 0;
-            int lvs = 0;
-            int next[26] = {};
-        };
-        vector<Node> trie{1};
+  class Trie {
+      struct Node {
+          int cnt = 0;
+          int lvs = 0;
+          int next[26] = {};
+      };
+      vector<Node> trie{1};
 
-    public:
-        void insert(const string& str) {
-            int node = 0;
-            for (char chr : str) {
-                if (!trie[node].next[chr - 'a']) {
-                    trie[node].next[chr - 'a'] = trie.size();
-                    trie.emplace_back();
-                }
-                node = trie[node].next[chr - 'a'];
-                trie[node].lvs++;
-            }
-            trie[node].cnt++;
-        }
+  public:
+      void insert(const string& str) {
+          int node = 0;
+          for (char chr : str) {
+              if (!trie[node].next[chr - 'a']) {
+                  trie[node].next[chr - 'a'] = trie.size();
+                  trie.emplace_back();
+              }
+              node = trie[node].next[chr - 'a'];
+              trie[node].lvs++;
+          }
+          trie[node].cnt++;
+      }
 
-        void erase(const string& str) {
-            int node = 0;
-            for (char chr : str) {
-                node = trie[node].next[chr - 'a'];
-                trie[node].lvs--;
-            }
-            trie[node].cnt--;
-            node = 0;
-            for (char chr : str) {
-                if (!trie[trie[node].next[chr - 'a']].lvs) {
-                    trie[node].next[chr - 'a'] = 0;
-                    return;
-                }
-                node = trie[node].next[chr - 'a'];
-            }
-        }
+      void erase(const string& str) {
+          int node = 0;
+          for (char chr : str) {
+              node = trie[node].next[chr - 'a'];
+              trie[node].lvs--;
+          }
+          trie[node].cnt--;
+          node = 0;
+          for (char chr : str) {
+              if (!trie[trie[node].next[chr - 'a']].lvs) {
+                  trie[node].next[chr - 'a'] = 0;
+                  return;
+              }
+              node = trie[node].next[chr - 'a'];
+          }
+      }
 
-        int count(const string& str) {
-            int node = 0;
-            for (char chr : str) {
-                if (!trie[node].next[chr - 'a'])
-                    return 0;
-                node = trie[node].next[chr - 'a'];
-            }
-            return trie[node].cnt;
-        }
+      int count(const string& str) {
+          int node = 0;
+          for (char chr : str) {
+              if (!trie[node].next[chr - 'a'])
+                  return 0;
+              node = trie[node].next[chr - 'a'];
+          }
+          return trie[node].cnt;
+      }
 
-        int lcp(const string& str) {
-            int node = 0, len = 0;
-            for (char chr : str) {
-                if (!trie[node].next[chr - 'a'])
-                    return len;
-                node = trie[node].next[chr - 'a'];
-                len++;
-            }
-            return len;
-        }
-    };
+      int lcp(const string& str) {
+          int node = 0, len = 0;
+          for (char chr : str) {
+              if (!trie[node].next[chr - 'a'])
+                  return len;
+              node = trie[node].next[chr - 'a'];
+              len++;
+          }
+          return len;
+      }
+  };
 
-    int main() {
-        Trie trie;
-        int type; string str;
-        while (fin >> type >> str)
-            if (!type)
-                trie.insert(str);
-            else if (type == 1)
-                trie.erase(str);
-            else if (type == 2)
-                fout << trie.count(str) << '\n';
-            else
-                fout << trie.lcp(str) << '\n';
-        return 0;
-    }
-[-code]
+  int main() {
+      Trie trie;
+      int type; string str;
+      while (fin >> type >> str)
+          if (!type)
+              trie.insert(str);
+          else if (type == 1)
+              trie.erase(str);
+          else if (type == 2)
+              fout << trie.count(str) << '\n';
+          else
+              fout << trie.lcp(str) << '\n';
+      return 0;
+  }
+^^^
 
 Totuși, în majoritatea problemelor interesante de la concursuri, avem nevoie doar de funcția `insert` (și poate `count`), restul problemei reducându-se la o dinamică pe arbore sau ceva. Iar în acest caz, implementarea asta mi se pare ceva mai simplă.
 
@@ -276,17 +275,13 @@ Cât despre numărul de noduri ale unei trie, în cel mai rău caz acesta poate 
 
 ## Aplicații clasice
 
-[+list]
-    [+item]
-        **Sortarea unei liste de cuvinte.** Construim o trie din cuvintele date, reținând în fiecare frunză o listă cu indicii cuvintelor care se termină în nodul respectiv. Apoi, efectuăm o parcurgere preordine a triei, afișând indicii întâlniți pe parcurs. Putem adapta algoritmul și pentru sortarea unui vector de întregi, inserând în trie reprezentările în baza $2$ ale acelor numere. Chiar am obține o complexitate bună: $O(n \log n)$. Însă, din cauza consumului mare de memorie auxiliară și a faptului că aceasta nu este o sortare prin comparare, nu veți auzi de ea prea des.
-    [-item]
-    [+item]
-        **Funcția de autocomplete.** Aici mă refer la căutarea de cuvinte cu un prefix dat, adică ceea ce face Google când vă oferă sugestii de căutare. Navigăm în trie până la nodul în care se termină prefixul acela, după care enumerăm frunzele din subarborele acelui nod.
-    [-item]
-    [+item]
-        **Cel mai lung prefix comun a două cuvinte.** Să zicem că avem dat un set de cuvinte și trebuie să răspundem la multe întrebări de forma „Care este lungimea LCP-ului cuvintelor $x$ și $y$?”. Mai întâi, construim tria formată din cuvintele date. Apoi, problema se reduce la a determina adâncimea LCA-ului nodurilor în care se termină $x$ și respectiv $y$. Puteți citi despre LCA [aici](https://infoarena.ro/problema/lca)TODO.
-    [-item]
-[-list]
++++
+  **Sortarea unei liste de cuvinte.** Construim o trie din cuvintele date, reținând în fiecare frunză o listă cu indicii cuvintelor care se termină în nodul respectiv. Apoi, efectuăm o parcurgere preordine a triei, afișând indicii întâlniți pe parcurs. Putem adapta algoritmul și pentru sortarea unui vector de întregi, inserând în trie reprezentările în baza $2$ ale acelor numere. Chiar am obține o complexitate bună: $O(n \log n)$. Însă, din cauza consumului mare de memorie auxiliară și a faptului că aceasta nu este o sortare prin comparare, nu veți auzi de ea prea des.
+~~~
+  **Funcția de autocomplete.** Aici mă refer la căutarea de cuvinte cu un prefix dat, adică ceea ce face Google când vă oferă sugestii de căutare. Navigăm în trie până la nodul în care se termină prefixul acela, după care enumerăm frunzele din subarborele acelui nod.
+~~~
+  **Cel mai lung prefix comun a două cuvinte.** Să zicem că avem dat un set de cuvinte și trebuie să răspundem la multe întrebări de forma „Care este lungimea LCP-ului cuvintelor $x$ și $y$?”. Mai întâi, construim tria formată din cuvintele date. Apoi, problema se reduce la a determina adâncimea LCA-ului nodurilor în care se termină $x$ și respectiv $y$. Puteți citi despre LCA [aici](https://infoarena.ro/problema/lca)TODO.
+---
 
 De asemenea, tria este esențială în algoritmul [Aho-Corasick](https://cp-algorithms.com/string/aho_corasick.html)TODO, care rezolvă următoarea problemă: „Dându-se un string $s$ și un dicționar $t$, să se determine, pentru fiecare cuvânt $x \in t$, numărul de apariții din șirul $s$.” În plus, tria stă la baza a două structuri de date mai avansate, [Suffix Tree](https://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423)TODO și [Suffix Automata](https://cp-algorithms.com/string/suffix-automaton.html)TODO, care ne ajută să rezolvăm în timp liniar probleme de genul: „Care este cea mai lungă subsecvență comună string-urilor $s_1, s_2, \ldots, s_n$?”
 
@@ -294,11 +289,11 @@ De asemenea, tria este esențială în algoritmul [Aho-Corasick](https://cp-algo
 
 În [această](https://infoarena.ro/problema/xormax) problemă ni se dă un vector $a$ de $n$ numere naturale, iar noi trebuie să determinăm o subsecvență a sa cu suma xor maximă. Suma xor a unei subsecvențe $[i, j]$ este $a_i \oplus a_{i + 1} \oplus \cdots \oplus a_j$, unde $\oplus$ reprezintă desigur operația xor. În caz că există mai multe soluții, se va alege secvența cu $j$-ul minim. Dacă în continuare există mai multe soluții, se va alege secvența de lungime minimă.
 
-[+quote]
-    ### Dacă $\oplus$ era $+$
+>>>
+  ### Dacă $\oplus$ era $+$
 
-    Să ne gândim mai întâi cum rezolvam problema dacă suma xor era de fapt sumă normală. Mă refer la [soluția](subsecventa-de-suma-maxima-cpp/#solutie-in-on-sume-partiale-5) cu sume parțiale. Păi, calculăm sumele parțiale ale vectorului dat, iar când am ajuns la o poziție $j$, ne uităm în stânga sa după o poziție $i$, astfel încât valoarea $\mathrm{ps}[j] - \mathrm{ps}[i]$ să fie maximă. Cum $j$ este fixat, vom obține diferența maximă atunci când $\mathrm{ps}[i]$ este minim. Pentru a accesa această valoare în timp constant, este de ajuns să menținem minimul sumelor parțiale calculate până la pasul curent.
-[-quote]
+  Să ne gândim mai întâi cum rezolvam problema dacă suma xor era de fapt sumă normală. Mă refer la [soluția](subsecventa-de-suma-maxima-cpp/#solutie-in-on-sume-partiale-5) cu sume parțiale. Păi, calculăm sumele parțiale ale vectorului dat, iar când am ajuns la o poziție $j$, ne uităm în stânga sa după o poziție $i$, astfel încât valoarea $\mathrm{ps}[j] - \mathrm{ps}[i]$ să fie maximă. Cum $j$ este fixat, vom obține diferența maximă atunci când $\mathrm{ps}[i]$ este minim. Pentru a accesa această valoare în timp constant, este de ajuns să menținem minimul sumelor parțiale calculate până la pasul curent.
+<<<
 
 Cum $x \oplus x = 0, \forall x \in \mathbb{N}$, putem folosi tehnica [sumelor parțiale](sume-partiale-cpp) și în cazul operației xor. Adică:
 
@@ -318,72 +313,72 @@ Am colorat cu portocaliu nodurile în care am ajuns alegând valoarea $\neg x$ �
 
 Iată mai jos o sursă de 100 de puncte la problema Xor Max. Complexitatea finală a algoritmului este de ordinul $O(n \log n)$, unde $\log$-ul vine de la numărul de biți ai unui număr, care este totodată înălțimea triei.
 
-[+code](title: xormax.cpp; lang: cpp; numb: yes; crop: yes)
-    #include <bits/stdc++.h>
-    using namespace std;
+``` cpp -> xormax.cpp
+  #include <bits/stdc++.h>
+  using namespace std;
 
-    ifstream fin("xormax.in");
-    ofstream fout("xormax.out");
+  ifstream fin("xormax.in");
+  ofstream fout("xormax.out");
 
-    class Trie {
-        struct Node {
-            int pos = 0;
-            int next[2] = {};
-        };
-        vector<Node> trie{1};
+  class Trie {
+      struct Node {
+          int pos = 0;
+          int next[2] = {};
+      };
+      vector<Node> trie{1};
 
-    public:
-        void insert(int pos, int val) {
-            int node = 0;
-            for (int bit = 20; bit >= 0; bit--) {
-                bool now = (val & (1 << bit));
-                if (!trie[node].next[now]) {
-                    trie[node].next[now] = trie.size();
-                    trie.emplace_back();
-                }
-                node = trie[node].next[now];
-            }
-            trie[node].pos = pos;
-        }
+  public:
+      void insert(int pos, int val) {
+          int node = 0;
+          for (int bit = 20; bit >= 0; bit--) {
+              bool now = (val & (1 << bit));
+              if (!trie[node].next[now]) {
+                  trie[node].next[now] = trie.size();
+                  trie.emplace_back();
+              }
+              node = trie[node].next[now];
+          }
+          trie[node].pos = pos;
+      }
 
-        tuple<int, int, int> query(int pos, int val) {
-            int node = 0, ans = 0;
-            for (int bit = 20; bit >= 0; bit--) {
-                bool now = (val & (1 << bit));
-                if (!trie[node].next[!now])
-                    node = trie[node].next[now];
-                else {
-                    node = trie[node].next[!now];
-                    ans |= (1 << bit);
-                }
-            }
-            return make_tuple(ans, -pos, trie[node].pos + 1);
-        }
-    };
+      tuple<int, int, int> query(int pos, int val) {
+          int node = 0, ans = 0;
+          for (int bit = 20; bit >= 0; bit--) {
+              bool now = (val & (1 << bit));
+              if (!trie[node].next[!now])
+                  node = trie[node].next[now];
+              else {
+                  node = trie[node].next[!now];
+                  ans |= (1 << bit);
+              }
+          }
+          return make_tuple(ans, -pos, trie[node].pos + 1);
+      }
+  };
 
-    int main() {
-        Trie trie; trie.insert(0, 0);
-        int n; fin >> n;
-        tuple<int, int, int> ans(-1, 0, 0);
-        for (int i = 1, sum = 0; i <= n; i++) {
-            int x; fin >> x; sum ^= x;
-            ans = max(ans, trie.query(i, sum));
-            trie.insert(i, sum);
-        }
-        fout << get<0>(ans) << ' ' << get<2>(ans) << ' ' << -get<1>(ans) << '\n';
-        return 0;
-    }
-[-code]
+  int main() {
+      Trie trie; trie.insert(0, 0);
+      int n; fin >> n;
+      tuple<int, int, int> ans(-1, 0, 0);
+      for (int i = 1, sum = 0; i <= n; i++) {
+          int x; fin >> x; sum ^= x;
+          ans = max(ans, trie.query(i, sum));
+          trie.insert(i, sum);
+      }
+      fout << get<0>(ans) << ' ' << get<2>(ans) << ' ' << -get<1>(ans) << '\n';
+      return 0;
+  }
+^^^
 
 ## Probleme recomandate
 
-[+list]
-    [+item]:bronze: [SETI](https://infoarena.ro/problema/seti) // string matching[-item]
-    [+item]:bronze: [Ratina](https://infoarena.ro/problema/ratina) // string matching[-item]
-    [+item]:silver: [Sub](https://infoarena.ro/problema/sub) // just trie[-item]
-    [+item]:silver: [A Lot of Games](https://codeforces.com/contest/456/problem/D) // game theory + dinamică pe trie[-item]
-    [+item]:golden: [Xor Max](https://infoarena.ro/problema/xormax) // sume xor parțiale[-item]
-    [+item]:golden: [CLI](https://infoarena.ro/problema/cli) // rucsac + dinamică pe tria compresată[-item]
-[-list]
++++
+> :bronze: [SETI](https://infoarena.ro/problema/seti) // string matching
+> :bronze: [Ratina](https://infoarena.ro/problema/ratina) // string matching
+> :silver: [Sub](https://infoarena.ro/problema/sub) // just trie
+> :silver: [A Lot of Games](https://codeforces.com/contest/456/problem/D) // game theory + dinamică pe trie
+> :golden: [Xor Max](https://infoarena.ro/problema/xormax) // sume xor parțiale
+> :golden: [CLI](https://infoarena.ro/problema/cli) // rucsac + dinamică pe tria compresată
+---
 
 **Sfârșit!** Dacă aveți vreo întrebare despre trie, sau dacă aveți sugestii pentru articole noi, nu ezitați să lăsați un comentariu mai jos :smile:
