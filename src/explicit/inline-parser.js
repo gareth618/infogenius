@@ -67,7 +67,7 @@ export default function parseInline(str) {
   const valid = url => {
     if (url === '') return true;
     if (url === '.') return true;
-    if (followsRegex(url, /[\w$.*!',()+-]+/) == null) return false;
+    if (followsRegex(url, /(https:\/\/)?[/\w$.*!',()#+-]+/) == null) return false;
     try {
       new URL(url);
       return true;
@@ -129,7 +129,7 @@ export default function parseInline(str) {
                 mark.fill('o', paraEnd + 1, paraEnd + 5);
               }
               for (let j = brckBeg + 1; j < brckEnd; j++) {
-                if (/[[\]().?o]/.test(mark[j])) {
+                if (/[[\]()o.?]/.test(mark[j])) {
                   mark[j] = ' ';
                   rght[j] = 0;
                 }
