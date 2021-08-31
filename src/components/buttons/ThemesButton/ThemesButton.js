@@ -49,7 +49,7 @@ export default function ThemesButton({ pageContainerRef }) {
   React.useEffect(() => {
     localStorage.setItem('InfoGenius.themeId', themeId);
     for (const color in THEMES[themeId].colors) {
-      pageContainerRef.current.style.setProperty('--' + color, THEMES[themeId].colors[color]);
+      pageContainerRef.current.style.setProperty(`--${color}`, THEMES[themeId].colors[color]);
     }
   }, [themeId, pageContainerRef]);
 

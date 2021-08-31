@@ -1,12 +1,11 @@
 import React from 'react';
 import * as styles from './BurgerButton.module.css';
 
-export default function BurgerButton({ onClick }) {
-  const [clicked, setClicked] = React.useState(false);
+export default function BurgerButton({ clicked, onClick }) {
   return (
     <button
       className={styles.burgerBtn + (clicked ? ' ' + styles.clicked : '')}
-      onClick={() => { onClick(); setClicked(!clicked); }}
+      onClick={onClick}
       type="button"
       aria-label="dropdown"
     >

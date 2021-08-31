@@ -32,51 +32,50 @@ export default function Header({ pageContainerRef }) {
 
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
-    const updateScrolled = () => {
-      setScrolled(document.documentElement.scrollTop > 80);
-    };
-    window.onscroll = updateScrolled;
-    setTimeout(updateScrolled, 0);
+    window.onscroll = () => setScrolled(document.documentElement.scrollTop > 80);
+    setTimeout(window.onscroll, 0);
   }, []);
-
   const [droppedDown, setDroppedDown] = React.useState(false);
-  const toggleDroppedDown = () => {
-    setDroppedDown(!droppedDown);
-  };
 
   const [searching, setSearching] = React.useState(false);
   const headerRef = React.useRef(null);
   const searchRef = React.useRef(null);
-  const search = () => {
+  const toggleSearch = () => {
     const nowSearching = !searching;
     headerRef.current.classList.toggle(stylesHeader.disabled);
     setTimeout(() => {
-      if (nowSearching) {
-        searchRef.current.focus();
-      }
-      else {
-        searchRef.current.blur();
-      }
+      if (nowSearching) searchRef.current.focus();
+      else searchRef.current.blur();
       headerRef.current.classList.toggle(stylesHeader.disabled);
     }, 1000);
+    if (nowSearching) setDroppedDown(false);
     setSearching(nowSearching);
   };
 
-  const categoriesLarge = categories.map(categ =>
+  const categoriesLarge = categories.map(categ => (
     <li key={uuidv4()}>
       <Link to={`/category/${slugify(categ.name)}/`}>
         <span className={stylesCategs.medScreen}>{categ.shortName}</span>
         <span className={stylesCategs.bigScreen}>{categ.name}</span>
       </Link>
     </li>
-  );
-  const categoriesSmall = categories.map(categ =>
+  ));
+  const categoriesSmall = categories.map(categ => (
     <li key={uuidv4()}>
       <Link to={`/category/${slugify(categ.name)}/`}>
         {categ.name}
       </Link>
     </li>
-  );
+  ));
+
+  const [results, setResults] = React.useState([]);
+  const resultList = results.map(result => (
+    <li key={uuidv4()}>
+      <Link to={`/${result.slug}/`}>
+        {result.title.slice(0, result.beg)}<span>{result.title.slice(result.beg, result.end)}</span>{result.title.slice(result.end)}
+      </Link>
+    </li>
+  ));
 
   return (
     <>
@@ -90,31 +89,37 @@ export default function Header({ pageContainerRef }) {
 
         <div className={stylesNavbar.navContainer}>
           <SearchForm
-            innerRef={searchRef}
-            onClick={search}
+            searchRef={searchRef}
+            toggleSearch={toggleSearch}
             searching={searching}
+            setResults={setResults}
           />
-
           <nav className={stylesNavbar.navbar + (searching ? ' ' + stylesNavbar.searching : '')}>
             <ul className={stylesCategs.categoriesLarge}>
               {categoriesLarge}
             </ul>
-
             <div className={stylesNavBtn.navButtons}>
               <ScrollButton right={scrolled ? '0' : '-4%'} />
               <ThemesButton pageContainerRef={pageContainerRef} />
-              <SearchButton onClick={search} />
-              <BurgerButton onClick={toggleDroppedDown} />
+              <SearchButton onClick={toggleSearch} />
+              <BurgerButton onClick={() => { setDroppedDown(!droppedDown); }} clicked={droppedDown} />
             </div>
           </nav>
         </div>
       </header>
 
       <ul className={stylesCategs.categoriesSmall} style={{
-        top: `calc(${scrolled ? '60' : '80'}px - ${droppedDown ? '0' : '15'}rem)`,
-        boxShadow: droppedDown ? '0 0 10px 0 rgba(0, 0, 0, .3)' : 'none'
+        top: `calc(${scrolled ? 60 : 80}px - ${droppedDown ? 0 : 3.2 * categories.length}rem)`,
+        boxShadow: droppedDown ? '0 0 10px -10px rgba(0, 0, 0, .3)' : 'none'
       }}>
         {categoriesSmall}
+      </ul>
+
+      <ul className={stylesCategs.results} style={{
+        top: `calc(${scrolled ? 60 : 80}px - ${searching ? 0 : 20}rem)`,
+        boxShadow: searching ? '0 0 10px -10px rgba(0, 0, 0, .3)' : 'none'
+      }}>
+        {resultList}
       </ul>
     </>
   );

@@ -41,9 +41,9 @@ export default function Layout({ displaySidebar, children }) {
       = navigator.appVersion.indexOf('Mac'  ) !== -1 ? 'os-macos'
       : navigator.appVersion.indexOf('Linux') !== -1 ? 'os-linux'
       : 'os-other';
-    const all = document.getElementsByClassName(os);
-    for (let i = 0; i < all.length; i++) {
-      all[i].style.display = 'inline';
+    const elements = document.getElementsByClassName(os);
+    for (const element of elements) {
+      element.style.display = 'inline';
     }
   }, []);
   const pageContainerRef = React.useRef(null);

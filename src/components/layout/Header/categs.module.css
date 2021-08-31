@@ -41,7 +41,6 @@
 .categories-small {
   display: block;
   position: fixed;
-  top: calc(-15rem + 80px);
   left: 0;
   z-index: 100;
 
@@ -67,7 +66,7 @@
 .categories-small a {
   color: white;
   padding: .75rem;
-  line-height: 1;
+  line-height: 1.2;
   font-weight: bold;
 }
 
@@ -76,9 +75,60 @@
 }
 
 .categories-small li:nth-child(2n+1) {
-  background: #5078dc;
+  background: #1c39bb;
 }
 
 .categories-small li:nth-child(2n) {
-  background: #4169e1;
+  background: #2a52be;
+}
+
+.results {
+  display: block;
+  position: fixed;
+  left: 5%;
+  z-index: 100;
+
+  width: 90%;
+  margin: 0;
+  padding: 0;
+  transition: top .3s;
+}
+
+@media (max-width: 800px) {
+  .results {
+    width: 100%;
+    left: 0;
+  }
+}
+
+.results li {
+  display: flex;
+  margin: 0;
+  padding: .25rem calc(5% - .75rem);
+}
+
+.results a {
+  color: white;
+  padding: .75rem;
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+.results a:hover {
+  color: gold;
+}
+
+.results span {
+  color: orangered;
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  text-decoration-thickness: 2px;
+}
+
+.results li:nth-child(2n+1) {
+  background: #006400;
+}
+
+.results li:nth-child(2n) {
+  background: #228b22;
 }

@@ -39,21 +39,21 @@ export default function Footer() {
     { img: faYoutube, color: 'red', alt: 'YouTube', url: data.social.youtube }
   ];
 
-  const pagesList = pages.map(page =>
+  const pagesList = pages.map(page => (
     <li key={uuidv4()}>
       <Link to={page.slug}>
         {page.name}
       </Link>
     </li>
-  );
+  ));
 
-  const iconsList = icons.map(icon =>
+  const iconsList = icons.map(icon => (
     <li key={uuidv4()}>
       <a href={icon.url} target="_blank" rel="noreferrer">
         <FontAwesomeIcon icon={icon.img} color={icon.color} />
       </a>
     </li>
-  );
+  ));
 
   return (
     <footer>
@@ -62,7 +62,6 @@ export default function Footer() {
           {pagesList}
         </ul>
       </nav>
-
       <div className={styles.footerInfo}>
         <div className={styles.copyright}>
           © 2017-{new Date().getFullYear()} <Link to="/">{data.title}.ro</Link>
@@ -71,7 +70,6 @@ export default function Footer() {
           {iconsList}
         </ul>
       </div>
-
       <CookieNotice />
     </footer>
   );

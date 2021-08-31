@@ -15,7 +15,7 @@ export default function ScrollButton({ right }) {
   return (
     <button
       className={styles.scrollBtn}
-      style={{ right: right }}
+      style={{ right }}
       onClick={scrollBack}
       type="button"
       aria-label="scroll back"

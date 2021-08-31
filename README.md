@@ -14,7 +14,7 @@
 
 ## TODO
 
-- [ ] search engine (Algola)
+- [x] search engine ~~(Algolia)~~
 - [ ] comments (FireBase)
 - [ ] push notifications
 - [ ] rewrite articles

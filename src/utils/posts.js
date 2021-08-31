@@ -131,9 +131,9 @@ export async function getArticles(graphql, importedSketches) {
       }
     }
   `);
-  return await Promise.all(result.data.allExplicitArticle.edges.map(edge =>
+  return await Promise.all(result.data.allExplicitArticle.edges.map(edge => (
     getPost('article', graphql, importedSketches, edge.node.slug)
-  ));
+  )));
 };
 
 export async function getPages(graphql, importedSketches) {
@@ -148,9 +148,9 @@ export async function getPages(graphql, importedSketches) {
       }
     }
   `);
-  return await Promise.all(result.data.allExplicitPage.edges.map(edge =>
+  return await Promise.all(result.data.allExplicitPage.edges.map(edge => (
     getPost('page', graphql, importedSketches, edge.node.slug)
-  ));
+  )));
 };
 
 export function getArticleInfo(str) {
