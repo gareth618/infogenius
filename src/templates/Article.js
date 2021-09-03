@@ -10,7 +10,8 @@ import { slugify } from '@utils/helpers';
 import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
-import { Donations } from '@components/others';
+import { CommentForm } from '@components/forms';
+import { Donations, CommentSection } from '@components/others';
 import * as styles from '@styles/article.module.css';
 
 export default function Article({ data, pageContext: article }) {
@@ -54,6 +55,8 @@ export default function Article({ data, pageContext: article }) {
         </ul>
 
         <Donations />
+        <CommentForm articleSlug={article.slug} />
+        <CommentSection articleSlug={article.slug} />
       </Layout>
     </>
   );

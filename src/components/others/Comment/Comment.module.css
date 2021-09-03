@@ -1,0 +1,35 @@
+.comment {
+  padding-top: 1rem;
+  border-top: 2px solid var(--text);
+}
+
+.comment:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.meta {
+  display: flex;
+  flex: 1;
+  padding: 1rem;
+  color: var(--text);
+  line-height: 1;
+  font-weight: bold;
+  border-radius: .5rem;
+  background: linear-gradient(to right, var(--sidebar), transparent);
+}
+
+.avatar {
+  margin-right: 1rem;
+  padding: 2px;
+  width: 50px;
+  height: 50px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: .25rem;
+}
+
+.name {
+  margin: .1rem 0 .3rem 0;
+  font-size: 1.4rem;
+}

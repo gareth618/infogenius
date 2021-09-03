@@ -14,6 +14,12 @@ export function dateToString(date) {
   return `${ddd}/${mmm}/${yyy}`;
 };
 
+export function timestampToString(date) {
+  const hhh = date.getHours().toString().padStart(2, '0');
+  const mmm = date.getMinutes().toString().padStart(2, '0');
+  return `${hhh}:${mmm}`;
+}
+
 export function slugify(str) {
   return str
     .toLowerCase()

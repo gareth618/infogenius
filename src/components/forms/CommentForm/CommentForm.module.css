@@ -1,0 +1,103 @@
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.buttons button {
+  display: block;
+  margin-top: 1rem;
+  padding: 1rem;
+  width: calc(50% - .5rem);
+  border-radius: .5rem;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+@media (max-width: 500px) {
+  .buttons button {
+    width: 100%;
+  }
+}
+
+.buttons button:first-child { background: royalblue; }
+.buttons button:last-child { background: crimson; }
+
+.buttons button:first-child:hover { background: cornflowerblue; }
+.buttons button:last-child:hover { background: tomato; }
+
+.comment-form {
+  margin-top: 3rem;
+}
+
+.title {
+  margin: 0 0 1rem 0;
+  color: var(--title);
+  line-height: 1.2;
+  font-size: 1.8rem;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.bottom > * {
+  display: block;
+  margin-top: 1rem;
+  padding: 1rem;
+  width: calc(50% - .5rem);
+  border: 2px solid var(--text);
+  border-radius: .5rem;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+@media (max-width: 500px) {
+  .bottom > * {
+    width: 100%;
+  }
+}
+
+.name {
+  background: var(--td);
+  font-family: 'Source Code Pro', monospace;
+}
+
+.name::placeholder {
+  color: var(--text);
+  opacity: .75;
+}
+
+.send {
+  background: var(--th);
+  font-weight: bold;
+}
+
+.send:hover {
+  background: var(--td);
+}
+
+.comment {
+  display: block;
+  padding: 1rem;
+  width: 100%;
+  height: 200px;
+  resize: none;
+  border: 2px solid var(--text);
+  border-radius: .5rem;
+  background: var(--td);
+  color: var(--text);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 1rem;
+}
+
+.comment::placeholder {
+  color: var(--text);
+  opacity: .75;
+}

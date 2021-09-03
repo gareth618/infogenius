@@ -14,10 +14,11 @@
 
 ## TODO
 
-- [x] search engine ~~(Algolia)~~
-- [ ] comments (FireBase)
-- [ ] push notifications
-- [ ] rewrite articles
-- [ ] make old redirects (?)
-- [ ] launch (Netlify)
-- [ ] make this a Gatsby starter :zany_face:
+- [ ] refactor CSS
+- [ ] use email in avatar generation
+- [ ] Gareth618's custom avatar
+- [ ] disable header anchors inside comments
+- [ ] secure FireBase
+- [ ] replies
+- [ ] push notifications for new articles
+- [ ] push/email notifications for replies

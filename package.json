@@ -23,6 +23,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@loadable/component": "^5.15.0",
     "esm": "^3.2.25",
+    "firebase": "^9.0.1",
     "gatsby": "^3.9.1",
     "gatsby-plugin-alias-imports": "^1.0.5",
     "gatsby-plugin-image": "^1.9.0",

@@ -1,0 +1,11 @@
+.section {
+  margin-top: 3rem;
+  margin-bottom: -1rem;
+}
+
+.title {
+  margin: 1rem 0;
+  color: var(--title);
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
