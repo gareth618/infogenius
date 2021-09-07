@@ -6,8 +6,13 @@ export default function Donations() {
   return (
     <div className={styles.donationForm}>
       <div className={styles.donationText}>
-        <h2>Îți place conținutul acestui site?</h2>
-        <p>Dacă vrei să mă susții în întreținerea server-ului și în a scrie mai multe articole de calitate pe acest blog, mă poți ajuta printr-o mică donație!</p>
+        <h2>
+          Îți place conținutul acestui site?
+        </h2>
+        <p>
+          Dacă vrei să mă susții în întreținerea server-ului și în a scrie mai multe
+          articole de calitate pe acest blog, mă poți ajuta printr-o mică donație!
+        </p>
       </div>
       <div className={styles.donationLink}>
         <a href="https://www.paypal.me/infogenius" target="_blank" rel="noreferrer">

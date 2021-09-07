@@ -1,37 +1,36 @@
 import katex from 'katex';
 
 export function stringToDate(str) {
-  const ddd = str.slice(0, 2);
-  const mmm = str.slice(3, 5);
-  const yyy = str.slice(6, 10);
-  return new Date(`${mmm}/${ddd}/${yyy}`);
+  const d = str.slice(0, 2);
+  const m = str.slice(3, 5);
+  const y = str.slice(6, 10);
+  return new Date(`${m}/${d}/${y}`);
 };
 
 export function dateToString(date) {
-  const ddd = date.getDate().toString().padStart(2, '0');
-  const mmm = (date.getMonth() + 1).toString().padStart(2, '0');
-  const yyy = date.getFullYear();
-  return `${ddd}/${mmm}/${yyy}`;
+  const d = date.getDate().toString().padStart(2, '0');
+  const m = (date.getMonth() + 1).toString().padStart(2, '0');
+  const y = date.getFullYear();
+  return `${d}/${m}/${y}`;
 };
 
-export function timestampToString(date) {
-  const hhh = date.getHours().toString().padStart(2, '0');
-  const mmm = date.getMinutes().toString().padStart(2, '0');
-  return `${hhh}:${mmm}`;
-}
+export function timeToString(date) {
+  const h = date.getHours().toString().padStart(2, '0');
+  const m = date.getMinutes().toString().padStart(2, '0');
+  return `${h}:${m}`;
+};
 
 export function slugify(str) {
   return str
     .toLowerCase()
-    .replace(/\+/g, 'p')
-    .replace(/\./g, '')
-    .replace(/'/g, '')
     .replace(/ă/g, 'a')
     .replace(/â/g, 'a')
     .replace(/î/g, 'i')
     .replace(/ș/g, 's')
     .replace(/ț/g, 't')
-    .replace(/ /g, '-');
+    .replace(/ /g, '-')
+    .replace(/\+/g, 'p')
+    .replace(/[^a-z0-9-]/g, '');
 };
 
 export function trimPost(str) {
@@ -68,7 +67,7 @@ export function followsRegex(str, regex) {
 
 export function katexify(math, mode, lft, rgh) {
   if (lft !== '') math = `\\htmlClass{katexified}{${lft}} ` + math;
-  let html = katex.renderToString(math, { displayMode: (mode === 'display' ? true : false), trust: true });
+  let html = katex.renderToString(math, { trust: true, displayMode: mode === 'display' });
   if (rgh !== '') {
     let pos = html.length;
     for (let i = 0; i < (mode === 'inline' ? 3 : 4); i++) {

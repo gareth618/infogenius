@@ -1,15 +1,16 @@
 .pagination {
   display: flex;
   justify-content: space-between;
-  text-align: center;
 }
 
 .pagination a {
   display: block;
   padding: .5rem 1rem;
-  background: royalblue;
   border-radius: .5rem;
+  font-weight: bold;
+  text-align: center;
   color: white;
+  background: royalblue;
 }
 
 .pagination a:hover {

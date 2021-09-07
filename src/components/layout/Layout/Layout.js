@@ -18,44 +18,34 @@ import '@fontsource/source-code-pro/700.css';
 import '@fontsource/source-code-pro/700-italic.css';
 
 import '@styles/global.css';
+import '@styles/themes.css';
 import '@styles/explicit.css';
 
 import 'katex/dist/katex.min.css';
 import 'prismjs/themes/prism-okaidia.css';
 
-function PageContainer({ displaySidebar, pageContainerRef, children }) {
-  return (
-    <div className={styles.pageContainer} ref={pageContainerRef}>
-      <div className={styles.mainArea + (displaySidebar ? '' : ' ' + styles.noSidebar)}>
-        <section className={styles.content}>{children}</section>
-        <aside className={styles.sidebar} />
-      </div>
-      <Footer />
-    </div>
-  );
-}
-
-export default function Layout({ displaySidebar, children }) {
+export default function Layout({ sidebar, children }) {
   React.useEffect(() => {
     const os
-      = navigator.appVersion.indexOf('Mac'  ) !== -1 ? 'os-macos'
-      : navigator.appVersion.indexOf('Linux') !== -1 ? 'os-linux'
+      = navigator.userAgent.indexOf('Mac') !== -1 ? 'os-macos'
+      : navigator.userAgent.indexOf('Linux') !== -1 ? 'os-linux'
       : 'os-other';
     const elements = document.getElementsByClassName(os);
     for (const element of elements) {
       element.style.display = 'inline';
     }
   }, []);
-  const pageContainerRef = React.useRef(null);
+
   return (
     <>
-      <PageContainer
-        displaySidebar={displaySidebar}
-        pageContainerRef={pageContainerRef}
-      >
-        {children}
-      </PageContainer>
-      <Header pageContainerRef={pageContainerRef} />
+      <Header />
+      <div className={styles.pageContainer}>
+        <div className={styles.mainArea}>
+          <section className={styles.content}>{children}</section>
+          {sidebar && <aside className={styles.sidebar} />}
+        </div>
+        <Footer />
+      </div>
     </>
   );
 };

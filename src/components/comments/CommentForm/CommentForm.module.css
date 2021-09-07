@@ -1,24 +1,23 @@
 .buttons {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
 .buttons button {
+  flex: 1 1 0;
   display: block;
-  margin-top: 1rem;
   padding: 1rem;
-  width: calc(50% - .5rem);
   border-radius: .5rem;
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
-  line-height: 1;
 }
 
-@media (max-width: 500px) {
-  .buttons button {
-    width: 100%;
+@media (max-width: 550px) {
+  .buttons {
+    flex-direction: column;
   }
 }
 
@@ -33,54 +32,48 @@
 }
 
 .title {
-  margin: 0 0 1rem 0;
-  color: var(--title);
-  line-height: 1.2;
+  margin: 1rem 0;
   font-size: 1.8rem;
-  font-family: 'Quicksand', sans-serif;
+  color: var(--title);
 }
 
 .bottom {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
 }
 
 .bottom > * {
+  flex: 1 1 0;
   display: block;
-  margin-top: 1rem;
   padding: 1rem;
-  width: calc(50% - .5rem);
-  border: 2px solid var(--text);
   border-radius: .5rem;
   color: var(--text);
-  font-size: 1rem;
-  line-height: 1;
 }
 
 @media (max-width: 500px) {
-  .bottom > * {
-    width: 100%;
+  .bottom {
+    flex-direction: column;
   }
 }
 
 .name {
-  background: var(--td);
+  background: var(--form-one);
   font-family: 'Source Code Pro', monospace;
 }
 
 .name::placeholder {
-  color: var(--text);
   opacity: .75;
+  color: var(--text);
 }
 
 .send {
-  background: var(--th);
   font-weight: bold;
+  background: var(--form-two);
 }
 
 .send:hover {
-  background: var(--td);
+  background: var(--form-one);
 }
 
 .comment {
@@ -89,15 +82,15 @@
   width: 100%;
   height: 200px;
   resize: none;
-  border: 2px solid var(--text);
+  border: none;
   border-radius: .5rem;
-  background: var(--td);
+  background: var(--form-one);
   color: var(--text);
   font-family: 'Source Code Pro', monospace;
   font-size: 1rem;
 }
 
 .comment::placeholder {
-  color: var(--text);
   opacity: .75;
+  color: var(--text);
 }

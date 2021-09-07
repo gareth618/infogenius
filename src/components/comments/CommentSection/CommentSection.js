@@ -1,7 +1,7 @@
 import React from 'react';
 import uuidv4 from 'uuid';
 
-import { Comment } from '@components/others';
+import { Comment } from '@components/comments';
 import * as styles from './CommentSection.module.css';
 
 import firestore from '@utils/firestore';
@@ -16,6 +16,7 @@ export default function CommentSection({ articleSlug }) {
       result.forEach(document => documents.push(document.data()));
       const comments = await Promise.all(
         documents.map(async document => ({
+          code: document.email.split('').map(chr => chr.charCodeAt(0) * 666013 % 100021).join(''),
           name: (await getDoc(doc(firestore, 'users', document.email))).data().name,
           date: document.timestamp.toDate(),
           content: document.content

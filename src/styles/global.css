@@ -25,17 +25,25 @@ a {
 }
 
 button, input {
+  padding: 0;
+  border: none;
+  line-height: 1;
+  font-size: 1rem;
   font-family: 'Quicksand', sans-serif;
 }
 
 button {
-  border: none;
+  font-weight: bold;
   background: transparent;
-  padding: 0;
 }
 
 button:hover {
   cursor: pointer;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -79,7 +87,7 @@ abbr {
   margin: 0 .1em;
   width: 1em;
   height: 1em;
-  vertical-align: -0.1em;
+  vertical-align: -.1em;
 }
 
 .strk {
@@ -89,7 +97,7 @@ abbr {
 .high {
   padding: .2rem .4rem;
   font-size: 85%;
-  color: var(--background);
+  color: var(--bg);
   background: var(--text);
   border-radius: .25rem;
 }

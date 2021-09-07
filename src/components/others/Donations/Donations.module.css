@@ -1,7 +1,9 @@
 .donation-form {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 1rem 0;
   padding: 1.5rem;
   border-radius: .5rem;
   background: radial-gradient(at bottom right, royalblue 0%, cornflowerblue 100%);
@@ -24,40 +26,24 @@
 }
 
 .donation-link {
-  margin-left: 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .donation-link a {
-  display: inline-flex;
-  align-items: center;
+  display: display;
   width: 150px;
-  height: 100%;
 }
 
-.donation-link img {
-  vertical-align: middle;
-}
-
-@media (max-width: 600px) {
+@media (max-width: 680px) {
   .donation-form {
-    flex-wrap: wrap;
-  }
-  .donation-text {
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
   }
   .donation-text h2 {
     text-align: center;
   }
   .donation-text p {
     text-align: center;
-  }
-  .donation-link {
-    margin-top: 1rem;
-    margin-left: 0;
-    width: 100%;
-  }
-  .donation-link a {
-    display: block;
-    margin: 0 auto;
   }
 }

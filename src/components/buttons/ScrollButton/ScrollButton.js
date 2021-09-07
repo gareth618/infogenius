@@ -1,8 +1,6 @@
 import React from 'react';
+import { Scroll } from '@utils/icons';
 import * as styles from './ScrollButton.module.css';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHandPointUp } from '@fortawesome/free-solid-svg-icons';
 
 export default function ScrollButton({ right }) {
   const scrollBack = () => {
@@ -20,11 +18,7 @@ export default function ScrollButton({ right }) {
       type="button"
       aria-label="scroll back"
     >
-      <FontAwesomeIcon
-        className="fa-fw"
-        icon={faHandPointUp}
-        color="lawngreen"
-      />
+      <Scroll />
     </button>
   );
 };

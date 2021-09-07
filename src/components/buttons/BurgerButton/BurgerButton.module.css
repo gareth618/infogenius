@@ -1,8 +1,6 @@
 .burger-btn {
   display: block;
   height: 2.2rem;
-  margin-left: .75rem;
-  margin-right: .5rem;
 }
 
 @media (min-width: 801px) {

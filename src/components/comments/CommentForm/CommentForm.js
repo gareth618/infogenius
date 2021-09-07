@@ -1,9 +1,6 @@
 import React from 'react';
+import { Share, SignIn, Send } from '@utils/icons';
 import * as styles from './CommentForm.module.css';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 import firestore from '@utils/firestore';
 import { collection, doc, setDoc, addDoc, Timestamp } from 'firebase/firestore';
@@ -38,27 +35,23 @@ export default function CommentForm({ articleSlug }) {
     }
   };
   React.useEffect(() => {
-    if (userEmail != null) {
-      const userName = localStorage.getItem(`InfoGenius.userCache.${userEmail}.userName`);
-      if (userName != null) setInputValue(userName);
-    }
-  }, [userEmail]);
+    const userName = localStorage.getItem('InfoGenius.userName');
+    if (userName != null) setInputValue(userName);
+  }, []);
 
   const [textareaValue, setTextareaValue] = React.useState('');
   const handleTextareaChange = event => setTextareaValue(event.target.value);
   React.useEffect(() => {
-    if (textareaValue === '') {
-      const commentDraft = localStorage.getItem(`InfoGenius.userCache.${userEmail == null ? 'default' : userEmail}.commentDraft.${articleSlug}`);
-      if (commentDraft != null) setTextareaValue(commentDraft);
-    }
-  }, [userEmail, articleSlug, textareaValue]);
+    const commentDraft = localStorage.getItem(`InfoGenius.commentDraft.${articleSlug}`);
+    if (commentDraft != null) setTextareaValue(commentDraft);
+  }, [articleSlug]);
   React.useEffect(() => {
     if (textareaValue !== '') {
       window.onbeforeunload = () => {
-        localStorage.setItem(`InfoGenius.userCache.${userEmail == null ? 'default' : userEmail}.commentDraft.${articleSlug}`, textareaValue);
+        localStorage.setItem(`InfoGenius.commentDraft.${articleSlug}`, textareaValue);
       };
     }
-  }, [userEmail, articleSlug, textareaValue]);
+  }, [articleSlug, textareaValue]);
 
   const textareaRef = React.useRef(null);
   const fixTextareaInput = event => {
@@ -100,9 +93,8 @@ export default function CommentForm({ articleSlug }) {
         content: textareaValue,
         timestamp: Timestamp.now()
       });
-      localStorage.setItem(`InfoGenius.userCache.${userEmail}.userName`, inputValue);
-      localStorage.removeItem(`InfoGenius.userCache.${userEmail}.commentDraft.${articleSlug}`);
-      localStorage.removeItem(`InfoGenius.userCache.default.commentDraft.${articleSlug}`);
+      localStorage.setItem('InfoGenius.userName', inputValue);
+      localStorage.removeItem(`InfoGenius.commentDraft.${articleSlug}`);
       setTextareaValue('');
     }
     event.preventDefault();
@@ -112,12 +104,10 @@ export default function CommentForm({ articleSlug }) {
     <>
       <div className={styles.buttons}>
         <button type="button" onClick={shareArticle}>
-          <FontAwesomeIcon icon={faFacebookF} />
-          &nbsp;&nbsp;Distribuie
+          <Share />&nbsp;&nbsp;Distribuie
         </button>
         <button type="button" onClick={userEmail == null ? logIn : logOut}>
-          <FontAwesomeIcon icon={faGoogle} />
-          &nbsp;&nbsp;{userEmail == null ? 'Conectează-te' : 'Deconectează-te'}
+          <SignIn />&nbsp;&nbsp;{userEmail == null ? 'Conectează-te' : 'Deconectează-te'}
         </button>
       </div>
 
@@ -129,11 +119,11 @@ export default function CommentForm({ articleSlug }) {
           Lasă un comentariu!
         </h2>
         <textarea
+          ref={textareaRef}
           className={styles.comment}
           placeholder="Comentariu"
           value={textareaValue}
           onChange={handleTextareaChange}
-          ref={textareaRef}
           onKeyDown={fixTextareaInput}
         />
         <div className={styles.bottom}>
@@ -149,8 +139,7 @@ export default function CommentForm({ articleSlug }) {
             type="submit"
             onClick={sendComment}
           >
-            Trimite&nbsp;&nbsp;
-            <FontAwesomeIcon icon={faPaperPlane} />
+            Trimite&nbsp;&nbsp;<Send />
           </button>
         </div>
       </form>

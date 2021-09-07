@@ -6,11 +6,9 @@
 .button {
   display: block;
   padding: 1rem 0 1rem 1rem;
+  font-size: .85rem;
   color: white;
   background: #1c1c1c;
-  line-height: 1;
-  font-weight: bold;
-  font-size: .85rem;
 }
 
 .button:first-child {

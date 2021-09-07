@@ -70,8 +70,9 @@
   position: relative;
   padding: .7rem 0;
   color: #eee;
-  font-size: 12px;
   line-height: 1;
+  font-size: 12px;
+  font-weight: bold;
   text-align: center;
 }
 

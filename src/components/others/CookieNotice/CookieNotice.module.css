@@ -2,7 +2,6 @@
   position: fixed;
   left: 2rem;
   bottom: 2rem;
-
   width: 400px;
   padding: 1rem;
   border-radius: .5rem;
@@ -21,17 +20,14 @@
 
 .cookie-notice button {
   float: right;
-  padding: .5rem 1rem;
-  border: none;
+  padding: .75rem 1rem;
   border-radius: .5rem;
-  color: #222;
-  font-size: 1rem;
+  color: #383838;
   background: whitesmoke;
 }
 
 .cookie-notice button:hover {
   background: khaki;
-  cursor: pointer;
 }
 
 @media (max-width: 800px) {

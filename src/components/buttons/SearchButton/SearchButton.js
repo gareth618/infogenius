@@ -1,8 +1,6 @@
 import React from 'react';
+import { Search } from '@utils/icons';
 import * as styles from './SearchButton.module.css';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 export default function SearchButton({ onClick }) {
   return (
@@ -12,11 +10,7 @@ export default function SearchButton({ onClick }) {
       type="button"
       aria-label="search"
     >
-      <FontAwesomeIcon
-        className="fa-fw"
-        icon={faSearch}
-        color="papayawhip"
-      />
+      <Search />
     </button>
   );
 };

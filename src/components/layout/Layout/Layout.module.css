@@ -1,15 +1,9 @@
 .page-container {
-  --background: white;
-  --sidebar: moccasin;
-  --title: #282828;
-  --text: #444;
-  --link: dodgerblue;
-
-  width: 90%;
+  width: min(90%, 1200px);
   margin: 0 auto;
   padding-top: 80px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, .3);
-  background: var(--background);
+  background: var(--bg);
 }
 
 @media (max-width: 800px) {
@@ -18,34 +12,19 @@
   }
 }
 
-@media (min-width: 1350px) {
-  .page-container {
-    width: 1200px;
-  }
-}
-
 .main-area {
   display: flex;
+  gap: 5.55%;
+  padding: 5%;
 }
 
 .content {
-  padding: 5%;
-  width: calc(95% - 200px);
-}
-
-@media (max-width: 1000px) {
-  .content {
-    width: 100%;
-  }
-}
-
-.no-sidebar .content {
-  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .sidebar {
-  margin: 5% 5% 5% 0;
-  width: 200px;
+  flex: 0 0 200px;
   border-radius: .5rem;
   background: var(--sidebar);
 }
@@ -54,8 +33,4 @@
   .sidebar {
     display: none;
   }
-}
-
-.no-sidebar .sidebar {
-  display: none;
 }

@@ -14,7 +14,7 @@ export const siteMetadata = {
   ],
   social: {
     facebook: 'https://www.facebook.com/infogenius.ro/',
-    twitter: 'https://twitter.com/Gareth618',
+    twitter: 'https://twitter.com/Gareth618/',
     github: 'https://github.com/Gareth618/',
     youtube: 'https://www.youtube.com/channel/UCdJ5X4TcLzU99dxNOB9n4yQ/'
   },

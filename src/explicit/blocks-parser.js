@@ -123,9 +123,7 @@ export default function parseBlocks(content, media, tag = 'root') {
         len: endPos + 1
       };
     }
-    catch (err) {
-      return;
-    }
+    catch (err) { return; }
   }
 
   if (tag === 'media') {
@@ -358,4 +356,4 @@ export default function parseBlocks(content, media, tag = 'root') {
       len: endPos + 2
     };
   }
-}
+};

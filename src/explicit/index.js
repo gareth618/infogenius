@@ -35,13 +35,12 @@ function fixLists(ast) {
 
 function fixKatexBug(ast) {
   if (ast.sons == null) return ast;
-  ast.sons.forEach(son => {
+  for (const son of ast.sons) {
     if (son.tag === 'math') {
       son.lft = '';
       son.rgh = '';
     }
-  });
-
+  }
   for (let i = 1; i < ast.sons.length; i++) {
     if (ast.sons[i].tag === 'math') {
       if (ast.sons[i - 1].tag === 'text') {
@@ -76,10 +75,7 @@ function fixKatexBug(ast) {
       }
     }
   }
-
-  for (const son of ast.sons) {
-    fixKatexBug(son);
-  }
+  ast.sons.forEach(son => fixKatexBug(son));
   return ast;
 }
 
@@ -154,11 +150,11 @@ function getExcerpt(ast) {
 }
 
 export function render(str, media) {
-  return media == null
-    ? renderInline(fixKatexBug({ tag: 'root', sons: parseInline(str) }).sons)
-    : renderBlocks(makeAnchors(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), { val: 0 }));
+  if (media == null) return renderInline(fixKatexBug({ tag: 'root', sons: parseInline(str) }).sons);
+  if (Object.keys(media).length === 0) return renderBlocks(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), false);
+  return renderBlocks(makeAnchors(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), { val: 0 }), true);
 };
 
 export function renderExcerpt(str, media) {
-  return renderBlocks(getExcerpt(fixKatexBug(parseBlocks(trimPost(str), media))));
+  return renderBlocks(getExcerpt(fixKatexBug(parseBlocks(trimPost(str), media))), false);
 };

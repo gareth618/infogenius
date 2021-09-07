@@ -10,8 +10,8 @@
   }
 }
 
-.explicit .center p { text-align: center; }
-.explicit .right p { text-align: right; }
+.explicit .div-center p { text-align: center; }
+.explicit .div-right p { text-align: right; }
 
 .explicit h2,
 .explicit h3,
@@ -95,7 +95,7 @@
   padding: 1rem;
   border: 2px solid var(--text);
   color: var(--text);
-  background: var(--background);
+  background: var(--bg);
   font-family: 'Merriweather', serif;
 }
 

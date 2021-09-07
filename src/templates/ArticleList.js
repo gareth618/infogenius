@@ -5,8 +5,8 @@ import { Helmet } from 'react-helmet';
 import { graphql, Link } from 'gatsby';
 import { GatsbyImage } from 'gatsby-plugin-image';
 
+import { slugify } from '@utils/helpers';
 import { render, renderExcerpt } from '@explicit';
-import { categoriesToJSX } from '@utils/jsxHelpers';
 
 import { Layout } from '@components/layout';
 import { Pagination } from '@components/others';
@@ -20,7 +20,12 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
 
   const articlePreviews = articles.map((article, index) => {
     const thumbnail = article.media.images.find(image => image.name === 'index')?.data;
-    const categories = categoriesToJSX(article.categories);
+    const categories = article.categories.map((category, index) => (
+      <React.Fragment key={uuidv4()}>
+        {index > 0 ? ', ' : ''}
+        <Link to={`/category/${slugify(category)}/`}>{category}</Link>
+      </React.Fragment>
+    ));
     return (
       <article key={uuidv4()} style={{ marginBottom: '2rem' }}>
         <div className={styles.preview}>
@@ -48,7 +53,7 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
-      <Layout displaySidebar>
+      <Layout sidebar>
         {articlePreviews}
         <Pagination
           olderPage={olderPage}

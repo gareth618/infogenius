@@ -15,7 +15,7 @@ export default function Page({ data, pageContext: page }) {
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
-      <Layout displaySidebar>
+      <Layout sidebar>
         <article>
           <h1 style={{ margin: 0, fontSize: '2.5rem', color: 'var(--title)' }}>
             {render(page.title)}

@@ -1,0 +1,27 @@
+:root {
+  --bg: white;
+  --sidebar: #efefef;
+  --title: #282828;
+  --text: #484848;
+  --code: #efefef;
+  --link: dodgerblue;
+  --quote: #eff0ff;
+  --td: oldlace;
+  --th: bisque;
+  --form-one: #dfdfdf;
+  --form-two: lightsteelblue;
+}
+
+:root.dark {
+  --bg: #282828;
+  --sidebar: #383838;
+  --title: white;
+  --text: #dfdfdf;
+  --code: #383838;
+  --link: skyblue;
+  --quote: #285078;
+  --td: seagreen;
+  --th: darkslateblue;
+  --form-one: #484848;
+  --form-two: darkslateblue;
+}

@@ -4,18 +4,15 @@ import * as styles from './CookieNotice.module.css';
 export default function CookieNotice() {
   const [accepted, setAccepted] = React.useState(true);
   React.useEffect(() => {
-    const storedAccepted = localStorage.getItem('InfoGenius.cookiesAccepted');
+    const storedAccepted = localStorage.getItem('InfoGenius.cookies');
     setAccepted(storedAccepted == null ? false : storedAccepted === 'true');
   }, []);
   React.useEffect(() => {
-    localStorage.setItem('InfoGenius.cookiesAccepted', accepted);
+    localStorage.setItem('InfoGenius.cookies', accepted);
   }, [accepted]);
 
-  return (
-    <div
-      className={styles.cookieNotice}
-      style={{ display: accepted ? 'none' : 'block' }}
-    >
+  return !accepted && (
+    <div className={styles.cookieNotice}>
       <h2>
         Notificare cookie-uri
       </h2>
@@ -26,7 +23,6 @@ export default function CookieNotice() {
       <button
         onClick={() => setAccepted(true)}
         type="button"
-        aria-label="cookie notice"
       >
         De acord!
       </button>

@@ -1,9 +1,7 @@
 import React from 'react';
+import { ClipboardOne } from '@utils/icons';
+import { ClipboardTwo } from '@utils/icons';
 import * as styles from './CodeBlock.module.css';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboard as faClipboardOne } from '@fortawesome/free-regular-svg-icons';
-import { faClipboard as faClipboardTwo } from '@fortawesome/free-solid-svg-icons';
 
 import prism from 'prismjs';
 import 'prismjs/components/prism-markup';
@@ -46,13 +44,12 @@ export default function CodeBlock({ info }) {
   const codeBlock = (
     <div className={styles.codeWrapper}>
       <button
-        onClick={clicked ? () => { } : copyCode}
+        type="button"
         className={styles.copyBtn}
         style={clicked ? { pointerEvents: 'none' } : { }}
+        onClick={clicked ? () => { } : copyCode}
       >
-        {clicked
-          ? <FontAwesomeIcon className="fa-clipboard" icon={faClipboardTwo} />
-          : <FontAwesomeIcon className="far-clipboard" icon={faClipboardOne} />}
+        {clicked ? <ClipboardTwo /> : <ClipboardOne />}
       </button>
       <pre
         className={preClasses.join(' ')}

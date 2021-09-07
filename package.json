@@ -1,9 +1,10 @@
 {
   "name": "infogenius",
-  "version": "2.0.0",
-  "private": true,
   "description": "InfoGenius",
   "author": "Gareth618",
+  "version": "2.0.0",
+  "private": true,
+
   "scripts": {
     "develop": "gatsby develop",
     "start": "rm -r public ; rm -r .cache ; gatsby develop -H 0.0.0.0",
@@ -11,35 +12,41 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },
+
   "dependencies": {
-    "@fontsource/inter": "^4.5.0",
-    "@fontsource/merriweather": "^4.5.0",
-    "@fontsource/quicksand": "^4.5.0",
-    "@fontsource/source-code-pro": "^4.5.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-brands-svg-icons": "^5.15.3",
-    "@fortawesome/free-regular-svg-icons": "^5.15.3",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
-    "@loadable/component": "^5.15.0",
-    "esm": "^3.2.25",
-    "firebase": "^9.0.1",
-    "gatsby": "^3.9.1",
-    "gatsby-plugin-alias-imports": "^1.0.5",
-    "gatsby-plugin-image": "^1.9.0",
-    "gatsby-plugin-manifest": "^3.9.0",
-    "gatsby-plugin-react-helmet": "^4.9.0",
-    "gatsby-plugin-robots-txt": "^1.6.8",
-    "gatsby-plugin-sharp": "^3.9.0",
-    "gatsby-plugin-sitemap": "^4.5.0",
-    "gatsby-source-filesystem": "^3.9.0",
-    "gatsby-transformer-sharp": "^3.9.0",
-    "katex": "^0.13.13",
-    "p5": "^1.4.0",
-    "prismjs": "^1.24.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
-    "uuid": "^3.4.0"
+
+    "gatsby": "^3.9.1",
+    "gatsby-plugin-image": "^1.9.0",
+    "gatsby-plugin-sharp": "^3.9.0",
+    "gatsby-plugin-react-helmet": "^4.9.0",
+    "gatsby-plugin-alias-imports": "^1.0.5",
+    "gatsby-plugin-sitemap": "^4.5.0",
+    "gatsby-plugin-manifest": "^3.9.0",
+    "gatsby-plugin-robots-txt": "^1.6.8",
+    "gatsby-source-filesystem": "^3.9.0",
+    "gatsby-transformer-sharp": "^3.9.0",
+
+    "@fontsource/inter": "^4.5.0",
+    "@fontsource/quicksand": "^4.5.0",
+    "@fontsource/merriweather": "^4.5.0",
+    "@fontsource/source-code-pro": "^4.5.0",
+
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
+
+    "p5": "^1.4.0",
+    "katex": "^0.13.13",
+    "prismjs": "^1.24.1",
+    "firebase": "^9.0.1",
+
+    "esm": "^3.2.25",
+    "uuid": "^3.4.0",
+    "@loadable/component": "^5.15.0"
   }
 }

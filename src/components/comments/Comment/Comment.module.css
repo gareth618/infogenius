@@ -1,22 +1,18 @@
 .comment {
-  padding-top: 1rem;
-  border-top: 2px solid var(--text);
+  margin: 1rem 0;
 }
 
-.comment:first-child {
-  padding-top: 0;
-  border-top: none;
+.comment:last-child {
+  margin-bottom: -1rem;
 }
 
 .meta {
   display: flex;
-  flex: 1;
   padding: 1rem;
-  color: var(--text);
   line-height: 1;
   font-weight: bold;
   border-radius: .5rem;
-  background: linear-gradient(to right, var(--sidebar), transparent);
+  background: linear-gradient(to right, var(--form-two), var(--form-one));
 }
 
 .avatar {
@@ -25,11 +21,15 @@
   width: 50px;
   height: 50px;
   background: white;
-  border: 2px solid #ddd;
   border-radius: .25rem;
 }
 
 .name {
   margin: .1rem 0 .3rem 0;
   font-size: 1.4rem;
+  color: var(--title);
+}
+
+.date {
+  color: var(--text);
 }

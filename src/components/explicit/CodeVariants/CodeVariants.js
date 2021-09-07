@@ -8,6 +8,7 @@ export default function CodeVariants({ items }) {
   const [crtBlock, setCrtBlock] = React.useState(0);
   const buttons = items.map((item, index) => (
     <button
+      type="button"
       key={uuidv4()}
       onClick={() => { setCrtBlock(index); }}
       className={styles.button}

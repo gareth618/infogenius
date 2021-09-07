@@ -1,48 +1,114 @@
-.logo-container {
-  height: 100%;
-  max-height: 40px;
-}
-
-.logo-container img {
-  height: 100%;
-}
-
-.logo-container span {
-  margin-left: .3rem;
-  color: white;
-  font-size: 0;
-  font-weight: bold;
-  transition: font-size .3s;
-  cursor: default;
-}
-
-.logo-container:hover span {
-  font-size: inherit;
-}
-
-.nav-container {
-  width: fit-content;
-}
-
-.navbar {
+.categories-large {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  width: fit-content;
-  height: 30px;
-  transition: 1s;
-  transition-property: height, opacity, visibility;
+  gap: .4rem;
+}
+
+.categories-large li {
+  display: block;
+}
+
+.categories-large a {
+  padding: .5rem .4rem;
+  color: aliceblue;
+  font-weight: bold;
+}
+
+.categories-large a:hover {
+  color: lightskyblue;
 }
 
 @media (max-width: 800px) {
-  .navbar {
-    width: calc(90vw - 200px);
-    justify-content: flex-end;
+  .categories-large {
+    display: none;
   }
 }
 
-.navbar.searching {
-  height: 0;
-  opacity: 0;
-  visibility: hidden;
+@media (max-width: 1250px) {
+  .big-screen {
+    display: none;
+  }
+}
+
+@media (min-width: 1251px) {
+  .med-screen {
+    display: none;
+  }
+}
+
+.categories-small {
+  position: fixed;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  transition: top .3s;
+}
+
+@media (min-width: 801px) {
+  .categories-small {
+    display: none;
+  }
+}
+
+.categories-small li {
+  display: block;
+}
+
+.categories-small a {
+  display: block;
+  padding: 1rem;
+  color: white;
+  line-height: 1.2;
+  font-weight: bold;
+  text-align: center;
+}
+
+.categories-small a:hover {
+  color: gold;
+}
+
+.categories-small li:nth-child(odd) { background: #1c39bb; }
+.categories-small li:nth-child(even) { background: #2a52be; }
+
+.results {
+  width: 100%;
+  max-height: calc(5 * 3.2rem);
+  overflow-y: scroll;
+}
+
+.results li {
+  display: block;
+}
+
+.results a {
+  display: block;
+  padding: 1rem 5%;
+  color: white;
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+.results a:hover {
+  color: gold;
+}
+
+.results span {
+  color: orangered;
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  text-decoration-thickness: 2px;
+}
+
+.results li:nth-child(odd) { background: #006400; }
+.results li:nth-child(even) { background: #228b22; }
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 1.5rem;
+}
+
+.nav-buttons svg {
+  vertical-align: -.16em;
 }

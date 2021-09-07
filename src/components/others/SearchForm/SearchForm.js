@@ -1,9 +1,8 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
-import * as styles from './SearchForm.module.css';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Close } from '@utils/icons';
+import * as styles from './SearchForm.module.css';
 
 export default function SearchForm({ searchRef, toggleSearch, searching, setResults }) {
   const articles = useStaticQuery(
@@ -34,7 +33,6 @@ export default function SearchForm({ searchRef, toggleSearch, searching, setResu
       .replace(/ț/g, 't');
   };
 
-  const [inputValue, setInputValue] = React.useState('');
   const search = value => {
     if (value === '') return [];
     const results = [];
@@ -46,12 +44,12 @@ export default function SearchForm({ searchRef, toggleSearch, searching, setResu
           beg: pos,
           end: pos + value.length
         });
-        if (results.length === 5) break;
       }
     }
     return results;
   };
 
+  const [inputValue, setInputValue] = React.useState('');
   const handleChange = event => {
     const value = event.target.value.toLowerCase();
     setInputValue(value);
@@ -72,15 +70,11 @@ export default function SearchForm({ searchRef, toggleSearch, searching, setResu
           onChange={handleChange}
         />
         <button
-          onClick={event => { toggleSearch(); event.preventDefault(); }}
+          onClick={() => { setInputValue(''); setResults([]); toggleSearch(); }}
           type="reset"
           aria-label="close search"
         >
-          <FontAwesomeIcon
-            className="fa-fw"
-            icon={faTimes}
-            color="papayawhip"
-          />
+          <Close />
         </button>
       </form>
     </>

@@ -11,3 +11,14 @@ const firebaseConfig = {
 };
 initializeApp(firebaseConfig);
 export default getFirestore();
+
+// rules_version = '2';
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /{document=**} {
+//       allow read;
+//       allow create: if request.auth != null;
+//       allow update: if request.auth != null && document == /users/$(request.auth.token.email[0:request.auth.token.email.size() - '@gmail.com'.size()]);
+//     }
+//   }
+// }
