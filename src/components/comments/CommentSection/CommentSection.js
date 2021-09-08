@@ -3,6 +3,7 @@ import uuidv4 from 'uuid';
 
 import { Comment } from '@components/comments';
 import * as styles from './CommentSection.module.css';
+import { dateToString, timeToString } from '@utils/helpers';
 
 import firestore from '@utils/firestore';
 import { onSnapshot, collection, query, where, doc, getDoc, getDocs } from 'firebase/firestore';
@@ -34,7 +35,16 @@ export default function CommentSection({ articleSlug, setParentComment }) {
         sons.sort((a, b) => a.date < b.date ? -1 : +1);
         sons.forEach(son => sortedComments.push(son));
       };
-      setComments(sortedComments);
+
+      setComments(sortedComments.map(comment => {
+        const cleanComment = { ...comment };
+        delete cleanComment.date;
+        return {
+          date: dateToString(comment.date),
+          time: timeToString(comment.date),
+          ...cleanComment
+        };
+      }));
     };
 
     const unsubscribeComments = onSnapshot(collection(firestore, 'comments'), loadComments);

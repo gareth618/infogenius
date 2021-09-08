@@ -1,10 +1,12 @@
 import React from 'react';
+import { useLocalStorage } from '@utils/hooks';
+
 import * as styles from './CommentContext.module.css';
 import { Comment, CommentForm, CommentSection } from '@components/comments';
 
 export default function CommentContext({ articleSlug }) {
   const formRef = React.useRef(null);
-  const [parentComment, setParentComment] = React.useState(null);
+  const [parentComment, setParentComment] = useLocalStorage(`InfoGenius.parentComment.${articleSlug}`, null);
 
   const commentSection = React.useMemo(() => (
     <CommentSection
@@ -14,7 +16,7 @@ export default function CommentContext({ articleSlug }) {
         formRef.current.scrollIntoView({ behavior: 'smooth' });
       }}
     />
-  ), [articleSlug]);
+  ), [articleSlug, setParentComment]);
 
   return (
     <>

@@ -14,11 +14,5 @@
 
 ## TODO
 
-- [x] refactor CSS
-- [x] use email in avatar generation
-- [x] Gareth618's custom avatar
-- [x] disable header anchors inside comments
-- [x] secure FireBase
-- [ ] replies
+- [ ] push notifications for replies
 - [ ] push notifications for new articles
-- [ ] push/email notifications for replies

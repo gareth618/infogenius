@@ -1,15 +1,11 @@
 import React from 'react';
 import { Light, Dark } from '@utils/icons';
+import { useLocalStorage } from '@utils/hooks';
 import * as styles from './ThemesButton.module.css';
 
 export default function ThemesButton() {
-  const [theme, setTheme] = React.useState('light');
+  const [theme, setTheme] = useLocalStorage('InfoGenius.theme', 'light');
   React.useEffect(() => {
-    const storedTheme = localStorage.getItem('InfoGenius.theme');
-    setTheme(storedTheme == null ? 'light' : storedTheme);
-  }, []);
-  React.useEffect(() => {
-    localStorage.setItem('InfoGenius.theme', theme);
     if (theme === 'light') document.documentElement.classList.remove('dark');
     if (theme === 'dark') document.documentElement.classList.add('dark');
   }, [theme]);

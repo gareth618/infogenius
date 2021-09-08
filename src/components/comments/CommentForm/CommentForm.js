@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLocalStorage } from '@utils/hooks';
+
 import { Share, SignIn, Send } from '@utils/icons';
 import * as styles from './CommentForm.module.css';
 
@@ -27,31 +29,16 @@ export default function CommentForm({ formRef, articleSlug, parentCommentId, set
       .catch(error => alert(`Ups! S-a produs o eroare în timpul deconectării :(\n${error.code}`));
   };
 
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = useLocalStorage('InfoGenius.userName', '');
   const handleInputChange = event => setInputValue(event.target.value);
   const fixInputInput = event => {
     if (event.code === 'Enter') {
       event.preventDefault();
     }
   };
-  React.useEffect(() => {
-    const userName = localStorage.getItem('InfoGenius.userName');
-    if (userName != null) setInputValue(userName);
-  }, []);
 
-  const [textareaValue, setTextareaValue] = React.useState('');
+  const [textareaValue, setTextareaValue] = useLocalStorage(`InfoGenius.commentDraft.${articleSlug}`, '');
   const handleTextareaChange = event => setTextareaValue(event.target.value);
-  React.useEffect(() => {
-    const commentDraft = localStorage.getItem(`InfoGenius.commentDraft.${articleSlug}`);
-    if (commentDraft != null) setTextareaValue(commentDraft);
-  }, [articleSlug]);
-  React.useEffect(() => {
-    if (textareaValue !== '') {
-      window.onbeforeunload = () => {
-        localStorage.setItem(`InfoGenius.commentDraft.${articleSlug}`, textareaValue);
-      };
-    }
-  }, [articleSlug, textareaValue]);
 
   const textareaRef = React.useRef(null);
   const fixTextareaInput = event => {
@@ -94,8 +81,6 @@ export default function CommentForm({ formRef, articleSlug, parentCommentId, set
         content: textareaValue,
         timestamp: Timestamp.now()
       });
-      localStorage.setItem('InfoGenius.userName', inputValue);
-      localStorage.removeItem(`InfoGenius.commentDraft.${articleSlug}`);
       setTextareaValue('');
       setParentComment(null);
     }

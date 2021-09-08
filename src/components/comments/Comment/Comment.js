@@ -1,11 +1,9 @@
 import React from 'react';
 import { StaticImage } from 'gatsby-plugin-image';
 
+import { render } from '@explicit';
 import { Reply, Close } from '@utils/icons';
 import * as styles from './Comment.module.css';
-
-import { render } from '@explicit';
-import { dateToString, timeToString } from '@utils/helpers';
 
 export default function Comment({ info, setParentComment, preview }) {
   const avatar = info.name === 'Gareth618'
@@ -51,7 +49,7 @@ export default function Comment({ info, setParentComment, preview }) {
           </div>
           <div>
             <div className={styles.name}>{info.name}</div>
-            <div className={styles.date}>{`pe ${dateToString(info.date)} la ${timeToString(info.date)}`}</div>
+            <div className={styles.date}>{`pe ${info.date} la ${info.time}`}</div>
           </div>
         </div>
         {info.parent === '' && button}
