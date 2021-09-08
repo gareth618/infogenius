@@ -67,7 +67,7 @@ export default function renderBlocks(ast, anchors) {
   if (ast.tag === 'list') {
     const items = ast.sons.map(son => <li key={uuidv4()}>{renderBlocks(son, anchors)}</li>);
     if (ast.type === 'bullet') return <ul className={ast.spaced ? '' : 'not-spaced-list'} style={{ listStyleType: 'disc' }}>{items}</ul>;
-    if (ast.type === 'none') return <ul className={ast.spaced ? '' : 'not-spaced-list'} style={{ listStyleType: 'none', marginLeft: '-1.5rem' }}>{items}</ul>;
+    if (ast.type === 'none') return <ul className={ast.spaced ? '' : 'not-spaced-list'} style={{ listStyleType: 'none', marginLeft: '-1.2rem' }}>{items}</ul>;
     const typeName = ast.type[0] === '*' ? ast.type.slice(2, -2) : ast.type;
     const typeBold = ast.type[0] === '*';
     return (

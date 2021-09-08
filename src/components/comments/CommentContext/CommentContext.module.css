@@ -1,0 +1,7 @@
+.reply-text {
+  margin: 1rem 0;
+  line-height: 1.2;
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: var(--text);
+}

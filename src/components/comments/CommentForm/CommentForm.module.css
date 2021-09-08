@@ -32,7 +32,8 @@
 }
 
 .title {
-  margin: 1rem 0;
+  margin-top: calc(1rem - 80px);
+  padding-top: 80px;
   font-size: 1.8rem;
   color: var(--title);
 }

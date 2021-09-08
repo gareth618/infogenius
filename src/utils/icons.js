@@ -6,7 +6,7 @@ import { faClipboard as faClipboardTwo } from '@fortawesome/free-solid-svg-icons
 
 import {
   faHandPointUp, faSearch, faTimes, faSun, faMoon,
-  faAngleDoubleLeft, faAngleDoubleRight, faPaperPlane
+  faAngleDoubleLeft, faAngleDoubleRight, faPaperPlane, faReply
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 export function ClipboardOne() { return <FontAwesomeIcon className="fa"    icon={faClipboardOne    } />; };
-export function ClipboardTwo() { return <FontAwesomeIcon className="far"   icon={faClipboardTwo    } />; };
+export function ClipboardTwo() { return <FontAwesomeIcon className="fa"    icon={faClipboardTwo    } />; };
 export function Scroll      () { return <FontAwesomeIcon className="fa-fw" icon={faHandPointUp     } />; };
 export function Search      () { return <FontAwesomeIcon className="fa-fw" icon={faSearch          } />; };
 export function Close       () { return <FontAwesomeIcon className="fa-fw" icon={faTimes           } />; };
@@ -30,3 +30,4 @@ export function GitHub      () { return <FontAwesomeIcon className="fa"    icon=
 export function FaceBook    () { return <FontAwesomeIcon className="fa"    icon={faFacebook        } />; };
 export function YouTube     () { return <FontAwesomeIcon className="fa"    icon={faYoutube         } />; };
 export function Twitter     () { return <FontAwesomeIcon className="fa"    icon={faTwitter         } />; };
+export function Reply       () { return <FontAwesomeIcon className="fa"    icon={faReply           } />; };

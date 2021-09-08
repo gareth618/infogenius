@@ -10,7 +10,7 @@ import { slugify } from '@utils/helpers';
 
 import { Layout } from '@components/layout';
 import { Donations } from '@components/others';
-import { CommentForm, CommentSection } from '@components/comments';
+import { CommentContext } from '@components/comments';
 import * as styles from '@styles/article.module.css';
 
 export default function Article({ data, pageContext: article }) {
@@ -24,7 +24,6 @@ export default function Article({ data, pageContext: article }) {
       <Link to={`/category/${slugify(category)}/`}>{category}</Link>
     </React.Fragment>
   ));
-
   const tags = article.tags.map(tag => (
     <li key={uuidv4()}>
       <Link to={`/tag/${slugify(tag)}/`}>{tag}</Link>
@@ -42,7 +41,6 @@ export default function Article({ data, pageContext: article }) {
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
-
       <Layout sidebar>
         <article>
           <div className={styles.preview}>
@@ -54,11 +52,9 @@ export default function Article({ data, pageContext: article }) {
             {render(article.content, article.media)}
           </div>
         </article>
-
         <ul className={styles.tags}>{tags}</ul>
         <Donations />
-        <CommentForm articleSlug={article.slug} />
-        <CommentSection articleSlug={article.slug} />
+        <CommentContext articleSlug={article.slug} />
       </Layout>
     </>
   );

@@ -6,13 +6,19 @@
   margin-bottom: -1rem;
 }
 
-.meta {
+.header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 1rem;
-  line-height: 1;
-  font-weight: bold;
   border-radius: .5rem;
   background: linear-gradient(to right, var(--form-two), var(--form-one));
+}
+
+.meta {
+  display: flex;
+  line-height: 1;
+  font-weight: bold;
 }
 
 .avatar {
@@ -32,4 +38,22 @@
 
 .date {
   color: var(--text);
+}
+
+.reply-btn {
+  display: block;
+  padding: 1rem;
+  border-radius: .5rem;
+  color: white;
+  background: cornflowerblue;
+}
+
+.reply-btn:hover {
+  background: lightskyblue;
+}
+
+@media (max-width: 500px) {
+  .reply-btn-text {
+    display: none;
+  }
 }

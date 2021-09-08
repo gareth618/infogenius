@@ -6,7 +6,7 @@ import firestore from '@utils/firestore';
 import { collection, doc, setDoc, addDoc, Timestamp } from 'firebase/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
 
-export default function CommentForm({ articleSlug }) {
+export default function CommentForm({ formRef, articleSlug, parentCommentId, setParentComment }) {
   const shareArticle = () => window.open(
     `https://www.facebook.com/sharer/sharer.php?u=https://infogenius.ro/${articleSlug}/`,
     'facebook-share-dialog'
@@ -88,6 +88,7 @@ export default function CommentForm({ articleSlug }) {
         name: inputValue
       });
       await addDoc(collection(firestore, 'comments'), {
+        parent: parentCommentId == null ? '' : parentCommentId,
         slug: articleSlug,
         email: userEmail,
         content: textareaValue,
@@ -96,6 +97,7 @@ export default function CommentForm({ articleSlug }) {
       localStorage.setItem('InfoGenius.userName', inputValue);
       localStorage.removeItem(`InfoGenius.commentDraft.${articleSlug}`);
       setTextareaValue('');
+      setParentComment(null);
     }
     event.preventDefault();
   };
@@ -112,6 +114,7 @@ export default function CommentForm({ articleSlug }) {
       </div>
 
       <form
+        ref={formRef}
         className={styles.commentForm}
         onSubmit={event => event.preventDefault()}
       >
