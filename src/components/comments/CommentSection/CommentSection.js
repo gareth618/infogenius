@@ -19,7 +19,7 @@ export default function CommentSection({ articleSlug, setParentComment }) {
         documents.map(async document => ({
           id: document.id,
           parent: document.data().parent,
-          code: document.data().email.split('').map(chr => chr.charCodeAt(0) * 666013 % 100021).join(''),
+          email: document.data().email,
           name: (await getDoc(doc(firestore, 'users', document.data().email))).data().name,
           date: document.data().timestamp.toDate(),
           content: document.data().content

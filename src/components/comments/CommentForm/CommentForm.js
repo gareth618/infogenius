@@ -5,10 +5,10 @@ import { Share, SignIn, Send } from '@utils/icons';
 import * as styles from './CommentForm.module.css';
 
 import firestore from '@utils/firestore';
-import { collection, doc, setDoc, addDoc, Timestamp } from 'firebase/firestore';
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc, addDoc, getDocs, collection, query, where, Timestamp } from 'firebase/firestore';
 
-export default function CommentForm({ formRef, articleSlug, parentCommentId, setParentComment }) {
+export default function CommentForm({ formRef, articleSlug, parentComment, setParentComment }) {
   const shareArticle = () => window.open(
     `https://www.facebook.com/sharer/sharer.php?u=https://infogenius.ro/${articleSlug}/`,
     'facebook-share-dialog'
@@ -71,16 +71,51 @@ export default function CommentForm({ formRef, articleSlug, parentCommentId, set
       alert('Numele trebuie să fie format din cel puțin 3 caractere!');
     }
     else {
-      await setDoc(doc(firestore, 'users', userEmail), {
-        name: inputValue
-      });
-      await addDoc(collection(firestore, 'comments'), {
-        parent: parentCommentId == null ? '' : parentCommentId,
+      const senderDocRef = doc(firestore, 'users', userEmail);
+      const senderDocOld = await getDoc(senderDocRef);
+      await setDoc(senderDocRef, senderDocOld.exists()
+        ? { name: inputValue, notifications: senderDocOld.data().notifications }
+        : { name: inputValue, notifications: [] }
+      );
+      const commentId = (await addDoc(collection(firestore, 'comments'), {
+        parent: parentComment == null ? '' : parentComment.id,
         slug: articleSlug,
         email: userEmail,
         content: textareaValue,
         timestamp: Timestamp.now()
-      });
+      })).id;
+
+      const notify = async (email, type) => {
+        const docRef = doc(firestore, 'users', email);
+        const docOld = await getDoc(docRef);
+        const notifications = docOld.data().notifications;
+        notifications.push({
+          type,
+          slug: articleSlug,
+          name: inputValue,
+          comment: commentId
+        });
+        await setDoc(docRef, {
+          name: docOld.data().name,
+          notifications
+        });
+      };
+
+      if (parentComment != null) {
+        if (userEmail !== parentComment.email) {
+          notify(parentComment.email, 'reply');
+        }
+        const result = await getDocs(query(
+          collection(firestore, 'comments'),
+          where('slug', '==', articleSlug),
+          where('parent', '==', parentComment.id)
+        ));
+        const emails = new Set();
+        result.forEach(document => emails.add(document.data().email));
+        emails.delete(parentComment.email);
+        emails.delete(userEmail);
+        emails.forEach(email => notify(email, 'comment'));
+      }
       setTextareaValue('');
       setParentComment(null);
     }

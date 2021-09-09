@@ -15,7 +15,11 @@ export default function Comment({ info, setParentComment, preview }) {
     )
     : (
       <img
-        src={`https://avatars.dicebear.com/api/jdenticon/${info.code + info.name}.svg`}
+        src={`https://avatars.dicebear.com/api/jdenticon/${
+          (info.email + info.name.toLowerCase()).split('').reduce(
+            (pre, now) => pre * now.charCodeAt(0) % (1e9 + 7), 1
+          ).toString().padStart(10, '0')
+        }.svg`}
         alt={info.name}
       />
     );
@@ -48,8 +52,12 @@ export default function Comment({ info, setParentComment, preview }) {
             {avatar}
           </div>
           <div>
-            <div className={styles.name}>{info.name}</div>
-            <div className={styles.date}>{`pe ${info.date} la ${info.time}`}</div>
+            <div className={styles.name} id={`comment-${info.id}`}>
+              <a href={`#comment-${info.id}`}>{info.name}</a>
+            </div>
+            <div className={styles.date}>
+              {`pe ${info.date} la ${info.time}`}
+            </div>
           </div>
         </div>
         {info.parent === '' && button}

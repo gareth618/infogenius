@@ -23,7 +23,7 @@ export default function CommentContext({ articleSlug }) {
       <CommentForm
         formRef={formRef}
         articleSlug={articleSlug}
-        parentCommentId={parentComment?.id}
+        parentComment={parentComment}
         setParentComment={setParentComment}
       />
       {parentComment && (

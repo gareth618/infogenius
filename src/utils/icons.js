@@ -6,7 +6,7 @@ import { faClipboard as faClipboardTwo } from '@fortawesome/free-solid-svg-icons
 
 import {
   faHandPointUp, faSearch, faTimes, faSun, faMoon,
-  faAngleDoubleLeft, faAngleDoubleRight, faPaperPlane, faReply
+  faAngleDoubleLeft, faAngleDoubleRight, faPaperPlane, faReply, faBell
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -31,3 +31,4 @@ export function FaceBook    () { return <FontAwesomeIcon className="fa"    icon=
 export function YouTube     () { return <FontAwesomeIcon className="fa"    icon={faYoutube         } />; };
 export function Twitter     () { return <FontAwesomeIcon className="fa"    icon={faTwitter         } />; };
 export function Reply       () { return <FontAwesomeIcon className="fa"    icon={faReply           } />; };
+export function Notification() { return <FontAwesomeIcon className="fa"    icon={faBell            } />; };

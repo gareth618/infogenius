@@ -12,7 +12,19 @@
   Demo of the new version available <a href="https://nervous-kalam-d2cf8e.netlify.app/">here</a>.
 </p>
 
+## Tech Stack
+
+- [**React**](https://reactjs.org/) frontend
+- [**FireBase**](https://firebase.google.com/) backend for comments
+- [**Gatsby**](https://www.gatsbyjs.com/) static site generator
+- [**Prism**](https://prismjs.com/) code highlighting
+- [**Katex**](https://katex.org/) mathematical expressions
+- [**Explicit**](https://github.com/Gareth618/explicit-highlighter/) markup language
+- [**CSanim**](https://github.com/Gareth618/csanim/) animation engine
+
 ## TODO
 
-- [ ] push notifications for replies
-- [ ] push notifications for new articles
+- [ ] rewrite articles
+- [ ] publish on Netlify
+- [ ] set up custom emails
+- [ ] OneSignal for new articles
