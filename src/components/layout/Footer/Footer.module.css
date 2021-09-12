@@ -9,7 +9,7 @@
   align-items: stretch;
   gap: .8rem;
   height: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 @media (max-width: 470px) {

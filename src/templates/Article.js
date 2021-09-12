@@ -14,9 +14,11 @@ import { CommentContext } from '@components/comments';
 import * as styles from '@styles/article.module.css';
 
 export default function Article({ data, pageContext: article }) {
+  const siteURL = data.site.siteMetadata.siteUrl;
   const siteTitle = data.site.siteMetadata.title;
   const cleanTitle = article.title.replace(/[$\\]/g, '');
   const thumbnail = article.media.images.find(image => image.name === 'index')?.data;
+  const thumbnailURL = article.media.images.find(image => image.name === 'index')?.url;
 
   const categories = article.categories.map((category, index) => (
     <React.Fragment key={uuidv4()}>
@@ -37,10 +39,19 @@ export default function Article({ data, pageContext: article }) {
         <meta name="description" content={article.description} />
         <meta name="keywords" content={article.tags.join(', ')} />
         <meta name="author" content={article.author} />
+
+        <meta property="og:title" content={cleanTitle} />
+        <meta property="og:url" content={`${siteURL}${article.slug}/`} />
+        <meta property="og:image" content={thumbnailURL} />
+        <meta property="og:type" content="article" />
+        <meta property="og:description" content={article.description} />
+        <meta property="og:locale" content="ro_RO" />
+
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
+
       <Layout sidebar>
         <article>
           <div className={styles.preview}>
@@ -65,6 +76,7 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        siteUrl
       }
     }
   }

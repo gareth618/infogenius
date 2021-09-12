@@ -25,6 +25,8 @@
 ## TODO
 
 - [ ] rewrite articles
+- [ ] redirects
+- [ ] pull comments
 - [ ] publish on Netlify
 - [ ] set up custom emails
 - [ ] OneSignal for new articles

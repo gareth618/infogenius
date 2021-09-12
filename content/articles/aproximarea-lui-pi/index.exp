@@ -10,6 +10,10 @@ DESCRIPTION: Pi este raportul dintre circumferința și diametrul unui cerc. În
   **InfoGenius:** Astăzi, pe 14 martie, se sărbătorește ziua numărului $\pi$!
 <<<
 
+[link1](trie-cpp)
+
+[link2](trie-cpp/#header-1)
+
 Pi este un număr care nu are nevoie de nicio introducere. El este definit drept raportul dintre circumferința și diametrul unui cerc, motiv pentru care această constantă apare adesea în formule și ecuații matematice, dar și fizice.
 
 ![360](definitie-pi.mp4)

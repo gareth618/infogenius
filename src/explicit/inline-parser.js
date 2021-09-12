@@ -195,7 +195,7 @@ export default function parseInline(str) {
         else {
           if (url !== '') {
             if (url === '.') url = '/';
-            else if (url.slice(0, 'https://'.length) !== 'https://') url = `/${url}/`;
+            else if (url.slice(0, 'https://'.length) !== 'https://') url = url.indexOf('#') === -1 ? `/${url}/` : `/${url}`;
           }
           sons.push({
             tag: 'link',

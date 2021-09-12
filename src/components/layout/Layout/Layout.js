@@ -64,11 +64,14 @@ export default function Layout({ sidebar, children }) {
 
   const [notifications, setNotifications] = React.useState([]);
   React.useEffect(() => onSnapshot(collection(firestore, 'users'), async () => {
-    const notificationsDocRef = doc(firestore, 'users', userEmail);
-    const notificationsDocOld = await getDoc(notificationsDocRef);
-    if (notificationsDocOld.exists()) {
-      setNotifications(notificationsDocOld.data().notifications);
+    try {
+      const notificationsDocRef = doc(firestore, 'users', userEmail);
+      const notificationsDocOld = await getDoc(notificationsDocRef);
+      if (notificationsDocOld.exists()) {
+        setNotifications(notificationsDocOld.data().notifications);
+      }
     }
+    catch (err) { }
   }), [userEmail]);
   if (notifications.length === 0) return content;
 
@@ -85,7 +88,7 @@ export default function Layout({ sidebar, children }) {
             notif => notif.comment !== notification.comment
           )
         });
-        navigate(`/${notification.slug}`);
+        navigate(`/${notification.slug}/`);
         setTimeout(() => navigate(`/${notification.slug}#comment-${notification.comment}`), 1618);
       }}
     >

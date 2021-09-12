@@ -1,6 +1,7 @@
 import React from 'react';
-import { useLocalStorage } from '@utils/hooks';
+import { graphql, useStaticQuery } from 'gatsby';
 
+import { useLocalStorage } from '@utils/hooks';
 import { Share, SignIn, Send } from '@utils/icons';
 import * as styles from './CommentForm.module.css';
 
@@ -9,8 +10,19 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 import { doc, getDoc, setDoc, addDoc, getDocs, collection, query, where, Timestamp } from 'firebase/firestore';
 
 export default function CommentForm({ formRef, articleSlug, parentComment, setParentComment }) {
+  const siteURL = useStaticQuery(
+    graphql`
+      query GetSiteURL {
+        site {
+          siteMetadata {
+            siteUrl
+          }
+        }
+      }
+    `
+  ).site.siteMetadata.siteUrl;
   const shareArticle = () => window.open(
-    `https://www.facebook.com/sharer/sharer.php?u=https://infogenius.ro/${articleSlug}/`,
+    `https://www.facebook.com/sharer/sharer.php?u=${siteURL}${articleSlug}/`,
     'facebook-share-dialog'
   );
 

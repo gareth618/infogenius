@@ -2,7 +2,7 @@
   margin: 1rem auto;
   width: fit-content;
   max-width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
   border-radius: .5rem;
 }
 

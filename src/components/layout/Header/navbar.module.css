@@ -73,7 +73,7 @@
 .results {
   width: 100%;
   max-height: calc(5 * 3.2rem);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .results li {

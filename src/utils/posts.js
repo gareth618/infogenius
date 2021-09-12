@@ -61,6 +61,7 @@ async function getPost(type, graphql, importedSketches, slug) {
         edges {
           node {
             name
+            publicURL
             childImageSharp {
               gatsbyImageData(
                 layout: FULL_WIDTH
@@ -99,7 +100,8 @@ async function getPost(type, graphql, importedSketches, slug) {
 
   const images = resultPNG.data.allFile.edges.map(edge => ({
     name: edge.node.name,
-    data: edge.node.childImageSharp.gatsbyImageData
+    data: edge.node.childImageSharp.gatsbyImageData,
+    url: edge.node.publicURL
   }));
   const videos = resultMP4.data.allFile.edges.map(edge => ({
     name: edge.node.name,

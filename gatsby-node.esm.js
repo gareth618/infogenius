@@ -81,7 +81,7 @@ export async function createPages({ graphql, actions }) {
   }
 
   const createPagination = (basePath, title, articles) => {
-    const ARTICLES_ON_PAGE = 2;
+    const ARTICLES_ON_PAGE = 10;
     const pageToURL = page => page === 1 ? basePath : `${basePath}page/${page}/`;
     const pageCount = Math.floor(articles.length / ARTICLES_ON_PAGE) + (articles.length % ARTICLES_ON_PAGE > 0 ? 1 : 0);
     for (let i = 0; i < articles.length; i += ARTICLES_ON_PAGE) {

@@ -82,7 +82,7 @@
 
 .explicit .table-wrapper {
   margin: 1rem 0;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .explicit table {
@@ -141,7 +141,7 @@
 .explicit .math-wrapper {
   margin: 1rem auto;
   color: var(--text);
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .explicit h2:first-child,

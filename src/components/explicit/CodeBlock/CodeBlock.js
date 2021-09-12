@@ -24,7 +24,7 @@ export default function CodeBlock({ info }) {
   if (info.title != null) preClasses.push(styles[`digits${info.code.length.toString().length}`]);
   if (info.lang === 'bash' && info.code[0] !== '#!/bin/bash') preClasses.push(styles.dollars);
 
-  const preStyles = ['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'scroll' };
+  const preStyles = ['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'auto' };
   if (info.label != null) preStyles.borderTopLeftRadius = 0;
   if (info.label != null && info.title == null) preStyles.marginTop = 0;
 
