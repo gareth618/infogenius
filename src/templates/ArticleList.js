@@ -13,7 +13,6 @@ import { Pagination } from '@components/others';
 import * as styles from '@styles/article.module.css';
 
 export default function ArticleList({ data, pageContext: { pageTitle, articles, olderPage, newerPage } }) {
-  const siteURL = data.site.siteMetadata.siteUrl;
   const siteMeta = data.site.siteMetadata;
   const helmetTitle = pageTitle === ''
     ? `${siteMeta.title} – ${siteMeta.motto}`
@@ -52,8 +51,8 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
         {pageTitle === '' && <meta name="author" content={siteMeta.author} />}
 
         {pageTitle === '' && <meta property="og:title" content={siteMeta.title} />}
-        {pageTitle === '' && <meta property="og:url" content={siteURL} />}
-        {pageTitle === '' && <meta property="og:image" content="https://scontent.fias1-1.fna.fbcdn.net/v/t1.6435-9/195414240_146098597509238_4783600710085528272_n.png?_nc_cat=100&ccb=1-5&_nc_sid=e3f864&_nc_ohc=g2iTbZZnazwAX9OiO5k&_nc_ht=scontent.fias1-1.fna&oh=95ff6d29020c70fba3d32ef205a4b653&oe=61650AB9" />}
+        {pageTitle === '' && <meta property="og:url" content={siteMeta.siteUrl} />}
+        {pageTitle === '' && <meta property="og:image" content={siteMeta.siteImage} />}
         {pageTitle === '' && <meta property="og:type" content="website" />}
         {pageTitle === '' && <meta property="og:description" content={siteMeta.description} />}
         {pageTitle === '' && <meta property="og:locale" content="ro_RO" />}
@@ -83,6 +82,8 @@ export const pageQuery = graphql`
         author
         description
         keywords
+        siteUrl
+        siteImage
       }
     }
   }

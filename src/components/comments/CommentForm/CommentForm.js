@@ -22,7 +22,7 @@ export default function CommentForm({ formRef, articleSlug, parentComment, setPa
     `
   ).site.siteMetadata.siteUrl;
   const shareArticle = () => window.open(
-    `https://www.facebook.com/sharer/sharer.php?u=${siteURL}${articleSlug}/`,
+    `https://www.facebook.com/sharer/sharer.php?u=${siteURL}/${articleSlug}/`,
     'facebook-share-dialog'
   );
 

@@ -41,8 +41,8 @@ export default function Article({ data, pageContext: article }) {
         <meta name="author" content={article.author} />
 
         <meta property="og:title" content={cleanTitle} />
-        <meta property="og:url" content={`${siteURL}${article.slug}/`} />
-        <meta property="og:image" content={thumbnailURL} />
+        <meta property="og:url" content={`${siteURL}/${article.slug}/`} />
+        <meta property="og:image" content={`${siteURL}${thumbnailURL}`} />
         <meta property="og:type" content="article" />
         <meta property="og:description" content={article.description} />
         <meta property="og:locale" content="ro_RO" />
