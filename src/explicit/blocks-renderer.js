@@ -90,14 +90,16 @@ export default function renderBlocks(ast, anchors) {
     return (
       <div className="table-wrapper">
         <table>
-          {ast.sons.map(row => (
-            <tr key={uuidv4()}>
-              {row.map(cell => cell.header
-                ? <th key={uuidv4()} rowSpan={cell.rowSpan} colSpan={cell.colSpan} style={{ textAlign: cell.align }}>{renderInline(cell.content)}</th>
-                : <td key={uuidv4()} rowSpan={cell.rowSpan} colSpan={cell.colSpan} style={{ textAlign: cell.align }}>{renderInline(cell.content)}</td>
-              )}
-            </tr>
-          ))}
+          <tbody>
+            {ast.sons.map(row => (
+              <tr key={uuidv4()}>
+                {row.sons.map(cell => cell.header
+                  ? <th key={uuidv4()} rowSpan={cell.rowSpan} colSpan={cell.colSpan} style={{ textAlign: cell.align }}>{renderInline(cell.sons)}</th>
+                  : <td key={uuidv4()} rowSpan={cell.rowSpan} colSpan={cell.colSpan} style={{ textAlign: cell.align }}>{renderInline(cell.sons)}</td>
+                )}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     );

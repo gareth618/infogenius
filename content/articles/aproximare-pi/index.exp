@@ -2,7 +2,7 @@ TITLE: Doi algoritmi pentru aproximarea numărului $\pi$!
 AUTHOR: Iulian Oleniuc
 DATE: 14/03/2021
 CATEGORIES: Diverse, Matematică
-TAGS: algoritmi probabilistici, buffon's needle, integrale, matematică, monte carlo, numărul pi, p5.js, serii
+TAGS: pi, p5.js, matematică, integrale, serii, algoritmi probabilistici, monte carlo
 DESCRIPTION: Pi este raportul dintre circumferința și diametrul unui cerc. În acest articol vă voi prezenta câteva metode de aproximare a numărului pi.
 
 >>>
@@ -10,13 +10,9 @@ DESCRIPTION: Pi este raportul dintre circumferința și diametrul unui cerc. În
   **InfoGenius:** Astăzi, pe 14 martie, se sărbătorește ziua numărului $\pi$!
 <<<
 
-[link1](trie-cpp)
-
-[link2](trie-cpp/#header-1)
-
 Pi este un număr care nu are nevoie de nicio introducere. El este definit drept raportul dintre circumferința și diametrul unui cerc, motiv pentru care această constantă apare adesea în formule și ecuații matematice, dar și fizice.
 
-![360](definitie-pi.mp4)
+![400](definitie-pi.mp4)
 
 De fapt, în fizică, $\pi$ apare de cele mai multe ori înmulțit cu $2$. Din acest motiv, mulți fizicieni doresc să renunțăm la $\pi$, în favoarea unei constante $\tau$, egală cu $2 \pi$. Sau, altfel spus, egală cu raportul dintre circumferința unui cerc și __raza__ sa. Din fericire, nimeni nu i-a băgat încă în seamă :tongue:
 
@@ -34,15 +30,15 @@ După cum bine știți, $\pi$ este un număr irațional, adică are o infinitate
 
 Să presupunem că știm diametrul unei sfere și dorim să-i calculăm circumferința. Dacă diametrul acestei sfere ar fi egal cu 93 de miliarde de ani-lumină (diametrul universului observabil), o aproximare a lui $\pi$ la 152 de zecimale ar fi suficientă pentru a obține o eroare cel mult egală cu lungimea Planck -- cea mai mică unitate de măsură pentru lungime care are vreo semnificație...
 
-![350; Diametrul universului](diametru-univers.png)
+![400; Diametrul universului](diametru-univers.png)
 
-Cu toate acestea, informaticienilor le place să inventeze algoritmi pentru aproximarea lui pi la câteva milioane, miliarde sau chiar trilioane de zecimale. Spre exemplu, ultimul record a fost atins în ianuarie 2020: După ce a muncit din greu 300 și ceva de zile, un super-calculator a reușit să determine primele 50 de trilioane de zecimale ale lui pi! Doborând recordul de doar 31.4 trilioane, stabilit de Google cu un an înainte.
+Cu toate acestea, informaticienilor le place să inventeze algoritmi pentru aproximarea lui pi la câteva milioane, miliarde sau chiar trilioane de zecimale. Spre exemplu, ultimul record a fost atins în ianuarie 2020: După ce a muncit din greu 300 și ceva de zile, un super-calculator a reușit să determine primele 50 de trilioane de zecimale ale lui pi! Doborând recordul de __doar__ 31.4 trilioane, stabilit de Google cu un an înainte.
 
-În caz că aceste rezultate vi se par inutile, în mare parte aveți dreptate. Doar că, vânătoarea asta după zecimalele lui $\pi$ este justificată din două motive. În primul rând, este o metodă foarte bună de a pune la încercare puterea computațională a celor mai noi super-calculatoare. În al doilea rând, simpla căutare de algoritmi care să-l aproximeze pe $\pi$ poate fi o problemă faină de info.
+În caz că aceste rezultate vi se par inutile, în mare parte aveți dreptate. Doar că, vânătoarea asta după zecimalele lui $\pi$ este justificată din două motive. În primul rând, este o metodă foarte bună de a pune la încercare puterea computațională a celor mai noi super-calculatoare. În al doilea rând, simpla căutare de algoritmi care să-l aproximeze pe $\pi$ poate fi o problemă de informatică foarte plăcută.
 
-![500; Aproximarea lui pi](aproximare-pi.png)
+![400; Aproximarea lui pi](aproximare-pi.png)
 
-Prin urmare, în acest articol vă voi prezenta doi algoritmi interesanți pentru aproximarea numărului pi. Ce îmi place la ei este că se bazează pe teoria probabilităților, făcându-i foarte ușor de vizualizat. În plus, demonstrația celui de-al doilea ne arată că, uneori, __integralele duble__ chiar sunt utile.
+Prin urmare, în acest articol vă voi prezenta doi algoritmi interesanți pentru aproximarea numărului pi. Ce îmi place la ei este că se bazează pe teoria probabilităților și pe geometrie, făcându-i foarte ușor de vizualizat. În plus, demonstrația celui de-al doilea ne arată că, uneori, __integralele duble__ chiar sunt utile.
 
 ## Metoda seriilor
 
@@ -56,7 +52,7 @@ Există [pagini](https://en.wikipedia.org/wiki/List_of_formulae_involving_%CF%80
 
 $$\frac{2 \sqrt{2}}{9801} \sum_{k = 0}^\infty \frac{(4k)! (1103 + 26390k)}{(k!)^4 396^{4k}} = \frac{1}{\pi}$$
 
-Este suficient să calculezi 2 termeni din seria asta pentru a obține în mod corect primele 14 zecimale ale lui $\pi$! Nici nu se compară cu seria precedentă, unde după primii 600 de termeni vei obține abia 3 zecimale. Serii de genul ăsta sunt folosite pentru a doborî recorduri ca cel menționat mai sus.
+Este suficient să calculezi $2$ termeni din seria asta pentru a obține în mod corect primele $14$ zecimale ale lui $\pi$! Nici nu se compară cu seria precedentă, unde după primii $600$ de termeni vei obține abia $3$ zecimale. Serii de genul ăsta sunt folosite pentru a doborî recorduri ca cel menționat mai sus.
 
 ## Metoda Monte Carlo
 
@@ -66,9 +62,9 @@ Fie un pătrat oarecare $P$, de latură $2r$, și fie $C$ cercul înscris în p�
 
 ![250; Pi Monte Carlo](pi-monte-carlo.png)
 
-De ce? Păi, mai întâi trebuie să calculăm ariile celor două figuri. Aria cercului este $A_C = \pi r^2$, iar aria pătratului este $A_P = 4 r^2$. Așadar, raportul dintre cele două arii este $\pi / 4$. Și, cred că este destul de intuitiv faptul că acest raport de arii este chiar probabilitatea căutată de noi. (E clar că dacă aria cercului este $A_C / A_P$ din aria pătratului, atunci doar $A_C / A_P$ puncte din interiorul lui $P$ se vor afla și în $C$.)
+De ce? Păi, mai întâi trebuie să calculăm ariile celor două figuri. Aria cercului este $A_C = \pi r^2$, iar aria pătratului este $A_P = 4 r^2$. Așadar, raportul dintre cele două arii este $\pi / 4$. Și, cred că e destul de intuitiv faptul că acest raport de arii este chiar probabilitatea căutată de noi. (E clar că dacă aria cercului este $A_C / A_P$ din aria pătratului, atunci doar $A_C / A_P$ puncte din interiorul lui $P$ se vor afla și în $C$.)
 
-$$\Pr\{A \in \operatorname{Int} \, C\} = \frac{A_C}{A_P} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}$$
+$$\Pr\{A \in \operatorname{Int} C\} = \frac{A_C}{A_P} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}$$
 
 ### Algoritm
 
@@ -81,36 +77,46 @@ Iată și o vizualizare a acestui algoritm! Pentru a pune pauză, dați click un
 Mai jos aveți și codul sursă pentru această animație, scris în JavaScript și P5.JS. Dacă vreți să vă jucați cu el, dar nu sunteți familiarizați cu cele două, vă recomand să citiți [acest](fractali-p5js) articol.
 
 ``` javascript -> pi-monte-carlo.js
-  let inside = 0;
-  let total = 0;
+  const BLACK = [17, 17, 17];
+  const WHITE = [250, 235, 215];
+  const RED = [255, 69, 0];
+  const RADIUS = 150;
 
   function setup() {
-    createCanvas(400, 500);
-    background(0);
+    createCanvas(300, 350);
+    background(BLACK);
     noStroke();
-    textSize(20);
-    textFont('Consolas, Monaco, monospace');
+    textSize(15);
+    textFont('Consolas');
     textAlign(CENTER, CENTER);
   }
 
+  let inside = 0;
+  let total = 0;
+
   function draw() {
-    const x = random(0, 400);
-    const y = random(0, 400);
     total++;
-    fill(250, 235, 215);
-    if ((200 - x) * (200 - x) + (200 - y) * (200 - y) <= 40000) {
-      fill(255, 69, 0);
+    const x = random(0, 2 * RADIUS);
+    const y = random(0, 2 * RADIUS);
+
+    fill(WHITE);
+    const sqrDist
+      = (RADIUS - x) * (RADIUS - x)
+      + (RADIUS - y) * (RADIUS - y);
+    if (sqrDist <= RADIUS * RADIUS) {
+      fill(RED);
       inside++;
     }
-    circle(x, y, 5);
-    fill(0);
-    rect(0, 402.5, 400, 100);
-    fill(250, 235, 215);
-    text("π aproximat:                  ", width / 2, 440);
-    text("     π real:                  ", width / 2, 470);
-    fill(255, 69, 0);
-    text("             " + (4 * inside / total).toFixed(15), width / 2, 440);
-    text("             " + PI, width / 2, 470);
+    circle(x, y, 3);
+
+    fill(BLACK);
+    rect(0, 300, 300, 50);
+    fill(WHITE);
+    text('π aproximat:             ', width / 2, 315);
+    text('     π real:             ', width / 2, 335);
+    fill(RED);
+    text('             ' + (4 * inside / total).toFixed(10), width / 2, 315);
+    text('             ' + PI.toFixed(10), width / 2, 335);
   }
 
   let paused = false;
@@ -126,12 +132,12 @@ Mai jos aveți și codul sursă pentru această animație, scris în JavaScript 
     }
   }
 
-  function keyTyped() {
-    if (!paused && (key === 'r' || key === 'R')) {
+  function keyPressed() {
+    if (!paused && key.toLowerCase() === 'r') {
       inside = 0;
       total = 0;
-      fill(0);
-      rect(0, 0, 400, 402.5);
+      fill(BLACK);
+      rect(0, 0, 300, 300);
     }
   }
 ^^^
@@ -140,65 +146,70 @@ Mai jos aveți și codul sursă pentru această animație, scris în JavaScript 
 
 A treia metodă se numește __Buffon's Needle__, și este oarecum similară cu cea precedentă, în sensul că și ea se bazează pe geometrie și probabilități. Algoritmul presupune să împărțim o foaie de hârtie în mai multe benzi verticale, fiecare de lățime $t$, iar apoi să aruncăm pe această foaie chibrituri de lungime $l$, unde $l \lt t$.
 
-![500; Pi Buffon's Needle](buffons-needle.png)
+![400; Pi Buffon's Needle](buffons-needle.png)
 
-Unele chibrituri vor intersecta liniile care separă benzile verticale, pe când altele nu. Raportul dintre numărul de chibrituri care intersectează aceste linii și numărul total de chibrituri aruncate va fi aproximativ $2l / t \pi$. Iar dacă alegem ca lățimea unei benzi să fie de două ori mai mare decât lungimea chibritului, adică $t = 2l$, vom obține direct $1 / \pi$.
+Unele chibrituri vor intersecta liniile care separă benzile verticale, pe când altele nu. Raportul dintre numărul chibriturilor care intersectează aceste linii și numărul total de chibrituri aruncate va fi aproximativ $2l / t \pi$. Iar dacă alegem ca lățimea unei benzi să fie de două ori mai mare decât lungimea chibritului, adică $t = 2l$, vom obține direct $1 / \pi$.
 
-Am încercat și eu experimentul, cu două serii de câte $100$ de chibrituri, însă n-am obținut cine știe ce rezultat... Doar $3.4$. Dezamăgit că matematica nu vrea să funcționeze în lumea reală, m-am dus la calculator să implementez o simulare a acestui algoritm. A mers ceva mai bine, însă n-am reușit să obțin decât $3.14$, iar asta după câteva minute bune de rulare. Din acest motiv, am fost foarte surprins să citesc că, în 1901, matematicianul Mario Lazzarini a reușit să calculeze corect primele ȘASE zecimale ale lui $\pi$ folosind această metodă. Dar asta, desigur, abia după ce a aruncat $3408$ chibrituri...
+Am încercat și eu experimentul, cu două serii de câte $100$ de chibrituri, însă n-am obținut cine știe ce rezultat... Doar $3.4$. Dezamăgit că matematica nu vrea să funcționeze în lumea reală, m-am dus la calculator să implementez o simulare a acestui algoritm. A mers ceva mai bine, însă n-am reușit să obțin decât $3.14$, iar asta după câteva minute bune de rulare. Din acest motiv, am fost foarte surprins să citesc că, în 1901, matematicianul Mario Lazzarini a reușit să calculeze corect primele **șase** zecimale ale lui $\pi$ folosind această metodă. Dar asta, desigur, abia după ce a aruncat $3408$ chibrituri...
 
 ![](pi-buffons-needle.js)
 
 Iată și codul, în caz că vreți să aruncați o privire peste el:
 
 ``` javascript -> pi-buffons-needle.js
+  const BLACK = [17, 17, 17];
+  const WHITE = [250, 235, 215];
+  const RED = [255, 69, 0];
+  const LENGTH = 300 / 4;
+
   let good = 0;
   let total = 0;
 
   function resetBackground() {
-    fill(0);
-    background(0);
-    stroke(250, 235, 215);
-    line(0, 0, 0, 400);
-    line(100, 0, 100, 400);
-    line(200, 0, 200, 400);
-    line(300, 0, 300, 400);
-    line(400, 0, 400, 400);
+    background(BLACK);
+    strokeWeight(2);
+    stroke(WHITE);
+    for (let i = 0; i < 5; i++) {
+      line(i * LENGTH, 0, i * LENGTH, 300);
+    }
     noStroke();
+    strokeWeight(1);
   }
 
   function setup() {
-    createCanvas(400, 500);
+    createCanvas(300, 350);
+    frameRate(20);
     resetBackground();
-    textSize(20);
-    textFont('Consolas, Monaco, monospace');
+    textSize(15);
+    textFont('Source Code Pro');
     textAlign(CENTER, CENTER);
   }
 
   function draw() {
-    const x1 = random(-25, 425);
-    const y1 = random(-25, 425);
+    total++;
+    const x = random(0, 300);
+    const y = random(0, 300);
     const theta = random(0, 2 * PI);
-    const x2 = x1 + 50 * cos(theta);
-    const y2 = y1 + 50 * sin(theta);
-    if (!(0 <= x1 + x2 && x1 + x2 <= 800)) return;
-    if (!(0 <= y1 + y2 && y1 + y2 <= 800)) return;
-    stroke(255, 69, 0);
+
+    const x1 = x - LENGTH / 4 * cos(theta);
+    const y1 = y - LENGTH / 4 * sin(theta);
+    const x2 = x + LENGTH / 4 * cos(theta);
+    const y2 = y + LENGTH / 4 * sin(theta);
+    for (let i = 0; i < 5; i++) {
+      good += min(x1, x2) < i * LENGTH && i * LENGTH < max(x1, x2);
+    }
+    stroke(RED);
     line(x1, y1, x2, y2);
     noStroke();
-    total++;
-    if (min(x1, x2) < 0 && 0 < max(x1, x2)) good++;
-    if (min(x1, x2) < 100 && 100 < max(x1, x2)) good++;
-    if (min(x1, x2) < 200 && 200 < max(x1, x2)) good++;
-    if (min(x1, x2) < 300 && 300 < max(x1, x2)) good++;
-    if (min(x1, x2) < 400 && 400 < max(x1, x2)) good++;
-    fill(0);
-    rect(0, 400, 400, 100);
-    fill(250, 235, 215);
-    text("π aproximat:                  ", width / 2, 440);
-    text("     π real:                  ", width / 2, 470);
-    fill(255, 69, 0);
-    text("             " + (total / good).toFixed(15), width / 2, 440);
-    text("             " + PI, width / 2, 470);
+
+    fill(BLACK);
+    rect(0, 300, 300, 50);
+    fill(WHITE);
+    text('π aproximat:             ', width / 2, 315);
+    text('     π real:             ', width / 2, 335);
+    fill(RED);
+    text('             ' + (total / good).toFixed(10), width / 2, 315);
+    text('             ' + PI.toFixed(10), width / 2, 335);
   }
 
   let paused = false;
@@ -214,8 +225,8 @@ Iată și codul, în caz că vreți să aruncați o privire peste el:
     }
   }
 
-  function keyTyped() {
-    if (!paused && (key === 'r' || key === 'R')) {
+  function keyPressed() {
+    if (!paused && key.toLowerCase() === 'r') {
       good = 0;
       total = 0;
       resetBackground();
@@ -229,7 +240,7 @@ Cred că motivul pentru care această metodă funcționează este mai interesant
 
 Practic, noi vrem să calculăm probabilitatea ca un chibrit aruncat aleatoriu să atingă o linie verticală. Primul pas este să explicităm acest eveniment, adică să-l împărțim în două evenimente mai simple. Astfel, putem spune că, pentru a arunca aleatoriu un chibrit, mai întâi alegem un număr random $x \in [0, t / 2]$, reprezentând distanța dintre mijlocul chibritului și cea mai apropiată linie verticală, după care alegem un număr random $\theta \in [0, \pi / 2]$, reprezentând unghiul ascuțit pe care chibritul îl formează cu dreapta verticală care trece prin mijlocul său.
 
-![500; x și theta](x-si-theta.png)
+![400; x și theta](x-si-theta.png)
 
 Iată și o animație care simulează modul în care este generat un chibrit random. Dați un click pentru a alege $x$-ul, un alt click pentru a-l fixa pe $\theta$ și încă unul pentru a o lua de la capăt.
 
@@ -245,9 +256,9 @@ $$\begin{align*}
 
 Acum, trebuie să găsim o relație în funcție de $x$ și $\theta$ care să ne spună dacă chibritul nostru intersectează într-adevăr vreo linie verticală. Observăm ușor că intersecția are loc doar dacă $x$ este mai mic sau egal cu distanța de la capătul stâng al chibritului la verticala care trece prin mijlocul său. Cea din urmă poate fi exprimată drept $(l / 2) \sin \theta$.
 
-![500; Intersecție chibrit](intersectie-chibrit.png)
+![400; Intersecție chibrit](intersectie-chibrit.png)
 
-Tot ce ne mai rămâne de făcut este să evaluăm funcția obținută anterior, $4 / t \pi$, în toate punctele $(x, \theta)$ cu proprietatea că $\theta \in [0, \pi / 2]$ și $x \in [0, (l / 2) \sin \theta]$, după care să însumăm aceste valori. Ăsta e genul de lucru pe care-l face o integrală (dublă):
+Tot ce ne mai rămâne de făcut este să evaluăm funcția obținută anterior, $4 / t \pi$, în toate punctele $(x, \theta)$ cu proprietatea că $\theta \in [0, \pi / 2]$ și $x \in [0, (l / 2) \sin \theta]$, după care să însumăm aceste valori. Exact ăsta e genul de lucru pe care-l face o integrală (dublă):
 
 $$\begin{align*}
   \Pr &= \int_0^{\pi / 2} \int_0^{(l / 2) \sin \theta} \frac{4}{t \pi} \, dx \, d \theta\\

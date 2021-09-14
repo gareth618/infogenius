@@ -116,3 +116,11 @@ h1 .katexified {
   font-size: 1.8rem;
   font-family: 'Quicksand', sans-serif;
 }
+
+strong .katexified {
+  font-weight: bold;
+}
+
+em .katexified {
+  font-style: italic;
+}

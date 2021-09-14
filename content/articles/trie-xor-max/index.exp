@@ -2,14 +2,14 @@ TITLE: Trie în C++. Problema Xor Max de pe InfoArena
 AUTHOR: Iulian Oleniuc
 DATE: 06/02/2021
 CATEGORIES: Algoritmică și structuri de date
-TAGS: arbori, recursivitate, șiruri de caractere, structuri de date, sume parțiale, trie, xor
-DESCRIPTION: Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră compactă...
+TAGS: structuri de date, arbori, recursivitate, șiruri de caractere, sume parțiale, trie, xor
+DESCRIPTION: Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră foarte compactă...
 
 În acest articol voi prezenta structura de date numită trie, precum și câteva aplicații interesante ale acesteia. Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră compactă. Din acest motiv, putem spune că tria este o structură de date de tip __dicționar__. Avantajul principal al acesteia este complexitatea căutării unui cuvânt, care este liniară în lungimea sa, nedepinzând de mărimea dicționarului. De aici și numele structurii (__trie__ provine de la __re**trie**val__).
 
 ## Structura unei trie
 
-Vom nota cu $\Sigma$ lungimea alfabetului cu care lucrăm, de obicei $26$ (de la alfabetul englez). O trie este un arbore în care fiecare nod are maxim $\Sigma$ fii, câte unul pentru fiecare literă din alfabet. Cuvintele stocate în trie pot fi obținute prin citirea caracterelor aflate pe lanțul de la rădăcină la diverse noduri, numite __frunze__. Iată mai jos o trie construită pe baza cuvintelor __lac__, __lat__, __latin__, __lung__, __mare__ etc. Nodurile frunză sunt marcate cu verde.
+Vom nota cu $\Sigma$ lungimea alfabetului cu care lucrăm, de obicei $26$ (de la alfabetul englez). O trie este un arbore în care fiecare nod are maxim $\Sigma$ fii, câte unul pentru fiecare literă din alfabet. Cuvintele stocate în trie pot fi obținute prin citirea caracterelor aflate pe lanțul de la rădăcină la diverse noduri, numite __frunze__. Iată mai jos o trie construită pe baza cuvintelor $\texttt{lac}$, $\texttt{lat}$, $\texttt{latin}$, $\texttt{lung}$, $\texttt{mare}$ etc. Nodurile frunză sunt marcate cu verde.
 
 ![400; Exemplu trie](trie-exemplu.png)
 
@@ -17,7 +17,7 @@ Am ales să pun literele în __noduri__ pentru a desena mai ușor tria, însă c
 
 ## Implementare în C++
 
-În continuare, vom scrie o clasă `Trie` în C++, pentru rezolvarea problemei cu același nume de pe [InfoArena](https://infoarena.ro/problema/trie). Această problemă ne cere să implementăm eficient operațiile de inserare, căutare, ștergere și LCP (longest common prefix). Mai întâi ne vom axa pe implementarea clasică, cu pointeri și funcții recursive, după care vă voi arăta și o variantă oarecum mai simplă, dar cu un mic dezavantaj în ceea ce privește memoria.
+În continuare, vom scrie o [clasă]()TODO `Trie` în C++, pentru rezolvarea problemei cu același nume de pe [InfoArena](https://infoarena.ro/problema/trie). Această problemă ne cere să implementăm eficient operațiile de inserare, căutare, ștergere și LCP (longest common prefix). Mai întâi ne vom axa pe implementarea clasică, cu pointeri și funcții recursive, după care vă voi arăta și o variantă oarecum mai simplă, dar cu un mic dezavantaj în ceea ce privește memoria.
 
 Deocamdată, clasa `Trie` are nevoie de doi membri privați: `cnt` (numărul de cuvinte care se termină în nodul curent) și un vector de pointeri `next`, de lungime $\Sigma$, unde `next[i]` ne spune în ce nod ne ducem dacă urmăm legătura corespunzătoare celei de-a `i`-a litere din alfabet. Dacă `next[i]` este `nullptr`, înseamnă că nu există tranziție către litera `i`.
 
@@ -30,11 +30,11 @@ Deocamdată, clasa `Trie` are nevoie de doi membri privați: `cnt` (numărul de 
 
 ### Funcția `insert`
 
-Această funcție, la fel ca și următoarele, primește ca parametri un string `str` și poziția curentă din acesta (`pos`). Funcția `insert` inserează recursiv cuvântul `str` în trie, astfel: Dacă poziția curentă este egală cu lungimea string-ului, înseamnă că ne-am terminat treaba, așa că incrementăm `cnt`-ul din nodul curent și ne oprim. Altfel, urmăm muchia către litera curentă (`str[pos] - 'a'`), și continuăm inserarea din nodul următor, începând cu poziția `pos + 1`. Înainte de asta, avem grijă să creăm nodul `next[str[pos] - 'a']`, în caz că acesta nu exista deja.
+Această funcție, la fel ca și următoarele, primește ca parametri un string `str` și poziția curentă din acesta (`pos`). Funcția `insert` inserează recursiv cuvântul `str` în trie, astfel: Dacă poziția curentă este egală cu lungimea string-ului, înseamnă că ne-am terminat treaba, așa că incrementăm `cnt`-ul din nodul curent și ne oprim. Altfel, urmăm muchia către litera curentă (`str[pos] - 'a'`), și continuăm inserarea din nodul următor, începând cu poziția `pos + 1`. Înainte de asta, avem grijă să creăm nodul `next[str[pos] - 'a']`, în caz că acesta nu există deja.
 
 ``` cpp -> Funcția insert
   void insert(const string& str, int pos = 0) {
-      if (pos == (int) str.size())
+      if (pos == int(str.size()))
           cnt++;
       else {
           if (!next[str[pos] - 'a'])
@@ -44,9 +44,9 @@ Această funcție, la fel ca și următoarele, primește ca parametri un string 
   }
 ```
 
-Iată o super animație marca InfoGenius, care arată cum este construită tria de mai sus prin inserări succesive:
+Iată o super-animație marca InfoGenius, care arată cum este construită tria de mai sus prin inserări succesive:
 
-![](trie.js)
+[TODO](trie.js)TODO
 
 ### Funcția `count`
 
@@ -54,7 +54,7 @@ Funcția `count` returnează numărul de apariții ale cuvântului `str` în tri
 
 ``` cpp -> Funcția count
   int count(const string& str, int pos = 0) {
-      if (pos == (int) str.size())
+      if (pos == int(str.size()))
           return cnt;
       if (!next[str[pos] - 'a'])
           return 0;
@@ -64,11 +64,11 @@ Funcția `count` returnează numărul de apariții ale cuvântului `str` în tri
 
 ### Funcția `lcp`
 
-Funcția `lcp` trebuie să returneze lungimea celui mai lung prefix comun al lui `str` cu un cuvânt din trie. Deja ar trebui să fie clar cum facem asta: Coborâm în trie până când ne blocăm într-un nod fără tranziție către următoarea literă sau până când ajungem la finalul string-ului. Ce returnăm de fapt este lungimea lanțului de la rădăcină până la nodul în care ne oprim.
+Funcția `lcp` trebuie să returneze lungimea celui mai lung prefix comun al lui `str` cu un cuvânt oarecare din trie. Deja ar trebui să fie clar cum facem asta: Coborâm în trie până când fie ne blocăm într-un nod fără tranziție către următoarea literă, fie ajungem la finalul string-ului. Ce returnăm de fapt este lungimea lanțului de la rădăcină până la nodul în care ne oprim.
 
 ``` cpp -> Funcția lcp
   int lcp(const string& str, int pos = 0) {
-      if (pos == (int) str.size())
+      if (pos == int(str.size()))
           return 0;
       if (!next[str[pos] - 'a'])
           return 0;
@@ -78,11 +78,11 @@ Funcția `lcp` trebuie să returneze lungimea celui mai lung prefix comun al lui
 
 ### Funcția `erase`
 
-Funcția `erase` trebuie să șteargă din trie o apariție a cuvântului `str`. (Ni se garantează că `str` apare cel puțin o dată în trie înainte să-i dăm `erase`.) Avem două cazuri -- fie putem șterge nodul `node` în care se termină `str`, fie nu. Pentru ca `node` să poată fi șters, trebuie ca numărul de cuvinte care se termină în subarborele cu rădăcina în acesta să fie exact `1`, adică doar cel pe care vrem să-l ștergem. De exemplu, în tria de mai jos nu putem șterge nodul în care se termină cuvântul `"lat"`, pentru că „sub el” se află frunza corespunzătoare lui `"latin"`. Altfel spus, `"lat"` este un prefix al lui `"latin"`.
+Funcția `erase` trebuie să șteargă din trie o apariție a cuvântului `str`. (Ni se garantează că `str` apare cel puțin o dată în trie înainte să-i dăm `erase`.) Avem două cazuri -- fie putem șterge nodul `node` în care se termină `str`, fie nu. Pentru ca `node` să poată fi șters, trebuie ca numărul de cuvinte care se termină în subarborele cu rădăcina în acesta să fie exact `1`, adică doar cel pe care vrem să-l ștergem. De exemplu, în tria de mai jos nu putem șterge nodul în care se termină cuvântul $\texttt{lat}$, pentru că „sub el” se află frunza corespunzătoare lui $\texttt{latin}$. Altfel spus, $\texttt{lat}$ este un prefix al lui $\texttt{latin}$.
 
 ![400; Exemplu de erase în trie](trie-exemplu-erase.png)
 
-În schimb, putem șterge nodul în care se termină `"prim"`. De fapt, putem șterge și din strămoșii lui `"prim"`, mai exact pe `"pri"` și pe `"pr"`. Nodul `"p"` nu poate fi șters, deoarece este prefix al mai multor cuvinte stocate în trie, nu doar al lui `"prim"`.
+În schimb, putem șterge nodul în care se termină $\texttt{prim}$. De fapt, putem șterge și din strămoșii lui $\texttt{prim}$, mai exact pe $\texttt{pri}$ și pe $\texttt{pr}$. Nodul $\texttt{p}$ nu poate fi șters, deoarece este prefix al mai multor cuvinte stocate în trie, nu doar al lui $\texttt{prim}$.
 
 Haideți să mai adăugăm un membru privat la clasa `Trie`, notat cu `lvs` (de la __leaves__), care să reprezinte suma valorilor `cnt` ale nodurilor din subarborele nodului curent. Această valoare poate fi menținută fără mari bătăi de cap, incrementând-o când vizităm nodul curent în cadrul unei inserări și decrementând-o când efectuăm o ștergere.
 
@@ -91,7 +91,7 @@ Acum că avem calculată această informație, ne este mai ușor să rezumăm ce
 ``` cpp -> Funcția erase
   void erase(const string& str, int pos = 0) {
       lvs--;
-      if (pos == (int) str.size())
+      if (pos == int(str.size()))
           cnt--;
       else {
           next[str[pos] - 'a']->erase(str, pos + 1);
@@ -122,7 +122,7 @@ Iată cum arată sursa completă pentru problema Trie:
   public:
       void insert(const string& str, int pos = 0) {
           lvs++;
-          if (pos == (int) str.size())
+          if (pos == int(str.size()))
               cnt++;
           else {
               if (!next[str[pos] - 'a'])
@@ -133,7 +133,7 @@ Iată cum arată sursa completă pentru problema Trie:
 
       void erase(const string& str, int pos = 0) {
           lvs--;
-          if (pos == (int) str.size())
+          if (pos == int(str.size()))
               cnt--;
           else {
               next[str[pos] - 'a']->erase(str, pos + 1);
@@ -145,7 +145,7 @@ Iată cum arată sursa completă pentru problema Trie:
       }
 
       int count(const string& str, int pos = 0) {
-          if (pos == (int) str.size())
+          if (pos == int(str.size()))
               return cnt;
           if (!next[str[pos] - 'a'])
               return 0;
@@ -153,7 +153,7 @@ Iată cum arată sursa completă pentru problema Trie:
       }
 
       int lcp(const string& str, int pos = 0) {
-          if (pos == (int) str.size())
+          if (pos == int(str.size()))
               return 0;
           if (!next[str[pos] - 'a'])
               return 0;
@@ -265,25 +265,25 @@ Iată și o implementare mai puțin populară, în care funcțiile sunt implemen
   }
 ^^^
 
-Totuși, în majoritatea problemelor interesante de la concursuri, avem nevoie doar de funcția `insert` (și poate `count`), restul problemei reducându-se la o dinamică pe arbore sau ceva. Iar în acest caz, implementarea asta mi se pare ceva mai simplă.
+Totuși, în majoritatea problemelor interesante de la concursuri, avem nevoie doar de funcția `insert` (și poate `count`), restul problemei reducându-se la o [dinamică pe arbore]()TODO sau ceva. Iar în acest caz, implementarea asta mi se pare ceva mai simplă.
 
 ## Complexitate
 
-În cazul ambelor implementări, funcția `insert` (la fel ca și celelalte trei de mai sus) are complexitatea $O(n)$, unde $n$ este lungimea string-ului dat. Partea mai puțin bună este consumul relativ mare de memorie -- pentru fiecare nod reținem $\Sigma$ pointeri/indici, dintre care majoritatea nu sunt folosiți. Iar asta se reflectă în complexitatea unui DFS, care ar avea constanta $\Sigma$. Putem reduce această constantă la $1$ înlocuind vectorul `next` cu un `map`. Însă, dacă facem asta, complexitatea lui `insert` devine $O(n \log \Sigma)$. Depinde de problemă dacă e mai bine să folosim `map` sau nu.
+În cazul ambelor implementări, funcția `insert` (la fel ca și celelalte trei de mai sus) are complexitatea $O(n)$, unde $n$ este lungimea string-ului dat. Partea mai puțin bună este consumul relativ mare de memorie -- pentru fiecare nod reținem $\Sigma$ pointeri/indici, dintre care majoritatea nu sunt folosiți. Iar asta se reflectă în complexitatea unui DFS, care ar avea constanta $\Sigma$. Putem reduce această constantă la $1$ înlocuind vectorul `next` cu un `map`. Însă, dacă facem asta, complexitatea lui `insert` devine $O(n \log \Sigma)$. Depinde de problemă dacă este mai bine să folosim `map` sau nu.
 
-Cât despre numărul de noduri ale unei trie, în cel mai rău caz acesta poate fi $O(s)$, unde $s$ este suma lungimilor cuvintelor din trie. Acest caz se poate atinge, de exemplu, când toate cuvintele încep cu altă literă. Dacă avem mai multe cuvinte decât litere în alfabet, putem spune că cel mai rău caz se atinge atunci când perechile formate din primele două litere din fiecare cuvânt sunt diferite. Dacă tot avem prea puține litere, ne putem uita la primele trei litere din fiecare cuvânt, și tot așa. Complexitatea rămâne $O(s)$.
+Cât despre numărul de noduri ale unei trie, în cel mai rău caz acesta poate fi $O(s)$, unde $s$ este suma lungimilor cuvintelor din trie. Acest caz se poate atinge, de exemplu, când toate cuvintele încep cu altă literă. Dacă avem mai multe cuvinte decât litere în alfabet, putem spune că cel mai rău caz se atinge atunci când perechile formate din primele două litere din fiecare cuvânt sunt diferite. Dacă tot avem prea puține litere, ne putem uita la primele trei litere din fiecare cuvânt, și tot așa. Complexitatea în spațiu rămâne $O(s)$.
 
 ## Aplicații clasice
 
 +++
-  **Sortarea unei liste de cuvinte.** Construim o trie din cuvintele date, reținând în fiecare frunză o listă cu indicii cuvintelor care se termină în nodul respectiv. Apoi, efectuăm o parcurgere preordine a triei, afișând indicii întâlniți pe parcurs. Putem adapta algoritmul și pentru sortarea unui vector de întregi, inserând în trie reprezentările în baza $2$ ale acelor numere. Chiar am obține o complexitate bună: $O(n \log n)$. Însă, din cauza consumului mare de memorie auxiliară și a faptului că aceasta nu este o sortare prin comparare, nu veți auzi de ea prea des.
+  **Sortarea unei liste de cuvinte.** Construim o trie din cuvintele date, reținând în fiecare frunză o listă cu indicii cuvintelor care se termină în nodul respectiv. Apoi, efectuăm o parcurgere preordine a triei, afișând indicii întâlniți pe parcurs. Putem adapta algoritmul și pentru sortarea unui vector de întregi, inserând în trie reprezentările lor în baza $2$. Chiar am obține o complexitate bună: $O(n \log n)$. Însă, din cauza consumului mare de memorie auxiliară și a faptului că aceasta nu este o sortare prin comparare, nu veți auzi prea des de ea.
 ~~~
   **Funcția de autocomplete.** Aici mă refer la căutarea de cuvinte cu un prefix dat, adică ceea ce face Google când vă oferă sugestii de căutare. Navigăm în trie până la nodul în care se termină prefixul acela, după care enumerăm frunzele din subarborele acelui nod.
 ~~~
   **Cel mai lung prefix comun a două cuvinte.** Să zicem că avem dat un set de cuvinte și trebuie să răspundem la multe întrebări de forma „Care este lungimea LCP-ului cuvintelor $x$ și $y$?”. Mai întâi, construim tria formată din cuvintele date. Apoi, problema se reduce la a determina adâncimea LCA-ului nodurilor în care se termină $x$ și respectiv $y$. Puteți citi despre LCA [aici](https://infoarena.ro/problema/lca)TODO.
 ---
 
-De asemenea, tria este esențială în algoritmul [Aho-Corasick](https://cp-algorithms.com/string/aho_corasick.html)TODO, care rezolvă următoarea problemă: „Dându-se un string $s$ și un dicționar $t$, să se determine, pentru fiecare cuvânt $x \in t$, numărul de apariții din șirul $s$.” În plus, tria stă la baza a două structuri de date mai avansate, [Suffix Tree](https://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423)TODO și [Suffix Automata](https://cp-algorithms.com/string/suffix-automaton.html)TODO, care ne ajută să rezolvăm în timp liniar probleme de genul: „Care este cea mai lungă subsecvență comună string-urilor $s_1, s_2, \ldots, s_n$?”
+De asemenea, tria este esențială în algoritmul [Aho-Corasick](https://cp-algorithms.com/string/aho_corasick.html)TODO, care rezolvă următoarea problemă: „Dându-se un string $s$ și un dicționar $t$, să se determine, pentru fiecare cuvânt $x \in t$, numărul său de apariții în șirul $s$.” În plus, tria stă la baza a două structuri de date mai avansate, [Suffix Tree](https://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423)TODO și [Suffix Automata](https://cp-algorithms.com/string/suffix-automaton.html)TODO, care ne ajută să rezolvăm în timp liniar probleme de genul: „Care este cea mai lungă subsecvență comună string-urilor $s_1, s_2, \ldots, s_n$?”
 
 ## Problema Xor Max de pe InfoArena
 
@@ -292,12 +292,12 @@ De asemenea, tria este esențială în algoritmul [Aho-Corasick](https://cp-algo
 >>>
   ### Dacă $\oplus$ era $+$
 
-  Să ne gândim mai întâi cum rezolvam problema dacă suma xor era de fapt sumă normală. Mă refer la [soluția](subsecventa-de-suma-maxima-cpp/#solutie-in-on-sume-partiale-5) cu sume parțiale. Păi, calculăm sumele parțiale ale vectorului dat, iar când am ajuns la o poziție $j$, ne uităm în stânga sa după o poziție $i$, astfel încât valoarea $\mathrm{ps}[j] - \mathrm{ps}[i]$ să fie maximă. Cum $j$ este fixat, vom obține diferența maximă atunci când $\mathrm{ps}[i]$ este minim. Pentru a accesa această valoare în timp constant, este de ajuns să menținem minimul sumelor parțiale calculate până la pasul curent.
+  Să ne gândim mai întâi cum rezolvam problema dacă suma xor era de fapt sumă normală. Mă refer la [soluția](subsecventa-de-suma-maxima/#header-5) cu sume parțiale. Păi, calculăm sumele parțiale ale vectorului dat, iar când am ajuns la o poziție $j$, ne uităm în stânga sa după o poziție $i$, astfel încât valoarea $\mathrm{ps}[j] - \mathrm{ps}[i]$ să fie maximă. Cum $j$ este fixat, vom obține diferența maximă atunci când $\mathrm{ps}[i]$ este minim. Pentru a accesa această valoare în timp constant, este de ajuns să menținem minimul sumelor parțiale calculate până la pasul curent.
 <<<
 
-Cum $x \oplus x = 0, \forall x \in \mathbb{N}$, putem folosi tehnica [sumelor parțiale](sume-partiale-cpp) și în cazul operației xor. Adică:
+Cum $x \oplus x = 0, \forall x \in \mathbb{N}$, putem folosi tehnica [sumelor parțiale](sume-partiale) și în cazul operației xor. Adică,
 
-$$a_{i + 1} \oplus a_{i + 2} \oplus \cdots \oplus a_j = \mathrm{ps}[j] \oplus \mathrm{ps}[i]$$
+$$a_{i + 1} \oplus a_{i + 2} \oplus \cdots \oplus a_j = \mathrm{ps}[j] \oplus \mathrm{ps}[i]$$.
 
 Acum, trebuie să vedem ce presupune să găsim cel mai bun indice $i$ pentru un capăt dreapta fixat $j$. Ne uităm la biții lui $\mathrm{ps}[j]$. Dacă cel mai semnificativ bit al său este $x$, atunci vom alege, dacă se poate, ca primul bit al lui $\mathrm{ps}[i]$ să fie $\neg x$, deoarece $x \oplus \neg x = 1$, iar asta clar ne garantează o sumă mai mare decât dacă am alege ca bitul curent să fie $x$, căci $x \oplus x = 0$. Apoi, trecem la al doilea cel mai semnificativ bit, $y$, iar dintre candidații de la pasul precedent îi vom da la o parte, dacă putem, pe cei cu al doilea bit egal cu $y$. Și așa mai departe.
 
@@ -373,12 +373,12 @@ Iată mai jos o sursă de 100 de puncte la problema Xor Max. Complexitatea final
 ## Probleme recomandate
 
 +++ none
-> :bronze: [SETI](https://infoarena.ro/problema/seti) // string matching
-> :bronze: [Ratina](https://infoarena.ro/problema/ratina) // string matching
-> :silver: [Sub](https://infoarena.ro/problema/sub) // just trie
-> :silver: [A Lot of Games](https://codeforces.com/contest/456/problem/D) // game theory + dinamică pe trie
-> :golden: [Xor Max](https://infoarena.ro/problema/xormax) // sume xor parțiale
-> :golden: [CLI](https://infoarena.ro/problema/cli) // rucsac + dinamică pe tria compresată
+> :bronze: [**SETI**](https://infoarena.ro/problema/seti) string matching
+> :bronze: [**Ratina**](https://infoarena.ro/problema/ratina) string matching
+> :silver: [**Sub**](https://infoarena.ro/problema/sub) just trie
+> :silver: [**A Lot of Games**](https://codeforces.com/contest/456/problem/D) game theory + dinamică pe trie
+> :golden: [**Xor Max**](https://infoarena.ro/problema/xormax) sume xor parțiale
+> :golden: [**CLI**](https://infoarena.ro/problema/cli) rucsac + dinamică pe tria compresată
 ---
 
 **Sfârșit!** Dacă aveți vreo întrebare despre trie, sau dacă aveți sugestii pentru articole noi, nu ezitați să lăsați un comentariu mai jos :smile:

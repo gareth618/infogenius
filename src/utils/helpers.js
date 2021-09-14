@@ -67,7 +67,7 @@ export function followsRegex(str, regex) {
 
 export function katexify(math, mode, lft, rgh) {
   if (lft !== '') math = `\\htmlClass{katexified}{${lft}} ` + math;
-  let html = katex.renderToString(math, { trust: true, displayMode: mode === 'display' });
+  let html = katex.renderToString(math, { trust: true, strict: false, displayMode: mode === 'display' });
   if (rgh !== '') {
     let pos = html.length;
     for (let i = 0; i < (mode === 'inline' ? 3 : 4); i++) {

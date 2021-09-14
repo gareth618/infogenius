@@ -88,6 +88,7 @@
 .explicit table {
   margin: 0 auto;
   border-collapse: collapse;
+  position: relative;
 }
 
 .explicit td,
@@ -142,6 +143,7 @@
   margin: 1rem auto;
   color: var(--text);
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .explicit h2:first-child,

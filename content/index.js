@@ -1,6 +1,6 @@
-import PiBuffonsNeedle from './articles/aproximarea-lui-pi/pi-buffons-needle';
-import PiMonteCarlo from './articles/aproximarea-lui-pi/pi-monte-carlo';
-import RandomNeedle from './articles/aproximarea-lui-pi/random-needle';
+import PiBuffonsNeedle from './articles/aproximare-pi/pi-buffons-needle';
+import PiMonteCarlo from './articles/aproximare-pi/pi-monte-carlo';
+import RandomNeedle from './articles/aproximare-pi/random-needle';
 
 export {
   PiBuffonsNeedle,

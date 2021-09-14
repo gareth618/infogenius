@@ -108,7 +108,10 @@ export default function parseBlocks(content, media, tag = 'root') {
     const endPos = content.indexOf('');
     content = content.slice(0, endPos);
     if (/\s/.test(content[content.length - 1][0])) return;
-    if (content.slice(1, -1).some(line => !/ {2}\S/.test(line.slice(0, 3)))) return;
+    if (content.slice(1, -1).some(line => (
+      !/\S/.test(line.slice(0, 3)) &&
+      !/ {2}\S/.test(line.slice(0, 3))
+    ))) return;
     const str = content.join(' ');
     if (followsRegex(str, /\$\$\S(.*\S)?\$\$[.,!?]?/) == null) return;
     try {
@@ -188,6 +191,7 @@ export default function parseBlocks(content, media, tag = 'root') {
     if (endPos === -1) return;
     content = content.slice(0, endPos);
 
+    if (content.length === 0) return;
     if (content[0].slice(0, 3) !== '>>>') return;
     const type
       = content[0].slice(3) === '' ? 'quote'
@@ -210,6 +214,7 @@ export default function parseBlocks(content, media, tag = 'root') {
     if (endPos === -1) return;
     content = content.slice(0, endPos);
 
+    if (content.length === 0) return;
     if (content[0].slice(0, 3) !== '+++') return;
     const type
       = content[0].slice(3) === '' ? 'bullet'
@@ -319,6 +324,7 @@ export default function parseBlocks(content, media, tag = 'root') {
   if (tag === 'table') {
     const endPos = content.findIndex((line, index) => line === '!!!' && content[index + 1] === '');
     if (endPos === -1) return;
+    if (content.length === 0) return;
     if (content[0] !== '???') return;
     content = content.slice(1, endPos);
 
@@ -331,23 +337,26 @@ export default function parseBlocks(content, media, tag = 'root') {
 
     const rows = delims.slice(0, -1).map((delim, index) => content.slice(delim + 1, delims[index + 1]));
     if (rows.some(row => row.length === 0)) return;
-    const cells = rows.map(row => row.map(line => {
-      const match = followsRegex(line,
-        / {2}(?<type>[lLcCrR])( (?<rowSpan>[1-9]\d*)( (?<colSpan>[1-9]\d*))?)? > (?<content>\S.*)/
-      );
-      if (match == null) return undefined;
-      return {
-        align:
-          /[lL]/.test(match.type) ? 'left' :
-          /[cC]/.test(match.type) ? 'center' :
-          /[rR]/.test(match.type) ? 'right' : '',
-        header: /[LCR]/.test(match.type),
-        rowSpan: match.rowSpan == null ? 1 : parseInt(match.rowSpan),
-        colSpan: match.colSpan == null ? 1 : parseInt(match.colSpan),
-        content: parseInline(match.content)
-      };
+    const cells = rows.map(row => ({
+      tag: 'table-row',
+      sons: row.map(line => {
+        const match = followsRegex(line,
+          / {2}(?<type>[lLcCrR])( (?<rowSpan>[1-9]\d*)( (?<colSpan>[1-9]\d*))?)? > (?<content>\S.*)/
+        );
+        if (match == null) return undefined;
+        return {
+          align:
+            /[lL]/.test(match.type) ? 'left' :
+            /[cC]/.test(match.type) ? 'center' :
+            /[rR]/.test(match.type) ? 'right' : '',
+          header: /[LCR]/.test(match.type),
+          rowSpan: match.rowSpan == null ? 1 : parseInt(match.rowSpan),
+          colSpan: match.colSpan == null ? 1 : parseInt(match.colSpan),
+          sons: parseInline(match.content)
+        };
+      })
     }));
-    if (cells.some(row => row.some(cell => cell == null))) return;
+    if (cells.some(row => row.sons.some(cell => cell == null))) return;
     return {
       ast: {
         tag: 'table',
