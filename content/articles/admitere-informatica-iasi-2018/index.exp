@@ -1,0 +1,461 @@
+TITLE: Admitere Informatică Iași 2018 -- Subiecte și rezolvări
+AUTHOR: Iulian Oleniuc
+DATE: 26/07/2018
+CATEGORIES: Admitere Iași
+TAGS: arbori, combinatorică, expresii, funcții, grafuri, hashing, matrice, matrice de adiacență, recursivitate, șiruri de caractere
+DESCRIPTION: Recent, a fost dată admiterea la Facultatea de Informatică Iași (2018). În acest articol voi prezenta rezolvările complete ale subiectelor.
+
+Recent, a fost dată admiterea la Facultatea de Informatică din Iași. Puteți găsi subiectele din 2018 [aici](https://www.modinfo.ro/admitere/iasi/2018/subiect.pdf), iar baremul [aici](https://www.modinfo.ro/admitere/iasi/2018/barem.pdf). Cum baremul nu oferă soluții complete ale problemelor, în acest articol voi prezenta rezolvările subiectelor date la admitere.
+
+## Subiectul I. Problema 1.
+
+>>>
+  Variabilele $u$, $v$, $z$, $t$ memorează valori întregi astfel încât $u \lt v$ și $z \lt t$. Precizați care dintre expresiile C++ de mai jos, atunci când este adevărată, implică faptul că intersecția intervalelor $[u, v)$ și $(z, t]$ este nevidă.
+
+  +++ **A.**
+  > `(u > t) && (v > z)`
+  > `!((u > t) || (v > z))`
+  > `(u <= t) && (v == z)`
+  > `!((u > t) || (t > u))`
+  ---
+<<<
+
+Simplificând un pic expresiile de mai sus, folosind legile lui De Morgan (la **B** și **D**), obținem:
+
++++ **A.**
+> `u > t && v > z`
+> `u <= t && v <= z`
+> `u <= t && v == z`
+> `u <= t && t <= u`
+---
+
+Prima expresie implică faptul că începutul primului interval este strict mai mare decât sfârșitul celui de-al doilea. Asta înseamnă că intersecția intervalelor este mulțimea vidă. A doua expresie nu este suficient de bună; un contraexemplu este $[1, 2)$, $(5, 6]$. A treia expresie nu funcționează niciodată, pentru că primul interval este deschis în dreapta, iar al doilea deschis în stânga. Chiar dacă $v = z$, intersecția lor este vidă. Ultima expresie implică faptul că $u$ și $t$ sunt egale, și cum primul interval îl conține pe $u$ și al doilea îl conține pe $t$, intersecția celor două intervale are cardinalul $1$, și deci nenul. Prin urmare, răspunsul corect este **D**.
+
+## Subiectul I. Problema 2.
+
+>>>
+  Se consideră subprogramul $F$ de mai jos, descris în pseudocod. Subprogramul primește două numere naturale nenule prin parametrii $x$ și $y$, și întoarce un număr natural când se oprește.
+
+  ``` text
+    subprogram F(x, y)
+      (x, y - numere naturale nenule)
+        acc <- 0
+        cât timp x != 0
+            dacă x este impar atunci
+                acc <- acc + y
+            x <- x / 2
+            y <- y * 2
+        returnează acc
+  ```
+
+  **a)** Care este valoarea returnată de subprogram pentru parametrii $x = 52$ și $y = 5$?
+<<<
+
+Iată valorile variabilelor după fiecare intrare în `while`:
+
+???
+  C > $\mathit{acc}$
+  C > $x$
+  C > $y$
+~~~
+  c > $0$
+  c > $26$
+  c > $10$
+~~~
+  c > $0$
+  c > $13$
+  c > $20$
+~~~
+  c > $20$
+  c > $6$
+  c > $40$
+~~~
+  c > $20$
+  c > $3$
+  c > $80$
+~~~
+  c > $100$
+  c > $1$
+  c > $160$
+~~~
+  c > $260$
+  c > $0$
+  c > $320$
+!!!
+
+Așadar, valoarea returnată de funcție este $260$.
+
+>>>
+  **b)** Care este cel mai mare număr prim $y$ astfel încât $F(x, y)$ să returneze $231$?
+<<<
+
+Dacă ne mai dăm niște exemple, se observă că funcția aceasta calculează produsul dintre parametrii săi. În timp logaritmic față de $x$ chiar. Cum descompunerea în factori primi a lui $231$ este $3 \cdot 7 \cdot 11$, răspunsul este $11$.
+
+>>>
+  **c)** Înlocuiți instrucțiunea `x <- x / 2` cu o secvență de pseudocod echivalentă și care folosește ca operații aritmetice doar adunări sau scăderi repetate.
+<<<
+
+Trebuie să efectuăm o împărțire folosind o instrucțiune repetitivă. Ei bine, se știe că împărțirea este o scădere repetată. Mai exact, $a / b$ se obține scăzând din $a$ valoarea $b$ cât timp $a$ este mai mare sau egal cu $b$; câtul împărțirii va fi dat de numărul de pași efectuați. Iată secvența de pseudocod cerută:
+
+``` text -> Subiectul I. Problema 2. Punctul c.
+  cnt <- 0
+  cât timp x >= 2
+      x <- x - 2
+      cnt <- cnt + 1
+  x <- cnt
+^^^
+
+>>>
+  **d)** Scrieți o funcție C++ care implementează subprogramul $F$ dat.
+<<<
+
+Trebuie doar să traducem pseudocodul în C++. Iată funcția scrisă în C++:
+
+``` cpp -> Subiectul I. Problema 2. Punctul d.
+  int F(int x, int y) {
+      int acc = 0;
+      while (x) {
+          if (x % 2)
+              acc += y;
+          x /= 2;
+          y *= 2;
+      }
+      return acc;
+  }
+^^^
+
+## Subiectul II. Problema 1.
+
+>>>
+  Fie $V$ mulțimea tuturor secvențelor de lungime $8$, formate doar din cifrele $0$ și $1$. Graful neorientat $G$ are drept vârfuri elementele lui $V$ și muchii doar între vârfuri reprezentând secvențe care diferă exact într-una dintre cele $8$ poziții. Care este numărul total de muchii din $G$?
+
+  +++ **A.**
+  > $896$
+  > $1024$
+  > $1792$
+  > $2048$
+  ---
+<<<
+
+Asta e o problemă destul de interesantă; nu are soluția chiar imediată. În primul rând, numărul de noduri ale grafului, adică numărul de secvențe binare de lungime $8$, este $2^8 = 256$. Numărul de vecini ai fiecărui nod este $8$, pentru că cele două extremități ale unei muchii pot diferi prin bitul de pe orice poziție cuprinsă între $0$ și $7$. Dar graful este neorientat, așa că trebuie să numărăm muchiile astfel încât să nu se repete.
+
+Putem, de exemplu, ca pentru fiecare nod să numărăm doar vecinii săi mai mari lexicografic decât el. Un vecin este mai mare lexicografic dacă și numai dacă se obține prin înlocuirea unui bit $0$ cu bitul $1$. Deci, numărul de muchii pe care le numărăm pentru nodul respectiv este egal numărul de biți $0$ ai lui. Prin urmare, răspunsul problemei este egal cu numărul de biți $0$ din scrierea tuturor nodurilor. Acesta este egal cu jumătate din numărul total de biți, pentru că jumătate dintre noduri au valoarea $0$ pe o anumită poziție, iar restul au $1$. Cum $8 \cdot 256 / 2 = 1024$, varianta corectă este **B**.
+
+## Subiectul II. Problema 2.
+
+>>>
+  Un graf este $p$-colorabil dacă $p$ este cel mai mic număr pentru care putem colora (eticheta) vârfurile sale folosind culori din mulțimea $\{1, 2, \ldots, p\}$, astfel încât oricare două vârfuri adiacente să fie colorate diferit. Care este numărul minim de muchii ale unui graf $10$-colorabil?
+
+  +++ **A.**
+  > $45$
+  > $50$
+  > $90$
+  > $100$
+  ---
+<<<
+
+Prima observație este că în colorarea grafului, trebuie ca toate culorile disponibile să fie folosite, pentru că altfel ar exista un număr mai mic de culori necesare, ceea ce încalcă definiția unui $p$-sistem. Așadar, graful trebuie să aibă $10$ noduri. În plus, trebuie să existe muchie între oricare două noduri, pentru că altfel unul dintre cele două noduri ar putea fi colorat altfel, fiind necesare mai puține culori, și iar nu s-ar respecta definiția $p$-sistemului.
+
+Deci, răspunsul este dat de numărul de muchii ale unui graf neorientat complet cu $10$ noduri. Adică $9 \cdot 10 / 2 = 45$. Răspunsul final este **A**.
+
+## Subiectul II. Problema 3.
+
+>>>
+  Considerăm o matrice $A$ de dimensiune $n \times m$ ($n, m \ge 2$), care conține numere naturale distincte două câte două. Matricea reprezintă terenul de joacă al unei broscuțe. Elementul de pe linia $i$ și coloana $j$ din matrice este înălțimea terenului la acea poziție. Broscuța vizitează o succesiune de poziții din teren în următorul fel: Broscuța se află inițial pe linia $L$ și coloana $C$. În orice poziție s-ar afla la un moment dat, broscuța efectuează un salt pe una dintre pozițiile vecine pe orizontală sau verticală.
+
+  Dintre acestea, broscuța va alege poziția care are înălțimea cea mai apropiată de înălțimea de pe poziția curentă (deci cu modulul diferenței dintre cele două înălțimi minim). În cazul în care există mai multe poziții vecine cu această proprietate, ea alege să sară pe cea cu înălțimea cea mai mică dintre acestea. Broscuța nu se oprește niciodată.
+
+  **a)** În exemplul de mai jos, dimensiunea terenului este $4 \times 5$. Broscuța se află inițial la coordonatele $(L, C) = (2, 4)$, unde înălțimea este $66$. Scrieți înălțimile primelor $10$ poziții vizitate de broscuță, în ordinea vizitării acestora.
+
+  $$\begin{pmatrix}
+    57 & 51 & 70 & 72 & 75\\
+    56 & 58 & 60 & \mathbf{66} & 77\\
+    59 & 54 & 93 & 90 & 76\\
+    88 & 52 & 61 & 79 & 68
+  \end{pmatrix}$$
+<<<
+
+Aplicând regula descrisă mai sus, primele $10$ înălțimi vizitate sunt $66$, $60$, $58$, $56$, $57$, $56$, $57$, $56$, $57$ și $56$. La primul pas, spre exemplu, se alege înălțimea corespunzătoare minimului dintre $6$, $24$, $11$ și $6$. Pentru diferența $6$ avem $60$ și $72$. Se alege minimul dintre cele două înălțimi, deci $60$.
+
+>>>
+  **b)** Scrieți o funcție C++ care primește ca parametri matricea $A$, dimensiunile acesteia, $n$ și $m$, și numerele naturale $L$ și $C$. Funcția trebuie să returneze cea mai mică înălțime a unei poziții vizitate de broscuță de cel puțin două ori. Nu este necesară validarea parametrilor de intrare.
+<<<
+
+Se observă că nu toate celulele matricei vor fi neapărat vizitate. Prima dată când broscuța ajunge pentru a doua oară pe o anumită celulă, traseul ei începe să se repete, urmând să facă de o infinitate de ori aceleași mișcări făcute de la prima vizită a acelei celule până la a doua (exclusiv). Cu alte cuvinte, din clipa aceea se intră într-un ciclu infinit. Pentru calcularea minimului, ne interesează doar numerele de pe acel ciclu, pentru că doar ele sunt vizitate de cel puțin două ori.
+
+![300; Admitere Informatică Iași 2018 (Subiectul 2. Problema 3)](subiectul-2-problema-3.png)
+
+Folosim o matrice locală `aux`, de tip `bool`, unde reținem pe fiecare poziție `true` dacă și numai dacă am vizitat-o. Începem să parcurgem pozițiile matricei cum este descris în enunț. Când ajungem pe una vizitată deja, îi reținem valoarea în variabila `val`, pentru că de acolo începe ciclul. Reținem valorile pozițiilor vizitate până atunci în vectorul `v`, iar la final parcurgem ciclul folosind acest vector.
+
+``` cpp -> Subiectul II. Problema 3. Punctul b.
+  // (NMAX - 1) = valoarea maximă pe care o poate lua n
+  // (MMAX - 1) = valoarea maximă pe care o poate lua m
+
+  int findMin(int A[NMAX][MMAX], int n, int m, int L, int C) {
+      int val; // valoarea de la care începe ciclul infinit
+      bool aux[NMAX][MMAX] = {}; // aux este inițializată cu false
+
+      // Vectorul valorilor parcurse până la intrarea în ciclu:
+      int lg = 0;
+      int v[NMAX * MMAX];
+
+      // Vectorii de deplasare:
+      int dL[] = {-1, 0, 1,  0};
+      int dC[] = { 0, 1, 0, -1};
+
+      while (true) {
+          if (aux[L][C]) { // Am trecut deja pe aici.
+              val = A[L][C];
+              break;
+          }
+          else {
+              aux[L][C] = true; // Marcăm poziția drept vizitată
+              v[lg++] = A[L][C]; // și îi adăugăm valoarea în vector.
+          }
+
+          // Inițializăm coordonatele valorii căutate:
+          int colMin = C;
+          int linMin = L + (L > 1 ? -1 : 1); // Ne asigurăm că este una din matrice.
+
+          int dif = A[linMin][colMin] - A[L][C]; // Calculăm diferența înălțimilor.
+          int absMin = dif < 0 ? -dif : dif; // Inițializăm modulul minim al diferenței.
+
+          // Parcurgem vecinii poziției curente:
+          for (int i = 0; i < 4; i++) {
+              int lin = L + dL[i];
+              int col = C + dC[i];
+
+              // Dacă vecinul se află în interiorul matricei:
+              if (1 <= lin && lin <= n &&
+                  1 <= col && col <= m) {
+                      dif = A[lin][col] - A[L][C]; // diferența curentă
+                      abs = dif < 0 ? -dif : dif; // modulul diferenței curente
+
+                      // Dacă am găsit o valoare/poziție mai bună:
+                      if (abs < absMin ||
+                          abs == absMin && A[lin][col] < A[linMin][colMin]) {
+                              absMin = abs;
+                              linMin = lin;
+                              colMin = col;
+                      }
+                  }
+          }
+
+          // Actualizăm coordonatele curente:
+          L = linMin;
+          C = colMin;
+      }
+
+      // Inițializăm minimul căutat cu ultima valoare din vector:
+      int min = v[lg - 1];
+
+      // Parcurgem vectorul în sens invers, până la începutul ciclului:
+      for (int i = lg - 2; i >= 0; i--) {
+          min = v[i] < min ? v[i] : min;
+
+          // Am terminat!
+          if (v[i] == val)
+              return min;
+      }
+  }
+^^^
+
+## Subiectul II. Problema 4.
+
+>>>
+  Definim un __cuvânt__ drept șir nevid format din cel mult $5$ caractere ale alfabetului latin: $\{\texttt{'a'}, \texttt{'b'}, \ldots, \texttt{'z'}\}$.
+
+  **a)** Scrieți o funcție C++ cu numele $\mathrm{value}$, care are ca argument de intrare un __cuvânt__ și returnează un număr natural. Pentru oricare două __cuvinte__ $s1$ și $s2$, funcția trebuie să satisfacă proprietatea $s1 = s2 \Leftrightarrow \mathrm{value}(s1) = \mathrm{value}(s2)$. În cazul în care argumentul primit nu este __cuvânt__, funcția va returna $0$.
+<<<
+
+Vom reprezenta __cuvintele__ prin [șiruri de caractere](siruri-de-caractere-cpp) (string-uri). Trebuie să găsim o funcție injectivă pe mulțimea tuturor __cuvintelor__. Cea mai simplă idee, inspirată din __funcțiile de hashing__, este să privim un __cuvânt__ ca pe un număr scris în baza $27$ (lungimea alfabetului $ + 1$), și să îl convertim în baza $10$. Fiecărei litere îi asociem un număr cuprins între $1$ și $26$, mai exact poziția sa din alfabet. Dacă am indexa pozițiile de la $0$, și am lucra cu baza $26$, funcția n-ar mai fi injectivă. De exemplu, atât pentru $\texttt{"aaa"}$, cât și pentru $\texttt{"a"}$, s-ar returna $0$.
+
+``` cpp -> Subiectul II. Problema 4. Punctul a.
+  int value(char* str) {
+      int val = 0;
+      for (int i = 0; str[i]; i++)
+          val = val * 27 + str[i] - 'a' + 1;
+      return val;
+  }
+^^^
+
+>>>
+  **b)** Justificați faptul că implementarea funcției $\mathrm{value}$ este corectă.
+<<<
+
+Funcția $\mathrm{value}$ primește ca parametru un șir de caractere și returnează un număr natural, așa cum se cere în problemă. Funcția este injectivă deoarece unui număr scris într-o anumită bază îi corespunde exact un număr scris în altă bază. În cazul nostru, cele două baze de numerație sunt $27$ și respectiv $10$.
+
+## Subiectul III. Problema 1.
+
+>>>
+  Câte șiruri distincte formate din exact o literă $A$, două litere $B$, trei litere $C$ și patru litere $D$ există?
+
+  +++ **A.**
+  > $151200$
+  > $7560$
+  > $12600$
+  > $1024$
+  ---
+<<<
+
+Asta e o simplă problemă de [combinatorică](combinatorica). Putem pune litera $A$ pe $10$ poziții. Litera $B$ poate fi pusă pe două din restul de $9$ poziții. Litera $C$ poate fi pusă pe trei dintre celelalte $7$ poziții. Litera $D$ poate fi pusă pe patru dintre cele $4$ poziții rămase. Răspunsul corect este **C**, și este dat de rezultatul următoarei formule:
+
+$$C_{10}^1 \cdot C_9^2 \cdot C_7^3 \cdot C_4^4$$
+
+## Subiectul III. Problema 2.
+
+>>>
+  Se consideră funcția recursivă $F$ de mai jos. Ce valoare va returna apelul $F(53)$?
+
+  ``` cpp
+    int F(int u) {
+        if (u == 0) {
+            return 0;
+        }
+        if (u % 2 != 0) {
+            return 2 * F(u / 2);
+        }
+        else {
+            return 1 + F(u / 2);
+        }
+    }
+  ```
+<<<
+
+Trebuie să urmărim lanțul de apeluri recursive. Apelul $F(53)$ funcționează cam așa:
+
+``` text
+  F(53) =
+  2 * F(26) =
+  2 * (1 + F(13)) =
+  2 * (1 + (2 * F(6))) =
+  2 * (1 + (2 * (1 + F(3)))) =
+  2 * (1 + (2 * (1 + (2 * F(1))))) =
+  2 * (1 + (2 * (1 + (2 * (2 * F(0)))))) =
+  2 * (1 + (2 * (1 + (2 * (2 * 0))))) =
+  2 * (1 + (2 * (1 + (2 * 0)))) =
+  2 * (1 + (2 * (1 + 0))) =
+  2 * (1 + (2 * 1)) =
+  2 * (1 + 2) =
+  2 * 3 =
+  6
+```
+
+Deci, răspunsul este $6$.
+
+## Subiectul III. Problema 3.
+
+>>>
+  Spunem că o matrice pătratică $a$, de dimensiune $n \ge 2$, având elemente numere naturale, are proprietatea $T$ dacă îndeplinește următoarele condiții:
+
+  +++ none
+  > __(i)__ Pentru orice $2 \le p \le n$, numărul de elemente nenule din submatricea formată din primele $p$ linii și $p$ coloane ale lui $a$ este $2p - 2$.
+  > __(ii)__ Pentru orice $1 \le j \le i \le n$, fie $a[i][j] = a[j][i] = 0$, fie $a[i][j] = a[j][i] + 1$.
+  > __(iii)__ Pentru orice linie a matricei, elementele nenule au aceeași valoare.
+  ---
+
+  De exemplu, matricea pătratică de mai jos, de dimensiune $5$, are proprietatea $T$:
+
+  $$\begin{pmatrix}
+    0 & 1 & 1 & 0 & 1\\
+    2 & 0 & 0 & 0 & 0\\
+    2 & 0 & 0 & 2 & 0\\
+    0 & 0 & 3 & 0 & 0\\
+    2 & 0 & 0 & 0 & 0
+  \end{pmatrix}$$
+
+  **a)** Scrieți o funcție C++ care primește ca parametri un întreg $n \ge 2$ și o matrice pătratică de dimensiune $n$. Funcția va returna $1$ dacă matricea satisface proprietatea $T$, $0$ în caz contrar.
+<<<
+
+Verificăm, pe rând, fiecare condiție a proprietății $T$. Imediat ce ne dăm seama că una nu este îndeplinită, returnăm `false`.
+
+``` cpp -> Subiectul III. Problema 3. Punctul a.
+  // (NMAX - 1) = valoarea maximă pe care o poate lua n
+
+  bool check(int n, int a[NMAX][NMAX]) {
+      int cnt = 0; // numărul curent de elemente nenule
+
+      // Condiția (i):
+      for (int p = 2; p <= n; p++) {
+          for (int i = 1; i < p; i++) {
+              if (a[p][i]) cnt++;
+              if (a[i][p]) cnt++;
+          }
+
+          if (a[p][p])
+              cnt++;
+
+          if (cnt != 2 * p - 2)
+              return false;
+      }
+
+      // Condiția (ii):
+      for (int i = 1; i <= n; i++)
+          for (int j = 1; j <= i; j++)
+              if (!(!a[i][j] && !a[j][i] || a[i][j] == a[j][i] + 1))
+                  return false;
+
+      // Condiția (iii):
+      for (int i = 1; i <= n; i++) {
+          // Căutăm primul p pentru care a[i][p] != 0:
+          for (int p = 1; !a[i][p]; p++);
+
+          for (int j = p + 1; j <= n; j++)
+              if (a[i][j] && a[i][j] != a[i][p])
+                  return false;
+      }
+      return true;
+  }
+^^^
+
+>>>
+  **b)** Demonstrați că într-o matrice pătratică de dimensiune $n \ge 2$ care satisface proprietatea $T$, există cel puțin două linii având un singur element nenul.
+<<<
+
+Având în vedere că `(bool) a[i][j] == (bool) a[j][i]`, putem considera că matricea dată este [matricea de adiacență](reprezentarea-grafurilor/#header-7) a unui graf neorientat cu $n$ noduri. Graful acesta este conex, deoarece fiecare nod este adiacent cu unul mai mic decât el (ca indice), conform condiției __(ii)__. În plus, numărul lui de muchii este $(2 \cdot n - 2) / 2$, adică $n - 1$. Având în vedere acestea, matricea dată este de fapt matricea de adiacență a unui arbore.
+
+Dacă arborele are minim două frunze, atunci matricea are minim două linii cu o singură valoare nenulă, pentru că frunzele sunt adiacente la un singur nod. Dacă nu, arborele este practic o listă simplu înlănțuită. În acest caz, rădăcina și frunza vor reprezenta cele două linii cu o singură valoare nenulă.
+
+>>>
+  **c)** Scrieți o funcție C++ care primește ca argumente un întreg $n \ge 2$ și o matrice pătratică de dimensiune $n$ care îndeplinește proprietatea $T$. Funcția va afișa cea mai lungă secvență de indecși $(i_k, \ldots, i_2, i_1 = 1)$ care satisface relația $a[i_{j + 1}][i_j] = a[i_j][i_{j + 1}] + 1$, pentru orice $1 \le j \lt k$. Nu este necesară validarea parametrilor de intrare. Justificați corectitudinea algoritmului. Pentru exemplul de mai sus, funcția va afișa $(4, 3, 1)$. Nu se acordă puncte pentru soluții ce folosesc backtracking.
+<<<
+
+În exemplul dat se observă că dacă $a[i][j]$ este nenul, atunci nivelul lui $i$ este $a[i][j]$. De asemenea, întotdeauna primul nod este rădăcina arborelui, conform condiției __(ii)__. Deci, trebuie determinat un lanț de la cea mai adâncă frunză la rădăcină. Ideea pe caz general este aproape la fel, doar că nu scrie nicăieri că nivelurile se indexează de la $1$. Așadar, trebuie să avem grijă să ne oprim după ce am afișat nodul $1$, și nu nodul de pe nivelul $1$.
+
+``` cpp -> Subiectul III. Problema 3. Punctul c.
+  // (NMAX - 1) = valoarea maximă pe care o poate lua n
+
+  void maxPath(int n, int a[NMAX][NMAX]) {
+      int levels[NMAX]; // nivelurile nodurilor
+      int leaf = 1; // Inițializăm frunza cu rădăcina.
+      for (int i = 1; i <= n; i++)
+          for (int j = 1; j <= n; j++)
+              if (a[i][j]) {
+                  levels[i] = a[i][j]; // Actualizăm nivelul,
+                  if (levels[i] > levels[leaf]) // și dacă e cazul,
+                      leaf = i; // frunza.
+                  break;
+              }
+
+      // Afișăm lanțul de la frunză la rădăcină:
+      cout << '(';
+      while (true) {
+          cout << leaf << ", ";
+          for (int j = 1; j <= n; j++)
+              if (a[j][leaf] && levels[j] == levels[leaf] - 1) {
+                  leaf = j; // leaf devine nodul curent
+                  break;
+              }
+
+          // Dacă am ajuns la rădăcină:
+          if (leaf == 1) {
+              cout << "1)\n";
+              break;
+          }
+      }
+  }
+^^^
+
+Voi ce părere aveți despre subiectele date la admiterea la Facultatea de Informatică din Iași, 2018? Mie mi se par ceva mai grele decât cele de anul trecut, dar în continuare suficient de accesibile. Dacă aveți vreo întrebare despre problemele rezolvate în acest articol, nu ezitați să o lăsați mai jos pentru a vă putea răspunde :smile:
+
+**PS:** Wow, 2595 de cuvinte! Cred că merită un share articolul :wink:

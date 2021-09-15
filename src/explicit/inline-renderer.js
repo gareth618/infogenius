@@ -3,7 +3,8 @@ import uuidv4 from 'uuid';
 import { Link } from 'gatsby';
 
 import { EMOJIS } from './inline-parser';
-import { sanitize, followsRegex, katexify } from '@utils/helpers';
+import { katexify } from '@utils/katex';
+import { sanitize, followsRegex } from '@utils/helpers';
 
 function renderText(str) {
   const arr = sanitize(str)

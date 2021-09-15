@@ -1,5 +1,3 @@
-import katex from 'katex';
-
 export function stringToDate(str) {
   const d = str.slice(0, 2);
   const m = str.slice(3, 5);
@@ -63,19 +61,4 @@ export function followsRegex(str, regex) {
   if (match == null) return;
   if (match[0].length < str.length) return;
   return match.groups || { };
-};
-
-export function katexify(math, mode, lft, rgh) {
-  if (lft !== '') math = `\\htmlClass{katexified}{${lft}} ` + math;
-  let html = katex.renderToString(math, { trust: true, strict: false, displayMode: mode === 'display' });
-  if (rgh !== '') {
-    let pos = html.length;
-    for (let i = 0; i < (mode === 'inline' ? 3 : 4); i++) {
-      pos = html.slice(0, pos).lastIndexOf('</span>');
-    }
-    html = html.slice(0, pos)
-      + `<span class="enclosing katexified"><span class="mclose">${rgh}</span></span>`
-      + html.slice(pos);
-  }
-  return html;
 };

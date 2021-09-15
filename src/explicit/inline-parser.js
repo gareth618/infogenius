@@ -1,4 +1,4 @@
-import katex from 'katex';
+import { testKatex } from '@utils/katex';
 import { followsRegex } from '@utils/helpers';
 
 export const EMOJIS = {
@@ -60,7 +60,7 @@ export default function parseInline(str) {
     }
   };
   markLeaf('`', true);
-  markLeaf('$', false, str => { try { katex.renderToString(str); return true; } catch (err) { return false; } });
+  markLeaf('$', false, str => testKatex(str));
   markLeaf(';', false);
   markLeaf(':', false, str => EMOJIS[str] != null);
 

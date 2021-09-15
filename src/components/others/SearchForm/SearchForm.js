@@ -2,6 +2,7 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 
 import { Close } from '@utils/icons';
+import { sanitize } from '@utils/helpers';
 import * as styles from './SearchForm.module.css';
 
 export default function SearchForm({ searchRef, toggleSearch, searching, setResults }) {
@@ -19,7 +20,7 @@ export default function SearchForm({ searchRef, toggleSearch, searching, setResu
       }
     `
   ).allExplicitArticle.edges.map(edge => ({
-    title: edge.node.title.replace(/[$\\]/g, ''),
+    title: sanitize(edge.node.title.replace(/[$\\]/g, '')),
     slug: edge.node.slug
   }));
 

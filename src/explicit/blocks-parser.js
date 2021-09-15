@@ -1,5 +1,6 @@
 import parseInline from './inline-parser';
-import { sanitize, toCamelCase, followsRegex, katexify } from '@utils/helpers';
+import { katexify } from '@utils/katex';
+import { sanitize, toCamelCase, followsRegex } from '@utils/helpers';
 
 const BEG_TAGS = {
   root  : ['math', 'block', 'code', 'list', 'table', 'p'],

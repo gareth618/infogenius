@@ -1,4 +1,4 @@
-TITLE: Admitere Informatică Iași 2015 – Subiecte și rezolvări
+TITLE: Admitere Informatică Iași 2015 -- Subiecte și rezolvări
 AUTHOR: Iulian Oleniuc
 DATE: 17/07/2019
 CATEGORIES: Admitere Iași
@@ -99,13 +99,13 @@ Acum trebuie să înțelegem ce face de fapt algoritmul dat. Ei bine, acesta ver
 
 Nu este prima oară când văd o problemă dată la admitere unde trebuie folosit faptul că împărțirea este o scădere repetată. Pentru a-l împărți pe $n$ la $10$, numărăm în $cnt$ de câte ori putem scădea $10$ din el astfel încât să rămână pozitiv, iar la final, copiem valoarea din $cnt$ în $n$:
 
-``` text
+``` text -> Subiectul I. Problema 2. Punctul c.
   cnt <- 0
   cât timp n >= 10 execută
       n <- n - 10
       cnt <- cnt + 1
   n <- cnt
-```
+^^^
 
 >>>
   **d)** Scrieți programul C++ corespunzător algoritmului dat.
@@ -113,7 +113,7 @@ Nu este prima oară când văd o problemă dată la admitere unde trebuie folosi
 
 Un răspuns corect este:
 
-``` cpp
+``` cpp -> Subiectul I. Problema 2. Punctul d.
   #include <iostream>
   using namespace std;
 
@@ -132,7 +132,7 @@ Un răspuns corect este:
       cout << s << '\n';
       return 0;
   }
-```
+^^^
 
 ## Subiectul II. Problema 1.
 
@@ -345,7 +345,6 @@ Atenție la restricția $p \le n / 2$! Eu inițial n-am băgat-o în seamă, aș
           A1[i] = j;
           B1[i] = j - 1;
       }
-
       cout << "A: "; for (int i = 1; i <= lgA1; i++) cout << A1[i] << ' '; cout << '\n';
       cout << "B: "; for (int i = 1; i <= lgB1; i++) cout << B1[i] << ' '; cout << '\n';
 
@@ -353,7 +352,6 @@ Atenție la restricția $p \le n / 2$! Eu inițial n-am băgat-o în seamă, aș
           cout << "partitie inexistenta\n";
           return 0;
       }
-
       if (p / 2 % 2) {
           for (int i = 1; i <= lgA1; i++)
               if (A1[i] != p / 2)
@@ -376,7 +374,6 @@ Atenție la restricția $p \le n / 2$! Eu inițial n-am băgat-o în seamă, aș
               else
                   B2[++lgB2] = B1[i];
       }
-
       cout << "A': "; for (int i = 1; i <= lgA2; i++) cout << A2[i] << ' '; cout << '\n';
       cout << "B': "; for (int i = 1; i <= lgB2; i++) cout << B2[i] << ' '; cout << '\n';
       return 0;

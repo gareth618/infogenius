@@ -9,7 +9,7 @@ DESCRIPTION: Tria este o structură de date arborescentă, ușor de implementat,
 
 ## Structura unei trie
 
-Vom nota cu $\Sigma$ lungimea alfabetului cu care lucrăm, de obicei $26$ (de la alfabetul englez). O trie este un arbore în care fiecare nod are maxim $\Sigma$ fii, câte unul pentru fiecare literă din alfabet. Cuvintele stocate în trie pot fi obținute prin citirea caracterelor aflate pe lanțul de la rădăcină la diverse noduri, numite __frunze__. Iată mai jos o trie construită pe baza cuvintelor $\texttt{lac}$, $\texttt{lat}$, $\texttt{latin}$, $\texttt{lung}$, $\texttt{mare}$ etc. Nodurile frunză sunt marcate cu verde.
+Vom nota cu $\Sigma$ lungimea alfabetului cu care lucrăm, de obicei $26$ (de la alfabetul englez). O trie este un arbore în care fiecare nod are maxim $\Sigma$ fii, câte unul pentru fiecare literă din alfabet. Cuvintele stocate în trie pot fi obținute prin citirea caracterelor aflate pe lanțul de la rădăcină la diverse noduri, numite __frunze__. Iată mai jos o trie construită pe baza cuvintelor $\texttt{lac}$, $\texttt{lat}$, $\texttt{latin}$, $\texttt{lung}$, $\texttt{mare}$ etc. Nodurile frunză sunt marcate cu verde.
 
 ![400; Exemplu trie](trie-exemplu.png)
 

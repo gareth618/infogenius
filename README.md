@@ -18,7 +18,7 @@
 - [**FireBase**](https://firebase.google.com/) backend for comments
 - [**Gatsby**](https://www.gatsbyjs.com/) static site generator
 - [**Prism**](https://prismjs.com/) code highlighting
-- [**Katex**](https://katex.org/) mathematical expressions
+- [**KaTeX**](https://katex.org/) mathematical expressions
 - [**Explicit**](https://github.com/Gareth618/explicit-highlighter/) markup language
 - [**CSanim**](https://github.com/Gareth618/csanim/) animation engine
 
