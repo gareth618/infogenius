@@ -2,7 +2,9 @@ import katex from 'katex';
 
 export const MACROS = {
   '\\cmmdc': '\\operatorname{cmmdc}',
-  '\\cmmmc': '\\operatorname{cmmmc}'
+  '\\cmmmc': '\\operatorname{cmmmc}',
+  '\\lcm': '\\operatorname{lcm}',
+  '\\modd': '\\operatorname{mod}'
 };
 
 export function testKatex(math) {

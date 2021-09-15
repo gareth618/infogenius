@@ -1,0 +1,283 @@
+TITLE: Algoritmul lui Euclid în C++. CMMDC și CMMMC
+AUTHOR: Iulian Oleniuc
+DATE: 13/09/2020
+CATEGORIES: Algoritmică și structuri de date, Matematică
+TAGS: algoritmul lui euclid, cmmdc, cmmmc, descompunere în factori primi, divizibilitate, numere prime
+DESCRIPTION: În acest articol voi prezenta conceptele de CMMDC și CMMMC și Algoritmul lui Euclid prin scăderi repetate și prin împărțiri repetate.
+
+În acest articol voi prezenta conceptele de CMMDC (cel mai mare divizor comun) și CMMMC (cel mai mic multiplu comun), precum și Algoritmul lui Euclid, atât prin scăderi repetate, cât și prin împărțiri repetate. La final, vom discuta despre câteva aplicații la CMMDC și CMMMC.
+
+## Cel mai mare divizor comun (CMMDC)
+
+Cel mai mare divizor comun a două numere naturale $a$ și $b$ este efectiv cel mai mare număr natural care îl divide atât pe $a$, cât și pe $b$. Acesta se notează $\cmmdc(a, b)$, $\gcd(a, b)$ (de la __greatest common divisor__) sau pur și simplu $(a, b)$.
+
+De exemplu, $(20, 24) = 4$, $(6, 3) = 3$, $(14, 5) = 1$ și $(0, 18) = 18$. Există un singur caz în care valoarea $(a, b)$ nu e definită, și anume atunci când $a = b = 0$. Asta pentru că $0$ este divizibil cu __toate__ numerele naturale nenule. Nu putem spune că $(a, b) = \infty$.
+
+Să luăm un exemplu mai mare: $a = 229\,320$ și $b = 996\,072$. Dacă descompunem în factori primi numerele $a$, $b$ și $(a, b)$, obținem:
+
+$$\begin{align*}
+  a = 229\,320 &= \textcolor{dodgerblue}{2}^{\textcolor{orangered}{3}} \cdot \textcolor{dodgerblue}{3}^2 \cdot 5^1 \cdot \textcolor{dodgerblue}{7}^{\textcolor{orangered}{2}} \cdot 13^1\\
+  b = 996\,072 &= \textcolor{dodgerblue}{2}^3 \cdot \textcolor{dodgerblue}{3}^{\textcolor{orangered}{1}} \cdot \textcolor{dodgerblue}{7}^3 \cdot 11^2\\
+  (a, b) = 1\,176 &= \textcolor{dodgerblue}{2}^{\textcolor{orangered}{3}} \cdot \textcolor{dodgerblue}{3}^{\textcolor{orangered}{1}} \cdot \textcolor{dodgerblue}{7}^{\textcolor{orangered}{2}}
+\end{align*}$$
+
+De aici observăm că putem defini CMMDC-ul a două numere drept produsul dintre factorii lor __comuni__ luați la __cea mai mică__ putere. Este cât se poate de logic: Dacă am scădea puterea unui factor din descompunerea lui $(a, b)$ am obține un CMMDC mai mic, iar dacă am mări-o, cel puțin unul dintre cele două numere nu va mai fi divizibil cu noul CMMDC.
+
+## Cel mai mic multiplu comun (CMMMC)
+
+Cel mai mic multiplu comun a două numere naturale nenule este cel mai mic număr natural __nenul__ care este divizibil atât cu $a$, cât și cu $b$. Acesta se notează $\cmmmc(a, b)$, $\lcm(a, b)$ (de la __least common multiple__) sau $[a, b]$. De exemplu, $[20, 24] = 120$, $[3, 5] = 15$, $[12, 4] = 12$ și $[1, 7] = 1$.
+
+Din nou, vom lua un exemplu mai complex ca să analizăm descompunerile în factori primi ale numerelor $a$, $b$ și $[a, b]$. Fie $a = 840$ și $b = 126$:
+
+$$\begin{align*}
+  a = 840 &= 2^{\textcolor{orangered}{3}} \cdot 3^1 \cdot 5^{\textcolor{orangered}{1}} \cdot 7^{\textcolor{orangered}{1}}\\
+  b = 126 &= 2^1 \cdot 3^{\textcolor{orangered}{2}} \cdot 7^1\\
+  [a, b] = 2\,520 &= 2^{\textcolor{orangered}{3}} \cdot 3^{\textcolor{orangered}{2}} \cdot 5^{\textcolor{orangered}{1}} \cdot 7^{\textcolor{orangered}{1}}
+\end{align*}$$
+
+De aici, putem observa că CMMMC-ul a două numere este egal cu produsul dintre factorii lor __comuni și necomuni__ luați la __cea mai mare__ putere.
+
+## Algoritmul lui Euclid prin scăderi repetate
+
+Algoritmul lui Euclid este o metodă foarte simplă și eficientă de a calcula CMMDC-ul a două numere. Există două variante ale Algoritmului lui Euclid: una prin scăderi repetate și cealaltă prin împărțiri repetate. Prima nu este nici pe departe la fel de eficientă precum a doua, dar voi începe cu ea pentru că ne ajută să înțelegem mai ușor varianta prin împărțiri.
+
+Algoritmul lui Euclid prin scăderi repetate presupune să scădem la fiecare pas numărul mai mic din numărul mai mare, până când unul dintre ele devine $0$. La final, valoarea numărului care a rămas nenul va fi egală cu $(a, b)$.
+
+``` cpp
+  while (b)
+      if (a > b)
+          a -= b;
+      else
+          b -= a;
+  cout << a << '\n';
+```
+
+Din cum arată implementarea, se vede că, atunci când $a = b$, îl vom scădea pe $a$ din $b$, valoarea lui $b$ devenind astfel $0$. De aceea, în `while` testez dacă $b$ este nenul, și nu dacă ambele numere sunt nenule. Din același motiv, la final îl pot afișa direct pe $a$, fiind sigur că el este numărul rămas nenul.
+
+Se observă că algoritmul acesta modifică valorile inițiale ale variabilelor $a$ și $b$. Deci, dacă avem nevoie de ele mai târziu, putem să le facem copii la început, și să folosim copiile în cadrul algoritmului. Sau, mai simplu, definim o funcție `gcd`, care primește ca parametri numerele $a$ și $b$ și returnează $(a, b)$:
+
+``` cpp
+  // ...
+
+  int gcd(int a, int b) {
+      while (b)
+          if (a > b)
+              a -= b;
+          else
+              b -= a;
+      return a;
+  }
+
+  // ...
+
+  int main() {
+      int a, b; cin >> a >> b;
+      cout << gcd(a, b) << '\n';
+      return 0;
+  }
+```
+
+### Explicație
+
+Să vedem de ce algoritmul furnizează întotdeaua rezultatul corect. Practic, el se bazează pe următoarea relație de recurență:
+
+$$\gcd(a, b) = \begin{cases}
+  \gcd(a - b, b) & \text{ pentru } a \gt b\\
+  a & \text{ pentru } b = 0
+\end{cases}$$
+
+Al doilea caz este trivial, iar primul se justifică astfel: $g = \gcd(a, b)$ divide atât pe $a$, cât și pe $b$. Asta înseamnă că $g \mid c = a - b$. Deci, $g$ este un divizor comun al numerelor $b$ și $c$. Prin urmare, trebuie să-l dividă pe cel mai mare divizor comun al lor, și anume pe $\gcd(b, c)$. Cum noi vrem ca $g$ să fie maxim, atunci acesta nu poate fi decât $\gcd(b, c)$. Așadar, $\gcd(a, b) = \gcd(a - b, b)$.
+
+![400; Exemplu CMMDC](exemplu-cmmdc.png)
+
+### Exemple
+
+Iată niște animații care ilustrează modul în care funcționează Algoritmul lui Euclid prin scăderi repetate pe trei perechi de numere: $(5, 18)$, $(20, 24)$ și $(60, 35)$:
+
+[TODO]()TODO
+
+[TODO]()TODO
+
+[TODO]()TODO
+
+### Complexitate
+
+După cum am spus mai sus, această variantă a algoritmului nu este eficientă. De exemplu, dacă $a = 10^9$ și $b = 1$, se vor efectua un miliard de operații, ceea ce este enorm. Putem spune deci că Algoritmul lui Euclid prin scăderi repetate are complexitatea $O(a + b)$.
+
+## Algoritmul lui Euclid prin împărțiri repetate
+
+Să ne uităm cum evoluează perechea de numere $(a, b) = (18, 5)$ în cazul algoritmului precedent:
+
+$$(18, 5) \rightarrow (13, 5) \rightarrow (8, 5) \rightarrow (3, 5)$$
+
+L-am scăzut pe $b$ din $a$ până când $a$ a devenit mai mic decât $b$. Practic, am simulat procesul de împărțire a lui $a$ la $b$ prin scăderi repetate. Astfel, la final $a$ a devenit $a \modd b$, adică restul împărțirii lui $a$ la $b$. Așadar, putem optimiza algoritmul inițial împărțind la fiecare pas numărul mai mare la cel mai mic, și reținând în acesta restul împărțirii. În cazul de mai sus economisim doi pași, însă în cazul $(a, b) = (10^9, 1)$ economisim un miliard de pași.
+
+``` cpp
+  while (a && b)
+      if (a > b)
+          a %= b;
+      else
+          b %= a;
+  cout << a + b << '\n'; // a + 0 sau 0 + b
+```
+
+Iată și o implementare ceva mai elegantă:
+
+``` cpp
+  while (b) {
+      int r = a % b;
+      a = b;
+      b = r;
+  }
+  cout << a << '\n';
+```
+
+La fiecare pas, îl copiem pe $b$ în $a$ și pe $r$ (restul împărțirii) în $b$, menținând astfel invariantul $a \gt b$. Numai la primul pas este posibil ca acesta să nu fie îndeplinit. Dacă inițial $a = b$, algoritmul se termină într-un pas, iar dacă $a \lt b$, numerele se inversează după primul pas, $a$ devenind mai mare decât $b$.
+
+### Complexitate
+
+Să luăm din nou exemplul ăla mare de la începutul articolului. Avem:
+
+$$\begin{align*}
+  (229\,320, 996\,072) & \rightarrow (996\,072, 229\,320) \rightarrow (229\,320, 78\,792) \rightarrow (78\,792, 71\,736)\\
+  & \rightarrow (71\,736, 7\,056) \rightarrow (7\,056, 1\,176) \rightarrow (1\,176, 0)
+\end{align*}$$
+
+Numărul de pași efectuați este foarte mic în comparație cu numerele inițiale, ceea ce ne face să intuim că algoritmul are o complexitate de ordinul $O(\log(a + b))$. Se întâmplă ca intuiția să fie corectă, iar mai jos aveți demonstrația. E doar pentru cei interesați; în niciun caz nu aveți nevoie de ea la școală. Pentru clasa a noua, e suficient să știți că Algoritmul lui Euclid este extrem de rapid.
+
+Vom analiza primii doi pași ai algoritmului. Presupunem că $a \gt b$ încă de la început. Perechea $(a, b)$ devine $(b, c)$, unde $c = a \modd b$, iar $(b, c)$ devine $(c, d)$, unde $d = b \modd c$.
+
+$$(a, b) \rightarrow (b, c) \rightarrow (c, d)$$
+
+Acum să o luăm invers. $d = b \modd c$ și $c \gt d$ implică faptul că $b \ge c + d$. Dar $a \gt b$, deci $a \gt c + d$. Adunând asta la relația precedentă, obținem $a + b \gt 2(c + d)$. Asta înseamnă că, la fiecare doi pași ai algoritmului, suma dintre $a$ și $b$ devine egală cu cel mult cu jumătate din cât a fost înainte. Deci, în cel mai rău caz, $a + b$ se înjumătățește din doi în doi pași. De aici avem complexitatea logaritmică a algoritmului. În caz că vă întrebați, cel mai nefavorabil caz este cel în care numerele date sunt termeni consecutivi din Șirul lui Fibonacci, dar nu mai intru în detalii.
+
+## Formula pentru calcularea CMMMC-ului
+
+CMMMC-ul poate fi calculat foarte ușor folosind următoarea formulă:
+
+$$(a, b) \cdot [a, b] = a \cdot b$$
+
+De aici îl scoatem pe $[a, b]$ drept $a \cdot b \mathbin{/} (a, b)$. Înmulțirea și împărțirea se efectuează în timp constant, motiv pentru care complexitatea calculării CMMMC-ului este egală cu cea a calculării CMMDC-ului, adică $O(\log(a + b))$.
+
+``` cpp
+  int lcm(int a, int b) {
+      return a * b / gcd(a, b);
+  }
+```
+
+Să demonstrăm formula. Reamintesc că CMMDC-ul este produsul factorilor comuni la cea mai mică putere, iar CMMMC-ul este produsul factorilor comuni și necomuni la cea mai mare putere. Ei bine, putem reformula prima definiție. Putem considera că CMMDC-ul este produsul factorilor comuni __și necomuni__ la cea mai mică putere, dacă prin asta înțelegem că un factor care nu apare în ambele numere se va lua la puterea $0$. Deci, dacă un factor $p$ apare la puterea $x$ în $a$ și la $y$ în $b$, știm că în $(a, b)$ va apărea la puterea $\min(x, y)$, iar în $[a, b]$ la $\max(x, y)$. Când înmulțim $(a, b)$ cu $[a, b]$, exponentul lui $p$ va deveni $\min(x, y) + \max(x, y)$, care este tot una cu $x + y$. Așadar, $(a, b) \cdot [a, b] = a \cdot b$.
+
+## CMMDC și CMMMC pentru mai multe numere
+
+Cum calculăm CMMDC-ul și CMMMC-ul pentru mai mult de două numere? În cazul CMMDC-ului e simplu. Luăm primele două numere, le calculăm CMMDC-ul, apoi calculăm CMMDC-ul dintre acest CMMDC și numărul următor și așa mai departe.
+
+$$\gcd(a, b, c) = \gcd(\gcd(a, b), c)$$
+
+În cazul CMMMC-ului putem fi tentați să generalizăm formula cu produsul, însă ea nu funcționează pentru mai mult de două numere. Dacă ați înțeles demonstrația de mai sus, ar trebui să fie clar de ce. Ne rămâne să procedăm la fel, adică să luăm câte două numere și să le calculăm CMMMC-ul.
+
+$$\lcm(a, b, c) = \lcm(\lcm(a, b), c)$$
+
+## Aplicații
+
+În continuare, voi prezenta cinci probleme legate de CMMDC și CMMMC.
+
+>>>
+  ### Problema 1.
+
+  Se dau două numere naturale nenule $a$ și $b$. Să se determine dacă cele două numere sunt prime între ele. Două numere se numesc prime între ele, coprime sau relativ prime dacă singurul lor divizor comun este $1$.
+<<<
+
+Testăm pur și simplu dacă $\gcd(a, b) = 1$. By the way, două numere consecutive sunt întotdeauna prime între ele. Ca să aibă un divizor comun $p$, trebuie ca diferența lor să fie divizibilă cu $p$. Cum diferența dintre $a$ și $b$ este $1$, singura valoare posibilă a lui $p$ este $1$.
+
+``` cpp
+  bool relativePrimes(int a, int b) {
+      return gcd(a, b) == 1;
+  }
+```
+
+>>>
+  ### Problema 2.
+
+  Se dau două fracții $a / b$ și $c / d$. Știind că $a$, $b$, $c$ și $d$ sunt numere naturale, iar $b$ și $d$ sunt nenule, să se afișeze suma celor două fracții sub forma unei fracții ireductibile $e / f$.
+<<<
+
+$$\frac{a}{b} + \frac{c}{d} = \frac{ad + cb}{bd}$$
+
+O fracție $x / y$ este ireductibilă dacă $\gcd(x, y) = 1$. Deci, ca să aducem o fracție $x / y$ la forma sa ireductibilă, trebuie să o simplificăm prin $\gcd(x, y)$.
+
+``` cpp
+  int e = a * d + c * b;
+  int f = c * d;
+  int g = gcd(e, f);
+  cout << e / g << " / " << f / g << '\n';
+```
+
+În caz că numerele date sunt mari, ar trebui să evităm pe cât posibil calculele ale căror rezultat ar putea depăși valoarea maximă a tipului `int`. În acest sens, putem aduce din start fracțiile date la forma lor ireductibilă. În plus, când le aducem la un numitor comun, ar fi bine să alegem ca acesta să fie $\lcm(b, d)$.
+
+``` cpp
+  int gcdAB = gcd(a, b); a /= gcdAB; b /= gcdAB;
+  int gcdCD = gcd(c, d); c /= gcdCD; d /= gcdCD;
+  int lcmBD = lcm(b, d);
+  a *= lcmBD / b;
+  c *= lcmBD / d;
+  int e = a + c;
+  int f = lcmBD;
+  int gcdEF = gcd(e, f);
+  e /= gcdEF;
+  f /= gcdEF;
+  cout << e << " / " << f << '\n';
+```
+
+>>>
+  ### Problema 3.
+
+  O instalație de Crăciun consistă din $n \ge 1$ becuri de diferite culori. Știind că inițial toate becurile sunt aprinse și că fiecare bec $i$ (cu $1 \le i \le n$) se aprinde din $t_i$ în $t_i$ secunde, să se determine după cât timp toate becurile vor fi aprinse simultan din nou.
+<<<
+
+Răspunsul trebuie să fie divizibil cu fiecare dintre timpii dați. Cum ne interesează __prima__ dată când toate becurile vor fi aprinse din nou, vom calcula $\lcm(t_1, t_2, \ldots, t_n)$:
+
+``` cpp
+  int ans = 1;
+  for (int i = 1; i <= n; i++)
+      ans = lcm(ans, t[i]);
+  cout << ans << '\n';
+```
+
+>>>
+  ### Problema 4.
+
+  Se consideră un dreptunghi de dimensiuni $a \times b$. Să se determine numărul minim de pătrate congruente în care poate fi împărțit dreptunghiul dat, precum și lungimea laturii acestora.
+<<<
+
+De exemplu:
+
+![400; CMMDC. Problema 4.](cmmdc-problema-4.png)
+
+Se observă că lungimea laturii $l$ alese trebuie să fie divizibilă atât cu $a$, cât și cu $b$. Cum noi vrem ca $a / l$ și $b / l$ să fie cât mai mici posibil, $l$ trebuie să fie cât mai mare. Deci, $l$ nu poate fi decât $\gcd(a, b)$. Numărul pătratelor va fi $ab / l^2$.
+
+``` cpp
+  int l = gcd(a, b);
+  cout << a * b / l / l << ' ' << l << '\n';
+```
+
+>>>
+  ### Problema 5.
+
+  Se dau două puncte în plan $A$ și $B$, ambele de coordonate întregi. Să se determine numărul punctelor laticeale de pe segmentul $[AB]$. Prin punct laticeal înțelegem punct de coordonate întregi.
+<<<
+
+De exemplu:
+
+![400; CMMDC. Problema 5.](cmmdc-problema-5.png)
+
+Dacă înșiruim punctele laticeale de pe segmentul $[AB]$ în funcție de cât de apropiate sunt de punctul $A$, vom observa că fiecare două puncte consecutive determină câte un dreptunghi. Cum dreptunghiurile determinate sunt congruente, lățimea lor trebuie să dividă lățimea dreptunghiului mare (determinat de $A$ și $B$), iar lungimea lor trebuie să dividă lungimea dreptunghiului mare. Asta înseamnă că numărul dreptunghiurilor mici trebuie să dividă $\gcd(a, b)$, unde $a = |x_A - x_B|$, iar $b = |y_A - y_B|$.
+
+Totuși, numărul nu are de ce să fie mai mic decât $\gcd(a, b)$, pentru că dimensiunile dreptunghiurilor n-ar mai fi prime între ele, așa că fiecare dreptunghi ar putea fi împărțit în două sau mai multe dreptunghiuri cu colțuri în puncte laticeale. Deci, numărul de dreptunghiuri este $\gcd(a, b)$, ceea ce înseamnă că numărul punctelor căutate este $\gcd(a, b) + 1$.
+
+``` cpp
+  int latticePoints(int xA, int yA, int xB, int yB) {
+      return gcd(abs(xA - xB), abs(yA - yB)) + 1;
+  }
+```
+
+**Sfârșit!** Urmează în curând un [articol](descompunere-in-factori-primi) despre descompunerea unui număr în factori primi și aplicațiile acesteia. Dacă aveți vreo întrebare despre CMMDC, CMMMC sau Algoritmul lui Euclid, nu ezitați să o adresați mai jos, într-un comentariu :smile:
