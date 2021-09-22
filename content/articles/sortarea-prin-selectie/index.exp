@@ -1,0 +1,48 @@
+TITLE: Sortarea prin selecție (Selection Sort) în C++
+AUTHOR: Iulian Oleniuc
+DATE: 16/07/2018
+CATEGORIES: Algoritmică și structuri de date, Sortare
+TAGS: sortare, sortare prin selecție, vectori
+DESCRIPTION: Sortarea prin selecție este printre cei mai eficienți algoritmi de sortare în complexitate O(n^2), datorită numărului mic de swap-uri.
+
+Sortarea prin selecție (Selection Sort) este probabil cel mai bun algoritm de sortare în complexitate $O(n^2)$, datorită numărului foarte mic de interschimbări pe care le efectuează în comparație cu [Bubble Sort](bubble-sort) și celelalte, dar și a constantei $1 / 2$ din spatele acestei complexități. Vom considera că dorim să sortăm crescător vectorul $v$, de lungime $n$, indexat de la $1$.
+
+## Algoritm
+
+Considerăm că primele $m - 1$ elemente din vector sunt deja pe pozițiile lor corespunzătoare (cele pe care trebuie să fie după ce sortăm vectorul). Inițial, $m = 1$. Efectuăm de $n - 1$ ori următoarele operații: Parcurgem vectorul de la poziția $m$ până la $n$ pentru a determina minimul acestor valori, $\mathrm{min}$, cât și poziția lui, $\mathrm{iMin}$. La pasul $m$, minimul determinat este, evident, al $m$-lea cel mai mic număr din vector. Așadar, acesta trebuie să stea pe poziția $m$. Prin urmare, interschimbăm elementele $v[m]$ și $v[\mathrm{iMin}]$. Incrementăm $m$-ul și repetăm procesul. Facem asta doar de $n - 1$ ori, pentru că după ultimul pas, mai rămâne de sortat doar ultimul element. Care nu poate fi deja decât unde trebuie.
+
+## Exemplu
+
+Am reprezentat cu galben elementul curent, cu roșu elementul minim și cu verde elementele sortate:
+
+![](selection-sort.js)
+
+## Implementare în C++
+
+Mai jos este implementarea sortării prin selecție în C++. Iterez pe $m$ de la $1$ la $n - 1$. La fiecare pas, inițializez pe $\mathrm{min}$ și $\mathrm{iMin}$ în funcție de prima valoare de unde se începe căutarea minimului, $v[m]$. Apoi, parcurg restul vectorului, de la $v[m + 1]$ la $v[n]$, pentru actualizarea minimului când este cazul. La final, interschimb valorile variabilelor $v[m]$ și $v[\mathrm{iMin}]$, folosind o variabilă auxiliară $\mathrm{aux}$.
+
+``` cpp -> Sortarea prin selecție
+  for (int m = 1; m < n; m++) {
+      int min = v[m], iMin = m;
+      for (int i = m + 1; i <= n; i++)
+          if (v[i] < v[iMin]) {
+              min = v[i];
+              iMin = i;
+          }
+      int aux = v[m];
+      v[m] = v[iMin];
+      v[iMin] = aux;
+  }
+```
+
+Aceasta este sortarea prin selecția __minimului__, dar programul poate fi modificat destul de ușor pentru a efectua o sortare prin selecția __maximului__: Sortăm vectorul de la dreapta la stânga, calculând la fiecare pas maximul din secvența nesortată și inserându-l spre sfârșitul vectorului. De asemenea, dacă în programul de mai sus schimbăm semnul din `<` în `>`, practic vom calcula maxime în loc de minime, și astfel vom sorta vectorul __descrescător__.
+
+## Complexitate
+
+În sortarea prin selecție se intră de $n - 1$ ori în primul `for`, iar la fiecare iterație, se efectuează $n - m + 1$ pași pentru aflarea minimului. Ignorăm interschimbările (swap-urile), pentru că n-ar reprezenta decât un $+ 1$ la fiecare iterație, și rezultă că în total se efectuează
+
+$$n + (n - 1) + \cdots + 2 = \frac{n(n+1)}{2} - 1$$
+
+pași. Asta înseamnă o complexitate de ordinul $O(n^2)$. Dar aici contează mult și constanta din fața ei, care este $1 / 2$. Aceasta face sortarea prin selecție să fie cea mai rapidă metodă de sortare în complexitate $O(n^2)$.
+
+Dacă aveți vreo întrebare despre sortarea prin selecție, lăsați-o mai jos într-un comentariu pentru a vă ajuta :smile:

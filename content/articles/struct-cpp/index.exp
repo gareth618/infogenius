@@ -1,0 +1,144 @@
+TITLE: Tipul `struct` în C++ -- Crearea propriilor tipuri de date!
+AUTHOR: Iulian Oleniuc
+DATE: 25/12/2017
+CATEGORIES: Limbajul C++
+TAGS: c++, oop, pointeri, struct
+DESCRIPTION: O structură reprezintă un grup de date grupate împreună sub același nume. Aceste date, numite câmpuri, pot avea tipuri și lungimi diferite.
+
+O structură reprezintă un grup de date grupate împreună sub același nume. Aceste date, numite __câmpuri__, pot avea tipuri și lungimi diferite (pot fi chiar tablouri). În C++, structurile pot fi definite folosind tipul `struct`, moștenit din limbajul C. Astfel, ne putem crea propriile tipuri de date, pentru a lucra mai ușor cu anumite informații.
+
+Desigur, o soluție mai flexibilă este folosirea [__claselor__]()TODO, care sunt noutatea principală adusă de C++, însă când vrem să definim un tip care să reunească doar câteva date, eventual să supraîncărcăm câțiva operatori pentru el și să-i scriem un constructor, este de ajuns tipul `struct`.
+
+## Declararea unei structuri
+
+O structură poate fi declarată astfel:
+
+``` cpp
+  struct NumeTip {
+      tipCamp1 numeCamp1;
+      tipCamp2 numeCamp2;
+      ...
+      tipCampN numeCampN;
+  } var1, var2, ..., varN; // variabile de tipul NumeTip
+```
+
+Numele noului tip va fi `NumeTip`, cu variabilele `var1`, `var2`, ..., `varN`. `NumeTip` poate începe și cu literă mică, ca orice identificator din C++, însă mi se pare mai convenabil să înceapă cu majusculă, pentru ca apoi să pot declara o variabilă cu numele `numeTip`. Nu este obligatoriu să declarăm variabilele imediat după definirea tipului; acestea pot fi declarate oriunde în program, după asta, prin sintaxa:
+
+``` cpp
+  NumeTip var1, var2, ..., varN; // varianta C++
+  struct NumeTip var1, var2, ..., varN; // varianta C (valabilă și în C++)
+```
+
+Când declarăm un `struct`, nu este obligatoriu să-i dăm și nume, dar trebuie să declarăm măcar o variabilă după acolada închisă, ca apoi să putem folosi [`decltype`](variabile-tipuri-de-date-cpp/#header-8) pentru a le declara pe celelalte. În acest caz, noul tip se va numi __structură anonimă__.
+
+``` cpp
+  struct {
+      int a, b;
+  } x;
+
+  decltype(x) y; // y va avea tipul anonim al lui x.
+```
+
+## Exemple de structuri
+
+Iată câteva exemple utile de structuri:
+
+``` cpp
+  struct Punct {
+      int x, y;
+  };
+
+  struct Elev {
+      int varsta;
+      char nume[20];
+      char prenume[20];
+
+      float medieGenerala;
+      float medieMatematica;
+      float medieInformatica;
+  };
+
+  struct Produs {
+      int pret;
+      int greutate;
+      char nume[20];
+  };
+
+  struct NrComplex {
+      int real;
+      int imag;
+  };
+```
+
+## Inițializarea unei variabile de tip `struct`
+
+O variabilă de tip `struct` se poate inițializa scriindu-i între acolade, separate prin virgulă, valorile pentru fiecare câmp, în ordinea în care apare acesta în definiție. Înaintea primei acolade se poate pune operatorul de atribuire, dar la noile versiuni C++ a devenit ceva opțional.
+
+``` cpp
+  struct Cerc {
+      int x, y;
+      double raza;
+  } cerc1 = {0, 0, 1};
+
+  Cerc cerc2 {2, 3, 1.618};
+```
+
+De asemenea, unele compilatoare suportă această sintaxă și pentru atribuirea unei valori variabilei după declarare, însă nu este recomandat.
+
+Dacă nu le inițializăm noi cu anumite valori, toate câmpurile dintr-o variabilă de tip `struct` declarată global sunt inițializate automat cu `0`, iar în cazul declarării locale, cu valori random rămase pe stivă, exact ca la variabilele obișnuite.
+
+## Accesarea câmpurilor unei variabile de tip `struct`
+
+Pentru a accesa un câmp al unei variabile de tip `struct` se folosește __operatorul de selecție directă__ (`.`), sintaxa fiind `variabila.camp`. Exemplu:
+
+``` cpp
+  struct Punct {
+      int x, y;
+  } punct = {1, 2}, x;
+
+  // var e declarat global:
+  Punct var;
+
+  x.x = 3;
+  x.y = 3;
+
+  cout << punct.x << ' ' << punct.y << '\n'; // 1 2
+  cout <<   var.x << ' ' <<   var.y << '\n'; // 0 0
+  cout <<     x.x << ' ' <<     x.y << '\n'; // 3 3
+```
+
+## Operatorul de atribuire
+
+Singurul operator predefinit pentru tipul `struct` este cel de atribuire. Acesta copiază valoarea fiecărui câmp din operandul stâng în cel drept, iar în cazul câmpurilor tablou, le copiază pe rând elementele. Alți operatori pot fi supraîncărcați, dar voi arăta cum într-un articol despre OOP :smile:
+
+``` cpp
+  struct {
+      int a, b;
+  } x, y = {1, 2};
+
+  x = y;
+  cout << x.a << ' ' << x.b << '\n'; // 1 2
+```
+
+## Pointeri la structuri
+
+Există pointeri și pentru `struct`, la fel ca pentru orice tip de date, și funcționează la fel.
+
+``` cpp
+  struct Punct {
+      int x, y;
+  } pct = {1, 2}, *pPct;
+
+  pPct = &pct; // pPct indică adresa variabilei pct.
+```
+
+Problema apare la accesarea câmpurilor unei variabile indicată de un pointer. Operatorul __punct__ nu funcționează, însă există un operator de dereferențiere, numit __operator de selecție indirectă__, creat special pentru această situație (`->`).
+
+``` cpp
+  cout << pPct->x << '\n'; // 1
+  cout << pPct->y << '\n'; // 2
+```
+
+`pointer->camp` este echivalent cu `(*pointer).camp`.
+
+Dacă aveți vreo întrebare despre tipul `struct` în C++, nu ezitați să o adresați mai jos printr-un comentariu ca să vă pot răspunde :smile:

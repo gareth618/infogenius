@@ -253,8 +253,8 @@ Complexitatea funcției `submatrix_size` este $O(n^4)$, dar cum numărul de colo
 Fie următoarea dinamică: $\mathrm{dp}[i][j] =$ dimensiunea maximă a unei submatrice pătratice care conține numai elemente cu valoarea $x$ și care are colțul din dreapta-jos în $(i, j)$. Recurența este destul de cunoscută:
 
 $$\mathrm{dp}[i][j] = \begin{cases}
-  \min(\mathrm{dp}[i - 1][j], \mathrm{dp}[i][j - 1], \mathrm{dp}[i - 1][j - 1]) + 1 & \text{ pentru } m[i][j] = x\\
-  0 & \text{ altfel}
+  \min(\mathrm{dp}[i - 1][j], \mathrm{dp}[i][j - 1], \mathrm{dp}[i - 1][j - 1]) + 1 & \text{pentru } m[i][j] = x\\
+  0 & \text{altfel}
 \end{cases}$$
 
 Explicația este că $\mathrm{dp}[i - 1][j] + 1$ ne spune care e lungimea maximă pe verticală, $\mathrm{dp}[i][j - 1] + 1$ pe orizontală, iar $\mathrm{dp}[i - 1][j - 1] + 1$ pe diagonală. Dintre cele trei valori trebuie să alegem minimul, ca să fim siguri că submatricea nu conține niciun element diferit de $x$. Vom construi așadar două dinamici: una pentru $0$ și una pentru $1$. De aici vine constanta $2$ din spatele complexității de $O(n^2)$. Iată implementarea acestei idei:
@@ -305,8 +305,10 @@ Explicația este că $\mathrm{dp}[i - 1][j] + 1$ ne spune care e lungimea maxim�
 
 Prima cerință este trivială, așa că trecem la **b**: Observăm că dacă cuplăm $1$ cu $n$, $2$ cu $n - 1$, $3$ cu $n - 2$ etc., obținem $n / 2$ perechi de sume egale. Cum $n$ este multiplu de $4$, $n / 2$ va fi număr par, așa că putem pune o jumătate dintre perechi în mulțimea $A$ și cealaltă jumătate în mulțimea $B$. Structura mulțimilor va fi:
 
-$$A = \{1, 3, \ldots, n / 2 - 1, n / 2 + 2, n / 2 + 4, \ldots, n\}\\
-B = \{2, 4, \ldots, n / 2, n / 2 + 1, n / 2 + 3, \ldots, n - 1\}$$
+$$
+A = \{1, 3, \ldots, n / 2 - 1, n / 2 + 2, n / 2 + 4, \ldots, n\}\\
+B = \{2, 4, \ldots, n / 2, n / 2 + 1, n / 2 + 3, \ldots, n - 1\}
+$$
 
 Să notăm cu $sum(X)$ suma elementelor din mulțimea $X$. Prima observație cu privire la cerința **c** este că dacă $p$ este impar, nu există soluție. Motivul este că suma numerelor de la $1$ la $n$ (să o notăm cu $2 \cdot S$) este pară, din moment ce $n$ este multiplu de $4$. Dacă din $S$ îl scădem pe $p$, care este impar, vom obține un număr impar, deci $sum(A)$ și $sum(B)$ nu vor putea fi egale. Dacă în schimb $p$ este par, trebuie să echilibrăm cele două mulțimi astfel încât $sum(A') = sum(B') = S - p / 2$. (Din mulțimea $A$ o vom forma pe $A'$, iar din $B$ pe $B'$.) Avem de analizat următoarele două cazuri:
 

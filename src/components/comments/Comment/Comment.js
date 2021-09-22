@@ -6,7 +6,7 @@ import { Reply, Close } from '@utils/icons';
 import * as styles from './Comment.module.css';
 
 export default function Comment({ info, setParentComment, preview }) {
-  const avatar = info.name === 'Gareth618'
+  const avatar = info.email === 'bloggareth@gmail.com'
     ? (
       <StaticImage
         src="./../../../assets/gareth618.png" alt="gareth618"

@@ -1,0 +1,188 @@
+TITLE: Numerele lui Stirling. Numerele Bell
+AUTHOR: Iulian Oleniuc
+DATE: 06/01/2020
+CATEGORIES: Algoritmică și structuri de date, Matematică
+TAGS: combinatorică, funcții surjective, partițiile unei mulțimi, programare dinamică, stirling, triunghiul lui sierpinski
+DESCRIPTION: Numerele lui Stirling de speța a II-a reprezintă numărul de partiții ale unei mulțimi de n elemente în k submulțimi. O partiție a unei...
+
+În acest articol voi prezenta trei elemente importante de [combinatorică](combinatorica), ușor asemănătoare între ele: numerele lui Stirling de speța a II-a, numerele Bell și numerele lui Stirling de speța I. Ele sunt utile în problemele de combinatorică, pentru că primele două numără partițiile unei mulțimi, iar al treilea tip de numere este referitor la ciclurile unei permutări.
+
+## Numerele lui Stirling de speța a II-a
+
+Numerele lui Stirling de speța a II-a reprezintă numărul de partiții ale unei mulțimi cu $n$ elemente în $k$ submulțimi, și se notează cu $S(n, k)$. O partiție a unei mulțimi reprezintă un set de submulțimi nevide, disjuncte, a căror reuniune este mulțimea respectivă.
+
+### Formula pentru calcularea $S(n, k)$
+
+Cazurile elementare pentru calcularea $S(n, k)$ sunt:
+
++++
+> $n = 0, k = 0$: Prin convenție, $S(0, 0) = 1$, adică există un singur mod de a partiționa mulțimea vidă în $0$ submulțimi.
+> $n = 0, k \gt 0$: $S(0, k) = 0$, adică nu putem partiționa o mulțime de $0$ elemente în mai mult de $0$ submulțimi (este destul de logic, pentru că nu am avea de unde să punem elemente în ele).
+> $n \gt 0, k = 0$: $S(n, 0) = 0$, adică nu putem partiționa o mulțime nevidă în $0$ submulțimi (toate elementele ar rămâne pe afară).
+---
+
+Dacă $n$ și $k$ nu se încadrează în vreun caz de mai sus, atunci $S(n, k)$ se poate calcula recurent, prin următoarea formulă:
+
+$$S(n, k) = S(n - 1, k - 1) + kS(n - 1, k)$$
+
+### Deducerea formulei
+
+Formula nu trebuie învățată pe de rost. Ea se deduce ușor din modul prin care se formează partițiile. Pentru demonstrație, voi scrie partițiile mulțimii $A = \{1, 2, 3, 4\}$ în $3$ submulțimi:
+
+$$
+A = \{1\} \cup \{2\} \cup \{3, 4\}\\
+A = \{1\} \cup \{2, 3\} \cup \{4\}\\
+A = \{1\} \cup \{2, 4\} \cup \{3\}\\
+A = \{1, 2\} \cup \{3\} \cup \{4\}\\
+A = \{1, 3\} \cup \{2\} \cup \{4\}\\
+A = \{1, 4\} \cup \{2\} \cup \{3\}
+$$
+
+Pentru a forma partițiile lui $B = \{1, 2, 3, 4, 5\}$ în $3$ submulțimi, vom folosi partițiile de mai sus la care vom adăuga elementul $5$. Acesta poate fi adăugat în două moduri. Fie la fiecare partiție, într-o submulțime nouă, ce-l va conține doar pe el, fie într-una dintre submulțimile deja existente din fiecare partiție. Pornind de la prima partiție, adăugându-l pe $5$, vom obține:
+
+$$\begin{align*}
+  B &= \{1\} \cup \{2\} \cup \{3, 4\} \cup \{\textcolor{orangered}{5}\}\\
+  B &= \{1, \textcolor{orangered}{5}\} \cup \{2\} \cup \{3, 4\}\\
+  B &= \{1\} \cup \{2, \textcolor{orangered}{5}\} \cup \{3, 4\}\\
+  B &= \{1\} \cup \{2\} \cup \{3, 4, \textcolor{orangered}{5}\}
+\end{align*}$$
+
+Analog pentru celelalte partiții. Așadar, pentru cazul 1 obținem $S(n - 1, k - 1)$ noi partiții, iar pentru cazul 2 obținem $kS(n - 1, k)$. Coeficientul $k$ vine din faptul că în fiecare partiție veche avem $k$ submulțimi la care putem adăuga noul element.
+
+### Sursă C++ pentru calcularea $S(n, k)$
+
+Putem folosi metoda programării dinamice pentru calcularea $S(n, k)$: Vom reține într-o matrice rezultatele subproblemelor, mai exact $\mathrm{stir}[i][j] = S(i, j)$.
+
+``` cpp
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  int main() {
+      int n, k; cin >> n >> k;
+      vector stir(n + 1, vector<int>(k + 1));
+      stir[0][0] = 1;
+      for (int i = 1; i <= n; i++)
+          for (int j = 1; j <= min(i, k); j++)
+              stir[i][j] = stir[i - 1][j - 1] + j * stir[i - 1][j];
+      cout << stir[n][k] << '\n';
+      return 0;
+  }
+```
+
+### Numărul de funcții surjective
+
+Aceasta e cea mai cunoscută problemă ce folosește numerele lui Stirling. Se dau mulțimile $A$ și $B$, cu $|A| \ge |B|$, și trebuie să determinăm numărul funcțiilor surjective definite pe $A$ cu valori în $B$.
+
+O funcție este surjectivă dacă și numai dacă imaginea ei este egală cu codomeniul. Iată un exemplu de funcție surjectivă definită pe $\{1, 2, 3, 4, 5\}$ cu valori în $\{1, 2\}$:
+
+$$
+f(1) = 1\\
+f(2) = 2\\
+f(3) = 2\\
+f(4) = 1\\
+f(5) = 1
+$$
+
+Iar așa arată toate funcțiile surjective definite pe $\{1, 2, 3\}$ cu valori în $\{1, 2\}$:
+
+$$
+f(1) = 1, f(2) = 1, f(3) = 2\\
+f(1) = 1, f(2) = 2, f(3) = 1\\
+f(1) = 1, f(2) = 2, f(3) = 2\\
+f(1) = 2, f(2) = 1, f(3) = 1\\
+f(1) = 2, f(2) = 1, f(3) = 2\\
+f(1) = 2, f(2) = 2, f(3) = 1
+$$
+
+Cu alte cuvinte, trebuie aflat numărul de moduri de a împărți elementele lui $A$ în $|B|$ grupe și de a asocia fiecărei dintre aceste grupe câte o valoare diferită din $B$ (adică valoarea pe care o va avea funcția aplicată numerelor din acel grup).
+
+După această reformulare, problema devine destul de simplă. Numărul de partiții este dat de $S(|A|, |B|)$, iar pe acesta îl înmulțim cu $|B|!$ (numărul permutărilor de $|B|$ elemente), deoarece pentru fiecare partiție putem permuta în toate modurile posibile valorile asociate fiecărei submulțimi. Formula finală este:
+
+$$S(|A|, |B|) \cdot |B|!$$
+
+Multe probleme de combinatorică, interpretate matematic, pot fi reduse la aceasta. De exemplu, [problema 100m](problema-100m-oni-2017-clasa-10), dată la ONI 2017 la clasa a 10-a.
+
+### Bonus
+
+Colorând cu alb numerele pare și cu negru cele impare, numerele lui Stirling de speța a II-a, așezate într-o matrice, vor forma [Triunghiul lui Sierpinski](fractali-p5js/#header-5)!
+
+![300; Paritatea numerelor lui Stirling de speța a II-a](stirling-sierpinski.png)
+
+## Numerele Bell
+
+Numerele Bell se referă la numărul de modalități prin care putem partiționa o mulțime cu $n$ elemente, și se notează cu $B_n$. Seamănă cu numerele lui Stirling de speța a II-a, doar că nu iau în calcul numărul de submulțimi ale partițiilor. Astfel, ele numără __toate__ partițiile posibile ale unei mulțimi. Numerele Bell pot fi calculate trivial pe baza numerelor lui Stirling de speța a II-a:
+
+$$B_n = S(n, 0) + S(n, 1) + \cdots + S(n, n)$$
+
+Însă putem formula și o recurență ce depinde doar de numerele Bell:
+
+$$B_n = \sum_{k = 0}^{n - 1} C_{n - 1}^k B_k$$
+
+Cazul de bază este $B_0 = 1$. Din păcate, recurența aceasta se calculează tot în $O(n^2)$, însă pe noi ne interesează modul prin care a fost obținută. Ne putem gândi că din cele $n$ elemente ale mulțimii noastre, putem selecta $n - k$ ($0 \le k \lt n$) pe care să le punem într-o submulțime, rămânând ca pe celelalte $k$ să le partiționăm separat, în $B_k$ moduri. Cum cele $n - k$ elemente pot fi alese în $C_n^{n - k} = C_n^k$ moduri, obținem că $B_n = \sum_{k = 0}^{n - 1} C_n^k B_k$.
+
+Însă, avem o greșeală fundamentală în raționament. De exemplu, pe partiția $\{1, 2\}, \{3\}$ am numărat-o de două ori: Când am ales să-i punem pe $1$ și $2$ în aceeași submulțime, rămânând să partiționăm recursiv submulțimea $\{3\}$, dar și atunci când am ales să-l punem pe $3$ într-o submulțime și să partiționăm recursiv submulțimea $\{1, 2\}$. Pentru a remedia această problemă, trebuie să fixăm un element arbitrar (de exemplu $1$) pe care-l punem mereu în submulțimea de cardinal $n - k$ selectată de noi. Este perfect în regulă, pentru că el oricum trebuie să se afle într-o submulțime. Acum rămâne să selectăm în $C_{n - 1}^{n - k - 1} = C_{n - 1}^k$ moduri ce elemente punem în aceeași submulțime cu $1$. Astfel, ajungem la recurența inițială, fără să numărăm de mai multe ori vreo configurație.
+
+## Numerele lui Stirling de speța I
+
+Numerele lui Stirling de speța I numără câte [permutări](https://ro.wikipedia.org/wiki/Permutare#Nota%C8%9Bie) de ordin $n$ cu $k$ cicluri există, și se notează cu $s(n, k)$. De exemplu, permutarea
+
+$$\sigma = \begin{pmatrix}
+  \textcolor{orangered}{1} & \textcolor{limegreen}{2} & \textcolor{limegreen}{3} & \textcolor{limegreen}{4} & \textcolor{dodgerblue}{5} & \textcolor{dodgerblue}{6}\\
+  \textcolor{orangered}{1} & \textcolor{limegreen}{4} & \textcolor{limegreen}{2} & \textcolor{limegreen}{3} & \textcolor{dodgerblue}{6} & \textcolor{dodgerblue}{5}
+\end{pmatrix}$$
+
+are $3$ cicluri: $\textcolor{orangered}{(1)}$, $\textcolor{limegreen}{(2, 4, 3)}$ și $\textcolor{dodgerblue}{(5, 6)}$. Al doilea ciclu, de pildă, a fost format așa:
+
+$$
+\sigma(2) = 4\\
+\sigma(4) = 3\\
+\sigma(3) = 2
+$$
+
+Cazurile particulare sunt: $s(0, 0) = 1$, $s(n, 0) = 0$ ($n \gt 0$) și $s(0, k) = 0$ ($k \gt 0$). Motivele sunt similare cu cele de la numerele de speța a II-a. Recurența este:
+
+$$s(n, k) = s(n - 1, k - 1) + (n - 1) \cdot s(n - 1, k)$$
+
+Explicație: Putem forma o permutare de ordin $n$ pornind de la una de ordin $n - 1$ în două moduri. Prima variantă este să adăugăm elementul $n$ la final, deci $\sigma(n) = n$, formând un nou ciclu, ce-l conține doar pe el. A doua variantă este să-l introducem pe $n$ într-un ciclu deja existent. Pentru asta, alegem un număr $a$ ($1 \le a \lt n$), cu $\sigma(a) = b$, și îl schimbăm pe $\sigma(a)$ în $n$, iar lui $\sigma(n)$ îi atribuim valoarea $b$:
+
+$$\begin{pmatrix}
+  1 & 2 & \cdots & a & \cdots & n - 1\\
+  \sigma(1) & \sigma(2) & \cdots & b & \cdots & \sigma(n - 1)
+  \end{pmatrix} \rightarrow \begin{pmatrix}
+  1 & 2 & \cdots & a & \cdots & n - 1 & n\\
+  \sigma(1) & \sigma(2) & \cdots & n & \cdots & \sigma(n - 1) & b
+\end{pmatrix}$$
+
+Așadar, folosind prima metodă obținem $s(n - 1, k - 1)$ permutări noi, iar folosind-o pe a doua obținem $(n - 1) \cdot s(n - 1, k)$. Coeficientul $n - 1$ vine de la faptul că, de fiecare dată când alegem $a$-ul despre care vorbeam mai devreme, avem $n - 1$ variante.
+
+### Sursă C++ pentru calcularea $s(n, k)$
+
+Iată mai jos o sursă care calculează $s(n, k)$. Este aproape identică cu cea pentru numere lui Stirling de speța a II-a, singura diferență fiind relația de recurență (linia 10).
+
+``` cpp
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  int main() {
+      int n, k; cin >> n >> k;
+      vector stir(n + 1, vector<int>(k + 1));
+      stir[0][0] = 1;
+      for (int i = 1; i <= n; i++)
+          for (int j = 1; j <= min(i, k); j++)
+              stir[i][j] = stir[i - 1][j - 1] + (i - 1) * stir[i - 1][j];
+      cout << stir[n][k] << '\n';
+      return 0;
+  }
+```
+
+## Probleme recomandate
+
++++
+> [Numerele lui Stirling](https://infoarena.ro/problema/stirling)
+> [100m](https://infoarena.ro/problema/100m)
+> [Permutări](https://infoarena.ro/problema/perm)
+> [Sistem](https://infoarena.ro/problema/sistem)
+> [Permutări4](https://infoarena.ro/problema/perm4)
+---
+
+100m și Permutări folosesc numerele lui Stirling (de ambele spețe), iar Sistem folosește o recurență foarte asemănătoare cu cea a numerelor Bell. Ultima problemă nu e legată în mod direct vreun concept din cele trei, însă procedeul pentru deducerea recurenței din spatele ei este foarte asemănător cu cele prezentate în acest articol. Dacă aveți întrebări despre numerele lui Stirling sau despre numerele Bell, nu ezitați să le adresați în rubrica de comentarii :smile:

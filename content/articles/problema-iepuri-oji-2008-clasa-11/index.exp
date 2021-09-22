@@ -1,0 +1,77 @@
+TITLE: Problema Iepuri -- OJI 2008, Clasa a 11-a
+AUTHOR: Iulian Oleniuc
+DATE: 08/10/2020
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 11, dinamică pe arbore, iolanda popa, oji 2008, programare dinamică, sume parțiale
+DESCRIPTION: Enunțul problemei Iepuri, de clasa a 11-a, dată în 2008 la OJI, se găsește pe InfoArena și PbInfo. Se dau un arbore cu n noduri și un...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Iolanda Popa
+> **Online:** [InfoArena](https://infoarena.ro/problema/iepuri2), [PbInfo](https://www.pbinfo.ro/probleme/2173/iepuri1)
+---
+
+## Rezumat
+
+Se dau un arbore cu $n$ noduri și un număr $k$. Fiecărui nod din arbore i se asociază un număr natural cuprins între $1$ și $k$. Orice nod diferit de rădăcină trebuie să aibă un număr strict mai mare decât tatăl său. Să se determine numărul de moduri în care pot fi alese aceste numere, modulo $30\,011$.
+
+## Soluție
+
+Problema Iepuri este o problemă elementară de programare dinamică pe arbore. Dar nu cred că trebuie să fiți familiarizați cu acest concept pentru a înțelege soluția. În continuare, prin $f(u)$ mă voi referi la valoarea asociată nodului $u$. Ideea este să notăm cu $\mathrm{dp}[u][x]$ numărul de moduri în care putem asocia numere cuprinse între $1$ și $k$ subarborelui cu rădăcina în nodul $u$, astfel încât $f(u) = x$. Dacă avem fixat $f(u) = x$, atunci trebuie ca $f(v) \gt x$, pentru orice fiu $v$ al lui $u$. De aici obținem recurența următoare:
+
+$$\mathrm{dp}[u][x] = \prod_{v \in \mathrm{fii}(u)} \prod_{y = x + 1}^k \mathrm{dp}[v][y]$$
+
+Care se traduce în: $\mathrm{dp}[u][x]$ este egal cu produsul valorilor $\mathrm{dp}[v][y]$, unde $v$ este fiu al lui $u$ și $x \lt y \le k$. Matricea $\mathrm{dp}$ poate fi calculată ușor în cadrul unui DFS din rădăcina arborelui. Când ne aflăm în nodul $u$, continuăm recursiv DFS-ul în fiii lui $u$, pentru a obține valorile $\mathrm{dp}[v][y]$. După ce le avem pe acestea, putem folosi recurența de mai sus pentru a calcula $\mathrm{dp}[u][x]$.
+
+Deocamdată avem complexitatea $O(n k^2)$, deoarece, atunci când calculăm valoarea $\mathrm{dp}[u][x]$, parcurgem $O(k)$ stări pentru fiecare fiu $v$, adică stările acelea cu $y \gt x$. Putem reduce partea asta la $O(1)$ calculând niște sume parțiale pe parcurs. Mai exact, la finalul funcției DFS, calculăm șirul $\mathrm{ps}[u]$, unde $\mathrm{ps}[u][x] = \sum_{y = x}^k \mathrm{dp}[u][y]$. Noua recurență reflectă scăderea complexității la $O(nk)$:
+
+$$\mathrm{dp}[u][x] = \prod_{v \in \mathrm{fii}(u)} \mathrm{ps}[v][x]$$
+
+## Sursă C++
+
+Un detaliu de implementare interesant este modul în care am calculat rădăcina arborelui. Având în vedere că muchiile sunt date sub forma tată-fiu, rădăcina este singurul nod care nu apare ca fiu în lista muchiilor. Prin urmare, o putem calcula drept suma numerelor naturale mai mici sau egale cu $n$, adică $n(n + 1) / 2$, minus suma fiilor din lista de muchii.
+
+Alt detaliu important este că, pentru un nod $u$ aflat la adâncimea $d$ (începând de la $1$), $f(u)$ nu poate fi mai mic decât $d$, din cauza condiției $f(u) \lt f(v)$. Din acest motiv, atunci când inițializez cu $1$ valorile $\mathrm{dp}[u][x]$, pe $x$ îl iau doar de la $d$ la $k$.
+
+Nu în ultimul rând, puteam calcula șirul $\mathrm{ps}[u]$ direct peste vectorul $\mathrm{dp}[u]$, dar pentru a păstra claritatea n-am mai făcut asta.
+
+``` cpp -> Problema Iepuri
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  ifstream fin("iepuri.in");
+  ofstream fout("iepuri.out");
+
+  const int MOD = 30011;
+
+  int main() {
+     int n, k; fin >> n >> k;
+     int root = n * (n + 1) / 2;
+     vector<vector<int>> ad(n + 1);
+     for (int i = 1; i < n; i++) {
+         int x, y; fin >> x >> y;
+         ad[x].push_back(y);
+         root -= y;
+     }
+
+     vector dp(n + 1, vector<int>(k + 1));
+     vector ps(n + 1, vector<int>(k + 2));
+     function<void(int, int)> dfs = [&](int node, int dpth) {
+         for (int carr = dpth; carr <= k; carr++)
+             dp[node][carr] = 1;
+         for (int son : ad[node]) {
+             dfs(son, dpth + 1);
+             for (int carr = dpth; carr <= k; carr++)
+                 dp[node][carr] = dp[node][carr] * ps[son][carr + 1] % MOD;
+         }
+         ps[node][k] = dp[node][k];
+         for (int carr = k - 1; carr >= 1; carr--)
+             ps[node][carr] = (dp[node][carr] + ps[node][carr + 1]) % MOD;
+     };
+     dfs(root, 1);
+     fout << ps[root][1] << '\n';
+     return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Iepuri, lasă un comentariu și te voi ajuta :smile:

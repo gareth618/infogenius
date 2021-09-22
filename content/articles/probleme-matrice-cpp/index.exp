@@ -1,0 +1,500 @@
+TITLE: Probleme simple cu matrice în C++
+AUTHOR: Iulian Oleniuc
+DATE: 29/08/2020
+CATEGORIES: Limbajul C++
+TAGS: c++, matrice, matrice pătratică
+DESCRIPTION: În acest articol vom rezolva câteva probleme elementare legate de parcurgerea și generarea matricelor în C++. Majoritatea pot fi...
+
+Acum ceva timp am discutat despre ce sunt [matricele](matrice-cpp) și cum putem lucra cu ele în C++. În acest articol vom rezolva câteva probleme elementare legate de parcurgerea și generarea matricelor în C++. Majoritatea pot fi găsite pe [PbInfo](https://www.pbinfo.ro/probleme/categorii/46/tablouri-bidimensionale-matrice). Matricele cu care vom lucra vor avea elementele de tipul `int` și vor fi indexate de la $(1, 1)$.
+
+>>>
+  ## Problema 1.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane, având toate elementele distincte. Să se interschimbe liniile pe care se află cel mai mic și respectiv cel mai mare element din matrice.
+<<<
+
+Primul pas este să găsim elementul minim (`mn`) și elementul maxim (`mx`) din matrice, precum și liniile pe care se află acestea (`linMin` și `linMax`). Pentru a inițializa aceste variabile, ne vom folosi de primul element al matricei (`mat[1][1]`), pe care îl vom considera deocamdată atât minim, cât și maxim.
+
+``` cpp
+  int mn = mat[1][1], linMin = 1;
+  int mx = mat[1][1], linMax = 1;
+```
+
+Următorul pas este să parcurgem matricea, actualizând la fiecare pas minimul și maximul de până acum, folosindu-ne de elementul curent. Orice parcurgere este bună, așa că o vom folosi pe cea mai simplă -- de sus în jos și de la stânga la dreapta.
+
+``` cpp
+  for (int i = 1; i <= m; i++)
+      for (int j = 1; j <= n; j++) {
+          if (mat[i][j] < mn) mn = mat[linMin = i][j];
+          if (mat[i][j] > mx) mx = mat[linMax = i][j];
+      }
+```
+
+La final, interschimbăm efectiv cele două linii `linMin` și `linMax`. Iterăm indicele de coloană `j` de la `1` la `n`, la fiecare pas făcând __swap__ între `mat[linMin][j]` și `mat[linMax][j]`.
+
+``` cpp
+  for (int j = 1; j <= n; j++) {
+      int aux = mat[linMin][j];
+      mat[linMin][j] = mat[linMax][j];
+      mat[linMax][j] = aux;
+  }
+```
+
+>>>
+  ## Problema 2.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. De asemenea, se dau $q$ numere întregi. Pentru fiecare dintre acestea, să se determine dacă apare pe fiecare linie a matricei.
+<<<
+
+Citim pe rând fiecare număr dintre cele `q`. La fiecare pas, reținem într-o variabilă `ok` de tip `bool` dacă numărul curent (`x`) apare pe fiecare linie a matricei. Inițial, `ok` este `true`. Luăm pe rând fiecare linie, și reținem într-o altă variabilă booleană `found`, inițializată cu `false`, dacă `x` se găsește pe linia `i`. Parcurgem linia. Dacă elementul curent este egal cu `x`, `found` devine `true` și ieșim din `for` cu un `break`. Dacă, la finalul `for`-ului, `found` a rămas `false`, înseamnă că `x` nu a fost găsit pe linia curentă. Asta înseamnă că putem seta `ok` la `false` și ne putem opri. Dacă la final `ok` este `true` afișăm `DA`, iar dacă este `false` afișăm `NU`.
+
+``` cpp
+  int q; cin >> q;
+  for (int it = 0; it < q; it++) {
+      int x; cin >> x;
+      bool ok = true;
+      for (int i = 1; i <= m; i++) {
+          bool found = false;
+          for (int j = 1; j <= n; j++)
+              if (mat[i][j] == x) {
+                  found = true;
+                  break;
+              }
+          if (!found) {
+              ok = false;
+              break;
+          }
+      }
+      cout << (ok ? "DA\n" : "NU\n");
+  }
+```
+
+Soluția este destul de înceată, având complexitatea $O(mn)$ per interogare, pentru că în cel mai rău caz numărul $x$ se găsește la finalul fiecărei linii. Dacă sortăm eficient elementele de pe fiecare linie a matricei, am putea reduce complexitatea la $O(m \log n)$, căci l-am putea [căuta binar](cautare-binara) pe $x$ pe fiecare linie. N-are sens să ne complicăm; scopul articolului este să învățăm să lucrăm cu matrice în C++.
+
+>>>
+  ## Problema 3.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. Să se rotească cu $90^{\text{o}}$ în sensul acelor de ceasornic matricea dată.
+<<<
+
+Iată un exemplu:
+
+![400; Matrice rotită cu 90 de grade](matrice-rotita.png)
+
+Este clar că nu putem efectua rotirea direct pe matricea $\mathrm{mat}$. Trebuie să construim într-o matrice auxiliară $\mathrm{aux}$ matricea obținută prin rotirea lui $\mathrm{mat}$, iar abia apoi să copiem conținutul lui $\mathrm{aux}$ în $\mathrm{mat}$. Din exemplu putem observa ușor că liniile $1, 2, \ldots, m$ devin coloanele $m, m - 1, \ldots, 1$, iar coloanele $1, 2, \ldots, n$ devin liniile $1, 2, \ldots, n$ (oglindite). Prin urmare, o soluție elegantă este să parcurgem matricea $\mathrm{mat}$ cu două perechi de indici: $(i_1, j_1)$ (linia și coloana elementului curent din $\mathrm{mat}$) și $(i_2, j_2)$ (linia și coloana elementului din $\mathrm{aux}$ unde îl vom copia pe $\mathrm{mat}[i_1][j_2]$).
+
+``` cpp
+  for (int i1 = 1, j2 = m; i1 <= m; i1++, j2--)
+      for (int j1 = 1, i2 = 1; j1 <= n; j1++, i2++)
+          aux[i2][j2] = mat[i1][j1];
+```
+
+Urmează să copiem matricea $\mathrm{aux}$ în $\mathrm{mat}$, însă înainte de asta ar fi frumos să facem un swap între $m$ și $n$, indicând că dimensiunile matricei s-au inversat:
+
+``` cpp
+  int tmp = m; m = n; n = tmp;
+  for (int i = 1; i <= m; i++)
+      for (int j = 1; j <= n; j++)
+          mat[i][j] = aux[i][j];
+```
+
+>>>
+  ## Problema 4.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. Să se permute circular coloanele matricei cu o poziție la stânga.
+<<<
+
+Iată un exemplu:
+
+![400; Permutarea la stânga a coloanelor](permutarea-coloanelor.png)
+
+Putem trata matricea ca pe un vector de coloane, permutând direct vectorul acesta. Asta înseamnă să copiem prima coloană într-o coloană auxiliară, să mutăm pe rând coloanele $2, 3, \ldots, n$ cu o poziție la stânga și la final să copiem coloana auxiliară pe ultima poziție. Ca să nu luăm un vector suplimentar, vom considera că acea coloană auxiliară este chiar coloana $0$ a matricei. La final va trebui să-i resetăm elementele la $0$.
+
+``` cpp
+  for (int i = 1; i <= m; i++)
+      mat[i][0] = mat[i][1];
+  for (int j = 2; j <= n; j++)
+      for (int i = 1; i < m; i++)
+          mat[i][j] = mat[i][j + 1];
+  for (int i = 1; i <= m; i++) {
+      mat[i][n] = mat[i][0];
+      mat[i][0] = 0;
+  }
+```
+
+Putem simplifica algoritmul observând că a permuta coloanele matricei cu o poziție la stânga este același lucru cu a permuta fiecare linie a matricei cu o poziție la stânga. Prin urmare, vom permuta circular, pe rând, fiecare linie a matricei, ca și cum ar fi un vector:
+
+``` cpp
+  for (int i = 1; i <= m; i++) {
+      int aux = mat[i][1];
+      for (int j = 1; j < n; j++)
+          mat[i][j] = mat[i][j + 1];
+      mat[i][n] = aux;
+  }
+```
+
+>>>
+  ## Problema 5.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. Să se determine câte elemente ale matricei au toți vecinii numere impare. Vecinii elementului $\mathrm{mat}[i][j]$ sunt $\mathrm{mat}[i - 1][j]$, $\mathrm{mat}[i + 1][j]$, $\mathrm{mat}[i][j - 1]$ și $\mathrm{mat}[i][j + 1]$ (dacă elementele acestea există, adică dacă se află în interiorul matricei).
+<<<
+
+Reținem într-o variabilă `ans`, inițializată cu `0`, răspunsul problemei. Parcurgem matricea, și pentru fiecare element reținem într-o variabilă booleană `ok = true` dacă respectă proprietatea dată. Luăm fiecare element în parte, verificăm în funcție de indicii lui dacă se află în interiorul matricei, iar dacă există și este par, setăm `ok` la `false`. După ce am verificat toți vecinii, adăugăm la `ans` valoarea `ok`. Astfel, dacă `ok` este `true`, `ans` va crește cu o unitate.
+
+``` cpp
+  int ans = 0;
+  for (int i = 1; i <= m; i++)
+      for (int j = 1; j <= n; j++) {
+          bool ok = true;
+          if (i > 1 && mat[i - 1][j] % 2 == 0) ok = false;
+          if (i < m && mat[i + 1][j] % 2 == 0) ok = false;
+          if (j > 1 && mat[i][j - 1] % 2 == 0) ok = false;
+          if (j < n && mat[i][j + 1] % 2 == 0) ok = false;
+          ans += ok;
+      }
+  cout << ans << '\n';
+```
+
+O idee care uneori simplifică problemele de tipul ăsta este să __bordăm__ matricea dată, ca să nu mai validăm indicii vecinilor la fiecare pas. Asta înseamnă să umplem liniile $0$ și $m + 1$, precum și coloanele $0$ și $n + 1$, cu o valoare care nu încalcă proprietatea din enunț. În cazul nostru putem pune $1$, pentru că $1$ este impar. Astfel, când vecinul curent va ieși din matrice, va fi înlocuit de unul fictiv, impar, care nu influențează valoarea lui `ok`.
+
+``` cpp
+  for (int i = 1; i <= m; i++) mat[i][0] = mat[i][n + 1] = 1;
+  for (int j = 1; j <= n; j++) mat[0][j] = mat[m + 1][j] = 1;
+  int ans = 0;
+  for (int i = 1; i <= m; i++)
+      for (int j = 1; j <= n; j++) {
+          bool ok = true;
+          if (mat[i - 1][j] % 2 == 0) ok = false;
+          if (mat[i + 1][j] % 2 == 0) ok = false;
+          if (mat[i][j - 1] % 2 == 0) ok = false;
+          if (mat[i][j + 1] % 2 == 0) ok = false;
+          ans += ok;
+      }
+  cout << ans << '\n';
+```
+
+>>>
+  ## Problema 6.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane, $n$ fiind impar. Să se determine dacă matricea dată este simetrică față de coloana sa din mijloc.
+<<<
+
+Din nou, putem reduce problema de la matrice la vector. Verificăm dacă fiecare linie este simetrică față de mijlocul ei. Dacă toate sunt simetrice, atunci și matricea este simetrică.
+
+``` cpp
+  bool ans = true;
+  for (int i = 1; i <= m; i++) {
+      bool ok = true;
+      for (int l = 1, r = n; l < r; l++, r--)
+          if (mat[i][l] != mat[i][r]) {
+              ok = false;
+              break;
+          }
+      if (!ok) {
+          ans = false;
+          break;
+      }
+  }
+  cout << (ans ? "DA\n" : "NO\n");
+```
+
+>>>
+  ## Problema 7.
+
+  Se dau două numere naturale nenule $m$ și $n$. Să se construiască o matrice $\mathrm{mat}$ cu $m$ linii și $n$ coloane cu proprietatea că, dacă o citim de la stânga la dreapta și de sus în jos, obținem șirul primelor $m \cdot n$ pătrate perfecte.
+<<<
+
+Reținem într-o variabilă $k$ inițializată cu $0$, radicalul pătratului perfect curent. Parcurgem matricea în ordinea specificată, atribuim elementului curent valoarea $k^2$, iar apoi incrementăm $k$.
+
+``` cpp
+  int k = 0;
+  for (int j = 1; j <= n; j++)
+      for (int i = 1; i <= m; i++) {
+          mat[i][j] = k * k;
+          k++;
+      }
+```
+
+>>>
+  ## Problema 8.
+
+  Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane, elementele sale luând valori din mulțimea $\{0, 1\}$. Se știe că matricea conține exact $p$ elemente egale cu $1$. Să se împartă matricea în $p / q$ zone conexe, astfel încât fiecare dintre ele să conțină exact $q$ elemente egale cu $1$. Se garantează că $p$ este divizibil cu $q$. O zonă se numește conexă dacă din fiecare celulă a sa se poate ajunge în oricare altă celulă din zona respectivă, fără a părăsi zona; la fiecare pas ne putem deplasa într-unul dintre cei patru vecini ai celulei curente.
+<<<
+
+Iată un exemplu ($p = 20$ și $q = 4$):
+
+![300; Partiționare matrice 1](partitionare-matrice-1.png)
+
+Am ales și o problemă la care trebuie să gândești puțin, nu doar să implementezi ce scrie în enunț :smile: Exemplul are rolul de a ne induce în eroare: Pare greu să alegi niște zone atât de aleatorii, și într-adevăr așa este. Ideea de rezolvare este să parcurgem matricea în așa fel încât celula curentă să fie vecină cu cea vizitată precedent. Putem face asta în mai multe moduri, dar cel mai simplu mi se pare să parcurgem matricea în zig-zag: Parcurgem liniile de sus în jos; liniile impare le parcurgem de la stânga la dreapta, iar cele pare de la dreapta la stânga.
+
+În timpul parcurgerii, contorizăm într-o variabilă $cnt = 0$ numărul de elemente nenule găsite până acum. Când acesta ajunge la $q$, tocmai am terminat de parcurs o zonă, și putem reseta $cnt$ la $0$. Știm că zona pe care tocmai am delimitat-o este conexă datorită ordinii în care parcurgem matricea.
+
+Ca să răspundem cerinței, vom genera o matrice $\mathrm{ans}$ cu $m$ linii și $n$ coloane, în care $\mathrm{ans}[i][j]$ va fi egal cu numărul zonei din care face parte elementul $\mathrm{mat}[i][j]$. După ce am delimitat ultima zonă, trebuie să avem grijă ca elementele pe care încă nu le-am parcurs să facă parte din ultima zonă.
+
+``` cpp
+  int crt = 1, cnt = 0;
+  for (int i = 1; i <= m; i++)
+      if (i % 2)
+          for (int j = 1; j <= n; j++) {
+              ans[i][j] = crt;
+              if (mat[i][j] && ++cnt == q && crt < p / q) {
+                  cnt = 0;
+                  crt++;
+              }
+          }
+      else
+          for (int j = n; j >= 1; j--) {
+              ans[i][j] = crt;
+              if (mat[i][j] && ++cnt == q && crt < p / q) {
+                  cnt = 0;
+                  crt++;
+              }
+          }
+```
+
+Răspunsul generat pentru exemplul de mai sus va arăta așa:
+
+![300; Partiționare matrice 2](partitionare-matrice-2.png)
+
+>>>
+  ## Problema 9.
+
+  Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se înlocuiască matricea dată cu simetrica ei față de diagonala principală.
+<<<
+
+![300; Simetrica față de diagonala principală](simetrica-diagonala-principala.png)
+
+Pentru a obține simetrica matricei date, trebuie să interschimbăm fiecare element $\mathrm{mat}[i][j]$ pentru care $i \lt j$ (deci deasupra diagonalei principale) cu corespondentul său de sub diagonala principală, care se observă ușor că este $\mathrm{mat}[j][i]$.
+
+``` cpp
+  for (int i = 1; i < n; i++)
+      for (int j = i + 1; j <= n; j++) {
+          int aux = mat[i][j];
+          mat[i][j] = mat[j][i];
+          mat[j][i] = aux;
+      }
+```
+
+>>>
+  ## Problema 10.
+
+  Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se înlocuiască matricea dată cu simetrica ei față de diagonala secundară.
+<<<
+
+![300; Simetrica față de diagonala secundară](simetrica-diagonala-secundara.png)
+
+Aici trebuie să vedem pentru fiecare element din stânga diagonalei secundare ($j \le n - i$) ce corespondent are în dreapta ei. Relațiile astea se observă analizând exemplul. Remarcăm că linia $i$ duce elementul pe coloana $n - i + 1$, iar coloana $j$ îl duce pe linia $n - j + 1$.
+
+``` cpp
+  for (int i = 1; i < n; i++)
+      for (int j = 1; j <= n - i; j++) {
+          int aux = mat[i][j];
+          mat[i][j] = mat[n - j + 1][n - i + 1];
+          mat[n - j + 1][n - i + 1] = aux;
+      }
+```
+
+>>>
+  ## Problema 11.
+
+  Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se afișeze șirul obținut prin parcurgerea matricei în formă de spirală.
+<<<
+
+![200; Parcurgerea matricei în formă de spirală](parcurgere-matrice-spirala.png)
+
+Observăm că a parcurge o matrice în formă de spirală înseamnă a-i parcurge pe rând chenarele, de la exterior la interior, fiecare chenar fiind parcurs în sensul acelor de ceasornic. Un chenar este determinat de linia/ coloana (sunt egale) colțului său din stânga-sus. Dacă facem un desen cu coordonatele tuturor celor patru colțuri ale chenarului, ne dăm seama ușor ce `for`-uri trebuie scrise ca să-l parcurgem corect:
+
+![200; Chenar matrice](chenar-matrice.png)
+
+``` cpp
+  for (int c = 1; c <= n - n / 2; c++) {
+      for (int j = c; j <= n - c + 1; j++)
+          cout << mat[c][j] << ' ';
+      for (int i = c + 1; i <= n - c + 1; i++)
+          cout << mat[i][n - c + 1] << ' ';
+      for (int j = n - c; j >= c; j--)
+          cout << mat[n - c + 1][j] << ' ';
+      for (int i = n - c; i >= c + 1; i--)
+          cout << mat[i][c] << ' ';
+  }
+  cout << '\n';
+```
+
+>>>
+  ## Problema 12.
+
+  Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se afișeze șirul obținut prin parcurgerea șerpuită a matricei date.
+<<<
+
+![200; Parcurgerea șerpuită a matricei](parcurgere-matrice-serpuita.png)
+
+Practic, trebuie să parcurgem fiecare diagonală paralelă sau egală cu diagonala secundară, în sensuri alternative (o dată de jos în sus, apoi de sus în jos). Deja știm destule; mai trebuie să determinăm coordonatele primului element parcurs de pe fiecare diagonală. În cazul exemplului, acestea sunt:
+
+$$
+(1, 1)\\
+(2, 1)\\
+(1, 3)\\
+(4, 1)\\
+(1, 5)\\
+(5, 2)\\
+(3, 5)\\
+(5, 4)\\
+(5, 5)
+$$
+
+Observăm că pentru primele $n$ diagonale una dintre coordonate este mereu $1$ și alternează (ba linie, ba coloană), iar cealaltă este un număr care crește de la $1$ la $n$. Similar, pentru ultimele $n - 1$ diagonale o coordonată e mereu $n$, iar cealaltă crește de la $2$ la $n$. De aici obținem codul de mai jos. `dir` este direcția în care parcurgem diagonala curentă (`1` e de jos în sus, `0` de sus în jos).
+
+``` cpp
+  bool dir = 1;
+  for (int i = 1; i <= n; i++, dir = !dir)
+      if (dir)
+          for (int j = 0, x = i, y = 1; j < i; j++, x--, y++)
+              cout << mat[x][y] << ' ';
+      else
+          for (int j = 0, x = 1, y = i; j < i; j++, x++, y--)
+              cout << mat[x][y] << ' ';
+  for (int i = 2; i <= n; i++, dir = !dir)
+      if (dir)
+          for (int j = 0, x = n, y = i; j < n - i + 1; j++, x--, y++)
+              cout << mat[x][y] << ' ';
+      else
+          for (int j = 0, x = i, y = n; j < n - i + 1; j++, x++, y--)
+              cout << mat[x][y] << ' ';
+  cout << '\n';
+```
+
+>>>
+  ## Problema 13.
+
+  Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se calculeze suma elementelor de pe fiecare diagonală a matricei.
+<<<
+
+Am văzut în articolul precedent că elementele aflate pe diagonala principală au coordonatele egale, iar cele de pe diagonala secundară au $j = n - i + 1$. De aici e simplu:
+
+``` cpp
+  int sumDP = 0, sumDS = 0;
+  for (int i = 1; i <= n; i++) {
+      sumDP += mat[i][i];
+      sumDS += mat[i][n - i + 1];
+  }
+  cout << sumDP << ' ' << sumDS << '\n';
+```
+
+>>>
+  ## Problema 14.
+
+  Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. În cadrul acesteia, putem distinge cinci zone:
+
+  +++
+  > **zona $0$:** elementele aflate pe diagonala principală sau pe cea secundară
+  > **zona $1$:** elementele aflate deasupra diagonalei principale și deasupra celei secundare
+  > **zona $2$:** elementele aflate deasupra diagonalei principale și sub cea secundară
+  > **zona $3$:** elementele aflate sub diagonala principală și sub cea secundară
+  > **zona $4$:** elementele aflate sub diagonala principală și deasupra celei secundare
+  ---
+
+  Să se determine suma elementelor aflate într-o zonă dată $z$.
+<<<
+
+Pentru zona $0$ calculăm suma elementelor de pe fiecare diagonală, le adunăm, iar dacă $n$ este impar, scădem elementul din centru, pentru că l-am adunat de două ori. Pentru celelalte zone, trebuie să căutăm din nou niște proprietăți ale indicilor elementelor corespunzătoare. Este bine să ne uităm pe două exemple -- unul cu $n$ par și altul cu $n$ impar:
+
+![400; Zone matrice](zone-matrice.png)
+
++++
+> În zona $1$, $1 \le i \le [n / 2]$ și $i + 1 \le j \le n - i$.
+> În zona $2$, $[n / 2] + 1 \le j \le n$ și $n - j + 2 \le i \le j - 1$.
+> În zona $3$, $[n / 2] + 1 \le i \le n$ și $n - i + 2 \le j \le i - 1$.
+> În zona $4$, $1 \le j \le [n / 2]$ și $j + 1 \le i \le n - j$.
+---
+
+Iată codul:
+
+``` cpp
+  int sum = 0;
+  if (!z) {
+      for (int i = 1; i <= n; i++)
+          sum += mat[i][i] + mat[i][n - i + 1];
+      if (n % 2)
+          sum -= mat[n - n / 2][n - n / 2];
+  }
+  else if (z == 1)
+      for (int i = 1; i <= n / 2; i++)
+          for (int j = i + 1; j <= n - i; j++)
+              sum += mat[i][j];
+  else if (z == 2)
+      for (int j = n / 2 + 1; j <= n; j++)
+          for (int i = n - j + 2; i <= j - 1; i++)
+              sum += mat[i][j];
+  else if (z == 3)
+      for (int i = n / 2 + 1; i <= n; i++)
+          for (int j = n - i + 2; j <= i - 1; j++)
+              sum += mat[i][j];
+  else
+      for (int j = 1; j <= n / 2; j++)
+          for (int i = j + 1; i <= n - j; i++)
+              sum += mat[i][j];
+  cout << sum << '\n';
+```
+
+>>>
+  ## Problema 15.
+
+  Să se genereze o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$ cu proprietatea că suma elementelor de pe fiecare coloană este aceeași.
+<<<
+
+De exemplu, pentru $n = 3$, un răspuns posibil este:
+
+$$\begin{pmatrix}
+  2 & 9 & 4\\
+  7 & 5 & 3\\
+  6 & 1 & 8
+\end{pmatrix}$$
+
+Asta e o problemă interesantă pentru că trebuie să găsim o modalitate __simplă__ de a aranja numerele, care să funcționeze pentru orice $n$. Cred că singura soluție este să o ghicim. Putem încerca să parcurgem matricea în diverse moduri dintre cele prezentate mai sus, însă ele nu vor funcționa.
+
+Soluția pe care am găsit-o eu este următoarea: Parcurgem pe rând liniile matricei, iar coloanele de pe linia $i$ le parcurgem pornind de la coloana $i$. După ce am terminat cu ultima coloană, ne întoarcem la coloana $1$ și continuăm să plasăm numere consecutive până pe coloana $i - 1$. De exemplu, pentru $n = 5$, matricea generată va fi:
+
+$$\begin{pmatrix}
+  1 & 2 & 3 & 4 & 5\\
+  10 & 6 & 7 & 8 & 9\\
+  14 & 15 & 11 & 12 & 13\\
+  18 & 19 & 20 & 16 & 17\\
+  22 & 23 & 24 & 25 & 21
+\end{pmatrix}$$
+
+Iată și codul:
+
+``` cpp
+  int k = 0;
+  for (int i = 1; i <= n; i++) {
+      for (int j = i; j <= n; j++)
+          mat[i][j] = ++k;
+      for (int j = 1; j < i; j++)
+          mat[i][j] = ++k;
+  }
+```
+
+În continuare, voi demonstra că soluția asta e corectă. Dacă ne uităm la diferența dintre elementele consecutive din cadrul fiecărei coloane, vom observa un pattern foarte simplu. Iată matricea obținută trecând pe poziția $(i, j)$ valoarea $\mathrm{mat}[i + 1][j] - \mathrm{mat}[i][j]$, pentru exemplul cu $n = 5$:
+
+$$\begin{pmatrix}
+  9 & 4 & 4 & 4 & 4\\
+  4 & 9 & 4 & 4 & 4\\
+  4 & 4 & 9 & 4 & 4\\
+  4 & 4 & 4 & 9 & 4
+\end{pmatrix}$$
+
+Generalizând, $4$ devine $n - 1$, iar $9$ devine $2n - 1$. Acum, putem calcula suma elementelor de pe orice coloană a lui $\mathrm{mat}$, folosindu-ne doar de prima linie a matricei și de diferențele scrise mai sus:
+
+$$\scriptsize \begin{align*}
+  \sum_{i = 1}^n \mathrm{mat}[i][j] &= j + (j + (n - 1)) + (j + 2(n - 1)) + \cdots + (j + (j - 1)(n - 1))\\
+  &+ (\underbrace{j + (j - 1)(n - 1) + (2n - 1)}_x) + (x + (n - 1)) + (x + 2(n - 1)) + \cdots + (x + (n - j - 1)(n - 1))\\
+  &= \left( j^2 + \frac{(j - 1)j}{2}(n - 1) \right) + \left( (n - j)(j + (j - 1)(n - 1) + (2n - 1)) + \frac{(n - j - 1)(n - j)}{2}(n - 1) \right)\\
+  &= \frac{j^2n + j^2 - jn + j}{2} + \frac{n^3 + n - j^2n - j^2 + jn - j}{2}\\
+  &= \frac{n(n^2 + 1)}{2}
+\end{align*}$$
+
+După cum se poate vedea, suma nu depinde de $j$, ceea ce înseamnă că este aceeași indiferent de coloană. De aici corectitudinea algoritmului.
+
+===
+
+Astea cred că sunt cele mai de bază probleme cu matrice în C++. Problemele mai interesante combină diverse tehnici ce merită abordate în alte articole, cum ar fi [sume parțiale 2D](sume-partiale/#header-7), [Șmenul lui Mars](smenul-lui-mars), [Algoritmul lui Lee](algoritmul-lui-lee), programare dinamică, baleiere cu stive etc. Dacă aveți vreo întrebare, nu ezitați să o adresați mai jos, într-un comentariu :smile:

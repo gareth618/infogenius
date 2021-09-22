@@ -3,7 +3,7 @@ AUTHOR: Iulian Oleniuc
 DATE: 06/02/2021
 CATEGORIES: Algoritmică și structuri de date
 TAGS: structuri de date, arbori, recursivitate, șiruri de caractere, sume parțiale, trie, xor
-DESCRIPTION: Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră foarte compactă...
+DESCRIPTION: Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră foarte compactă.
 
 În acest articol voi prezenta structura de date numită trie, precum și câteva aplicații interesante ale acesteia. Tria este o structură de date arborescentă, ușor de implementat, folosită pentru a stoca un set de cuvinte într-o manieră compactă. Din acest motiv, putem spune că tria este o structură de date de tip __dicționar__. Avantajul principal al acesteia este complexitatea căutării unui cuvânt, care este liniară în lungimea sa, nedepinzând de mărimea dicționarului. De aici și numele structurii (__trie__ provine de la __re**trie**val__).
 
@@ -32,7 +32,7 @@ Deocamdată, clasa `Trie` are nevoie de doi membri privați: `cnt` (numărul de 
 
 Această funcție, la fel ca și următoarele, primește ca parametri un string `str` și poziția curentă din acesta (`pos`). Funcția `insert` inserează recursiv cuvântul `str` în trie, astfel: Dacă poziția curentă este egală cu lungimea string-ului, înseamnă că ne-am terminat treaba, așa că incrementăm `cnt`-ul din nodul curent și ne oprim. Altfel, urmăm muchia către litera curentă (`str[pos] - 'a'`), și continuăm inserarea din nodul următor, începând cu poziția `pos + 1`. Înainte de asta, avem grijă să creăm nodul `next[str[pos] - 'a']`, în caz că acesta nu există deja.
 
-``` cpp -> Funcția insert
+``` cpp
   void insert(const string& str, int pos = 0) {
       if (pos == int(str.size()))
           cnt++;
@@ -46,13 +46,13 @@ Această funcție, la fel ca și următoarele, primește ca parametri un string 
 
 Iată o super-animație marca InfoGenius, care arată cum este construită tria de mai sus prin inserări succesive:
 
-[TODO]()TODO
+![](trie.js)
 
 ### Funcția `count`
 
 Funcția `count` returnează numărul de apariții ale cuvântului `str` în trie. Pentru a face asta, trebuie ca mai întâi să ajungem în nodul în care se termină cuvântul dat, iar apoi să returnăm `cnt`-ul din acesta. Așadar, funcția `count` va semăna foarte mult cu `insert`, numai că aici, dacă nu există tranziție din nodul curent către litera următoare, returnăm `0` și ne oprim, deoarece `str` nu se găsește în trie.
 
-``` cpp -> Funcția count
+``` cpp
   int count(const string& str, int pos = 0) {
       if (pos == int(str.size()))
           return cnt;
@@ -66,7 +66,7 @@ Funcția `count` returnează numărul de apariții ale cuvântului `str` în tri
 
 Funcția `lcp` trebuie să returneze lungimea celui mai lung prefix comun al lui `str` cu un cuvânt oarecare din trie. Deja ar trebui să fie clar cum facem asta: Coborâm în trie până când fie ne blocăm într-un nod fără tranziție către următoarea literă, fie ajungem la finalul string-ului. Ce returnăm de fapt este lungimea lanțului de la rădăcină până la nodul în care ne oprim.
 
-``` cpp -> Funcția lcp
+``` cpp
   int lcp(const string& str, int pos = 0) {
       if (pos == int(str.size()))
           return 0;
@@ -88,7 +88,7 @@ Haideți să mai adăugăm un membru privat la clasa `Trie`, notat cu `lvs` (de 
 
 Acum că avem calculată această informație, ne este mai ușor să rezumăm ce trebuie să facem concret în funcția `erase`: Coborâm în trie până în nodul în care se termină `str`, decrementând valorile `lvs` întâlnite pe parcurs. După ce ajungm în `node`, îl decrementăm pe `cnt` și ne întoarcem în rădăcină pe același traseu, ștergând nodurile al căror `lvs` a devenit `0`.
 
-``` cpp -> Funcția erase
+``` cpp
   void erase(const string& str, int pos = 0) {
       lvs--;
       if (pos == int(str.size()))
@@ -107,7 +107,7 @@ Acum că avem calculată această informație, ne este mai ușor să rezumăm ce
 
 Iată cum arată sursa completă pentru problema Trie:
 
-``` cpp -> trie.cpp
+``` cpp -> Trie
   #include <bits/stdc++.h>
   using namespace std;
 
@@ -181,7 +181,7 @@ Iată cum arată sursa completă pentru problema Trie:
 
 Iată și o implementare mai puțin populară, în care funcțiile sunt implementate iterativ. Aici, nodurile sunt ținute într-un vector alocat dinamic, iar pointerii sunt de fapt indici în acest vector. Dezavantajul este că această metodă de stocare a nodurilor nu ne permite să eliberăm efectiv memorie în urma unui `erase`. Nodurile sunt eliminate doar conceptual, prin ștergerea muchiei către primul nod dintre rădăcină și `node` care are `lvs`-ul `0`.
 
-``` cpp -> trie.cpp
+``` cpp -> Trie
   #include <bits/stdc++.h>
   using namespace std;
 
@@ -269,7 +269,7 @@ Totuși, în majoritatea problemelor interesante de la concursuri, avem nevoie d
 
 ## Complexitate
 
-În cazul ambelor implementări, funcția `insert` (la fel ca și celelalte trei de mai sus) are complexitatea $O(n)$, unde $n$ este lungimea string-ului dat. Partea mai puțin bună este consumul relativ mare de memorie -- pentru fiecare nod reținem $\Sigma$ pointeri/indici, dintre care majoritatea nu sunt folosiți. Iar asta se reflectă în complexitatea unui DFS, care ar avea constanta $\Sigma$. Putem reduce această constantă la $1$ înlocuind vectorul `next` cu un `map`. Însă, dacă facem asta, complexitatea lui `insert` devine $O(n \log \Sigma)$. Depinde de problemă dacă este mai bine să folosim `map` sau nu.
+În cazul ambelor implementări, funcția `insert` (la fel ca și celelalte trei de mai sus) are complexitatea $O(n)$, unde $n$ este lungimea string-ului dat. Partea mai puțin bună este consumul relativ mare de memorie -- pentru fiecare nod reținem $\Sigma$ pointeri/ indici, dintre care majoritatea nu sunt folosiți. Iar asta se reflectă în complexitatea unui DFS, care ar avea constanta $\Sigma$. Putem reduce această constantă la $1$ înlocuind vectorul `next` cu un `map`. Însă, dacă facem asta, complexitatea lui `insert` devine $O(n \log \Sigma)$. Depinde de problemă dacă este mai bine să folosim `map` sau nu.
 
 Cât despre numărul de noduri ale unei trie, în cel mai rău caz acesta poate fi $O(s)$, unde $s$ este suma lungimilor cuvintelor din trie. Acest caz se poate atinge, de exemplu, când toate cuvintele încep cu altă literă. Dacă avem mai multe cuvinte decât litere în alfabet, putem spune că cel mai rău caz se atinge atunci când perechile formate din primele două litere din fiecare cuvânt sunt diferite. Dacă tot avem prea puține litere, ne putem uita la primele trei litere din fiecare cuvânt, și tot așa. Complexitatea în spațiu rămâne $O(s)$.
 
@@ -313,7 +313,7 @@ Am colorat cu portocaliu nodurile în care am ajuns alegând valoarea $\neg x$ �
 
 Iată mai jos o sursă de 100 de puncte la problema Xor Max. Complexitatea finală a algoritmului este de ordinul $O(n \log n)$, unde $\log$-ul vine de la numărul de biți ai unui număr, care este totodată înălțimea triei.
 
-``` cpp -> xormax.cpp
+``` cpp -> Problema Xor Max
   #include <bits/stdc++.h>
   using namespace std;
 

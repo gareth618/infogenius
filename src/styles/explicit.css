@@ -10,8 +10,14 @@
   }
 }
 
+.explicit .div-center { margin: 1rem 0; }
+.explicit .div-right { margin: 1rem 0; }
 .explicit .div-center p { text-align: center; }
 .explicit .div-right p { text-align: right; }
+.explicit .div-right > *:first-child { margin-top: 0; }
+.explicit .div-right > *:last-child { margin-bottom: 0; }
+.explicit .div-center > *:first-child { margin-top: 0; }
+.explicit .div-center > *:last-child { margin-bottom: 0; }
 
 .explicit h2,
 .explicit h3,
@@ -55,6 +61,14 @@
 .explicit h6 a:hover {
   text-underline-offset: 2px;
   text-decoration-thickness: 3px;
+}
+
+.explicit h2 a code,
+.explicit h3 a code,
+.explicit h4 a code,
+.explicit h5 a code,
+.explicit h6 a code {
+  color: var(--text);
 }
 
 .explicit ul,
@@ -113,6 +127,7 @@
 
 .explicit blockquote > *:first-child { margin-top: 0; }
 .explicit blockquote > *:last-child { margin-bottom: 0; }
+.explicit blockquote > div:last-child > pre:last-child { margin-bottom: 0; }
 
 .explicit hr {
   margin: 1rem 0;

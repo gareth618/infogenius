@@ -41,25 +41,10 @@ export default function PiMonteCarlo(p5) {
     p5.text('             ' + p5.PI.toFixed(10), p5.width / 2, 335);
   };
 
-  let paused = false;
-
   p5.mousePressed = () => {
-    if (paused) {
-      p5.loop();
-      paused = false;
-    }
-    else {
-      p5.noLoop();
-      paused = true;
-    }
-  };
-
-  p5.keyPressed = () => {
-    if (!paused && p5.key.toLowerCase() === 'r') {
-      inside = 0;
-      total = 0;
-      p5.fill(BLACK);
-      p5.rect(0, 0, 300, 300);
-    }
+    inside = 0;
+    total = 0;
+    p5.fill(BLACK);
+    p5.rect(0, 0, 300, 300);
   };
 };

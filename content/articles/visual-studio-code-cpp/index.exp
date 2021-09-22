@@ -1,0 +1,208 @@
+TITLE: Cum să configurezi Visual Studio Code pentru C++
+AUTHOR: Iulian Oleniuc
+DATE: 14/04/2020
+CATEGORIES: Diverse
+TAGS: c++, codeblocks, ide, programare competitivă, visual studio code
+DESCRIPTION: Visual Studio Code (VSCode) este unul dintre cele mai bune IDE-uri pentru cei interesați de programare competitivă.
+
+**Articolul a fost actualizat pe 21 septembrie 2021!** Visual Studio Code (VSCode) este unul dintre cele mai bune IDE-uri pentru cei interesați de programare competitivă. Este intuitiv, customizabil, extensibil, stabil, rapid, primește update-uri frecvent, are syntax highlighting bun și vine cu teme elegante, atât light cât și dark. Este exact opusul lui CodeBlocks, pe care dacă încă îl folosiți, vă recomand să-l înlocuiți cu VSCode cât mai repede.
+
+Dacă e să trecem cu vederea design-ul oribil al CodeBlocks, acesta are în continuare o problemă foarte mare, și anume faptul că se crash-uiește când vrea. Eu am pățit-o de multe ori, în special când încercam să deschid un fișier de intrare foarte mare. Este extrem de enervant să ți se șteargă o sursă întreagă din cauza unui crash idiot. Costin Oncescu chiar a [ratat](https://codeforces.com/blog/entry/61780) aurul la ?[IOI](International Olympiad in Informatics) din cauza asta...
+
+Așadar, în acest articol vă voi arăta cum se configurează Visual Studio Code pentru [C++](introducere-cpp) (atât pe Windows cât și pe Mac), iar apoi voi vorbi un pic despre code snippet-uri și shortcut-uri.
+
+## Configurare pentru C++
+
+Mai întâi trebuie să descărcați VSCode de [aici](https://code.visualstudio.com/download). Când veți deschide VSCode pentru prima dată veți fi întâmpinați cu ceva de genul:
+
+![500; Visual Studio Code](vscode-start-page.png)
+
+Interfața este foarte simplă, așa că n-am prea multe de spus despre ea, mai ales că vom face aproape totul din taste.
+
+Pentru a crea un nou fișier, tastați ;wl(Ctrl+N) m(CmdN);, salvați-l prin ;wl(Ctrl+S) m(CmdS); cu extensia `.cpp` și gata! Dacă aveți nevoie și de alte fișiere, de exemplu `.in` și `.out`, nu aveți decât să le salvați în același director, în mod similar. Spre deosebire de CodeBlocks, VSCode nu creează proiecte întregi, cu multe directoare și fișiere ciudate, ca `.layout` și `.depend`. Fișierele deschise apar sus, exact ca într-un browser:
+
+Pentru a putea lucra în C++, trebuie să instalăm câteva extensii specifice: __C/C++__, __C/C++ Intellisense__ și __Code Runner__. Acestea pot fi căutate prin __Search Extensions in Marketplace__, din meniul corespunzător celui de-al cincilea buton din stânga (cel cu patru pătrățele):
+
+![250; VScode: Extensii](vscode-extensions.png)
+
+După ce am instalat cele trei extensii, trebuie să configurăm comanda pentru compilarea fișierelor C++. Pentru a face asta, trebuie să edităm fișierul `settings.json`, care, după cum îi zice și numele, stochează setările principale ale IDE-ului în format JSON, care cred este destul de ușor de deslușit, chiar dacă nu vă este familiar. Cel mai simplu mod de a deschide fișierul `settings.json` este să intrați în __Command Palette__ cu ;wl(Ctrl+Shift+P) m(ShiftCmdP); și să tastați __Open Settings (JSON)__. Acum vă îndemn să copiați direct fișierul meu de setări, care conține calea către compilator, și niște chestii de bază, cum ar fi faptul că oblig VSCode să ruleze codul în terminal.
+
+``` json -> settings.json => Windows
+  {
+    "workbench.startupEditor": "none",
+    "workbench.editor.untitled.hint": "hidden",
+
+    "editor.fontSize": 20,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.tabSize": 4,
+    "editor.suggestSelection": "first",
+    "editor.renderWhitespace": "none",
+    "editor.minimap.enabled": false,
+
+    "terminal.integrated.fontSize": 18,
+    "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
+    "terminal.integrated.allowChords": false,
+
+    "debug.console.fontSize": 18,
+    "debug.console.fontFamily": "Consolas, 'Courier New', monospace",
+
+    "code-runner.ignoreSelection": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+      "cpp": "cd $dir ; if ($?) { g++ -std=c++17 -Wall -Wextra $fileName -o $fileNameWithoutExt } ; if ($?) { .\\$fileNameWithoutExt }"
+    },
+
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.includePath": [
+      "C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32",
+      "C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++/mingw32"
+    ]
+  }
+^^^ json -> settings.json => MacOS
+  {
+    "workbench.startupEditor": "none",
+    "workbench.editor.untitled.hint": "hidden",
+
+    "editor.fontSize": 20,
+    "editor.fontFamily": "Consolas, 'Courier New', monospace",
+    "editor.tabSize": 4,
+    "editor.suggestSelection": "first",
+    "editor.renderWhitespace": "none",
+    "editor.minimap.enabled": false,
+
+    "terminal.integrated.fontSize": 18,
+    "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
+    "terminal.integrated.allowChords": false,
+
+    "debug.console.fontSize": 18,
+    "debug.console.fontFamily": "Consolas, 'Courier New', monospace",
+
+    "code-runner.ignoreSelection": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+      "c": "cd $dir && clang -std=c17 -Wall -Wextra $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt && rm $fileNameWithoutExt",
+      "cpp": "cd $dir && clang++ -std=c++17 -Wall -Wextra $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt && rm $fileNameWithoutExt"
+    },
+
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.intelliSenseMode": "macos-clang-x64",
+    "C_Cpp.default.includePath": ["/usr/local/include/"],
+    "C_Cpp.default.compilerPath": "/usr/bin/clang"
+  }
+^^^
+
+### Calea către compilator
+
+Setarea `"C_Cpp.default.includePath"` conține calea către compilator. Pentru Windows, vom folosi compilatorul MinGW, care, dacă încă aveți CodeBlocks instalat, probabil se alfă în `C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32`. Dacă nu, îl puteți descărca de [aici](https://sourceforge.net/projects/mingw-w64/). Pentru Mac, compilatorul folosit este Clang, și se află în `/usr/bin/clang`. Trebuie să instalați __Xcode Command Line Tools__ în prealabil. Comenzile și path-urile de pe Mac merg și pe Linux, numai să înlocuiți compilatorul cLang cu GCC.
+
+(Celor cu Windows le urez mult succes, pentru că eu tocmai am încercat să configurez VSCode pe o mașină virtuală cu Windows, și m-am dat bătut. Dacă nici vouă nu vă (mai) merg setările de mai sus, știu doar că trebuie să modificați calea către MinGW în funcție de unde l-ați instalat, și să adăugați calea către G++ în variabila de sistem `PATH` -- mie asta nu-mi iese. Dacă nu reușiți, eu zic să-l dați încolo de Windows și să treceți pe Linux, sau chiar pe Mac dacă vă permiteți.)
+
+Acum ar trebui să aveți totul pregătit pentru a putea rula surse C++. Pentru a testa compilatorul, creați un fișier nou `.cpp`, scrieți un program de genul __Hello World__, salvați, și folosiți comanda ;wl(Ctrl+Alt+N) m(CtrlOptionN);.
+
+### `<bits/stdc++.h>`
+
+Cea mai mare problemă pe care am avut-o când am configurat VSCode a fost faptul că nu mă lăsa să folosesc `biblioteca <bits/stdc++.h>`, și mi-a luat ceva să găsesc o soluție. Problema apare pentru că `<bits/stdc++.h>` nu e un header standard C++, și într-un fel VSCode nu-l recunoaște dacă nu trimiți linker-ul direct la adresa directorului în care se află `bits`. Prin urmare, la `"C_Cpp.default.includePath"` trebuie adăugată adresa
+
+`C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++/mingw32`.
+
+Dacă ați copiat conținutul `settings.json` de mai sus, nu trebuie să mai faceți nimic.
+
+Pentru Mac e puțin mai complicat, pentru că Clang nu conține deloc fișierul `stdc++.h`, așa că trebuie să-l descărcați de [aici](https://github.com/tekfyl/bits-stdc-.h-for-mac/blob/master/stdc%2B%2B.h) și să-l copiați într-un director `bits`, pe care-l creați la adresa `/usr/local/include/`, care trebuie inclusă la rândul ei în `"C_Cpp.default.includePath"`. Acum ar trebui să puteți compila surse care includ biblioteca `<bits/stdc++.h>`!
+
+## Code Snippets
+
+Un code snippet este o secvență de cod care apare la sugestii atunci când tastezi începutul ei. Practic este un template care te ajută să tastezi mai repede secvențe repetitive de cod. Extensia C++ Intellisense vine cu niște snippet-uri default, ca cel de mai jos pentru `for`:
+
+![300](vscode-for-snippet.mp4)
+
+Un snippet pentru `for` pare inutil... și chiar e. Dar partea interesantă este că ne putem defini propriile noastre snippet-uri, iar asta e foarte util pentru cei care folosesc template-uri pentru programare competitivă, ca cel de [aici](https://codeforces.com/contest/1329/submission/75584223).
+
+Pentru a crea un snippet, mergeți la __Settings > User Snippets > `cpp.json`__. Aici veți găsi fișierul JSON cu snippet-urile definite de utilizator, care conține într-un comentariu o descriere mai detaliată a modului lor de funcționare. Eu am două snippet-uri, unul pentru probleme cu input/output din consolă (`CodeForces`) și unul pentru probleme cu fișiere (`InfoArena`). Când creez un fișier nou pur și simplu scriu `CodeForces` sau `InfoArena`, dau enter și fișierul se completează automat cu template-ul corespunzător. Iar în cazul `InfoArena`, e de ajuns să scriu numele fișierului o singură dată, pentru că se tastează automat și la `fin` și la `fout` :tongue:
+
+![500](vscode-infoarena-snippet.mp4)
+
+Iată definițiile celor două snippet-uri în JSON:
+
+``` json -> cpp.json
+  "CodeForces": {
+      "prefix": "CodeForces",
+      "body": [
+          "#include <bits/stdc++.h>",
+          "using namespace std;",
+          "",
+          "int main() {",
+          "    ios_base::sync_with_stdio(false);",
+          "    cin.tie(nullptr);",
+          "",
+          "    $0",
+          "    return 0;",
+          "}",
+          ""
+      ],
+      "description": "CodeForces Snippet"
+  },
+
+  "InfoArena": {
+      "prefix": "InfoArena",
+      "body": [
+          "#include <bits/stdc++.h>",
+          "using namespace std;",
+          "",
+          "ifstream fin(\"$1.in\");",
+          "ofstream fout(\"$1.out\");",
+          "",
+          "int main() {",
+          "    $0",
+          "    return 0;",
+          "}",
+          ""
+      ],
+      "description": "InfoArena Snippet"
+  }
+^^^
+
+De fiecare dată când am terminat de completat un câmp din snippet, apăsăm ;Tab; și trecem la următorul. `$i`, cu `i` nenul, arată poziția cursorului după al `(i-1)`-lea tab, iar `$0` reprezintă poziția finală a cursorului. Dar cred că GIF-ul de mai sus explică cel mai bine procesul.
+
+## Shortcut-uri
+
+VSCode are o grămadă de shortcut-uri utile. Aveți două PDF-uri cu acestea [aici](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf) (Windows) și [aici](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf) (Mac). Țin să menționez totuși câteva shortcut-uri mai importante:
+
++++
+> ;wl(Ctrl+/) m(Cmd/); comentează sau de-comentează secvența selectată de cod. Foarte util atunci când faci debugging, pentru că nu mai trebuie să stai să încadrezi manual codul între `/*` și `*/`.
+> ;wl(Alt+i) m(Ctrli); te duce la al `i`-lea tab deschis, cu `1 <= i <= 9`. Foarte util pentru a naviga eficient printre fișiere.
+> ;wl(Ctrl+K+T) m(CmdKT); deschide un meniu cu temele disponibile. Eu de obicei folosesc Dark+, dar când este prea multă lumină în încăpere apelez și la Solarized Light.
+> ;wl(Ctrl+C) m(CmdC);, dacă nu ai nicio secvență de cod selectată, îți copiază întreaga linie pe care de afli.
+> ;wl(Alt) m(Option);, urmat de săgeată-sus sau săgeată-jos, îți mută linia curentă cu o poziție mai sus sau mai jos.
+> ;wl(Ctrl+Shift+K) m(CmdShiftK); șterge linia curentă.
+> ;wl(Alt) m(Option);, urmat de click, adaugă un nou cursor la poziția respectivă. Astfel, poți scrie același text în mai multe locuri simultan.
+---
+
+### Shortcut-uri definite de utilizator
+
+Pentru a defini propriile noastre shortcut-uri, trebuie să edităm fișierul `keybindings.json`, care se accesează tastând __Open Keyboard Shortcuts (JSON)__ în Command Palette. Recomand să copiați și voi următoarele trei shortcut-uri, pentru că rezolvă două mici probleme ale VSCode-ului:
+
+``` json -> keybindings.json
+  [
+    {
+      "key": "ctrl+k",
+      "command": "workbench.action.terminal.kill"
+    },
+    {
+      "key": "ctrl+`",
+      "command": "workbench.action.terminal.focus",
+    },
+    {
+      "key": "ctrl+`",
+      "command": "workbench.action.focusActiveEditorGroup",
+      "when": "terminalFocus"
+    }
+  ]
+^^^
+
+Acum, putem închide terminalul apăsând ;wl(Ctrl+K) m(CtrlK);. Nu mai este nevoie să apăsăm pe butonul cu coșul de gunoi. Celelalte două shortcut-uri, care de fapt sunt unul singur, ne permit să schimbăm focusul de pe fișier pe terminal și invers. Acest lucru este util deoarece (uneori -- depinde de ultimul update) VSCode nu ne lasă să folosim comenzi de genul ;wl(Alt+i) m(Ctrli); când suntem în terminal.
+
+===
+
+**Sfârșit!** Sper că ați reușit să configurați Visual Studio Code și că o să vă placă :smile: Dacă aveți vreo întrebare legată de VSCode, o puteți adresa într-un comentariu mai jos.

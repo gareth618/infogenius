@@ -70,7 +70,7 @@ $$\Pr\{A \in \operatorname{Int} C\} = \frac{A_C}{A_P} = \frac{\pi r^2}{4 r^2} = 
 
 Ca să rezum, algoritmul constă în a genera cât mai multe puncte random în interiorul unui pătrat și a determina câte dintre acestea se află la o distanță cel mult egală cu $r$ de centrul pătratului. Apoi, împărțim acest număr la numărul total de puncte, înmulțim rezultatul cu $4$ și putem spune că l-am aproximat pe $\pi$.
 
-Iată și o vizualizare a acestui algoritm! Pentru a pune pauză, dați click undeva în canvas, iar pentru a o lua de la capăt, apăsați tasta ;R;.
+Iată și o vizualizare a acestui algoritm! (Dați click pentru a o lua de la capăt.)
 
 ![](pi-monte-carlo.js)
 
@@ -119,26 +119,11 @@ Mai jos aveți și codul sursă pentru această animație, scris în JavaScript 
     text('             ' + PI.toFixed(10), width / 2, 335);
   }
 
-  let paused = false;
-
   function mousePressed() {
-    if (paused) {
-      loop();
-      paused = false;
-    }
-    else {
-      noLoop();
-      paused = true;
-    }
-  }
-
-  function keyPressed() {
-    if (!paused && key.toLowerCase() === 'r') {
-      inside = 0;
-      total = 0;
-      fill(BLACK);
-      rect(0, 0, 300, 300);
-    }
+    inside = 0;
+    total = 0;
+    fill(BLACK);
+    rect(0, 0, 300, 300);
   }
 ^^^
 
@@ -212,25 +197,10 @@ Iată și codul, în caz că vreți să aruncați o privire peste el:
     text('             ' + PI.toFixed(10), width / 2, 335);
   }
 
-  let paused = false;
-
   function mousePressed() {
-    if (paused) {
-      loop();
-      paused = false;
-    }
-    else {
-      noLoop();
-      paused = true;
-    }
-  }
-
-  function keyPressed() {
-    if (!paused && key.toLowerCase() === 'r') {
-      good = 0;
-      total = 0;
-      resetBackground();
-    }
+    good = 0;
+    total = 0;
+    resetBackground();
   }
 ^^^
 

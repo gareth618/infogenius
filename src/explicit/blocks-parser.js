@@ -29,8 +29,7 @@ const END_TAGS = {
 const LANGS = [
   'html', 'css', 'javascript', 'json',
   'c', 'cpp', 'java', 'python',
-  'bash', 'asm6502', 'text',
-  'latex', 'markdown'
+  'bash', 'text', 'latex', 'markdown'
 ];
 
 function parseSons(content, media, tag) {
@@ -114,7 +113,7 @@ export default function parseBlocks(content, media, tag = 'root') {
       !/ {2}\S/.test(line.slice(0, 3))
     ))) return;
     const str = content.join(' ');
-    if (followsRegex(str, /\$\$\S(.*\S)?\$\$[.,!?]?/) == null) return;
+    if (followsRegex(str, /\$\$.*\S.*\$\$[.,!?]?/) == null) return;
     try {
       const last = str.slice(-1);
       return {

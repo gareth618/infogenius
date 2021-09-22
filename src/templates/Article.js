@@ -16,7 +16,7 @@ import * as styles from '@styles/article.module.css';
 export default function Article({ data, pageContext: article }) {
   const siteURL = data.site.siteMetadata.siteUrl;
   const siteTitle = data.site.siteMetadata.title;
-  const cleanTitle = sanitize(article.title.replace(/[$\\]/g, ''));
+  const cleanTitle = sanitize(article.title.replace(/[$\\]/g, '').replace(/`/g, ''));
   const thumbnail = article.media.images.find(image => image.name === 'index')?.data;
   const thumbnailURL = article.media.images.find(image => image.name === 'index')?.url;
 

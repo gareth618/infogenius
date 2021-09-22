@@ -7,6 +7,7 @@ export default class CSanim {
   static get YELLOW() { return [255, 215, 0]; }
   static get ORANGE() { return [255, 140, 0]; }
   static get OLDLACE() { return [253, 245, 230]; }
+  static get PURPLE() { return [102, 51, 153]; }
 
   static linearMap(value, beg1, end1, beg2, end2) {
     return (value - beg1) / (end1 - beg1) * (end2 - beg2) + beg2;
@@ -141,14 +142,14 @@ export default class CSanim {
     }
   }
 
-  static #Node = class extends CSanim.#Shape {
-    constructor(csa, position, size, draw) {
+  static Node = class extends CSanim.#Shape {
+    constructor(csa, position, size, getCorner = () => 0) {
       super(csa);
-      this.drawNode = draw;
       this.position = [...position];
       this.size = size;
       this.textSize = size * .6;
       this.ratio = 5;
+      this.getCorner = getCorner;
     }
 
     draw(p5) {
@@ -157,10 +158,10 @@ export default class CSanim {
       p5.translate(+this.position[0], +this.position[1]);
       p5.rotate(this.angle == null ? 0 : +this.angle);
       p5.fill(...this.color, this.opacity == null ? 255 : this.opacity);
-      this.drawNode(p5, size);
+      p5.square(0, 0, size, this.getCorner(size));
       if (this.newColor != null) {
         p5.fill(this.newColor[0], this.newColor[1], this.newColor[2]);
-        this.drawNode(p5, this.newColor[3]);
+        p5.square(0, 0, this.newColor[3], this.getCorner(this.newColor[3]));
       }
       p5.textSize(textSize);
       if (this.newText != null) {
@@ -222,15 +223,15 @@ export default class CSanim {
     }
   }
 
-  static Square = class extends CSanim.#Node {
+  static Square = class extends CSanim.Node {
     constructor(csa, position, size) {
-      super(csa, position, size, (p5, size) => p5.square(0, 0, size, size / this.ratio));
+      super(csa, position, size, () => Math.ceil(Math.ceil(this.size / this.ratio) / 1.5));
     }
   };
 
-  static Circle = class extends CSanim.#Node {
+  static Circle = class extends CSanim.Node {
     constructor(csa, position, size) {
-      super(csa, position, size, (p5, size) => p5.circle(0, 0, size));
+      super(csa, position, size, () => Math.ceil(this.size / 2));
     }
   };
 
@@ -311,21 +312,20 @@ export default class CSanim {
       p5.line(...this.beg, ...this.end);
       const angle = p5.atan2(this.end[1] - this.beg[1], this.end[0] - this.beg[0]);
       if (this.arrow) {
-        const arrowLength = Math.min(p5.dist(...this.beg, ...this.end) / 10, 10);
         p5.translate(+this.end[0], +this.end[1]);
         p5.rotate(+(angle - 150));
-        p5.line(0, 0, arrowLength, 0);
+        p5.line(0, 0, 7.5, 0);
         p5.rotate(-(angle - 150));
         p5.rotate(+(angle + 150));
-        p5.line(0, 0, arrowLength, 0);
+        p5.line(0, 0, 7.5, 0);
         p5.rotate(-(angle + 150));
         if (this.newColor != null) {
           p5.stroke(this.newColor[0], this.newColor[1], this.newColor[2], this.newColor[7]);
           p5.rotate(+(angle - 150));
-          p5.line(0, 0, arrowLength, 0);
+          p5.line(0, 0, 7.5, 0);
           p5.rotate(-(angle - 150));
           p5.rotate(+(angle + 150));
-          p5.line(0, 0, arrowLength, 0);
+          p5.line(0, 0, 7.5, 0);
           p5.rotate(-(angle + 150));
         }
         p5.translate(-this.end[0], -this.end[1]);
@@ -353,6 +353,7 @@ export default class CSanim {
         p5.text(this.newText, 0, 0);
       }
       else {
+        console.log(this.text.length);
         p5.fill(...this.textBoxColor, this.opacity == null ? 255 : this.opacity);
         p5.rect(0, 0, this.text === '' ? 0 : this.text.length * this.textSize / 2 + 25, this.textSize + 5, this.weight);
         p5.fill(...this.textColor, this.opacity == null ? 255 : this.opacity);
@@ -496,6 +497,10 @@ export default class CSanim {
     this.play([], duration);
   }
 
+  saveScreen() {
+    this.toSave = this.frames.length - 1;
+  }
+
   run(p5) {
     let active = false;
     let paused = false;
@@ -506,7 +511,7 @@ export default class CSanim {
       p5.rectMode(p5.CENTER);
       p5.ellipseMode(p5.CENTER);
       p5.textAlign(p5.CENTER, p5.CENTER);
-      p5.textFont("'Source Code Pro', monospace");
+      p5.textFont('Source Code Pro');
     };
 
     let fps = 1;

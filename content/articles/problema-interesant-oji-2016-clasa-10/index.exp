@@ -1,0 +1,107 @@
+TITLE: Problema Interesant -- OJI 2016, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 26/06/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, oji 2016, șiruri de caractere
+DESCRIPTION: Problema Interesant, de clasa a 10-a, a fost dată în 2016 la OJI. Se dă o mulțime s ce conține n șiruri de caractere formate doar din...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Vlad Nicu
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/interesant), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=1620)
+---
+
+## Rezumat
+
+Se dă o mulțime `s` ce conține `n` șiruri de caractere formate doar din litere mici. Un șir de caractere se consideră __interesant__ dacă nu există niciun alt șir în mulțimea `s` care să-l conțină ca subșir (__nu__ subsecvență). Prima cerință este să determinăm cel mai lung șir din mulțimea dată. Dacă există mai multe șiruri de lungime maximă, trebuie afișat cel minim din punct de vedere lexicografic. A doua cerință este să afișăm șirurile interesante (în ordinea în care apar în fișierul de intrare), împreună cu numărul lor.
+
+## Soluție
+
+Pentru a reține șirurile de caractere convenabil în raport cu cerințele problemei, am definit un `struct` `Str`. Acesta conține câmpurile `id` (poziția string-ului din timpul citirii), `lg` (lungimea string-ului) și `str` (șirul în sine). Am supraîncărcat operatorul `<` pentru acest tip de date și i-am scris două criterii de sortare. Primul (`operator<`) sortează șirurile crescător din punct de vedere al lungimii, iar în caz de egalitate, descrescător lexicografic. Al doilea (`cmp`) le sortează crescător după `id`.
+
+După citirea datelor, am sortat vectorul de șiruri după primul criteriu, și pentru fiecare string am căutat un posibil string care să-l conțină ca subșir. Pentru asta, am parcurs vectorul în ordine inversă, pentru că șansele sunt mai mari ca un string mai lung să-l conțină ca subșir pe celălalt. Am marcat în vectorul `no` pentru fiecare string dacă este interesant sau nu, iar la final am sortat vectorul după al doilea criteriu pentru a-i restabili ordinea inițială și a afișa soluția. Pentru a doua cerință era de ajuns să afișăm ultimul element al vectorului după prima sortare.
+
+## Sursă C++
+
+``` cpp -> Problema Interesant
+  #include <fstream>
+  #include <cstring>
+  #include <algorithm>
+
+  #define VMAX 210
+  #define SMAX 5010
+
+  std::ifstream fin("interesant.in");
+  std::ofstream fout("interesant.out");
+
+  struct Str {
+      int id, lg;
+      char str[SMAX];
+  };
+
+  inline bool operator<(Str x, Str y) {
+      return x.lg < y.lg || x.lg == y.lg && strcmp(x.str, y.str) > 0;
+  }
+
+  inline bool cmp(Str x, Str y) {
+      return x.id < y.id;
+  }
+
+  int c, n;
+  Str v[VMAX];
+
+  int nrSol;
+  bool no[VMAX];
+
+  /// Funcția ce testează dacă x este un subșir al lui y
+  bool check(Str x, Str y) {
+      for (int i = 0, j = 0; j < y.lg; j++)
+          if (x.str[i] == y.str[j]) {
+              if (i == x.lg - 1)
+                  return true;
+              i++;
+          }
+      return false;
+  }
+
+  int main() {
+      char chr;
+
+      fin >> c >> n; fin.get();
+      for (int i = 0; i < n; i++) {
+          v[i].lg = 0;
+          v[i].id = i;
+
+          while (fin.get(chr), chr != '\n')
+              v[i].str[v[i].lg++] = chr;
+          v[i].str[v[i].lg] = '\0';
+      }
+
+      std::sort(v, v + n);
+      if (c == 1) {
+          fout << v[n - 1].str << '\n';
+          fout.close();
+          return 0;
+      }
+
+      nrSol = n;
+      for (int i = 0; i < n; i++)
+          for (int j = n - 1; j >= 0; j--)
+              if (i != j && check(v[i], v[j])) {
+                  no[v[i].id] = true;
+                  nrSol--;
+                  break;
+              }
+              else if (v[j].lg < v[i].lg)
+                  break;
+
+      std::sort(v, v + n, cmp);
+      fout << nrSol << '\n';
+      for (int i = 0; i < n; i++)
+          if (!no[i])
+              fout << v[i].str << '\n';
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Interesant, lasă un comentariu și te voi ajuta :smile:

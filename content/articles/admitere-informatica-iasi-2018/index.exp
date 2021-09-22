@@ -231,7 +231,7 @@ Folosim o matrice locală `aux`, de tip `bool`, unde reținem pe fiecare poziți
                       dif = A[lin][col] - A[L][C]; // diferența curentă
                       abs = dif < 0 ? -dif : dif; // modulul diferenței curente
 
-                      // Dacă am găsit o valoare/poziție mai bună:
+                      // Dacă am găsit o valoare/ poziție mai bună:
                       if (abs < absMin ||
                           abs == absMin && A[lin][col] < A[linMin][colMin]) {
                               absMin = abs;

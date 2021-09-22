@@ -1,0 +1,82 @@
+TITLE: Problema Avârcolaci -- ONI 2014, Clasa a 11-a
+AUTHOR: Iulian Oleniuc
+DATE: 19/07/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 11, element majoritar, oni 2014
+DESCRIPTION: Problema avârcolaci, de clasa a 11-a, a fost dată în 2014 la ONI. Se dă un vector de lungime 2 * n, ce conține codurile unor vârcolaci...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Andrei Pârvu
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/avarcolaci), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=1115)
+---
+
+## Rezumat
+
+Se dă un vector de lungime $2 \cdot n$, ce conține codurile unor vârcolaci. Dacă oricum am împărți vectorul în două grupe, fiecare de lungime $n$, un vârcolac codificat cu $v$ apare cel puțin câte o dată în fiecare grupă, atunci el este cu siguranță cel care bântuie satul. Pentru $t$ astfel de teste, trebuie să determinăm vârcolacul care bântuie fiecare sat. Dacă nu există un astfel de vârcolac, se afișează mesajul `"Mozart"`.
+
+## Soluție
+
+Enunțul e destul de ciudat, probabil pentru a ne îndepărta de la ideea că nu trebuie decât să aflăm elementul majoritar al fiecărui vector. Cuvântul __Mozart__ (care știu că e scris greșit) ar trebui totuși să ne ajute; soluția problemei e la fel de clasică precum muzica lui Mozzart :yey:
+
+Folosim algoritmul optim pentru găsirea elementului majoritar, de complexitate $O(n)$, pe care l-am prezentat și în articolul despre problema [livada](problema-livada-oji-2010-clasa-9). Totuși, ceva nu e bine. Algoritmul presupune parcurgerea vectorului de două ori, iar pentru asta ar trebui să reținem cumva vectorul, deși n-avem destulă memorie. Șmecheria este să efectuăm prima parte a algoritmului, reținând doar candidatul corespunzător fiecărui test (într-un vector `cand`), iar apoi să redeschidem fișierul pentru a doua parcurgere a vectorilor, în care verificăm pentru fiecare dacă are într-adevăr un element majoritar, folosind valorile găsite mai înainte:
+
+``` cpp
+  fin.close();
+  fin.open("NumeFisier");
+```
+
+Dar, chiar dacă era necesară ideea asta isteață, mi se pare o problemă prea simplă pentru o națională de clasele 11-12... Nici nu aveai nevoie de [citire în C](citire-scriere-c-cpp) sau de parsare, pentru că cele șase secunde oferite sunt suficiente.
+
+## Sursă C++
+
+``` cpp -> Problema Avârcolaci
+  #include <fstream>
+  #define TMAX 20
+
+  std::ifstream fin("avarcolaci.in");
+  std::ofstream fout("avarcolaci.out");
+
+  int t, n;
+  int cand[TMAX];
+
+  int main() {
+      fin >> t;
+      for (int i = 0; i < t; i++) {
+          fin >> n;
+          int ap = 0;
+          cand[i] = -1;
+          for (int j = 0; j < 2 * n; j++) {
+              int x; fin >> x;
+              if (!ap) {
+                  cand[i] = x;
+                  ap = 1;
+              }
+              else if (x == cand[i])
+                  ap++;
+              else
+                  ap--;
+          }
+      }
+      fin.close();
+      fin.open("avarcolaci.in");
+
+      fin >> t;
+      for (int i = 0; i < t; i++) {
+          fin >> n;
+          ap = 0;
+          for (int j = 0; j < 2 * n; j++) {
+              fin >> x;
+              if (x == cand[i])
+                  ap++;
+          }
+          if (ap > n)
+              fout << cand[i] << '\n';
+          else
+              fout << "Mozart\n";
+      }
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Avârcolaci, lasă un comentariu și te voi ajuta :smile:

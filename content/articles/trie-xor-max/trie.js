@@ -1,322 +1,144 @@
-const paddingH = 20;
-const paddingV = 40;
-const nodeWidth = 30;
+import CSanim from '@components/explicit/Sketch/csanim';
 
-function copy2D(arr) {
-  let ret = [];
-  for (let i = 0; i < arr.length; i++) {
-    ret.push([]);
-    for (let j = 0; j < arr[i].length; j++)
-      ret[i].push(arr[i][j]);
-  }
-  return ret;
-}
+export default function Trie(p5) {
+  const csa = new CSanim(400, 400);
+  const size = 24;
+  const rootX = csa.w / 2 + 8;
+  const rootY = 32;
+  const paddingH = 16;
+  const paddingV = 32;
 
-function getCoords(n, ad, x, y) {
-  let wid = new Array(n);
-  const getWidth = function(node) {
-    let sum = -paddingH;
-    for (const son of ad[node])
-      sum += getWidth(son) + paddingH;
-    wid[node] = Math.max(sum, nodeWidth);
-    return wid[node];
+  const trie = {
+    circle: (() => {
+      const circle = new CSanim.Circle(csa, [rootX, rootY], size);
+      circle.zIndex = 1;
+      return circle;
+    })(),
+    line: null,
+    sons: new Map()
   };
-  getWidth(0);
+  csa.play(trie.circle.zoomIn(), .5);
 
-  let treeX = new Array(n);
-  let treeY = new Array(n);
-  const draw = function(node, x, y) {
-    treeX[node] = x;
-    treeY[node] = y;
-    let sum = x - wid[node] / 2;
-    for (const son of ad[node]) {
-      draw(son, sum + wid[son] / 2, y + paddingV + nodeWidth);
-      sum += wid[son] + paddingH;
-    }
-    if (ad[node].length > 0) {
-      if (ad[node].length % 2 === 1)
-        treeX[node] = treeX[ad[node][Math.floor(ad[node].length / 2)]];
-      else
-        treeX[node] = (treeX[ad[node][ad[node].length / 2]] + treeX[ad[node][ad[node].length / 2 - 1]]) / 2;
-    }
-  };
-  draw(0, 0, y);
-
-  for (let i = 1; i < n; i++)
-    treeX[i] += x - treeX[0];
-  treeX[0] = x;
-  return [treeX, treeY];
-}
-
-function getPrevCoords(n, ad, x, y) {
-  let now = copy2D(ad);
-  for (let i = 0; i < n; i++)
-    for (let j = 0; j < now[i].length; j++)
-      if (now[i][j] === n - 1)
-        now[i].splice(j, 1);
-  n--;
-  return getCoords(n, now, x, y);
-}
-
-class State {
-  constructor(n, ad, letter, colors, crtNode, percent, newNode, leaves, start, fps) {
-    this.n = n;
-    this.ad = copy2D(ad);
-    this.letter = [...letter];
-    this.colors = [...colors];
-    this.crtNode = crtNode;
-    this.percent = percent;
-    this.newNode = newNode;
-    this.leaves = [...leaves];
-    this.start = start;
-    this.fps = fps;
-  }
-
-  draw() {
-    const coords = getCoords(this.n, this.ad, 260, 40);
-    if (this.newNode !== -1) {
-      const prevCoords = getPrevCoords(this.n, this.ad, 260, 40);
-      for (let i = 0; i < this.n - 1; i++) {
-        coords[0][i] = prevCoords[0][i] + (coords[0][i] - prevCoords[0][i]) * this.percent / 100;
-        coords[1][i] = prevCoords[1][i] + (coords[1][i] - prevCoords[1][i]) * this.percent / 100;
+  const updateCoords = newNodeCircleRef => {
+    const edges = [];
+    const dfsLabel = node => {
+      const nodePos = edges.length;
+      edges.push([]);
+      const sons = [];
+      for (const [key, val] of node.sons.entries()) {
+        sons.push([key, val]);
       }
-    }
-    strokeWeight(3);
-    for (let i = 0; i < this.n; i++)
-      for (const j of this.ad[i]) {
-        if (this.colors[j] === 0)
-          stroke(250);
-        else
-          stroke(30, 144, 255);
-        if (j === this.newNode)
-          line(
-            coords[0][i], coords[1][i],
-            coords[0][i] + (coords[0][j] - coords[0][i]) / 100 * this.percent,
-            coords[1][i] + (coords[1][j] - coords[1][i]) / 100 * this.percent
-          );
-        else
-          line(coords[0][i], coords[1][i], coords[0][j], coords[1][j]);
-        if (this.crtNode === 0 && this.newNode === -1 && this.percent !== 0 && !this.start) {
-          if (this.colors[j] === 0)
-            stroke(250);
-          else
-            stroke(
-              30 + (250 - 30) * this.percent / 100,
-              144 + (250 - 144) * this.percent / 100,
-              255 + (250 - 255) * this.percent / 100
-            );
-          line(coords[0][i], coords[1][i], coords[0][j], coords[1][j]);
-        }
-        stroke(30, 144, 255);
-        if (j === this.crtNode) {
-          line(
-            coords[0][i], coords[1][i],
-            coords[0][i] + (coords[0][j] - coords[0][i]) / 100 * this.percent,
-            coords[1][i] + (coords[1][j] - coords[1][i]) / 100 * this.percent
-          );
-        }
+      sons.sort(([key1], [key2]) => key1 < key2 ? -1 : +1);
+      for (const [, val] of sons) {
+        edges[nodePos].push(edges.length);
+        dfsLabel(val);
       }
-    noStroke();
-    for (let i = 0; i < this.n; i++) {
-      if (this.colors[i] === 0) {
-        if (this.leaves[i] === 0)
-          fill(250);
-        else
-          fill(124, 252, 0);
+    };
+    dfsLabel(trie);
+
+    let [, , coordsX, coordsY] = CSanim.getTreeCoords(edges.length, edges, size, paddingH, paddingV);
+    coordsX = coordsX.map(x => rootX + x);
+    coordsY = coordsY.map(y => rootY + y);
+
+    const animation = [];
+    let nodeCnt = 0;
+    const dfsCoords = (node, fathId) => {
+      const nodeId = nodeCnt++;
+      if (node.circle === newNodeCircleRef) {
+        node.circle.position = [coordsX[nodeId], coordsY[nodeId]];
+        animation.push(node.circle.zoomIn());
       }
-      else
-        fill(30, 144, 255);
-      if (i === this.newNode)
-        circle(coords[0][i], coords[1][i], nodeWidth * this.percent / 100);
-      else
-        circle(coords[0][i], coords[1][i], nodeWidth);
-      if (i === this.crtNode) {
-        fill(30, 144, 255);
-        circle(coords[0][i], coords[1][i], nodeWidth * this.percent / 100);
+      else {
+        animation.push(node.circle.moveTo([coordsX[nodeId], coordsY[nodeId]]));
       }
-      if (this.crtNode === 0 && this.newNode === -1 && this.percent !== 0 && !this.start) {
-        if (this.leaves[i] === 0) {
-          if (this.colors[i] === 0)
-            fill(250);
-          else
-            fill(
-              30 + (250 - 30) * this.percent / 100,
-              144 + (250 - 144) * this.percent / 100,
-              255 + (250 - 255) * this.percent / 100
-            );
+
+      if (fathId !== -1) {
+        animation.push(node.line.animate('beg', [coordsX[fathId], coordsY[fathId]]));
+        if (node.circle === newNodeCircleRef) {
+          node.line.end = [coordsX[nodeId], coordsY[nodeId]];
+          animation.push(node.line.zoomIn());
         }
         else {
-          if (this.colors[i] === 0)
-            fill(124, 252, 0);
-          else
-            fill(
-              30 + (124 - 30) * this.percent / 100,
-              144 + (252 - 144) * this.percent / 100,
-              255 + (0 - 255) * this.percent / 100
-            );
+          animation.push(node.line.animate('end', [coordsX[nodeId], coordsY[nodeId]]));
         }
-        circle(coords[0][i], coords[1][i], nodeWidth);
       }
-      fill(0);
-      textSize(i === this.newNode ? 20 * this.percent / 100 : 20);
-      text(this.letter[i], coords[0][i], coords[1][i]);
-    }
-  }
-}
 
-let frame = 0;
-let state = 0;
-let queue = [];
-
-class Trie {
-  enqueue(fps = 50) {
-    queue.push(new State(this.n, this.ad, this.letter, this.colors, this.crtNode, this.percent, this.newNode, this.leaves, this.start, fps));
-  }
-
-  constructor() {
-    this.n = 1;
-    this.ad = [[]];
-    this.letter = [''];
-    this.colors = [0];
-    this.crtNode = 0;
-    this.percent = 0;
-    this.newNode = -1;
-    this.leaves = [0];
-    this.start = false;
-    this.enqueue();
-  }
-
-  insert(str) {
-    let node = 0;
-    this.enqueue();
-    this.start = true;
-    for (let i = 0; i < 50; i++) {
-      this.percent += 2;
-      this.enqueue(1);
-    }
-    this.start = false;
-    this.percent = 0;
-    this.colors[node] = 1;
-    for (const chr of str) {
-      let next = 0;
-      for (const son of this.ad[node])
-        if (this.letter[son] === chr) {
-          next = son;
-          break;
-        }
-      if (next === 0) {
-        next = this.n++;
-        this.ad.push([]);
-        this.ad[node].push(next);
-        this.letter.push(chr);
-        this.colors.push(0);
-        this.leaves.push(0);
-        for (let i = 0; i < this.n; i++)
-          this.ad[i].sort((x, y) => {
-            const a = this.letter[x];
-            const b = this.letter[y];
-            return (a < b ? -1 : (a > b ? +1 : 0));
-          });
-        this.newNode = next;
-        for (let i = 0; i < 50; i++) {
-          this.percent += 2;
-          this.enqueue(1);
-        }
-        this.newNode = -1;
-        this.percent = 0;
+      const sons = [];
+      for (const [key, val] of node.sons.entries()) {
+        sons.push([key, val]);
       }
-      this.crtNode = next;
-      for (let i = 0; i < 50; i++) {
-        this.percent += 2;
-        this.enqueue(1);
+      sons.sort(([key1], [key2]) => key1 < key2 ? -1 : +1);
+      for (const [, val] of sons) {
+        dfsCoords(val, nodeId);
       }
-      this.crtNode = 0;
-      this.percent = 0;
-      this.colors[next] = 1;
-      node = next;
+    };
+    dfsCoords(trie, -1);
+    return animation;
+  };
+
+  for (const word of [
+    'mare',
+    'paste',
+    'lat',
+    'lac',
+    'patine',
+    'marte',
+    'lung',
+    'pat',
+    'mic',
+    'pas',
+    'prim',
+    'latin'
+  ]) {
+    let node = trie;
+    csa.play(node.circle.zoomColorTo(CSanim.BLUE), .5);
+    const finishAnimation = [node.circle.changeColorTo(CSanim.WHITE)];
+
+    for (const chr of word) {
+      let newNodeCircleRef = null;
+      if (node.sons.get(chr) == null) {
+        const circle = new CSanim.Circle(csa, [0, 0], size);
+        circle.zIndex = 1;
+        circle.text = chr;
+        newNodeCircleRef = circle;
+
+        const line = new CSanim.Line(csa, node.circle.position, [0, 0]);
+        line.color = CSanim.OLDLACE;
+        node.sons.set(chr, {
+          circle,
+          line,
+          sons: new Map()
+        });
+        csa.play(updateCoords(newNodeCircleRef), .5);
+      }
+
+      node = node.sons.get(chr);
+      const initColor = node.circle.color;
+      finishAnimation.push(node.circle.changeTextColorTo(CSanim.BLACK));
+      finishAnimation.push(node.line.changeColorTo(CSanim.OLDLACE));
+      finishAnimation.push(node.circle.changeColorTo(initColor));
+
+      const animation = [
+        node.circle.zoomColorTo(CSanim.BLUE),
+        node.circle.changeTextColorTo(CSanim.WHITE),
+        node.line.zoomColorToEnd(CSanim.BLUE)
+      ];
+      csa.play(animation, .5);
     }
-    this.leaves[node] = 1;
-    for (let i = 0; i < 50; i++) {
-      this.percent += 2;
-      this.enqueue(1);
-    }
-    this.percent = 0;
-    for (let i = 0; i < this.n; i++)
-      this.colors[i] = 0;
-    this.enqueue();
-  }
-}
 
-let trie;
-
-function setup() {
-  createCanvas(500, 500);
-  textSize(20);
-  textFont('Consolas, Monaco, monospace');
-  textAlign(CENTER, CENTER);
-  noStroke();
-
-  trie = new Trie();
-  trie.insert('mare');
-  trie.insert('paste');
-  trie.insert('lat');
-  trie.insert('lac');
-  trie.insert('patine');
-  trie.insert('marte');
-  trie.insert('lung');
-  trie.insert('pat');
-  trie.insert('mic');
-  trie.insert('pas');
-  trie.insert('prim');
-  trie.insert('latin');
-  trie.enqueue(500);
-  trie.enqueue(1);
-}
-
-let paused = false;
-let active = false;
-
-function draw() {
-  if (paused)
-    background(75);
-  else
-    background(30);
-
-  fill(50);
-  textSize(10);
-  text('InfoGenius.ro', 37, height - 5);
-  textSize(20);
-
-  if (!active) {
-    fill(250);
-    textSize(25);
-    text('Click pentru a începe!', width / 2, height / 2);
-    cursor(HAND);
-    return;
+    finishAnimation.pop();
+    finishAnimation.push(node.circle.changeColorTo(CSanim.GREEN));
+    csa.play(finishAnimation, 1);
   }
 
-  if (++frame === queue[state].fps) {
-    state++;
-    frame = 0;
-  }
-
-  if (state === queue.length - 1)
-    active = false;  
-  queue[state].draw();
-}
-
-function mousePressed() {
-  if (!active) {
-    state = 0;
-    active = true;
-    cursor(ARROW);
-  }
-  else if (paused) {
-    loop();
-    paused = false;
-  }
-  else {
-    noLoop();
-    paused = true;
-  }
-}
+  const finishAnimation = [];
+  const dfs = node => {
+    finishAnimation.push(node.circle.fadeOut());
+    if (node.line != null) finishAnimation.push(node.line.fadeOut());
+    for (const [, val] of node.sons.entries()) dfs(val);
+  };
+  dfs(trie);
+  csa.wait(5);
+  csa.play(finishAnimation, 1);
+  csa.run(p5);
+};

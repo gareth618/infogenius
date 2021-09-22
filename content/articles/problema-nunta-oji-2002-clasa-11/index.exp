@@ -1,0 +1,62 @@
+TITLE: Problema Nunta -- OJI 2002, Clasa a 11-a
+AUTHOR: Iulian Oleniuc
+DATE: 05/10/2020
+CATEGORIES: Probleme de olimpiadă
+TAGS: bitmask, clasa 11, emanuela cerchez, oji 2002, operații pe biți, parantezare optimă de matrice, programare dinamică
+DESCRIPTION: Enunțul problemei Nunta, de clasa a 11-a, dată în 2002 la OJI, se găsește pe PbInfo. Avem un șir de n numere. La fiecare pas, putem alege...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Emanuela Cerchez
+> **Online:** [PbInfo](https://www.pbinfo.ro/probleme/2137/nunta1)
+---
+
+## Rezumat
+
+Avem un șir de $n$ numere. La fiecare pas, putem alege două numere situate pe poziții consecutive și să le înlocuim cu modulul diferenței lor. Ne oprim după ce am rămas cu un singur număr. Să se determine toate valorile pe care le poate lua acesta. Elementele șirului dat sunt numere naturale cuprinse între $0$ și $20$.
+
+## Soluție
+
+Aceasta este o problemă de programare dinamică foarte similară cu celebra [parantezare optimă de matrice](parantezare-optima-de-matrice). Diferența constă în modul în care combinăm stările $\mathrm{dp}[i][k]$ și $\mathrm{dp}[k + 1][j]$. Notăm cu $\mathrm{dp}[i][j]$ mulțimea valorilor pe care le poate lua elementul la care este redusă secvența $[i, j]$. Acest element este obținut înlocuind elementele la care sunt reduse două secvențe $[i, k]$ și $[k + 1, j]$, unde $i \le k \lt j$, cu modulul diferenței lor. Așadar, pentru a calcula $\mathrm{dp}[i][j]$, luăm fiecare element $x$ din $\mathrm{dp}[i][k]$, fiecare element $y$ din $\mathrm{dp}[k + 1][j]$, și inserăm în $\mathrm{dp}[i][j]$ valoarea $|x - y|$. Formal, recurența este:
+
+$$\mathrm{dp}[i][j] = \bigcup_{i \le k \lt j} \{ |x - y| \mid x \in \mathrm{dp}[i][k], y \in \mathrm{dp}[k + 1][j] \}$$
+
+Mai rămâne să alegem modalitatea de reprezentare a mulțimilor. Putem folosi [`set`](http://www.cplusplus.com/reference/set/set/)-uri din STL fără probleme, însă mai elegant și mai eficient ar fi să folosim [__bitmask__](operatii-pe-biti-cpp/#header-19)-uri. Putem face asta deoarece atât valorile inițiale, cât și cele intermediare, sunt rezonabil de mici (maxim $20$). Astfel, fiecare stare a dinamicii va fi reprezentată printr-un întreg în care bitul $x$ va fi setat la $1$ dacă și numai dacă valoarea $x$ apare în mulțimea $\mathrm{dp}[i][j]$. Complexitatea soluției este $O(n^3 k^2)$, unde $k$ este valoarea maximă din șirul dat, și anume $20$.
+
+## Sursă C++
+
+``` cpp -> Problema Nunta
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  ifstream fin("nunta.in");
+  ofstream fout("nunta.out");
+
+  int main() {
+     int n; fin >> n;
+     vector<vector<int>> dp(n + 1, vector<int>(n + 1));
+     for (int i = 1; i <= n; i++) {
+         int x; fin >> x;
+         dp[i][i] = (1 << x);
+     }
+
+     for (int len = 2; len <= n; len++)
+         for (int i = 1, j = len; j <= n; i++, j++)
+             for (int k = i; k < j; k++)
+                 for (int x = 0; x <= 20; x++) if (dp[i][k] & (1 << x))
+                     for (int y = 0; y <= 20; y++) if (dp[k + 1][j] & (1 << y))
+                         dp[i][j] |= (1 << abs(x - y));
+
+     int ans = 0;
+     for (int x = 0; x <= 20; x++)
+         ans += (bool) (dp[1][n] & (1 << x));
+     fout << ans << '\n';
+     for (int x = 0; x <= 20; x++)
+         if (dp[1][n] & (1 << x))
+             fout << x << ' ';
+     fout << '\n';
+     return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Nunta, lasă un comentariu și te voi ajuta :smile:

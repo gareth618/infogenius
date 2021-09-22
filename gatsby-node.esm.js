@@ -98,7 +98,7 @@ export async function createPages({ graphql, actions }) {
       });
     }
   };
-  createPagination('/', '', articles);
+  createPagination('/', '', articles.filter(article => article.categories.indexOf('Probleme de olimpiadă') === -1));
 
   const categoryMap = { };
   for (const article of articles) {

@@ -1,0 +1,272 @@
+TITLE: Vectori caracteristici. Vectori de frecvență
+AUTHOR: Iulian Oleniuc
+DATE: 11/05/2018
+CATEGORIES: Algoritmică și structuri de date
+TAGS: vectori, vectori caracteristici, vectori de frecvență
+DESCRIPTION: Vectorii caracteristici și vectorii de frecvență reprezintă două aplicații foarte simple ale vectorilor statici, ce se bazează pe...
+
+Vectorii caracteristici și vectorii de frecvență reprezintă două aplicații foarte simple ale [vectorilor](vectori-cpp), ce se bazează pe accesul indexat la elementele lor (faptul că orice element poate fi accesat în timp constant știind poziția sa în vector). În acest articol voi prezenta la ce se referă cele două tipuri de vectori, precum și câteva tehnici de utilizare a lor.
+
+## Vectori caracteristici
+
+Într-un __vector caracteristic__, pe poziția `i` este stocată o informație despre numărul `i`. De cele mai multe ori, pe poziția `i` se va găsi o valoare booleană (`true` sau `false`) care indică, spre exemplu, dacă `i` se află într-o listă dată de întregi sau nu. Asta e tot :smile: Acum, iată câteva probleme simple cu vectori caracteristici:
+
+>>>
+  ### Problema 1.
+
+  Se citesc `n` numere întregi cuprinse între `-1000` și `1000`. Pentru fiecare dintre următoarele `q` numere date (din același interval), să se afișeze dacă acesta se regăsește în șirul dat.
+<<<
+
+O soluție naivă este să reținem cele `n` numere într-un vector auxiliar, iar pentru fiecare interogare să căutăm numărul dat în acel vector. Complexitatea algoritmului este $O(q \cdot n)$, foarte proastă pentru valori mari ale celor două variabile. Putem sorta vectorul ca apoi să folosim [căutare binară](cautare-binara), reducând complexitatea la $O((n + q) \log n)$, dar tot nu e cine știe ce.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 1000;
+
+  int n, q;
+  int v[VMAX];
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++)
+          cin >> v[i];
+      cin >> q;
+      for (int i = 0; i < q; i++) {
+          int x; cin >> x;
+          bool ok = false;
+          for (int j = 0; j < n; j++)
+              if (v[j] == x) {
+                  ok = true;
+                  break;
+              }
+          cout << (ok ? "DA\n" : "NU\n");
+      }
+      return 0;
+  }
+```
+
+Ce ar fi să încercăm să răspundem la interogări în $O(1)$? Dacă tot vorbim despre vectori caracteristici, putem memora un vector caracteristic `chr` în care pe poziția `i` vom reține dacă `i` se găsește printre numerele date sau nu. Astfel, nici nu este nevoie să reținem numerele citite. La final, vom afișa pentru fiecare număr `x` pe `chr[x]`.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 1000;
+
+  int n, q;
+  bool chr[VMAX];
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++) {
+          int x; cin >> x;
+          chr[x] = true;
+      }
+      cin >> q;
+      for (int i = 0; i < q; i++) {
+          int x; cin >> x;
+          cout << (chr[x] ? "DA\n" : "NU\n");
+      }
+      return 0;
+  }
+```
+
+Defectul acestui algoritm este că programul va crăpa pentru numere negative, deoarece C++ nu suportă vectori statici indexați negativ. Putem folosi o constantă `MASK = 1000`, iar atunci când vrem să accesăm informația despre `x`, vom scrie `chr[x + MASK]`. Astfel, vom accesa doar elemente de pe poziții pozitive. Pentru `-1000` vom accesa `chr[0]`, pentru `618` `chr[1618]` etc. Atenție la dimensiunea maximă a vectorului! Aceasta trebuie să fie minim `2001` (`1000` de numere strict negative, `1000` strict pozitive, un `0`).
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  const int VMAX = 2001;
+  const int MASK = 1000;
+
+  int n, q;
+  bool chr[VMAX];
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++) {
+          int x; cin >> x;
+          chr[x + MASK] = true;
+      }
+      cin >> q;
+      for (int i = 0; i < q; i++) {
+          int x; cin >> x;
+          cout << (chr[x + MASK] ? "DA\n" : "NU\n");
+      }
+      return 0;
+  }
+```
+
+>>>
+  ### Problema 2.
+
+  Se dau `n` numere naturale de maxim `8` cifre. Să se afișeze cel mai mic și cel mai mare număr de `3` cifre care nu apar în șirul dat. Se garantează că există întotdeauna soluție.
+<<<
+
+Reținem numerele prezente în șir printr-un vector caracteristic `chr`. O idee de optimizare este să ignorăm de la citire numerele cu mai mult sau mai puțin de `3` cifre. Altfel, vectorul caracteristic ar trebui să aibă minim `1 miliard` de elemente -- cam mult.
+
+O altă idee este să folosim o mască negativă (ca mai sus), astfel încât în loc de `chr[100]` să accesăm `chr[0]`, în loc de `chr[999]` `chr[899]` etc. În acest mod, vom reține cu `100` de elemente mai puțin, însă la fiecare accesare vom fi nevoiți să efectuăm o scădere. Din această cauză, nu-și are rost această „optimizare”, însă ideea poate fi utilă în alte contexte.
+
+După etapa citirii, va trebui doar să parcurgem vectorul caracteristic de la primul index de `3` cifre până la ultimul și să ne oprim la primul element cu valoarea `false`. Apoi vom face același lucru, dar în sens invers.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 1000;
+
+  int n;
+  bool chr[VMAX];
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++) {
+          int x; cin >> x;
+          if (100 <= x && x <= 999)
+              chr[x] = true;
+      }
+      for (int i = 100; chr[i]; i++); cout << i << '\n';
+      for (int i = 999; chr[i]; i--); cout << i << '\n';
+      return 0;
+  }
+```
+
+>>>
+  ### Problema 3.
+
+  Se citesc `n` numere naturale de maxim `3` cifre. Să se afișeze, fără repetiții, în ordine crescătoare, numerele pare ce se regăsesc printre numerele date, iar apoi cele impare, în ordine descrescătoare.
+<<<
+
+Reținem numerele într-un vector caracteristic, iar apoi facem exact ce scrie în enunț... În general, problemele cu vectori caracteristici și cu vectori de frecvență, după citirea datelor, se rezumă doar la parcurgerea vectorilor.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 1000;
+
+  int n;
+  bool chr[VMAX];
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++) {
+          int x; cin >> x;
+          chr[x] = true;
+      }
+      for (int i = 0; i <= 998; i += 2)
+          if (chr[i])
+              cout << i << ' ';
+      cout << '\n';
+      for (int i = 999; i >= 1; i -= 2)
+          if (chr[i])
+              cout << i << ' ';
+      cout << '\n';
+      return 0;
+  }
+```
+
+## Vectori de frecvență
+
+__Vectorii de frecvență__ seamănă izbitor de bine cu cei caracteristici, singura diferență fiind că pe poziția `i` aceștia rețin __numărul de apariții__ ale lui `i` (frecvența lui `i`).
+
+>>>
+  ### Problema 1.
+
+  Se citesc `n` numere naturale de maxim `3` cifre. Să se determine numerele prime ce aparțin acestui șir, cât și frecvențele lor.
+<<<
+
+Reținem un vector de frecvență `frq` cu numărul de apariții ale tuturor numerelor posibile ce pot aparține șirului dat. Apoi îl parcurgem, iar pentru indecșii `i` primi și cu frecvența nenulă (cei care apar în șir), afișăm `i` și `frq[i]`.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 1000;
+
+  int n;
+  int frq[VMAX];
+
+  bool isPrime(int n) {
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0)
+              return false;
+      return true;
+  }
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++) {
+          int x; cin >> x;
+          frq[x]++;
+      }
+      for (int i = 2; i <= 997; i++)
+          if (frq[i] && isPrime(i))
+              cout << i << ' ' << frq[i] << '\n';
+      return 0;
+  }
+```
+
+>>>
+  ### Problema 2.
+
+  Se citesc `n` numere naturale. Să se determine numărul cu cea mai mare frecvență. Dacă sunt mai multe soluții, se va afișa cea maximă.
+<<<
+
+După ce formăm vectorul de frecvență, calculăm frecvența maximă, reținând în același timp și numărul ce o deține.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 100;
+
+  int n;
+  int frq[VMAX];
+
+  int sol;
+  int frqMax;
+
+  int main() {
+      cin >> n;
+      for (int i = 0; i < n; i++) {
+          int x; cin >> x;
+          frq[x]++;
+          if (frq[x] > frqMax) {
+              frqMax = frq[x];
+              sol = x;
+          }
+          else if (frq[x] == frqMax && x > sol)
+              sol = x;
+      }
+      cout << sol << '\n';
+      return 0;
+  }
+```
+
+>>>
+  ### Problema 3.
+
+  Se dă un număr natural `n` de maxim `8` cifre. Să se afișeze de câte ori apare fiecare cifră în acesta.
+<<<
+
+Citim numărul, îi eliminăm pe rând ultima cifră și actualizăm cu ajutorul ei vectorul de frecvență. La final afișăm elementele vectorului.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  int n;
+  int frq[10];
+
+  int main() {
+      cin >> n;
+      do {
+          frq[n % 10]++;
+          n /= 10;
+      } while (n);
+      for (int i = 0; i <= 9; i++)
+          cout << frq[i] << ' ';
+      cout << '\n';
+      return 0;
+  }
+```
+
+Doi algoritmi importanți ce se folosesc de vectori caracteristici și respectiv de vectori de frecvență sunt [__Ciurul lui Eratostene__](ciurul-lui-eratostene) și [__Sortarea prin numărare__](sortarea-prin-numarare). Puteți găsi exerciții ce se folosesc de aceste tipuri de vectori și pe [PbInfo](https://www.pbinfo.ro/?pagina=probleme-lista&tag=45). Nu uitați să lăsați un comentariu dacă aveți vreo problemă cu vectori caracteristici sau vectori de frecvență pe care nu reușiți să o rezolvați :smile:

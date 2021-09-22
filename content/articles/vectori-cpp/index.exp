@@ -1,0 +1,115 @@
+TITLE: Vectori în C++ -- Tablouri unidimensionale
+AUTHOR: Iulian Oleniuc
+DATE: 22/12/2017
+CATEGORIES: Limbajul C++
+TAGS: c++, structura repetitivă, vectori
+DESCRIPTION: În problemele de informatică avem nevoie foarte des să reținem și să prelucrăm seturi mari de date de același tip. Vectorii din C++ sunt...
+
+În problemele de informatică avem nevoie foarte des să reținem și să prelucrăm seturi mari de date de același tip. De exemplu costul unor produse dintr-un magazin, înălțimea fiecărui elev dintr-o clasă sau pur și simplu un șir de numere. În aceste cazuri putem folosi câte o variabilă pentru fiecare dată, însă va fi foarte greu să le organizăm. În funcție de problemă, pot fi folosite și alte structuri de date, poate mai eficiente, însă cea mai simplă soluție constă în utilizarea unui tablou unidimensional, numit și vector (static).
+
+## Declararea vectorilor în C++
+
+Înainte de a folosi un vector, acesta trebuie să fie declarat. Sintaxa pentru declararea unui vector este următoarea:
+
+``` cpp
+  tip nume[VMAX];
+```
+
+În urma acestei instrucțiuni, se va aloca o zonă __liniară__ de memorie, de `VMAX` elemente de tipul `tip` (elementele se vor afla pe secvențe consecutive de memorie). Așadar, această structură de date va consuma `sizeof(tip) * VMAX` bytes. Dacă vectorul este declarat global (în exteriorul oricărui bloc de instrucțiuni), toate elementele sale vor fi inițializate cu `0`.
+
+Așa arată un zona de memorie alocată unui vector de tip `int` cu 4 elemente:
+
+![400; Exemplu vector în memorie](vector-memorie-exemplu.png)
+
+Eu prefer ca atunci când am nevoie de un vector să declar o constantă `VMAX` pentru a-i specifica dimensiunea maximă, deoarece dacă o să am nevoie să schimb acest număr va fi de ajuns să modific valoarea într-un singur loc (acolo unde am declarat constanta).
+
+La declararea vectorului se folosește dimensiunea maximă, deoarece numărul de elemente folosite poate varia de la un set de date de intrare la altul, iar compilatorul trebuie să știe câtă memorie este de ajuns în cel mai rău caz, căci dimensiunea unui vector static nu poate fi schimbată pe parcursul executării programului.
+
+## Când să folosim vectori?
+
+De exemplu, trebuie să reținem un șir de `n` numere, `n`-ul maxim fiind `100`. Chiar dacă pentru un anumit test, în care `n`-ul este `30`, dimensiunea de `30` de elemente este suficientă, pentru altele e posibil să fie nevoie de mai mult spațiu, așa că vectorul trebuie declarat cu lungimea maximă de măcar `100` de elemente. Eu de obicei declar vectorii cu vreo `10` elemente în plus față de maxim, pentru că nu se știe niciodată când o să am nevoie de accesul la câteva poziții de la finalul său.
+
+Cu cât un vector are dimensiunea mai mare, cu atât ocupă mai multă memorie. Deci, este important să ne gândim bine la ce tip de date folosim. Dacă trebuie să reținem numere mai mici ca `30000`, atunci este de ajuns `short int` (va consuma de 2 ori mai puțin spațiu decât `int`). Dacă avem nevoie de un vector care să rețină doar valorile `1` și `0` (`true` și `false`), o soluție bună ar fi folosirea tipului `bool` (ocupă de 4 ori mai puțină memorie decât `int`). Totuși, nu trebuie să exagerăm cu astfel de optimizări -- la concursuri important este ca ordinul de complexitate al spațiului folosit să fie minim, nu tipul de date.
+
+## Accesarea elementelor unui vector în C++
+
+Pentru a accesa un element dintr-un vector se folosește structura `numeVector[index]`, unde `index` reprezintă al câtelea element din vector este cel la care ne referim. În această expresie, `index` se numește __subscriptul__ vectorului. Subscriptul trebuie să fie un număr pozitiv (chiar și `char`), mai mic strict decât `VMAX`. În C++, vectorii sunt indexați de la `0`, deci elementele vectorului `v`, declarat `v[VMAX]`, vor fi `v[0]`, `v[1]`, `v[2]`, ..., `v[VMAX - 1]`. În general, pentru a accesa al `i`-lea element, vom folosi `v[i - 1]`. De multe ori este mai ușor să lucrăm cu pozițiile unui vector de la `1` încolo. Pentru asta pur și simplu ignorăm elementul de pe poziția `0` și declarăm vectorul cu un element în plus.
+
+Iată cum arată un exemplu de vector declarat `int v[7]`:
+
+![400; Exemplu elemente vector](elemente-vector-exemplu.png)
+
+## Inițializarea vectorilor în C++
+
+Putem inițializa elementele unui vector la declarare folosind acolade:
+
+``` cpp
+  int v[5] = {4, 0, 6, 3, 9};
+  // v[0] = 4;
+  // v[1] = 0;
+  // v[2] = 6;
+  // v[3] = 3;
+  // v[4] = 9;
+```
+
+Între acolade nu este obligatoriu să scriem valori pentru toate elementele din vector. În cazul de mai jos, primele 3 valori din vector vor fi în ordine `1`, `2` și `3`, iar restul vor fi inițializate cu `0`. Putem să specificăm chiar și 0 valori între acolade, caz în care toate valorile vectorului vor fi `0`.
+
+``` cpp
+  int v[5] = {1, 2, 3};
+  // v[0] = 1;
+  // v[1] = 2;
+  // v[2] = 3;
+  // v[3] = 0;
+  // v[4] = 0;
+```
+
+De asemenea, atunci când inițializăm un vector nu este obligatoriu să îi mai specificăm dimensiunea maximă; aceasta va fi dedusă de compilator (va fi egală cu numărul de valori scrise între acolade). În plus, nici operatorul de atribuire nu mai este obligatoriu. Cele două instrucțiuni de mai jos sunt echivalente:
+
+``` cpp
+  int v[] = {6, 1, 8};
+  int v[] {6, 1, 8};
+```
+
+Așa cum am spus și mai sus, dacă vectorul este declarat global și nu se specifică o listă de valori inițiale, toate elementele sale vor fi inițializate automat cu `0`.
+
+## Parcurgerea unui vector în C++
+
+Pentru a parcurge un vector de `n` elemente, trebuie să folosim o instrucțiune repetitivă (cel mai natural este `for`) și o variabilă contor (notată de obicei cu `i`), care reține indexul elementului curent pe care îl prelucrăm. Această variabilă se mai numește __iterator__, deoarece este folosită pentru a itera printre niște valori (indicii vectorului în cazul nostru).
+
+Iată un simplu program C++ care citește de la tastatură un vector de tip `int` și îi afișează elementele în consolă:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  #define VMAX 618 // Definim o constantă egală cu
+  // numărul maxim de elemente ale vectorului v.
+
+  // Declarăm vectorul v, de tip int,
+  // cu numărul maxim de elemente VMAX:
+  int v[VMAX], n;
+
+  int main() {
+      int i; // Declarăm variabila contor i.
+
+      cin >> n; // Citim numărul de elemente.
+      for (i = 0; i < n; i++) // Iterăm de la 0 la n - 1.
+          cin >> v[i]; // Citim elementul de pe poziția i.
+
+      // Afișăm elementele vectorului,
+      for (i = 0; i < n; i++) // iterând tot de la 0 la n - 1.
+          cout << v[i] << ' ';
+
+      cout << '\n';
+      return 0;
+  }
+```
+
+Desigur, problema se putea rezolva și fără memorarea unui vector. Dar scopul era să arăt cum se citesc și cum se afișează elementele unui vector :smile: Un exemplu de problemă în care utilizarea unui vector este esențială este cea în care se citește un șir de numere iar apoi numerele trebuie afișate în ordinea inversă citirii lor. Soluția arată aproape ca programul de mai sus, dar desigur, trebuie modificată afișarea. Se pornește de la ultimul element, `n - 1`, și se iterează până la `0`, iar la fiecare pas `i`-ul se decrementează:
+
+``` cpp
+  for (i = n - 1; i >= 0; i--)
+      cout << v[i] << ' ';
+```
+
+Am scris un articol cu cele mai importante probleme legate de vectori [aici](probleme-vectori-cpp). Dacă aveți vreo întrebare despre vectori în C++, lăsați un comentariu mai jos și vă voi ajuta :smile:

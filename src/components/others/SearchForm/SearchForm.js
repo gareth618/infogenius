@@ -20,7 +20,7 @@ export default function SearchForm({ searchRef, toggleSearch, searching, setResu
       }
     `
   ).allExplicitArticle.edges.map(edge => ({
-    title: sanitize(edge.node.title.replace(/[$\\]/g, '')),
+    title: sanitize(edge.node.title.replace(/[$\\]/g, '').replace(/`/g, '')),
     slug: edge.node.slug
   }));
 

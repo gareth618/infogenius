@@ -26,7 +26,7 @@ import '@styles/themes.css';
 import '@styles/explicit.css';
 
 import 'katex/dist/katex.min.css';
-import 'prismjs/themes/prism-okaidia.css';
+import '@styles/okaidia.css';
 
 import firestore from '@utils/firestore';
 import { onSnapshot, collection, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -59,7 +59,7 @@ export default function Layout({ sidebar, children }) {
 
   const [userEmail, setUserEmail] = React.useState(null);
   React.useEffect(() => onAuthStateChanged(getAuth(), user => {
-    setUserEmail(user == null ? null : user.email.slice(0, -'@gmail.com'.length));
+    setUserEmail(user == null ? null : user.email);
   }), []);
 
   const [notifications, setNotifications] = React.useState([]);

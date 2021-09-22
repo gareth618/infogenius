@@ -1,0 +1,309 @@
+TITLE: Reprezentarea grafurilor în C++
+AUTHOR: Iulian Oleniuc
+DATE: 05/10/2018
+CATEGORIES: Algoritmică și structuri de date, Teoria grafurilor
+TAGS: grafuri, listă de muchii, liste de adiacență, matrice de adiacență
+DESCRIPTION: În acest articol voi analiza cele mai importante trei metode de a reprezenta un graf în C++: lista de muchii, matricea de adiacență și...
+
+Într-un [articol mai vechi](introducere-teoria-grafurilor) am discutat despre noțiunile de bază ale teoriei grafurilor. Acum se pune problema următoare: Cum putem reprezenta eficient un graf în C++? Altfel spus, cum putem reține informațiile necesare pentru prelucrarea unui graf? Voi analiza cele mai cunoscute trei metode: __lista de muchii__, __matricea de adiacență__ și __listele de adiacență__.
+
+## Reprezentarea grafurilor prin lista de muchii
+
+O soluție naivă este să reținem o listă cu toate muchiile (sau arcele) grafului. Pentru asta, putem folosi o matrice cu două coloane astfel: $\mathrm{mat}[i][0]$ și $\mathrm{mat}[i][1]$ ar fi extremitățile muchiei $i$. Dacă există costuri pe muchiile grafului, le putem reține adăugând încă o coloană la matrice: $\mathrm{mat}[i][2]$ ar fi costul muchiei $i$.
+
+![550; Exemplu: Reprezentarea unui graf prin lista de muchii](exemplu-lista-muchii.png)
+
+Totuși, ar fi mai elegant să definim un [`struct`](struct-cpp) numit `Edge` (__muchie__ în engleză) care să rețină informațiile aferente unei muchii. Deci, pentru stocarea muchiilor vom reține un vector cu elemente de tipul `Edge`.
+
+``` cpp
+  struct Edge {
+      int x, y; // extremitățile
+      Edge(int x = 0, int y = 0) { // constructor
+          this->x = x;
+          this->y = y;
+      }
+  };
+```
+
+Am definit și un constructor ce primește ca parametri două numere cu care inițializează extremitățile muchiei curente. M-am săturat să primesc warning-uri pentru expresii de genul `{x, y}`, așa că le-am înlocuit cu `Edge(x, y)`. Aceasta returnează un nou obiect de tipul `Edge`, construit folosind constructorul de mai sus.
+
+Acum urmează să vedem cum putem efectua operații obișnuite legate de muchii folosind acest mod de reprezentare. Este vorba de __accesarea__, __ștergerea__ și __inserarea__ unei muchii noi, precum și despre __parcurgerea vecinilor__ unui nod.
+
+### Accesarea unei muchii
+
+Pentru a accesa o muchie, sau a verifica dacă aceasta există, trebuie să o căutăm în vector. Complexitatea este $O(m)$, deoarece vectorul nu este sortat după niciun criteriu. Nu are sens să ținem vectorul sortat ca să efectuăm căutare binară, pentru că inserarea și ștergerea unei muchii se vor efectua tot în timp liniar. Optimizările ce folosesc căutare binară depind foarte mult de numărul de operații de fiecare tip pe care trebuie să le efectuăm în problemă. Noi vom considera cazul general, cel mai ușor de implementat.
+
+### Ștergerea unei muchii
+
+Pentru a șterge o muchie, putem căuta muchia respectivă în vector și să mutăm cu o poziție la stânga toate elementele care o succed. Complexitatea ar fi $O(m)$, cu constanta $2$. Dar, putem efectua ștergerea efectivă a muchiei în $O(1)$, interschimbând-o cu ultima muchie din listă, și decrementând $m$-ul direct. Astfel, parcurgem lista o singură dată.
+
+### Inserarea unei muchii
+
+Pentru a insera o muchie, o adăugăm pur și simplu la vector, iar apoi incrementăm $m$-ul. Complexitatea este $O(1)$.
+
+### Parcurgerea vecinilor unui nod
+
+Pentru a parcurge nodurile adiacente unui nod dat $x$, trebuie să parcurgem toată lista de muchii și să le luăm în considerare doar pe acelea cu una dintre extremități egală cu $x$. Din păcate, complexitatea este $O(m)$.
+
+### Sursă demonstrativă în C++
+
+Mai jos este o sursă demonstrativă pentru reținerea unui graf orientat prin lista sa de muchii. Aceasta prezintă o listă de muchii definită global și implementează funcții pentru operațiile descrise mai sus. Pentru a face sursa să funcționeze cu grafuri neorientate, când comparăm o muchie $[x, y]$ cu muchia $[a, b]$, va trebui să o comparăm și pe $[y, x]$ cu $[a, b]$, pentru că poate am reținut-o invers în listă. La fel și când parcurgem vecinii unui nod. Va trebui să comparăm nodul dat cu ambele extremități ale muchiei curente.
+
+``` cpp -> Lista de muchii
+  #include <iostream>
+  using namespace std;
+
+  struct Edge {
+      int x, y;
+      Edge(int x = 0, int y = 0) {
+          this->x = x;
+          this->y = y;
+      }
+  };
+
+  int m; // numărul de muchii
+  Edge edg[618]; // lista de muchii
+
+  /// Funcția returnează poziția din vector unde se găsește edge,
+  /// sau -1 dacă muchia nu există.
+  int find(Edge edge) {
+      for (int i = 0; i < m; i++)
+          if (edg[i].x == edge.x && edg[i].y == edge.y)
+              return i;
+      return -1;
+  }
+
+  void remove(Edge edge) {
+      for (int i = 0; i < m; i++)
+          if (edg[i].x == edge.x && edg[i].y == edge.y) {
+              swap(edg[i], edg[m - 1]);
+              m--;
+              return;
+          }
+  }
+
+  void insert(Edge edge) {
+      edg[m++] = edge;
+  }
+
+  void neighbors(int node) {
+      for (int i = 0; i < m; i++)
+          if (edg[i].x == node)
+              cout << edg[i].y << ' ';
+      cout << '\n';
+  }
+
+  int main() {
+      insert(Edge(5, 1));
+      insert(Edge(5, 2));
+      insert(Edge(5, 4));
+
+      insert(Edge(5, 3));
+      remove(Edge(5, 3));
+
+      cout << find(Edge(5, 2)) << '\n';
+      cout << find(Edge(2, 5)) << '\n';
+
+      neighbors(5);
+      return 0;
+  }
+^^^
+
+## Reprezentarea grafurilor prin matricea de adiacență
+
+Un mod mult mai bun de reprezentare a unui graf se realizează prin folosirea unei așa-numite matrice de adiacență. Aceasta are numărul de linii și numărul de coloane egale cu numărul de noduri ale grafului. Dacă e să o notăm cu $\mathrm{ad}$ (de la __adiacență__), atunci pe $\mathrm{ad}[i][j]$ se găsește valoarea `true` dacă există muchie de la nodul $i$ la nodul $j$, sau `false` dacă nu.
+
+Dacă există cost pe muchiile grafului, acesta poate fi stocat în matricea de adiacență, doar că aceasta își va schimba numele în __matrice de ponderi__. Dacă există muchia $[i, j]$, pe $\mathrm{ad}[i][j]$ s-ar reține costul acesteia. Dacă nu, $\mathrm{ad}[i][j]$ ar avea o valoare pe care nu o poate lua niciun cost (de obicei $0$).
+
+![500; Exemplu: Reprezentarea unui graf prin matricea de adiacență](exemplu-matrice-adiacenta.png)
+
+Se poate observa că în cazul unui graf neorientat, matricea de adiacență este simetrică după diagonala principală. Altfel spus, $\mathrm{ad}[i][j]$ are aceeași valoare cu $\mathrm{ad}[j][i]$. Este evident, din moment ce $[i, j]$ și $[j, i]$ se referă de fapt la aceeași muchie.
+
+### Accesarea, inserarea și ștergerea unei muchii
+
+Operațiile de accesare, inserare și ștergere se produc în $O(1)$, accesând și modificând elemente din matrice. Însă, la grafurile neorientate trebuie avută un pic de grijă: La inserarea sau ștergerea muchiei $[i, j]$, trebuie actualizate atât $\mathrm{ad}[i][j]$, cât și $\mathrm{ad}[j][i]$.
+
+### Parcurgerea vecinilor unui nod
+
+Parcurgerea vecinilor unui nod $x$ are complexitatea $O(n)$, unde $n$ este numărul de noduri din graf: Trebuie parcursă întreaga linie $x$ din matrice, și vor fi prelucrate doar elementele cu valoarea `true`.
+
+### Sursă demonstrativă în C++
+
+Iată o sursă demonstrativă pentru reținerea unui graf neorientat prin matricea sa de adiacență. Poate fi adaptată extrem de ușor ca să funcționeze pe grafuri orientate.
+
+``` cpp -> Matricea de adiacență
+  #include <iostream>
+  using namespace std;
+
+  struct Edge {
+      int x, y;
+      Edge(int x, int y) {
+          this->x = x;
+          this->y = y;
+      }
+  };
+
+  int n; // numărul de noduri
+  bool ad[NMAX][NMAX]; // matricea de adiacență
+
+  bool find(Edge edge) {
+      return ad[edge.x][edge.y];
+  }
+
+  void remove(Edge edge) {
+      ad[edge.x][edge.y] = ad[edge.y][edge.x] = false;
+  }
+
+  void insert(Edge edge) {
+      ad[edge.x][edge.y] = ad[edge.y][edge.x] = true;
+  }
+
+  void neighbors(int node) {
+      for (int j = 1; j <= n; j++)
+          if (ad[node][j])
+              cout << j << ' ';
+      cout << '\n';
+  }
+
+  int main() {
+      n = 5;
+      insert(Edge(1, 2));
+      insert(Edge(1, 3));
+      insert(Edge(1, 4));
+      insert(Edge(4, 5));
+
+      insert(Edge(3, 4));
+      remove(Edge(3, 4));
+
+      cout << find(Edge(4, 5)) << '\n';
+      cout << find(Edge(2, 5)) << '\n';
+
+      neighbors(1);
+      neighbors(2);
+      neighbors(3);
+      neighbors(4);
+      neighbors(5);
+      return 0;
+  }
+^^^
+
+## Reprezentarea grafurilor prin liste de adiacență
+
+O altă soluție este să reținem câte o listă de adiacență pentru fiecare nod al grafului. Mai exact, lista de adiacență a unui nod va reține nodurile adiacente la acesta. Pentru implementare am putea folosi o matrice, iar fiecare linie $i$ să fie lista de adiacență a nodului $i$. Însă, n-ar fi o idee prea eficientă ca memorie, pentru că s-ar reține o grămadă de poziții libere la finalul fiecărei linii. Listele ar trebui să fie alocate dinamic, ca să nu ocupe decât atâtea elemente câți vecini are nodul respectiv. Ca să simplific lucrurile, pentru liste am folosit container-ul [`vector`](http://www.cplusplus.com/reference/vector/vector/) din STL, căci este perfect pentru ce avem nevoie.
+
+![500; Exemplu: Reprezentarea unui graf prin liste de adiacență](exemplu-liste-adiacenta.png)
+
+### Accesarea unei muchii
+
+Pentru a accesa o muchie $(i, j)$, trebuie doar să căutăm nodul $j$ în lista de adiacență a nodului $i$. Complexitatea este $O(nr(i))$. Am notat prin $nr(i)$ numărul de vecini ai nodului $i$; voi folosi această notație și în continuare.
+
+### Ștergerea unei muchii
+
+Pentru a șterge o muchie $(i, j)$, căutăm nodul $j$ în lista nodului $i$, apoi îl ștergem similar modului descris în cazul listei de muchii. Complexitatea este $O(nr(i))$.
+
+### Inserarea unei muchii
+
+Pentru a insera o muchie $(i, j)$, adăugăm nodul $j$ la sfârșitul listei de adiacență a nodului $i$. Complexitatea este $O(1)$.
+
+### Parcurgerea vecinilor unui nod
+
+Pentru a parcurge nodurile adiacente unui nod dat, trebuie doar să-i parcurgem lista de adiacență. Complexitatea este $O(nr(x))$.
+
+### Sursă demonstrativă în C++
+
+Mai jos este o sursă demonstrativă pentru reținerea unui graf orientat prin liste de adiacență. Din nou, sursa poate fi modificată ușor ca să funcționeze pentru grafuri neorientate.
+
+``` cpp -> Listele de adiacență
+  #include <vector>
+  #include <iostream>
+  using namespace std;
+
+  struct Edge {
+      int x, y;
+      Edge(int x, int y) {
+          this->x = x;
+          this->y = y;
+      }
+  };
+  vector<int> ad[618]; // lista de adiacență
+
+  int find(Edge edge) {
+      for (int j = 0; j < int(ad[edge.x].size()); j++)
+          if (ad[edge.x][j] == edge.y)
+              return j;
+      return -1;
+  }
+
+  void remove(Edge edge) {
+      for (int j = 0; j < int(ad[edge.x].size()); j++)
+          if (ad[edge.x][j] == edge.y) {
+              swap(ad[edge.x][j], ad[edge.x].back());
+              ad[edge.x].pop_back();
+              return;
+          }
+  }
+
+  void insert(Edge edge) {
+      ad[edge.x].push_back(edge.y);
+  }
+
+  void neighbors(int node) {
+      for (int j = 0; j < int(ad[node].size()); j++)
+          cout << ad[node][j] << ' ';
+      cout << '\n';
+  }
+
+  int main() {
+      insert(Edge(5, 1));
+      insert(Edge(5, 2));
+      insert(Edge(5, 4));
+
+      insert(Edge(5, 3));
+      remove(Edge(5, 3));
+
+      cout << find(Edge(5, 2)) << '\n';
+      cout << find(Edge(2, 5)) << '\n';
+
+      neighbors(5);
+      return 0;
+  }
+^^^
+
+## Concluzii
+
+Mai jos aveți un tabel care compară complexitățile celor trei metode de reprezentare a grafurilor. Am evidențiat complexitățile optime pentru fiecare operație.
+
+???
+  C > Operație
+  C > Listă de muchii
+  C > Matrice de adiacență
+  C > Liste de adiacență
+~~~
+  l > Accesarea unei muchii
+  c > $O(m)$
+  c > ^^$O(1)$^^
+  c > $O(nr(x))$
+~~~
+  l > Ștergerea unei muchii
+  c > $O(m)$
+  c > ^^$O(1)$^^
+  c > $O(nr(x))$
+~~~
+  l > Inserarea unei muchii
+  c > ^^$O(1)$^^
+  c > ^^$O(1)$^^
+  c > ^^$O(1)$^^
+~~~
+  l > Parcurgerea vecinilor unui nod
+  c > $O(m)$
+  c > $O(n)$
+  c > ^^$O(nr(x))$^^
+!!!
+
+Reprezentarea unui graf prin lista de muchii este cea mai ineficientă metodă. Este utilă doar atunci când efectiv trebuie să parcurgem muchiile grafului, și cel mult să inserăm niște muchii. Una dintre foarte puținele aplicații practice ale listei de muchii este [Algoritmul lui Kruskal]()TODO.
+
+Matricea de adiacență și listele de adiacență sunt cele mai folosite metode. Prima are cea mai bună complexitate pentru manipularea muchiilor, însă consumă cea mai multă memorie, și nu permite o parcurgere prea eficientă a vecinilor unui nod. Listele de adiacență sunt însă cele mai bune la capitolul din urmă, iar consumul de memorie al acestora depinde doar de numărul de muchii.
+
+Alegerea celei mai potrivite metode de reprezentare a unui graf depinde foarte mult de restricțiile problemei. De obicei însă, matricea de adiacență este mai bună pentru grafurile __dense__ (cu multe muchii), iar listele de adiacență sunt mai bune pentru grafurile __rare__ (cu puține muchii).
+
+Dacă aveți vreo întrebare legată de metodele de reprezentare a grafurilor în C++, nu ezitați să o adresați într-un comentariu, mai jos :smile:

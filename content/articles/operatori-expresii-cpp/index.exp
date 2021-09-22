@@ -1,0 +1,493 @@
+TITLE: Operatori și expresii în C++
+AUTHOR: Iulian Oleniuc
+DATE: 21/07/2017
+CATEGORIES: Limbajul C++
+TAGS: c++, expresii, operatori
+DESCRIPTION: Pentru a opera cu variabile și constante vom folosi operatori. În C++, aceștia pot fi unari, binari sau ternari.
+
+Pentru a opera cu variabile și constante, vom folosi operatori. În funcție de numărul operanzilor, un operator poate fi unar, binar sau ternar. O expresie este o înșiruire de variabile, constante și operatori. Majoritatea expresiilor pot fi evaluate de compilator, returnând o valoare.
+
+## Operatorul de atribuire
+
+Operatorul de atribuire (`=`) are rolul de a atribui o valoare unei variabile. De exemplu, după execuția instrucțiunii de mai jos, variabila `x` va avea valoarea `618`. Întotdeauna operația de atribuire se desfășoară de la dreapta la stânga.
+
+``` cpp
+  x = 618;
+```
+
+Operandul din dreapta poate fi de asemenea o variabilă, de exemplu:
+
+``` cpp
+  a = b;
+```
+
+În cazul acesta, variabila `a` primește **valoarea** variabilei `b`. Așadar, nicio modificare ulterioară a lui `b` nu va afecta valoarea lui `a`.
+
+``` cpp
+  int a = 1;
+  int b = 2;
+
+  a = b;
+  // Acum a are valoarea 2, iar b tot 2.
+```
+
+Operatorul de atribuire returnează valoarea atribuită primului operand.
+
+``` cpp
+  b = 1 + (a = 9); // b devine 10.
+  // Întâi a primește valoarea 9, iar apoi
+  // lui b i se atribuie valoarea (1 + 9).
+```
+
+De aceea, putem atribui mai multor variabile aceeași valoare în modul următor:
+
+``` cpp
+  variabila1 = variabila2 = ... = variabilaN = valoare;
+```
+
+Operatorul de atribuire se mai numește operator de asignare. A nu se confunda cu operatorul `==`, care testează __egalitatea__ dintre operanzi!
+
+## Operatori aritmetici
+
+Operatorii aritmetici efectuează operații matematice asupra operanzilor:
+
+???
+  C > Operator
+  C > Descriere
+  C > Efect
+~~~
+  l > `+`
+  l > adunare
+  l > Returnează suma operanzilor.
+~~~
+  l > `-`
+  l > scădere
+  l > Returnează diferența dintre operanzi. Primul este descăzutul, iar al doilea scăzătorul.
+~~~
+  l > `*`
+  l > înmulțire
+  l > Returnează produsul dintre operanzi.
+~~~
+  l > `/`
+  l > împărțire
+  l > Returnează rezultatul împărțirii primului operand la al doilea. Dacă ambii sunt întregi, se va efectua împărțirea întreagă (se returnează câtul), altfel cea reală.
+~~~
+  l > `%`
+  l > modulo
+  l > Returnează restul împărțirii primului operand la al doilea. Ambii operanzi trebuie să fie întregi.
+!!!
+
+Cum în matematică împărțirea la `0` nu are sens (nici măcar dacă deîmpărțitul este `0`), `x / 0` și `x % 0` vor genera o eroare.
+
+La fel ca în matematică, în evaluarea unei expresii se ține cont de ordinea efectuării operațiilor. La finalul articolului veți găsi o listă completă cu ordinea evaluării operatorilor din C++.
+
+``` cpp
+  1 + 2 * 3 % 4 - 5 / 6 // Se evaluează la 3.
+```
+
+Tot ca în matematică, putem folosi paranteze rotunde ca să delimităm o parte din expresie pentru a-i crește prioritatea, sau doar pentru a o evidenția. În C++ nu putem folosi decât paranteze rotunde. Exemplu:
+
+``` text
+  ((1 + 2) * 3) - 4 // Corect, se evaluează la 5.
+  (1 + 2) * (3 + 4  // Greșit, a doua paranteză nu a fost închisă.
+```
+
+## Operatori relaționali
+
+Operatorii relaționali sunt folosiți pentru a testa o relație dintre valorile a două expresii. În C++, operatorii relaționali sunt:
+
+???
+  C > Operator
+  C > Descriere
+~~~
+  l > `==`
+  l > egal
+~~~
+  l > `!=`
+  l > diferit
+~~~
+  l > `<`
+  l > mai mic
+~~~
+  l > `>`
+  l > mai mare
+~~~
+  l > `<=`
+  l > mai mic sau egal
+~~~
+  l > `>=`
+  l > mai mare sau egal
+!!!
+
+Acești operatori returnează o valoare booleană. Exemple:
+
+``` cpp
+  1 == 2 // false
+  1 < 3  // true
+  2 != 2 // false
+  3 >= 3 // true
+```
+
+### Testul de egalitate pentru numere reale
+
+Cum numerele reale sunt stocate folosind virgulă mobilă, de la un anumit punct se pierde precizia. Adică, teste de genul `0.000001 == 0` vor fi evaluate uneori drept `true`.
+
+![500; Floating point error](floating-point-error.png)
+
+De aceea, dacă trebuie să testăm egalitatea dintre două numere reale, e bine să implementăm o funcție de genul:
+
+``` cpp
+  inline bool equals(double a, double b) {
+      double dif = a - b;
+      double abs = dif < 0 ? -dif : dif; // modulul diferenței
+
+      // Dacă diferența dintre cele două numere este suficient
+      // de mică, vom considera că sunt egale.
+      return abs < 0.000001;
+  }
+```
+
+## Operatori logici
+
+În C++ există 3 operatori logici: `!` (NOT, __negație__), `&&` (AND, __conjuncție__) și `||` (OR, __disjuncție__). În evaluarea expresiilor ce conțin acești operatori, operanzii sunt reduși mai întâi la o valoare booleană, adică pentru o valoare nenulă se va folosi `true`, iar pentru una nulă, `false`. De ce spun o valoare nulă, și nu `0` direct? Nu pentru toate tipurile de date valoarea nulă este `0`; de exemplu, pentru pointeri este `nullptr`.
+
+Operatorul `!` returnează valoarea booleană opusă celei la care se evaluează operandul. Exemple:
+
+``` cpp
+  !(2 != 2) // true
+  !(3 == 3) // false
+  !false    // true
+  !true     // false
+  !x        // true dacă x este nul, false dacă x este nenul
+```
+
+Operatorul `&&` returnează `true` dacă ambii operanzi sunt `true`, altfel `false`.
+
+???
+  C > `a`
+  C > `b`
+  C > `a && b`
+~~~
+  l > `true`
+  l > `true`
+  l > `true`
+~~~
+  l > `true`
+  l > `false`
+  l > `false`
+~~~
+  l > `false`
+  l > `true`
+  l > `false`
+~~~
+  l > `false`
+  l > `false`
+  l > `false`
+!!!
+
+Exemple:
+
+``` cpp
+  618 && 819       // true
+  123 && 0         // false
+  1 == 1 && 6 < 4  // false
+  false && false   // false
+  x && x % 10 == 0 // true dacă x are ultima cifră 0 și e nenul
+```
+
+Operatorul `||` returnează `true` dacă cel puțin unul dintre operanzi este `true`, altfel `false`.
+
+???
+  C > `a`
+  C > `b`
+  C > `a || b`
+~~~
+  l > `true`
+  l > `true`
+  l > `true`
+~~~
+  l > `true`
+  l > `false`
+  l > `true`
+~~~
+  l > `false`
+  l > `true`
+  l > `true`
+~~~
+  l > `false`
+  l > `false`
+  l > `false`
+!!!
+
+Exemple:
+
+``` cpp
+  true || false            // true
+  2 < 1 || 1 == 2          // false
+  false || 2 < 1 && 3 == 3 // false
+
+  // true dacă x reprezintă un an bisect:
+  x % 400 == 0 || x % 100 && x % 4 == 0
+```
+
+Când vrem să testăm dacă trei variabile de același tip sunt egale, folosim operatorul `&&`:
+
+``` cpp
+  a == b == c // Nu va produce efectul dorit.
+  // Se evaluează întâi a == b, obținându-se true sau false.
+  // Dacă se obține true, se va evalua 1 == c, altfel 0 == c.
+  a == b && b == c // Asta, în schimb, este ceea ce ne dorim.
+```
+
+Pentru a reține și mai ușor valorile returnate de cei doi operatori, putem asimila conjuncția cu __înmulțirea__ dintre `0` și `1`, iar disjuncția cu __adunarea__ dintre `0` și `1`, unde `0` este `false` și `1` este `true`.
+
+Evaluarea expresiilor ce conțin `&&` și `||` este foarte eficientă în C++. Într-o conjuncție, dacă operandul stâng este `false`, cel drept este ignorat, deoarece indiferent de valoarea lui, rezultatul va fi `false`. Similar, dacă într-o disjuncție operandul stâng este `true`, celălalt este ignorat și se returnează direct valoarea `true`.
+
+### Legile lui De Morgan
+
+De Morgan a enunțat două legi logice foarte simple despre negarea unei propoziții compuse, sau a unei expresii în cazul nostru:
+
+``` cpp
+  !(a && b) == !a || !b
+  !(a || b) == !a && !b
+```
+
+Acestea pot fi demonstrate dând valori binare lui `a` și `b` (sunt doar 4 combinații).
+
+## Operatorul ternar condițional `?:`
+
+Sintaxa unei expresii ce conține acest operator este:
+
+``` cpp
+  expresie ? expresie1 : expresie2
+```
+
+Se evaluează `expresie`, și dacă aceasta este adevărată, se returnează `expresie1`, iar dacă nu, `expresie2`. Exemplu:
+
+``` cpp
+  int maxim, a, b;
+  cin >> a >> b;
+  maxim = a > b ? a : b;
+```
+
+## Operatori pe biți
+
+Acești operatori lucrează la nivelul biților din reprezentarea întregilor. Operațiile pe biți sunt folosite pentru optimizarea multor algoritmi. Am abordat subiectul pe larg în [acest](operatii-pe-biti-cpp) articol.
+
+???
+  C > Operator
+  C > Descriere
+~~~
+  l > `&`
+  l > AND
+~~~
+  l > `|`
+  l > OR
+~~~
+  l > `^`
+  l > XOR
+~~~
+  l > `~`
+  l > NOT
+~~~
+  l > `<<`
+  l > SHIFT LEFT (SHL)
+~~~
+  l > `>>`
+  l > SHIFT RIGHT (SHR)
+!!!
+
+## Operatori compuși de atribuire
+
+Operatorii compuși de atribuire (`+=`, `-=`, `*=`, `/=`, `%=`, `>>=`, `<<=`, `&=`, `^=`, `|=`) ne ajută să scriem mai puțin cod, dar și optimizează operațiile efectuate asupra variabilelor. Exemple:
+
+``` cpp
+  x += y;    // x = x + y;
+  x /= y;    // x = x / y;
+  x -= a + b // x = x - (a + b);
+```
+
+De ce acești operatori sunt eficienți? De exemplu, în `x = x + y`, întâi se calculează `x + y`, iar apoi se atribuie această valoare lui `x`, pe când în `x += y`, adunarea se efectuează direct pe `x`.
+
+## Operatorii de incrementare și decrementare
+
+Incrementarea reprezintă adunarea lui `1` unui număr, iar decrementarea, scăderea lui `1` din acesta. De multe ori avem nevoie de efectuarea uneia dintre aceste operații înainte sau după altă operație, și de aceea acești operatori pot fi folosiți atât sub formă de __prefix__, cât și de __sufix__.
+
+În expresia `x = ++a`, întâi `a` se incrementează, iar apoi lui `x` i se atribuie valoarea lui `a`. În schimb, în expresia `x = a++`, întâi `x` primește valoarea lui `a`, iar apoi `a` se incrementează. Similar pentru operatorul de decrementare (`--`). Exemple:
+
+``` cpp
+  x = 618;
+  y = ++x;
+  // Acum x == 619 și y == 619.
+
+  x = 618;
+  y = x++;
+  // Acum x == 619 și y == 618.
+```
+
+Dacă vrem să incrementăm variabila `a`, putem folosi la fel de bine oricare dintre cele 4 instrucțiuni de mai jos, mai ales că de ceva timp compilatoarele sunt atât de inteligente încât înlocuiesc bucăți de cod cu cele mai eficiente variante ale lor din punct de vedere semantic (dar asta nu înseamnă că optimizează și complexitatea algoritmilor).
+
+``` cpp
+  ++a;
+  a++;
+  a += 1;
+  a = a + 1;
+```
+
+## Operatorul de casting (conversie a tipului)
+
+Operatorul de casting convertește o valoare de un anumit tip în altul. Acest operator se pune înaintea expresiei respective și are sintaxa `(tip)`. Exemple:
+
+``` cpp
+  double a = 1.618;
+  int b = (int) a; // Acum b == 1.
+```
+
+Dintr-un tip real într-unul întreg, conversia se face prin __trunchiere__, nu prin rotunjire. Deci atât `1.99`, cât și `1.01`, convertite la `int`, vor deveni `1`.
+
+În C++, cast-ul se mai poate efectua folosind notația funcțională `tip(expresie)`.
+
+``` cpp
+  int x = int(3.14);
+```
+
+## Operatorul `sizeof()`
+
+Am întâlnit deja acest operator în [Variabile și tipuri de date în C++](variabile-tipuri-de-date-cpp). Operatorul `sizeof()` poate lua ca parametru un tip sau o variabilă, și returnează mărimea în bytes a acestuia. Rezultatul este determinat întotdeauna înaintea execuției programului.
+
+``` cpp
+  int x = sizeof(bool); // x primește valoarea 1.
+```
+
+## Operatorul virgulă
+
+Operatorul virgulă este folosit pentru a separa mai multe expresii, __concatenându__-le. Operatorul va returna valoarea celei mai din dreapta expresii.
+
+``` cpp
+  a = (b = 3, ++b); // Acum a == 4 și b == 4.
+```
+
+De obicei, acest operator este folosit când vrem să scriem o singură instrucțiune care să facă mai multe operații, într-o structură `for` de exemplu.
+
+## Ordinea evaluării operatorilor
+
+Mai există niște operatori în limbajul C++, dar despre aceștia voi discuta în articolele următoare. Iată lista completă a operatorilor C++, de la cei cu cea mai mare prioritate în jos:
+
+???
+  C > Grup
+  C > Operator
+  C > Descriere
+  C > Evaluare
+~~~
+  L > Rezoluție
+  l > `::`
+  l > rezoluție
+  c > stânga-dreapta
+~~~
+  L 4 > Operatori sufix
+  l > `++` `--`
+  l > sufix de incrementare/ decrementare
+  c 4 > stânga-dreapta
+~~~
+  l > `()`
+  l > apel de funcție
+~~~
+  l > `[]`
+  l > subscript
+~~~
+  l > `.` `->`
+  l > acces către membru
+~~~
+  L 7 > Operatori prefix
+  l > `++` `--`
+  l > prefix de incrementare/ decrementare
+  c 7 > dreapta-stânga
+~~~
+  l > `~` `!`
+  l > NOT pe biți, NOT logic
+~~~
+  l > `+` `-`
+  l > prefix unar (semnul unui număr)
+~~~
+  l > `&` `*`
+  l > referențiere, dereferențiere
+~~~
+  l > `new` `delete`
+  l > alocare/ dealocare de memorie
+~~~
+  l > `sizeof()`
+  l > dimensiune în bytes
+~~~
+  l > `(type)`
+  l > ?[casting](conversie a tipului)
+~~~
+  L > Pointer către membru
+  l > `.*` `->*`
+  l > acces către pointer al membrului
+  c > stânga-dreapta
+~~~
+  L > Înmulțire, împărțire
+  l > `*` `/` `%`
+  l > produs, raport, rest
+  c > stânga-dreapta
+~~~
+  L > Adunare, scădere
+  l > `+` `-`
+  l > sumă, diferență
+  c > stânga-dreapta
+~~~
+  L > Shiftări pe biți
+  l > `<<` `>>`
+  l > shiftare la stânga/ dreapta
+  c > stânga-dreapta
+~~~
+  L > Operatori relaționali
+  l > `<` `>` `<=` `>=`
+  l > operatori de comparație
+  c > stânga-dreapta
+~~~
+  L > Operatori de egalitate
+  l > `==` `!=`
+  l > egal, diferit
+  c > stânga-dreapta
+~~~
+  L > AND pe biți
+  l > `&`
+  l > AND pe biți
+  c > stânga-dreapta
+~~~
+  L > XOR pe biți
+  l > `^`
+  l > ?[XOR](sau exclusiv) pe biți
+  c > stânga-dreapta
+~~~
+  L > OR pe biți
+  l > `|`
+  l > OR pe biți
+  c > stânga-dreapta
+~~~
+  L > Conjuncție
+  l > `&&`
+  l > AND logic
+  c > stânga-dreapta
+~~~
+  L > Disjuncție
+  l > `||`
+  l > OR logic
+  c > stânga-dreapta
+~~~
+  L 2 > Operatori de atribuire
+  l > `=` `*=` `/=` `%=` `+=` `-=` `>>=` `<<=` `&=` `^=` `|=`
+  l > operatori (compuși) de atribuire
+  c 2 > dreapta-stânga
+~~~
+  l > `?:`
+  l > operatorul condițional ternar
+~~~
+  L > Concatenare
+  l > `,`
+  l > compunerea expresiilor
+  c > stânga-dreapta
+!!!
+
+Următorul articol din seria de tutoriale C++ este [Citirea datelor din consolă și din fișiere în C++](citire-scriere-c-cpp). Dacă aveți întrebări despre operatori și expresii în C++, adresați-le mai jos :smile:

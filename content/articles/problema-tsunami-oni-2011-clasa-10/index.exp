@@ -1,0 +1,96 @@
+TITLE: Problema Tsunami -- ONI 2011, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 02/01/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: fill, oni 2011, recursivitate
+DESCRIPTION: Problema tsunami, de clasa a 10-a, a fost dată în 2011 la ONI. Avem un teritoriu reprezentat sub formă de matrice cu m linii și n coloane...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Eugen Nodea
+> **Online:** [InfoArena](http://www.infoarena.ro/problema/tsunami), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=)
+---
+
+## Rezumat
+
+Avem un teritoriu reprezentat sub formă de matrice cu $m$ linii și $n$ coloane, fiecare element al acesteia reprezentând cota terenului din pătratul corespunzător. Zonele de apă au cota $0$, iar cele de uscat cote mai mari decât $0$.
+
+Un tsunami este clasificat după înălțimea valului mareic, pe o scară de la $1$ la $10$. Trebuie să determinăm numărul de zone de pe hartă ce pot fi afectate de un tsunami de înălțime dată, notată cu $h$. O zonă teritorială este supusă pericolului dacă are cota strict mai mică decât $h$, și se află în vecinătatea apei sau a altei zone afectate (două pătrate se învecinează dacă au o latură comună).
+
+## Soluție
+
+Este o problemă destul de simplă ce folosește algoritmul de fill. După ce bordăm matricea cu cote mai mari decât înălțimea maximă a unui tsunami (am ales $20$), aplicăm câte un fill pentru fiecare poziție cu valoarea $0$ din matrice (nici nu are rost să testăm dacă aceasta se învecinează cu apă).
+
+Eu am implementat un fill recursiv. Ca să nu fac __stack overflow__, am folosit două variabile globale (pentru linie și coloană) în loc de parametri. Dar problema poate fi rezolvată la fel de bine folosind o coadă.
+
+## Sursă C++
+
+``` cpp -> Problema Tsunami
+  #include <fstream>
+
+  #define MAX 20
+  #define DMAX 1010
+
+  std::ifstream fin("tsunami.in");
+  std::ofstream fout("tsunami.out");
+
+  int sol;
+  int m, n, h;
+
+  bool aux[DMAX][DMAX];
+  short int a[DMAX][DMAX];
+
+  // Variabilele folosite de funcția fill:
+  int I, J;
+
+  /// Funcția recursivă de fill
+  void fill() {
+      if (a[I][J] < h && !aux[I][J]) {
+          aux[I][J] = true; // Marcăm poziția în matricea auxiliară.
+          if (a[I][J]) // Testăm dacă este o zonă uscată.
+              sol++;
+
+          // Aplicăm fill pentru vecini:
+          I--; fill(); I++;
+          I++; fill(); I--;
+          J--; fill(); J++;
+          J++; fill(); J--;
+      }
+  }
+
+  /// Funcția de rezolvare
+  void solve() {
+      int i, j;
+      for (i = 1; i <= m; i++)
+          for (j = 1; j <= n; j++)
+              if (!a[i][j]) {
+                  I = i;
+                  J = j;
+                  fill();
+              }
+  }
+
+  /// Funcția de citire
+  void scan() {
+      int i, j;
+      fin >> m >> n >> h;
+      for (i = 1; i <= m; i++)
+          for (j = 1; j <= n; j++)
+              fin >> a[i][j];
+
+      // Bordăm matricea cu MAX:
+      for (i = 0; i <= m + 1; i++)
+          a[i][0] = a[i][n + 1] = MAX;
+      for (j = 0; j <= n + 1; j++)
+          a[0][j] = a[m + 1][j] = MAX;
+  }
+
+  int main() {
+      scan();
+      solve();
+      fout << sol << '\n';
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Tsunami, lasă un comentariu și te voi ajuta :smile:

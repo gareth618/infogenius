@@ -3,7 +3,7 @@ AUTHOR: Iulian Oleniuc
 DATE: 13/09/2020
 CATEGORIES: Algoritmică și structuri de date, Matematică
 TAGS: algoritmul lui euclid, cmmdc, cmmmc, descompunere în factori primi, divizibilitate, numere prime
-DESCRIPTION: În acest articol voi prezenta conceptele de CMMDC și CMMMC și Algoritmul lui Euclid prin scăderi repetate și prin împărțiri repetate.
+DESCRIPTION: În acest articol voi prezenta conceptele de CMMDC, CMMMC și Algoritmul lui Euclid atât prin scăderi repetate cât și prin împărțiri repetate.
 
 În acest articol voi prezenta conceptele de CMMDC (cel mai mare divizor comun) și CMMMC (cel mai mic multiplu comun), precum și Algoritmul lui Euclid, atât prin scăderi repetate, cât și prin împărțiri repetate. La final, vom discuta despre câteva aplicații la CMMDC și CMMMC.
 
@@ -44,15 +44,15 @@ Algoritmul lui Euclid este o metodă foarte simplă și eficientă de a calcula 
 Algoritmul lui Euclid prin scăderi repetate presupune să scădem la fiecare pas numărul mai mic din numărul mai mare, până când unul dintre ele devine $0$. La final, valoarea numărului care a rămas nenul va fi egală cu $(a, b)$.
 
 ``` cpp
-  while (b)
+  while (a && b)
       if (a > b)
           a -= b;
       else
           b -= a;
-  cout << a << '\n';
+  cout << a + b << '\n';
 ```
 
-Din cum arată implementarea, se vede că, atunci când $a = b$, îl vom scădea pe $a$ din $b$, valoarea lui $b$ devenind astfel $0$. De aceea, în `while` testez dacă $b$ este nenul, și nu dacă ambele numere sunt nenule. Din același motiv, la final îl pot afișa direct pe $a$, fiind sigur că el este numărul rămas nenul.
+(Afișăm $a + b$ pentru că această valoare este egală cu numărul care nu a devenit $0$.)
 
 Se observă că algoritmul acesta modifică valorile inițiale ale variabilelor $a$ și $b$. Deci, dacă avem nevoie de ele mai târziu, putem să le facem copii la început, și să folosim copiile în cadrul algoritmului. Sau, mai simplu, definim o funcție `gcd`, care primește ca parametri numerele $a$ și $b$ și returnează $(a, b)$:
 
@@ -60,12 +60,12 @@ Se observă că algoritmul acesta modifică valorile inițiale ale variabilelor 
   // ...
 
   int gcd(int a, int b) {
-      while (b)
+      while (a && b)
           if (a > b)
               a -= b;
           else
               b -= a;
-      return a;
+      return a + b;
   }
 
   // ...
@@ -82,23 +82,30 @@ Se observă că algoritmul acesta modifică valorile inițiale ale variabilelor 
 Să vedem de ce algoritmul furnizează întotdeaua rezultatul corect. Practic, el se bazează pe următoarea relație de recurență:
 
 $$\gcd(a, b) = \begin{cases}
-  \gcd(a - b, b) & \text{ pentru } a \gt b\\
-  a & \text{ pentru } b = 0
+  \gcd(a - b, b) & \text{pentru } a \gt b\\
+  a & \text{pentru } b = 0
 \end{cases}$$
 
-Al doilea caz este trivial, iar primul se justifică astfel: $g = \gcd(a, b)$ divide atât pe $a$, cât și pe $b$. Asta înseamnă că $g \mid c = a - b$. Deci, $g$ este un divizor comun al numerelor $b$ și $c$. Prin urmare, trebuie să-l dividă pe cel mai mare divizor comun al lor, și anume pe $\gcd(b, c)$. Cum noi vrem ca $g$ să fie maxim, atunci acesta nu poate fi decât $\gcd(b, c)$. Așadar, $\gcd(a, b) = \gcd(a - b, b)$.
+Al doilea caz este trivial, iar primul se justifică astfel:
+
+>>>
+  Notăm $c = a - b$. Fie $d$ un divizor oarecare al lui $b$.
+
+  +++
+  > Dacă $d \mid a$, atunci, știind că $d \mid b$, rezultă că $d \mid a - b$, adică $d \mid c$.
+  > Dacă $d \mid c$, atunci, știind că $d \mid b$, rezultă că $d \mid c + b$, adică $d \mid a$.
+  ---
+
+  Mai pe scurt, $d \mid b \rightarrow (d \mid a \leftrightarrow d \mid c)$. Cu alte cuvinte, perechile $(b, a)$ și $(b, c)$ au aceeași mulțime de divizori comuni. Așadar, cel mai mare divizor comun al fiecărei perechi trebuie și el să fie același. Adică, $\gcd(a, b) = \gcd(b, c)$.
+<<<
 
 ![400; Exemplu CMMDC](exemplu-cmmdc.png)
 
 ### Exemple
 
-Iată niște animații care ilustrează modul în care funcționează Algoritmul lui Euclid prin scăderi repetate pe trei perechi de numere: $(5, 18)$, $(20, 24)$ și $(60, 35)$:
+Iată o animație care ilustrează modul în care funcționează Algoritmul lui Euclid prin scăderi repetate pe trei perechi de numere: $(5, 18)$, $(20, 24)$ și $(60, 35)$:
 
-[TODO]()TODO
-
-[TODO]()TODO
-
-[TODO]()TODO
+![](euclidean-algorithm.js)
 
 ### Complexitate
 
@@ -118,7 +125,7 @@ L-am scăzut pe $b$ din $a$ până când $a$ a devenit mai mic decât $b$. Pract
           a %= b;
       else
           b %= a;
-  cout << a + b << '\n'; // a + 0 sau 0 + b
+  cout << a + b << '\n';
 ```
 
 Iată și o implementare ceva mai elegantă:
@@ -136,22 +143,34 @@ La fiecare pas, îl copiem pe $b$ în $a$ și pe $r$ (restul împărțirii) în 
 
 ### Complexitate
 
-Să luăm din nou exemplul ăla mare de la începutul articolului. Avem:
+Să luăm din nou exemplul acela mare de la începutul articolului. Avem:
 
 $$\begin{align*}
   (229\,320, 996\,072) & \rightarrow (996\,072, 229\,320) \rightarrow (229\,320, 78\,792) \rightarrow (78\,792, 71\,736)\\
   & \rightarrow (71\,736, 7\,056) \rightarrow (7\,056, 1\,176) \rightarrow (1\,176, 0)
 \end{align*}$$
 
-Numărul de pași efectuați este foarte mic în comparație cu numerele inițiale, ceea ce ne face să intuim că algoritmul are o complexitate de ordinul $O(\log(a + b))$. Se întâmplă ca intuiția să fie corectă, iar mai jos aveți demonstrația. E doar pentru cei interesați; în niciun caz nu aveți nevoie de ea la școală. Pentru clasa a noua, e suficient să știți că Algoritmul lui Euclid este extrem de rapid.
+Numărul de pași efectuați este foarte mic în comparație cu numerele inițiale, ceea ce ne face să intuim că algoritmul are o complexitate de ordinul $O(\log(a + b))$. Se întâmplă ca intuiția să fie corectă, iar mai jos aveți demonstrația. E doar pentru cei interesați; în niciun caz nu aveți nevoie de ea la școală. Pentru clasa a noua, e suficient să știți că Algoritmul lui Euclid este... extrem de rapid.
 
-Vom analiza primii doi pași ai algoritmului. Presupunem că $a \gt b$ încă de la început. Perechea $(a, b)$ devine $(b, c)$, unde $c = a \modd b$, iar $(b, c)$ devine $(c, d)$, unde $d = b \modd c$.
+Vom analiza trei iterații consecutive ale algoritmului. Perechea $(a, b)$ devine $(b, c)$, unde $c = a \modd b$, iar $(b, c)$ devine $(c, d)$, unde $d = b \modd c$. Considerăm că $a \gt b$, de unde și $b \gt c$ și $c \gt d$.
 
 $$(a, b) \rightarrow (b, c) \rightarrow (c, d)$$
 
-Acum să o luăm invers. $d = b \modd c$ și $c \gt d$ implică faptul că $b \ge c + d$. Dar $a \gt b$, deci $a \gt c + d$. Adunând asta la relația precedentă, obținem $a + b \gt 2(c + d)$. Asta înseamnă că, la fiecare doi pași ai algoritmului, suma dintre $a$ și $b$ devine egală cu cel mult cu jumătate din cât a fost înainte. Deci, în cel mai rău caz, $a + b$ se înjumătățește din doi în doi pași. De aici avem complexitatea logaritmică a algoritmului. În caz că vă întrebați, cel mai nefavorabil caz este cel în care numerele date sunt termeni consecutivi din Șirul lui Fibonacci, dar nu mai intru în detalii.
+Știm că $d = b \modd c$, adică $b = qc + d$, pentru un $q$ natural. Dar $b \gt c \gt d$, așa că $q \ge 1$. Prin urmare,
 
-## Formula pentru calcularea CMMMC-ului
+$$b \ge c + d$$.
+
+Dar $a \gt b$, deci mai avem că
+
+$$a \gt c + d$$.
+
+Adunând cele două relații, obținem că
+
+$$a + b \gt 2(c + d)$$.
+
+Așadar, la fiecare două iterații, suma valorilor $a$ și $b$ devine de cel puțin două ori mai mică. Asta înseamnă că numărul maxim de iterați din `while` este aproximativ $2[\log_2(a + b)]$. În concluzie, complexitatea algoritmului este de ordinul $O(\log(a + b))$. În caz că vă întrebați, cel mai nefavorabil caz este cel în care numerele date sunt termeni consecutivi din Șirul lui Fibonacci, dar nu mai intru în detalii.
+
+## Formula pentru CMMMC
 
 CMMMC-ul poate fi calculat foarte ușor folosind următoarea formulă:
 

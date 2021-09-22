@@ -126,8 +126,10 @@ Dacă veți încerca să desenați un astfel de graf, veți vedea că trebuie ad
 >>>
   Considerăm un șir oarecare format doar din caractere din mulțimea $\{a, b\}$. Mulțimea
 
-  $$R = \{r_1: \texttt{aab} \rightarrow \texttt{aaa}, r_2: \texttt{aba} \rightarrow \texttt{aab}, r_3: \texttt{abb} \rightarrow \texttt{aba},\\
-  r_4: \texttt{baa} \rightarrow \texttt{abb}, r_5: \texttt{bab} \rightarrow \texttt{aba}, r_6: \texttt{bba} \rightarrow \texttt{baa}, r_7: \texttt{bbb} \rightarrow \texttt{bab}\}$$
+  $$
+    R = \{r_1: \texttt{aab} \rightarrow \texttt{aaa}, r_2: \texttt{aba} \rightarrow \texttt{aab}, r_3: \texttt{abb} \rightarrow \texttt{aba},\\
+    r_4: \texttt{baa} \rightarrow \texttt{abb}, r_5: \texttt{bab} \rightarrow \texttt{aba}, r_6: \texttt{bba} \rightarrow \texttt{baa}, r_7: \texttt{bbb} \rightarrow \texttt{bab}\}
+  $$
 
   definește regulile de transformare care pot fi aplicate unui astfel de șir. Fiecare dintre aceste transformări, aplicată unui șir de caractere oarecare, va înlocui prima apariție a subșirului de trei caractere din partea stângă a regulii, cu subșirul din partea dreaptă. Pornind de la șirul inițial, vom aplica în mod repetat oricare dintre transformările din mulțimea $R$, atât timp cât acest lucru este posibil.
 
@@ -426,5 +428,7 @@ Din moment ce în enunț se specifică faptul că putem folosi funcția preceden
 ^^^
 
 Se vede clar că algoritmul are o complexitate de ordinul $O((NM)^2)$. Am putea face o mică optimizare, și anume să folosim observația de la punctul **a** pentru a nu parcurge de două ori aceeași secvență din direcții diferite. Dar complexitatea rămâne aceeași, așa că nu are sens să ne complicăm.
+
+===
 
 Astea au fost subiectele de la admitere din 2016. Mie mi s-au părut ceva mai grele decât cele din 2017 și 2018, în special datorită cerinței II.4.2 și a argumentării răspunsului de la problema II.2. (Chiar dacă subiectul spune doar să scrieți litera corespunzătoare răspunsului corect, se punctează și justificarea.) Dacă aveți vreo întrebare legată de problemele din acest articol, nu ezitați să lăsați un comentariu mai jos :smile:

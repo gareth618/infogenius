@@ -1,0 +1,217 @@
+TITLE: Variabile și tipuri de date în C++
+AUTHOR: Iulian Oleniuc
+DATE: 30/06/2017
+CATEGORIES: Limbajul C++
+TAGS: ascii, c++, tipuri de date, variabile
+DESCRIPTION: În C++, o variabilă este o zonă de memorie care își poate schimba valoarea pe parcursul execuției programului.
+
+În programare, avem nevoie tot timpul de reținerea anumitor valori în memoria calculatorului. O __variabilă__ este o zonă de memorie care își poate schimba valoarea pe parcursul execuției programului. Pentru a putea folosi o variabilă, aceasta trebuie mai întâi __declarată__. Sintaxa declarării unei variabile în [C++](introducere-cpp) este:
+
+``` cpp
+  tip nume;
+```
+
+Efectul este alocarea unei zone de memorie, unde va fi stocată variabila `nume` de tipul `tip`. Alocarea memoriei poate fi __statică__, __auto__, __dinamică__ sau __registru__.
+
+Cea statică este specifică variabilelor __globale__ (cele declarate în afara funcțiilor). Variabilele globale sunt stocate în **zona de date** a programului, și sunt inițializate automat cu `0`.
+
+Variabilele corespunzătoare alocării auto sunt cele __locale__. Variabilele locale sunt cele declarate într-o funcție (de exemplu `main`), într-o instrucțiune `for`... în general într-un block de cod. Acestea sunt stocate în **stivă**, și nu se știe niciodată ce valoare primesc după declarare (de aceea e bine să le inițializăm noi).
+
+Alocarea dinamică de memorie se face în timpul execuției programului, și aceste variabile sunt stocate în zona numită **heap**, despre care voi vorbi în alte articole. Exemple:
+
+``` cpp
+  // Variabilă globală:
+  int a; // a are valoarea 0.
+
+  int main() {
+      // Variabilă locală:
+      int b; // b poate fi 3243732.
+
+      // Variabilă locală în for (c):
+      for (int c = 0; c < 618; c++) {
+          int d; // variabilă locală într-un block de cod
+      }
+      return 0;
+  }
+```
+
+Variabilele alocate în mod registru sunt stocate într-un registru mașină, pentru a fi accesate mai ușor. Compilatoarele moderne alocă memorie registru chiar fără să specificăm, deoarece detectează singure unde este nevoie. Sintaxa este:
+
+``` cpp
+  register tip nume;
+```
+
+Se pot declara mai multe variabile de același tip printr-o singură instrucțiune:
+
+``` cpp
+  tip nume1, nume2, ..., numeN;
+```
+
+Variabilele trebuie să poarte un nume pentru a ne putea referi la ele în cadrul expresiilor. Numele unei variabile este un __identificator__. În C++, identificatorii trebuie să înceapă cu underscore (`_`) sau cu o literă din alfabetul englez, și să continue cu 0, 1 sau mai multe litere, cifre sau underscore-uri. C++ este __case-sensitive__, așa că `NUMAR`, `Numar` și `numar` sunt variabile diferite. Identificatorii nu trebuie să coincidă cu keyword-urile standard ale limbajului:
+
+`alignas`, `alignof`, `and`, `and_eq`, `asm`, `auto`, `bitand`, `bitor`, `bool`, `break`, `case`, `catch`, `char`, `class`, `compl`, `const`, `constexpr`, `const_cast`, `continue`, `decltype`, `default`, `delete`, `do`, `double`, `dynamic_cast`, `else`, `enum`, `explicit`, `export`, `extern`, `false`, `float`, `for`, `friend`, `goto`, `if`, `inline`, `int`, `long`, `mutable`, `namespace`, `new`, `noexcept`, `not`, `not_eq`, `nullptr`, `operator`, `or`, `or_eq`, `private`, `protected`, `public`, `register`, `reinterpret_cast`, `return`, `short`, `signed`, `sizeof`, `static`, `static_assert`, `static_cast`, `struct`, `switch`, `template`, `this`, `thread_local`, `throw`, `true`, `try`, `typedef`, `typeid`, `typename`, `union`, `unsigned`, `using`, `virtual`, `void`, `volatile`, `wchar_t`, `while`, `xor`, `xor_e`
+
+O bună parte dintre ele nici nu sunt folosite în programarea de zi cu zi, așa că nu trebuie reținute pe de rost. Oricum când vom încerca să compilăm programul vom primi o eroare dacă folosim un astfel de identificator greșit. Plus că, CodeBlocks de exemplu, ne colorează cele mai utilizate keyword-uri standard ale limbajului în albastru.
+
+## Tipuri fundamentale de date în C++
+
+???
+  C > Grup
+  C > Tip
+  C > Mărime
+  C > Interval de valori
+~~~
+  L 2 > Caractere
+  l > __`signed`__ `char`
+  l > 1 byte
+  l > $[-2^7, 2^7)$
+~~~
+  l > `unsigned char`
+  l > 1 byte
+  l > $[0, 2^8)$
+~~~
+  L 5 > Numere întregi
+  l > __`signed`__ `char`
+  l > 1 byte
+  l > $[-2^7, 2^7)$
+~~~
+  l > __`signed`__ `short` __`int`__
+  l > 2 bytes
+  l > $[-2^{15}, 2^{15})$
+~~~
+  l > __`signed`__ `int`
+  l > 4 bytes
+  l > $[-2^{31}, 2^{31})$
+~~~
+  l > __`signed`__ `long` __`int`__
+  l > 4 bytes
+  l > $[-2^{31}, 2^{31})$
+~~~
+  l > __`signed`__ `long long` __`int`__
+  l > 8 bytes
+  l > $[-2^{63}, 2^{63})$
+~~~
+  L 5 > Numere naturale
+  l > `unsigned char`
+  l > 1 byte
+  l > $[0, 2^8)$
+~~~
+  l > `unsigned short` __`int`__
+  l > 2 bytes
+  l > $[0, 2^{16})$
+~~~
+  l > `unsigned int`
+  l > 4 bytes
+  l > $[0, 2^{32})$
+~~~
+  l > `unsigned long` __`int`__
+  l > 4 bytes
+  l > $[0, 2^{32})$
+~~~
+  l > `unsigned long long` __`int`__
+  l > 8 bytes
+  l > $[0, 2^{64})$
+~~~
+  L 3 > Numere reale
+  l > `float`
+  l > 4 bytes
+  l > precizie de 2-3 zecimale
+~~~
+  l > `double`
+  l > 8 bytes
+  l > precizie dublă
+~~~
+  l > `long double`
+  l > 10 bytes
+  l > precizie mai mare decât `double`
+~~~
+  L > Boolean
+  l > `bool`
+  l > 1 byte
+  l > `true`, `false`
+~~~
+  L > Nul
+  l > `void`
+  l > 0 bytes
+  l > -
+~~~
+  L > Pointeri
+  l > `decltype(nullptr)`
+  l > variază în funcție de tipul pointer-ului
+  l > adresa unei variabile
+!!!
+
+Porțiunile italice sunt opționale în specificarea numelui tipului, însă nu recomand omiterea keyword-ului `int`, deoarece compilatoarele (foarte) vechi s-ar putea să nu identifice tipul.
+
+### Tipul caracter
+
+O variabilă de tip `char` stochează un caracter, mai exact codul său [ASCII](http://www.ascii-code.com/). De aceea, tipul caracter este folosit și pentru a stoca numere întregi micuțe. Pentru calculator, un caracter și codul său ASCII sunt același lucru, diferența se vede doar la citire și afișare.
+
+### Tipul întreg/ natural
+
+Primul bit din reprezentarea unui număr întreg se numește bit de semn, și ia valoarea `0` dacă numărul reprezentat este pozitiv, sau `1` dacă e negativ. Restul biților sunt reprezentarea în baza 2 a numărului respectiv. Într-o variabilă de tip natural (`unsigned`), nu există bit de semn, deoarece toți biții sunt reprezentarea în baza 2 a numărului dat. Asta permite memorarea unei valori pozitive aproape duble decât permite tipul corespondent cu semn. Puteți afla mai multe despre cum sunt reprezentate numerele întregi în C++ în articolul meu despre [Operații pe biți](operatii-pe-biti-cpp).
+
+### Tipul real
+
+O variabilă `float/ (long) double` este reprezentată prin __mantisă__ și __exponent__. Reprezentarea aceasta este cam greu de înțeles așa că nu o să intru acum în detalii. Când e nevoie să lucrăm cu numere reale, recomand tipul `double`. Doar dacă trebuie să reținem foarte multe variabile, cu precizie de maxim două zecimale, e OK `float`, deoarece consumă mai puțină memorie.
+
+Numerele periodice sau iraționale nu pot fi reținute în memoria calculatorului pentru simplul fapt că au o infinitate de zecimale. În schimb, pot fi reținute aproximări ale lor. Există și excepții. De exemplu, matematic, `1,9 = 2`, iar `2` poate fi reținut fără probleme în `double`.
+
+## Inițializarea variabilelor
+
+Să inițializăm o variabilă înseamnă să-i atribuim o valoare imediat după ce am declarat-o. Pentru asta folosim operatorul de atribuire (`=`). Al doilea operand (valoarea pe care o atribuim variabilei) poate fi o constantă, o expresie sau o altă variabilă, deja declarată.
+
+``` cpp
+  int a = 10, b = 1 + 1, c = a;
+```
+
+Mai există două moduri prin care putem inițializa o variabilă: punând valoarea între paranteze sau acolade:
+
+``` cpp
+  int a = 10, b(1 + 1), c{a};
+```
+
+## Ce înseamnă overflow?
+
+Overflow este o rezultatul unei operații care încearcă să creeze o valoare numerică ce iese din intervalul de valori pe care îl suportă tipul respectiv de date. Rezultatul este reținerea unei valori diferite de cea dorită. De exemplu, instrucțiunea `unsigned int a = 4294967296;` produce un overflow, deoarece acea valoare depășește cu `1` maximul suportat de `unsigned int`. Variabila `a` va stoca de fapt valoarea `0`, pentru că atunci când se caută valoarea de după `4294967295`, se continuă cu începutul intervalului, unde se găsește `0`.
+
+## Operatorul `sizeof()`
+
+`sizeof()` este un operator (și nu o funcție!) care determină mărimea în bytes a operandului. Acesta poate fi numele unui tip de date sau o variabilă (caz în care parantezele nu mai sunt obligatorii). Exemplu:
+
+``` cpp
+  int a; char c = '?';
+  cout << sizeof(int)    << ' '   // 4
+       << sizeof(double) << ' '   // 8
+       << sizeof(a)      << ' '   // 4
+       << sizeof c       << '\n'; // 1
+```
+
+## `decltype()` și `auto`
+
+`decltype()` este un specificator care arată și el ca o funcție. Acesta determină tipul prin care a fost declarat parametrul. Sintaxa:
+
+``` cpp
+  decltype(variabilă/expresie) nume;
+```
+
+`decltype` poate fi folosit pentru a declara noi variabile. Iată un exemplu:
+
+``` cpp
+  int x = 618;   // x este de tip int și are valoarea 618.
+  decltype(x) y; // y este de tipul lui x, adică int.
+```
+
+Keyword-ul `auto` este folosit tot pentru a declara variabile, dar fără a le specifica explicit tipul. Acesta va fi dedus de compilator, în funcție de valoarea prin care este inițializată (dacă folosim `auto` este obligatoriu să inițializăm variabila la declarare). Iată câteva exemple:
+
+``` cpp
+  auto a = 1.618; // double
+  auto b = 'x';   // char
+  auto c = true;  // bool
+  auto d = 819;   // int
+  decltype(d) e;  // int
+```
+
+Cei doi specificatori sunt mult mai puternici de atât, însă nu-i recomand decât în contextul programării generice.
+
+Următorul tutorial de C++ ce merită citit este [Constante în C++](constante-cpp). Dacă aveți vreo întrebare despre variabile și tipuri de date în C++, vă rog să o adresați în rubrica de comentarii :smile:

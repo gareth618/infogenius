@@ -57,7 +57,6 @@ body {
 
 code {
   padding: .2rem .4rem;
-  color: var(--text);
   background: var(--code);
   border-radius: .25rem;
   font-size: 85%;

@@ -1,0 +1,130 @@
+TITLE: Problema Ecuații -- OJI 2006, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 10/07/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, evaluare de expresii, oji 2006, șiruri de caractere
+DESCRIPTION: Problema Ecuații, de clasa a 10-a, s-a dat la OJI în 2006. Se dau n ecuații de gradul I, cu necunoscuta x. Fiecare ecuație are un membru...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Emanuela Cerchez
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/ecuatii2), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=1536)
+---
+
+## Rezumat
+
+Se dau `n` ecuații de gradul I, cu necunoscuta `x`. Fiecare ecuație are un membru stâng și un membru drept. Fiecare membru este constituit dintr-o succesiune de operanzi, despărțiți prin operatorii de adunare (`+`) și de scădere (`-`). Fiecare operand este un număr natural, un număr natural urmat de `x`, sau doar `x`.
+
+Se cere să se afișeze soluția fiecărei ecuații. Dacă o ecuație admite o infinitate de soluții (poate fi redusă la identitatea `0 = 0`), se va afișa __infinit__. Dacă o ecuație nu admite nicio soluție (se reduce la o ecuație de genul `1 = 2`), se va afișa mesajul __imposibil__.
+
+## Soluție
+
+Am procedat ca la orice problemă de evaluare de expresii. Dar, pentru a lucra mai ușor, am definit niște constante utile:
+
+``` cpp
+  // Semnul pe care îl poate avea operandul curent:
+  #define MINUS -1
+  #define PLUS +1
+
+  // Valorile pe care le poate avea membrul curent (stânga/dreapta):
+  #define LEFT +1
+  #define RIGHT -1
+```
+
+Pentru fiecare expresie, am inițializat membrul curent (`mmbr`) cu `LEFT`, semnul curent (`sign`) cu `PLUS` și numărul curent (`nr`) cu `0`. Apoi, am parcurs expresia astfel:
+
++++
+> Dacă am găsit o cifră, actualizez `nr`.
+> Dacă am găsit un semn și caracterul precedent era o cifră, înseamnă că am terminat de citit un termen liber. Actualizez variabila `b` (suma termenilor liberi) prin `b += nr * semn * mmbr`, precum și semnul curent. Resetez `nr` la `0`.
+> Dacă am găsit un `x`, actualizez suma coeficienților termenilor cu `x` (`a`) prin `a += nr * semn * mmbr`. Sunt atent că dacă `x` nu e precedat de o cifră, înseamnă că are coeficientul `1`. Apoi resetez `nr` la `0`.
+> Dacă am găsit semnul `=`, actualizez `b` dacă e cazul, și resetez `nr` la `0`. Apoi, marchez că am trecut la membrul drept prin `mmbr = RIGHT`. De asemenea, setez semnul curent la `PLUS`.
+---
+
+Am definit acele constante folosind `-1` și `+1` ca să scriu ușor expresiile pentru actualizarea variabilelor `a` și `b`. De exemplu, dacă `mmbr == -1` și `sign == -1`, atunci ar trebui să adăugăm la `a` (sau `b`) valoarea `nr`, pentru că un termen cu semnul minus din membrul drept se trece în cel stâng cu plus. Și chiar asta se întâmplă, pentru că `-1 * -1 == 1`. Dacă aș fi folosit valori ca `true` și `false`, ar fi trebuit să mă complic cu niște `if`-uri imbricate.
+
+La final, dacă `a` și `b` sunt `0`, soluția va fi __infinit__, dacă `a` este `0`, soluția va fi __imposibil__, iar altfel `-b / a`. Mai trebuie să fim atenți că soluțiile se afișează cu `4` zecimale. Pentru asta am folosit `fixed` și funcția `setprecision(4)`. În plus, am declarat variabilele `a` și `b` drept `double`, ca să se efectueze împărțirea reală.
+
+## Sursă C++
+
+``` cpp -> Problema Ecuații
+  #include <ios>
+  #include <iomanip>
+  #include <fstream>
+
+  #define SMAX 260
+
+  #define PLUS +1
+  #define MINUS -1
+
+  #define LEFT +1
+  #define RIGHT -1
+
+  using std::fixed;
+  using std::setprecision;
+
+  std::ifstream fin("ecuatii.in");
+  std::ofstream fout("ecuatii.out");
+
+  int n;
+  double a, b;
+  char str[SMAX];
+
+  void eval() {
+      char *p;
+      int nr = 0;
+
+      int mmbr = LEFT;
+      int sign = PLUS;
+
+      a = b = 0;
+      for (p = str; *p; p++)
+          if (*p == '-') {
+              if ('0' <= *(p - 1) && *(p - 1) <= '9')
+                  b += nr * sign * mmbr, nr = 0;
+              sign = MINUS;
+          }
+          else if (*p == '+') {
+              if ('0' <= *(p - 1) && *(p - 1) <= '9')
+                  b += nr * sign * mmbr, nr = 0;
+              sign = PLUS;
+          }
+          else if (*p == '=') {
+              if ('0' <= *(p - 1) && *(p - 1) <= '9')
+                  b += nr * sign * mmbr;
+              nr = 0;
+              mmbr = RIGHT;
+              sign = PLUS;
+          }
+          else if (*p == 'x') {
+              if ('0' <= *(p - 1) && *(p - 1) <= '9')
+                  a += nr * sign * mmbr, nr = 0;
+              else
+                  a += sign * mmbr;
+          }
+          else
+              nr = nr * 10 + *p - '0';
+
+      if ('0' <= *(p - 1) && *(p - 1) <= '9')
+          b += nr * sign * mmbr;
+  }
+
+  int main() {
+      fin >> n;
+      fout << fixed << setprecision(4);
+
+      for (int i = 0; i < n; i++) {
+          fin >> str;
+          eval();
+
+          if (!a && !b)
+              fout << "infinit\n";
+          else if (!a)
+              fout << "imposibil\n";
+          else
+              fout << -b / a << '\n';
+      }
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Ecuații, lasă un comentariu și te voi ajuta :smile:

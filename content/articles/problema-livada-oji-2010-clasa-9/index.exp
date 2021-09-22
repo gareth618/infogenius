@@ -1,0 +1,86 @@
+TITLE: Problema Livada -- OJI 2010, Clasa a 9-a
+AUTHOR: Iulian Oleniuc
+DATE: 11/07/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 9, element majoritar, matrice, oji 2010, secvențe
+DESCRIPTION: Problema livada, de clasa a 9-a, a fost dată în 2010 la OJI. Se dă o livadă sub forma unei matrice cu m linii și n coloane. În fiecare...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Radu Boriga
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/livada), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=1080)
+---
+
+## Rezumat
+
+Se dă o livadă sub forma unei matrice cu `m` linii și `n` coloane. În fiecare celulă a matricei se află câte un pom, cu soiul identificat printr-un număr natural cuprins între `1` și `p`. Trebuie să aflăm pe câte linii ale matricei există un element majoritar, precum și cel mai mare număr de pomi de același soi, plantați pe poziții consecutive pe un rând. Într-un vector, un element se numește __majoritar__ dacă acesta apare de mai mult de `[n / 2]` ori.
+
+## Soluție
+
+Pentru prima cerință, trebuie să testăm pentru fiecare linie a matricei (liniile fiind considerate vectori) dacă aceasta are un element majoritar, folosind algoritmul clasic de complexitate $O(n)$. Se inițializează o variabilă `cand` (candidat) cu o valoare din afara intervalului `[1, p]`, de exemplu `0`, și o variabilă `ap`, ce semnifică numărul de apariții ale lui `cand` pe linia curentă. Parcurgem linia, iar dacă `ap` a ajuns la valoarea `0`, schimbăm `cand` în `v[i]`. Altfel, dacă `cand` este egal cu elementul curent, incrementăm numărul său de apariții, iar dacă e diferit, îl decrementăm pe `ap`. La final, mai parcurgem o dată vectorul, pentru a număra aparițiile lui `cand`. Dacă numărul lor este într-adevăr ma mare decât `n / 2`, înseamnă că vectorul respectiv are un element majoritar.
+
+A doua cerință este o simplă problemă cu secvențe. Folosim o variabilă `lg`, inițializată cu `0`, ce reține lungimea secvenței curente. Dacă elementul curent este egal cu precedentul, incrementăm `lg`. Dacă nu, actualizăm lungimea maximă (dacă e cazul) și resetăm `lg` la `1`. La primul pas, elementul precedent este `0` (pentru că am declarat vectorul global), ceea ce este OK, căci nu poate exista un soi codificat cu `0`, așa că mereu `v[0] != v[1]`. Am ales să parcurg elementele până la poziția `n + 1` (unde avem tot `0`), ca să luăm în calcul și secvența care se termină pe poziția `n`.
+
+Ca detalii de implementare: Am citit, pe rând, fiecare linie în vectorul `v`, pentru că n-are sens să rețin toată matricea. Apoi, am apelat funcția `elMaj`, ce verifică dacă `v` are element majoritar, și funcția `secv`, care parcurge secvențele de elemente egale din `v`. La final, am afișat cele două numere (`nrMaj`, `lgMax`). Se observă că `p` nu influențează cu nimic problema.
+
+## Sursă C++
+
+``` cpp -> Problema Livada
+  #include <fstream>
+  #define VMAX 700010
+
+  std::ifstream fin("livada.in");
+  std::ofstream fout("livada.out");
+
+  int m, n, p;
+  int v[VMAX];
+
+  int nrMaj;
+  int lgMax;
+
+  void secv() {
+      int i, lg = 0;
+      for (i = 1; i <= n + 1; i++)
+          if (v[i - 1] == v[i])
+              lg++;
+          else {
+              if (lg > lgMax)
+                  lgMax = lg;
+              lg = 1;
+          }
+  }
+
+  void elMaj() {
+      int i, ap = 0, cand = 0;
+      for (i = 1; i <= n; i++)
+          if (!ap) {
+              ap = 1;
+              cand = v[i];
+          }
+          else if (cand == v[i])
+              ap++;
+          else
+              ap--;
+      ap = 0;
+      for (i = 1; i <= n; i++)
+          if (cand == v[i])
+              ap++;
+      if (ap > n / 2)
+          nrMaj++;
+  }
+
+  int main() {
+      int i, j;
+      fin >> m >> n >> p;
+      for (i = 1; i <= m; i++) {
+          for (j = 1; j <= n; j++)
+              fin >> v[j];
+          elMaj();
+          secv();
+      }
+      fout << nrMaj << '\n' << lgMax << '\n';
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Livada, lasă un comentariu și te voi ajuta :smile:
