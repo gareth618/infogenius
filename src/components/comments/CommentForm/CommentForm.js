@@ -113,20 +113,28 @@ export default function CommentForm({ formRef, articleSlug, parentComment, setPa
         });
       };
 
-      if (parentComment != null) {
-        if (userEmail !== parentComment.email) {
-          notify(parentComment.email, 'reply');
+      const ADMIN = 'bloggareth@gmail.com';
+      if (parentComment == null) {
+        if (userEmail !== ADMIN) {
+          notify(ADMIN, 'new');
         }
-        const result = await getDocs(query(
+      }
+      else {
+        if (userEmail !== parentComment.email) {
+          notify(parentComment.email, 'child');
+        }
+        const replies = await getDocs(query(
           collection(firestore, 'comments'),
-          where('slug', '==', articleSlug),
           where('parent', '==', parentComment.id)
         ));
         const emails = new Set();
-        result.forEach(document => emails.add(document.data().email));
+        replies.forEach(reply => emails.add(reply.data().email));
         emails.delete(parentComment.email);
         emails.delete(userEmail);
-        emails.forEach(email => notify(email, 'comment'));
+        emails.forEach(email => notify(email, 'sibling'));
+        if (userEmail !== ADMIN && parentComment.email !== ADMIN && !emails.has(ADMIN)) {
+          notify(ADMIN, 'new');
+        }
       }
       setTextareaValue('');
       setParentComment(null);

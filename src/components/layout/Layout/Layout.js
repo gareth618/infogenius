@@ -93,7 +93,9 @@ export default function Layout({ sidebar, children }) {
       }}
     >
       <Notification />&nbsp;&nbsp;<span>{notification.name}</span>
-      {notification.type === 'reply' ? ' ți-a răspuns!' : ' a răspuns.'}
+      {notification.type === 'child' && ' ți-a răspuns!'}
+      {notification.type === 'sibling' && ' a răspuns.'}
+      {notification.type === 'new' && ' a comentat.'}
     </button>
   ));
 
