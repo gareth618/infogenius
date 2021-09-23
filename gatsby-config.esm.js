@@ -65,7 +65,7 @@ export const plugins = [
     resolve: 'gatsby-plugin-robots-txt',
     options: {
       host: 'https://infogenius.ro',
-      sitemap: 'https://infogenius.ro/sitemap.xml',
+      sitemap: 'https://infogenius.ro/sitemap/sitemap-index.xml',
       policy: [
         {
           userAgent: '*',
@@ -90,9 +90,9 @@ export const plugins = [
         '/politica-cookies/',
         '/contact/',
         '/despre/',
-        '/category/',
-        '/tag/',
-        '/page/'
+        '/category/**',
+        '/tag/**',
+        '/page/**'
       ]
     }
   },

@@ -31,14 +31,19 @@ export default function renderBlocks(ast, anchors) {
 
   if (ast.tag === 'adsense') {
     return (
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block', textAlign: 'center' }}
-        data-ad-layout="in-article"
-        data-ad-format="fluid"
-        data-ad-client="ca-pub-2051821579024751"
-        data-ad-slot="4596708104"
-      />
+      <>
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'block', textAlign: 'center' }}
+          data-ad-layout="in-article"
+          data-ad-format="fluid"
+          data-ad-client="ca-pub-2051821579024751"
+          data-ad-slot="4596708104"
+        />
+        <script dangerouslySetInnerHTML={{
+          __html: '(adsbygoogle = window.adsbygoogle || []).push({ });'
+        }} />
+      </>
     );
   }
 

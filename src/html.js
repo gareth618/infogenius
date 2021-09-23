@@ -12,20 +12,6 @@ export default function HTML(props) {
           gtag('js', new Date());
           gtag('config', 'UA-103171287-1');
         ` }} />
-
-        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async="" />
-        <script dangerouslySetInnerHTML={{ __html: `
-          window.OneSignal = window.OneSignal || [];
-          OneSignal.push(function() {
-            OneSignal.init({
-              appId: '1677b417-ac7f-4fb3-b870-b7fbf9bea9cb',
-              safari_web_id: 'web.onesignal.auto.11512f5d-61af-48e1-99c6-cc09fe5cc2c2',
-              notifyButton: { enable: true }
-            });
-          });
-        ` }} />
-
-        <script dangerouslySetInnerHTML={{ __html: '(adsbygoogle = window.adsbygoogle || []).push({ });' }} />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2051821579024751" crossOrigin="anonymous" />
 
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
@@ -33,6 +19,7 @@ export default function HTML(props) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         {props.headComponents}
       </head>
+
       <body {...props.bodyAttributes}>
         {props.preBodyComponents}
         <div
@@ -52,5 +39,5 @@ HTML.propTypes = {
   bodyAttributes: PropTypes.object,
   preBodyComponents: PropTypes.array,
   body: PropTypes.string,
-  postBodyComponents: PropTypes.array,
+  postBodyComponents: PropTypes.array
 };

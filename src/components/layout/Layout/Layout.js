@@ -45,7 +45,11 @@ export default function Layout({ sidebar, children }) {
                 className="adsbygoogle"
                 style={{ display: 'inline-block', width: 200, height: 600 }}
                 data-ad-client="ca-pub-2051821579024751"
-                data-ad-slot="2342079856" />
+                data-ad-slot="2342079856"
+              />
+              <script dangerouslySetInnerHTML={{
+                __html: '(adsbygoogle = window.adsbygoogle || []).push({ });'
+              }} />
             </aside>
           )}
         </div>
