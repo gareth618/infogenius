@@ -44,7 +44,7 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
 
   return (
     <>
-      <Helmet htmlAttributes={{ lang: 'ro-RO' }}>
+      <Helmet>
         <title>{helmetTitle}</title>
         {pageTitle === '' && <meta name="description" content={siteMeta.description} />}
         {pageTitle === '' && <meta name="keywords" content={siteMeta.keywords.join(', ')} />}
@@ -56,10 +56,6 @@ export default function ArticleList({ data, pageContext: { pageTitle, articles, 
         {pageTitle === '' && <meta property="og:type" content="website" />}
         {pageTitle === '' && <meta property="og:description" content={siteMeta.description} />}
         {pageTitle === '' && <meta property="og:locale" content="ro_RO" />}
-
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
 
       <Layout sidebar>

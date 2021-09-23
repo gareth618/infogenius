@@ -39,7 +39,15 @@ export default function Layout({ sidebar, children }) {
       <div className={styles.pageContainer}>
         <div className={styles.mainArea}>
           <section className={styles.content}>{children}</section>
-          {sidebar && <aside className={styles.sidebar} />}
+          {sidebar && (
+            <aside className={styles.sidebar}>
+              <ins
+                className="adsbygoogle"
+                style={{ display: 'inline-block', width: 200, height: 600 }}
+                data-ad-client="ca-pub-2051821579024751"
+                data-ad-slot="2342079856" />
+            </aside>
+          )}
         </div>
         <Footer />
       </div>

@@ -9,11 +9,8 @@ export default function Page({ data, pageContext: page }) {
   const siteTitle = data.site.siteMetadata.title;
   return (
     <>
-      <Helmet htmlAttributes={{ lang: 'ro-RO' }}>
+      <Helmet>
         <title>{page.title} – {siteTitle}</title>
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
       <Layout sidebar>
         <article>

@@ -90,14 +90,15 @@ export const plugins = [
         '/politica-cookies/',
         '/contact/',
         '/despre/',
-        '/category/*',
-        '/tag/*',
-        '/page/*'
+        '/category/',
+        '/tag/',
+        '/page/'
       ]
     }
   },
   'gatsby-plugin-react-helmet',
   'gatsby-plugin-image',
   'gatsby-plugin-sharp',
+  'gatsby-plugin-netlify',
   'gatsby-transformer-sharp'
 ];

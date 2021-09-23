@@ -353,7 +353,6 @@ export default class CSanim {
         p5.text(this.newText, 0, 0);
       }
       else {
-        console.log(this.text.length);
         p5.fill(...this.textBoxColor, this.opacity == null ? 255 : this.opacity);
         p5.rect(0, 0, this.text === '' ? 0 : this.text.length * this.textSize / 2 + 25, this.textSize + 5, this.weight);
         p5.fill(...this.textColor, this.opacity == null ? 255 : this.opacity);
