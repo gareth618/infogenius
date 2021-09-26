@@ -70,7 +70,7 @@ export default function renderInline(sons) {
     if (son.tag === 'math') jsx.push(<React.Fragment key={uuidv4()}>{renderMath(son.content, son.lft, son.rgh)}</React.Fragment>);
     if (son.tag === 'kbrd') jsx.push(<React.Fragment key={uuidv4()}>{renderKbrd(son.content)}</React.Fragment>);
     if (son.tag === 'emoj') jsx.push(<React.Fragment key={uuidv4()}>{renderEmoj(son.content)}</React.Fragment>);
-    if (son.tag === 'abbr') jsx.push(<abbr title={sanitize(son.alt)}>{renderInline(son.sons)}</abbr>);
+    if (son.tag === 'abbr') jsx.push(<abbr key={uuidv4()} title={sanitize(son.alt)}>{renderInline(son.sons)}</abbr>);
     if (son.tag === 'link') jsx.push(
       son.url === '' ? <React.Fragment key={uuidv4()}>{renderInline(son.sons)}</React.Fragment> :
       son.url[0] === '/' ? <Link key={uuidv4()} to={son.url}>{renderInline(son.sons)}</Link> :

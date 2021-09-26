@@ -6,15 +6,14 @@ import * as styles from './CommentSection.module.css';
 import { dateToString, timeToString } from '@utils/helpers';
 
 import firestore from '@utils/firestore';
-import { onSnapshot, collection, query, where, doc, getDoc, getDocs } from 'firebase/firestore';
+import { onSnapshot, collection, query, where, doc, getDoc } from 'firebase/firestore';
 
 export default function CommentSection({ articleSlug, setParentComment }) {
   const [comments, setComments] = React.useState([]);
   React.useEffect(() => {
-    const loadComments = async () => {
-      const result = await getDocs(query(collection(firestore, 'comments'), where('slug', '==', articleSlug)));
+    const loadComments = async docs => {
       const documents = [];
-      result.forEach(document => documents.push(document));
+      docs.forEach(document => documents.push(document));
       const comments = await Promise.all(
         documents.map(async document => ({
           id: document.id,
@@ -47,19 +46,19 @@ export default function CommentSection({ articleSlug, setParentComment }) {
       }));
     };
 
-    const unsubscribeComments = onSnapshot(collection(firestore, 'comments'), loadComments);
-    const unsubscribeUsers = onSnapshot(collection(firestore, 'users'), loadComments);
-    return () => {
-      unsubscribeComments();
-      unsubscribeUsers();
-    };
+    return onSnapshot(
+      query(collection(firestore, 'comments'), where('slug', '==', articleSlug)),
+      docs => loadComments(docs), err => setComments(null)
+    );
   }, [articleSlug]);
 
-  return (
-    <section className={styles.section}>
-      <h2 className={styles.title}>
-        {`${comments.length}${comments.length >= 20 ? ' de' : ''} comentarii`}
-      </h2>
+  const commentList = comments == null
+    ? (
+      <p className={styles.error}>
+        Comentariile nu pot fi încărcate, am depășit limita zilnică de citiri din FireStore. Reveniți mâine.
+      </p>
+    )
+    : (
       <div>
         {comments.map(comment => (
           <Comment
@@ -69,6 +68,16 @@ export default function CommentSection({ articleSlug, setParentComment }) {
           />
         ))}
       </div>
+    );
+
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.title}>
+        {comments == null
+          ? '(?) comentarii'
+          : `${comments.length}${comments.length >= 20 ? ' de' : ''} comentarii`}
+      </h2>
+      {commentList}
     </section>
   );
 };

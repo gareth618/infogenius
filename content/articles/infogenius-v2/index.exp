@@ -1,0 +1,122 @@
+TITLE: InfoGenius v2.0 -- Un nou început!
+AUTHOR: Iulian Oleniuc
+DATE: 26/09/2021
+CATEGORIES: Diverse
+TAGS: infogenius, blogging, p5.js
+DESCRIPTION: După trei luni intense de web developing, sunt onorat să lansez noua versiune InfoGenius, blogul despre informatică #1 din România!
+
+După trei luni intense de web developing, sunt onorat să vă prezint versiunea 2.0 a site-ului InfoGenius, blogul despre programare competitivă #1 din România! Aștept momentul ăsta de mai bine de patru ani, când după ce am terminat de scris [primele](introducere-informatica-programare) articole de aici mi-am dat seama că relația mea cu ?[WordPress](platforma de blogging) trebuie să ia sfârșit cât mai curând.
+
+## Puțin istoric
+
+InfoGenius a luat naștere pe data de 21 iunie 2017! De fapt ce InfoGenius, că în primul an site-ul s-a chemat [Gareth618](https://web.archive.org/web/2018*/gareth618.com). Tocmai terminasem clasa a 9-a -- un an foarte interesant pentu mine, pentru că am ajuns de la a face probleme despre parcurgerea vectorilor, lucru pe care l-am făcut timp de ȘASE ani la Palatul Copiilor, la a mă califica pentru prima dată la ONI. (Unde n-am făcut mare lucru, dar măcar am aflat ce înseamnă ?[MLC](nu vă spun).) Mereu mi-a plăcut ideea de a avea propriul meu blog, iar de data asta aveam în sfârșit o temă clară pentru el, care să fie utilă pentru ceilalți și să îmi placă și mie: informatica. Așadar, mi-am luat domeniu + host la vreo 20$ pe an de pe un site dubios, am instalat un WordPress fresh și m-am apucat de treabă.
+
+### 2017-2018
+
+La începutul lui 2018 am făcut prima pauză mai lungă de la blog, fiind ocupat cu olimpiada. Mereu mă simțeam vinovat dacă lucram la blog în loc să bag probleme pe InfoArena :sad: Măcar anul ăsta luasem bronz. După ONI, m-am apucat de niște articole mai serioase, și mi-am dat seama cât de nasol este ecosistemul WordPress. Ai un editor vizual care conține toate prostiile din lume, mai puțin butonul de care aveam eu nevoie: unul care să-ți marcheze textul selectat drept secvență de cod.
+
+![600; Editorul WordPress](editor-wordpress.png)
+
+Trebuia să intru în editorul HTML și să tastez manual `<code>` și `</code>` de câteva sute de ori pentru fiecare articol. Iar după ce ieși din editorul HTML, WordPress începe să-și facă de cap cu codul tău, inserând și ștergând tag-uri de peste tot. Plus că distruge toată indentarea făcută de tine mai devreme, așa că e foarte greu să editezi chestii precum tabelele. Și, cel mai rău, adesea dispăreau fragmente întregi de cod C++. De exemplu, din `if (x < 10 && x > 0)` era foarte posibil să rămân cu `if (x 0)`, pentru că WordPress crede că `<10 && x>` este un tag HTML, așa că îl șterge.
+
+### 2018-2019
+
+Pe 21 iunie 2018, `gareth618.com` a devenit `infogenius.ro`, pentru că aveam nevoie de un nume mai serios. Am schimbat și host-ul într-unul românesc, pentru că n-are sens să ții server-ul în America, chiar dacă e mai ieftin, atâta vreme cât toți vizitatorii tăi sunt în România. În perioada 2018-2019 blogul a avut cea mai mare creștere, în principal pentru că am început să postez rezolvări pentru admiterea la facultate. Au apărut și primele comentarii. Chiar și prima donație!
+
+![600; Primele comentarii](primele-comentarii.png)
+
+Tot atunci lucrurile au început să meargă tot mai prost cu WordPress, pentru că a trecut la versiunea 5, ceea ce însemna, printre altele, că se renunță la jQuery -- o librărie JavaScript învechită dar pe care se bazează 80% din tot internetul. E periculos să faci schimbări atât de drastice când depinzi de plugin-uri (pentru syntax highlighting, matematică, securitate etc.) care n-au mai fost actualizate de 10 ani. Prin urmare, tot mai multe părți ale site-ului (mă refer în primul rând la interfața pentru admin) au început să crape. Era nevoie de Inspect Element ca să pot seta thumbnail-uri la articole, pentru că nu funcționau butoanele!!!
+
+### 2019-2020
+
+A urmat clasa a 12-a. Până la începutul lui 2020, toate bune și frumoase. Eram la apogeul „cercetării” mele în informatică, adică lucram probleme mai interesante ca niciodată. Cu arbori de intervale persistenți, min-max merge, fully dynamic connectivity -- just to name a few. Am scris și un [articol](partitii-numar-natural) despre numărarea partițiilor unui număr folosind funcții generatoare. Știam că nu-l caută nimeni, dar simțeam că e nevoie de el.
+
+Apoi a venit pandemia. Vizualizările scădeau treptat, BAC-ul bătea la ușă... Eram în toiul unei [probleme](https://www.infoarena.ro/problema/switch5) bombă de-ale lui Panaete, și chiar atunci primesc vestea că nu se mai țin olimpiadele naționale. După aceea a urmat cea mai nașpa perioadă a vieții mele, culminată de o lună întreagă în care am stat în pat toată ziua tocind comentariile la română.
+
+### 2020-2021
+
+După BAC am scris niște articole faine, ca cel despre [fractali](fractali-p5js), urmate de unele mai serioase, ca cel despre [trie](trie-xor-max). Când chiar aveam chef să duc până la capăt seria cu probleme de OJI (clasa a 11-a), a început facultatea. N-am avut timp de blog decât în vacanța dintre semestre, când am pregătit [articolul](aproximare-pi) despre $\pi$ (altul pe care nu-l aștepta nimeni), pentru că voiam de mult să fac ceva special de 14 martie.
+
+Tot atunci m-am decis că trebuie neapărat să refac site-ul ăsta din temelii, pentru că cel vechi era incapabil atât pentru mine (mă făcea neproductiv), cât și pentru useri (se mișca tot mai încet, era urât și avea bug-uri). Am creat un [repo](https://github.com/Gareth618/infogenius) pe GitHub și după semestrul al doilea m-am apucat ca lumea de coding. Nu știam mai nimic despre web developing, dar acum mă descurc destul de bine cu JavaScript, React, Gatsby și FireBase. Practic am făcut echivalentul unui internship :tongue:
+
+## În ce constă InfoGenius v2.0?
+
+În primul rând, nu mai am de a face cu interfața WordPress. Acum lucrez direct în VSCode.
+
+![1000; Noua interfață](noua-interfata.png)
+
+### Limbajul Explicit
+
+În plus, articolele nu le mai scriu într-un editor vizual sau în semi-HTML, ci într-un limbaj de markup creat de mine, numit Explicit. Puteam folosi MarkDown, dar mi se părea prea flexibil, și totuși neadecvat tipului meu de conținut. Parser-ul pentru Explicit mi-a mâncat cel mai mult timp, mai ales că atunci când era aproape gata mi-am dat seama că trebuie să refac toată sintaxa -- cea inițială era prea greoaie. Am făcut și o [extensie](https://github.com/Gareth618/explicit-highlighter) VSCode pentru Explicit, care se ocupă în principal de highlighting:
+
+![350; Limbajul Explicit](limbajul-explicit.png)
+
+### Biblioteca CSanim
+
+Unele articole de pe acest blog conțin vizualizări pentru diverși algoritmi. Aceste animații erau scrise în JavaScript, folosind biblioteca grafică [P5.JS](https://p5js.org/). Ideea lor de bază este că, atunci când sunt încărcate, rulează algoritmul respectiv, generând pe parcurs frame-urile corespunzătoare. La final, acestea sunt parcurse și randate. Mi se pare o soluție mai bună decât a încărca animațiile sub forma unor clipuri `.mp4`, deoarece videoclipurile necesită mult mai multă lățime de bandă, chiar dacă sunt comprimate (caz în care li s-ar pierde și calitatea). Singura problemă cu animațiile astea e că nu pot fi redimensionate, așa că de obicei nu încap pe tot ecranul unui mobil, însă pot fi scrollate.
+
+![](new-animation.js)
+
+În fine, noutatea la acest capitol este că am scris un mic engine pentru animații, CSanim, ca un wrapper pentru P5.JS. (Am fost inspirat de [Manim](https://github.com/3b1b/manim)-ul lui [3Blue1Brown](https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw).) CSanim îmi permite să creez animații de două ori mai bune, scriind de trei ori mai puțin cod. Uitați-vă doar la animația de mai sus pentru algoritmul de [căutare binară](cautare-binara)!
+
+### Viteză
+
+Până acum site-ul vechi se încărca și în $10$ secunde, iar interfața pentru admin chiar și în $30$. Acum durează în medie $1.618$ secunde, pentru că toate paginile sunt generate și randate la __build-time__, astfel că server-ul răspunde direct cu codul HTML corespunzător. Pe lângă asta, se adaugă tot felul de optimizări legate de content, cum ar fi faptul că imaginile se încarcă __lazily__ și sunt comprimate la maxim, în formatul WebP/AVIF. De toate astea se ocupă [Gatsby](https://www.gatsbyjs.com/), generatorul de site-uri statice pe care l-am ales.
+
+### Design fără cusur
+
+Cel puțin așa cred eu. Diferența este oricum foarte mare față de ce era înainte, în special pe mobil, unde acum lucrurile sunt mult mai responsive. Plus că acum avem dark mode! :yey: Chestia care-mi place cel mai mult la noul design sunt block-urile de cod, pentru că pot pune mai multe variante de cod (pentru limbaje sau sisteme de operare diferite) în același block:
+
+``` cpp -> Hello World => C++
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+      cout << "Hello world!\n";
+      return 0;
+  }
+``` java -> Hello World => Java
+  public class HelloWorld {
+      public static void main(String[] args) {
+          System.out.println("Hello world!");
+      }
+  }
+``` javascript -> Hello World => JavaScript
+  console.log('Hello world!');
+```
+
+### Sistem nou de comentarii
+
+Acum comentariile sunt stocate în [FireBase](https://firebase.google.com/), iar pentru a lăsa un comentariu trebuie doar să te autentifici cu Google (nu este necesar să îți faci vreun cont). Comentariile sunt actualizate instant și permit utilizarea limbajului Explicit, iar codul pe care îl trimiteți nu mai este stricat de WordPress. Partea cea mai faină este că atunci când cineva îți răspunde la comentarii, vei fi notificat în colțul din stânga-jos:
+
+![300; Notificare comentariu](notificare-comentariu.png)
+
+## Statistici
+
+În caz că vă întrebați cum stau cu vizualizările, cred că e momentul potrivit să pun niște statistici:
+
+![700; Statistici pe zile](statistici-zile.png)
+
+Și pe ani:
+
+![400; Statistici pe ani](statistici-ani.png)
+
+## Bonus: Primul an de facultate
+
+Până una alta, las aici niște teme pe care le-am făcut anul ăsta pentru facultate. Am muncit prea mult la ele ca să le țin doar pentru mine... :hehe:
+
++++
+> **[matematică](https://infogenius.ro/teme/matematica.pdf).**
+> **[teoria numerelor](https://infogenius.ro/teme/teoria-numerelor.pdf).** Teorema lui Wilson
+> **[proiectarea algoritmilor 1](https://infogenius.ro/teme/proiectarea-algoritmilor-1.pdf).** Complexități
+> **[proiectarea algoritmilor 2](https://infogenius.ro/teme/proiectarea-algoritmilor-2.pdf).** Algoritmul lui Euclid
+> **[proiectarea algoritmilor 3](https://infogenius.ro/teme/proiectarea-algoritmilor-3.pdf).** Coin Change Problem
+> **[proiectarea algoritmilor 4](https://infogenius.ro/teme/proiectarea-algoritmilor-4.pdf).** Set Partition Problem
+> **[proiectarea algoritmilor 5](https://infogenius.ro/teme/proiectarea-algoritmilor-5.pdf).** $2$-SAT și $3$-SAT
+---
+
+Și că tot veni vorba de facultate, anul ăsta am făcut parte din comisia științifică a concursului [FIICode](https://fiicode.asii.ro/algoritmica). A fost interesant -- am aflat cum e să organizezi un concurs cu $4$ runde în ~$3$ oameni. Primele $1.5$ runde au ieșit destul de bine, de restul nu sunt prea mulțumit. Chiar și așa, tot am propus vreo $6$ probleme mișto, așa că va urma curând un articol cu rezolvările lor :cool:
+
+===
+
+Cam atât despre acest update, ne vedem mai târziu cu articole noi! Iar dacă aveți propuneri de teme pe care să le abordez, lăsați-le într-un comentariu mai jos :smile:

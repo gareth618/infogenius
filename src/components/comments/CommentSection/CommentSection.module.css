@@ -8,3 +8,7 @@
   color: var(--title);
   font-size: 1.8rem;
 }
+
+.error {
+  color: var(--text);
+}
