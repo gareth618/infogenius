@@ -70,7 +70,7 @@ function fixKatexBug(ast) {
         const str = ast.sons[i - 1].content;
         if (str.length > 0) {
           let pos = str.length;
-          while (pos > 0 && /[^\w\n ]/.test(str[pos - 1])) {
+          while (pos > 0 && /[^~\w\n ]/.test(str[pos - 1])) {
             pos--;
           }
           if (pos !== str.length) {
@@ -87,7 +87,7 @@ function fixKatexBug(ast) {
         const str = ast.sons[i + 1].content;
         if (str.length > 0) {
           let pos = -1;
-          while (pos < str.length - 1 && /[^\w\n ]/.test(str[pos + 1])) {
+          while (pos < str.length - 1 && /[^~\w\n ]/.test(str[pos + 1])) {
             pos++;
           }
           if (pos !== -1) {

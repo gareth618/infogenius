@@ -69,6 +69,17 @@ export default function Layout({ sidebar, children }) {
     }
   });
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      const head = document.getElementsByTagName('head')[0];
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2051821579024751';
+      head.appendChild(script);
+      console.log(script);
+    }, 1618);
+  }, []);
+
   const [userEmail, setUserEmail] = React.useState(null);
   React.useEffect(() => onAuthStateChanged(getAuth(), user => {
     setUserEmail(user == null ? null : user.email);

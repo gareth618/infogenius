@@ -48,7 +48,7 @@ export default function CommentSection({ articleSlug, setParentComment }) {
 
     return onSnapshot(
       query(collection(firestore, 'comments'), where('slug', '==', articleSlug)),
-      docs => loadComments(docs), err => setComments(null)
+      docs => loadComments(docs), () => setComments(null)
     );
   }, [articleSlug]);
 

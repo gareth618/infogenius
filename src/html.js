@@ -12,7 +12,6 @@ export default function HTML(props) {
           gtag('js', new Date());
           gtag('config', 'UA-103171287-1');
         ` }} />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2051821579024751" crossOrigin="anonymous" />
 
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
         <meta httpEquiv="content-type" content="text/html; charset=utf-8" />

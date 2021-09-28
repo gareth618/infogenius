@@ -84,6 +84,6 @@ Dacă ne uităm un pic mai atent, ne putem da seama că de fapt, după __ultimul
 
 În concluzie, Bubble Sort este un algoritm simplu, potrivit pentru introducerea în algoritmii de sortare și în studiul complexității. Dar, chiar și cu optimizarea de mai sus, este prea ineficient pentru a fi utilizat în practică, așa că rămâne doar un subiect ce generează niște probleme teoretice interesante.
 
-Una dintre ele este [Trouble Sort](https://codingcompetitions.withgoogle.com/codejam/round/00000000000000cb/00000000000079cb), dată anul acesta la runda de calificare a concursului [Google Code Jam](https://codingcompetitions.withgoogle.com/codejam/). În această problemă este vorba despre o variație a  algoritmului Bubble Sort, care fiind gândită un pic greșit, duce de fapt la sortarea independentă a elementelor de pe poziții de paritate diferită.
+Una dintre ele este [Trouble Sort](https://codingcompetitions.withgoogle.com/codejam/round/00000000000000cb/00000000000079cb), dată anul acesta la runda de calificare a concursului [Google Code Jam](https://codingcompetitions.withgoogle.com/codejam/). În această problemă este vorba despre o variație a algoritmului Bubble Sort, care fiind gândită un pic greșit, duce de fapt la sortarea independentă a elementelor de pe poziții de paritate diferită.
 
 Dacă aveți vreo întrebare legată de algoritmul Bubble Sort, nu ezitați să o lăsați mai jos, într-un comentariu :smile:

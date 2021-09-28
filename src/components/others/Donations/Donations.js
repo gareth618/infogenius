@@ -1,27 +1,21 @@
 import React from 'react';
-import { StaticImage } from 'gatsby-plugin-image';
+import Patreon from '@assets/patreon.svg';
 import * as styles from './Donations.module.css';
 
 export default function Donations() {
   return (
     <div className={styles.donationForm}>
-      <div className={styles.donationText}>
-        <h2>
-          Îți place conținutul acestui site?
-        </h2>
-        <p>
-          Dacă vrei să mă susții în întreținerea server-ului și în a scrie mai multe
-          articole de calitate pe acest blog, mă poți ajuta printr-o mică donație!
-        </p>
-      </div>
-      <div className={styles.donationLink}>
-        <a href="https://www.paypal.me/infogenius" target="_blank" rel="noreferrer">
-          <StaticImage
-            src="./../../../assets/paypal.png" alt="donează"
-            placeholder="none" formats={['auto', 'webp', 'avif']}
-          />
-        </a>
-      </div>
+      <p className={styles.donationText}>
+        Mulțumesc că ai citit acest articol.<br />
+        Dacă vrei să susții blogul, poți cumpăra un abonament de 2$.
+      </p>
+      <a
+        className={styles.donationLink}
+        href="https://www.patreon.com/infogenius"
+        target="_blank" rel="noreferrer"
+      >
+        <img src={Patreon} alt="patreon" />
+      </a>
     </div>
   );
 };
