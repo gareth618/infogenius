@@ -23,6 +23,10 @@
   border-radius: .5rem;
 }
 
+.donation-link:hover {
+  background: gold;
+}
+
 .donation-link img {
   height: 25px;
 }

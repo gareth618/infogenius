@@ -76,7 +76,6 @@ export default function Layout({ sidebar, children }) {
       script.type = 'text/javascript';
       script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2051821579024751';
       head.appendChild(script);
-      console.log(script);
     }, 1618);
   }, []);
 
