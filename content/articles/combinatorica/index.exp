@@ -30,7 +30,7 @@ $$
 
 Permutările unei mulțimi $A$ pot fi privite de asemenea drept totalitatea funcțiilor bijective definite pe $A$, cu valori în $A$. Asta e ușor de înțeles dacă ne gândim că $f(x)$ nu trebuie să fie neapărat o expresie ce-l conține pe $x$, ci îl putem defini folosind o înșiruire de __pentru__-uri. De exemplu, a treia permutare de mai sus reprezintă funcția:
 
-$$f : A \rightarrow A, f(x) = \begin{cases}
+$$f : A \to A, f(x) = \begin{cases}
   2 \text{, pentru } x = 1\\
   1 \text{, pentru } x = 2\\
   3 \text{, pentru } x = 3

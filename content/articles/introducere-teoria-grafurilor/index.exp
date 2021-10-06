@@ -39,7 +39,7 @@ Nodurile vor fi atomii (sau grupările de atomi), iar muchiile legăturile dintr
 
 Acesta e un exemplu mult mai abstract și interesant, găsit pe [CSAcademy](https://csacademy.com/lesson/introduction_to_graphs). Să presupunem că pornim de la un cuvânt de trei litere, căruia îi putem schimba succesiv câte o literă astfel încât să obținem un nou cuvânt valid. Scopul este de a ajunge la un cuvânt dat printr-un număr minim de pași. De exemplu (nu prea am găsit cuvinte în română):
 
-$$\texttt{dog} \rightarrow \texttt{bog} \rightarrow \texttt{bot} \rightarrow \texttt{bat}$$
+$$\texttt{dog} \to \texttt{bog} \to \texttt{bot} \to \texttt{bat}$$
 
 Putem modela un graf neorientat în care fiecare nod reține câte un cuvânt valid de trei litere. O muchie reprezintă faptul că se poate ajunge de la o extremitate la cealaltă printr-un singur pas. Pentru a rezolva problema va mai trebui doar să determinăm drumul minim de la nodul cu primul cuvânt la cel cu al doilea.
 

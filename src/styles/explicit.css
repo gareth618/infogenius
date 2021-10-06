@@ -129,12 +129,6 @@
 .explicit blockquote > *:last-child { margin-bottom: 0; }
 .explicit blockquote > div:last-child > pre:last-child { margin-bottom: 0; }
 
-.explicit blockquote.h2 { margin-top: 2.4rem; }
-.explicit blockquote.h3 { margin-top: 2.3rem; }
-.explicit blockquote.h4 { margin-top: 2.2rem; }
-.explicit blockquote.h5 { margin-top: 2.1rem; }
-.explicit blockquote.h6 { margin-top: 2.0rem; }
-
 .explicit hr {
   margin: 1rem 0;
   height: 2px;

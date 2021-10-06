@@ -13,7 +13,7 @@ export default function NewAnimation(p5) {
     array.unshift(-1e9);
     array.push(+1e9);
 
-    const width = CSanim.getMaximumSize(array.length, csa.w - 50)
+    const width = CSanim.getMaximumSize(array.length, csa.w - 50);
     const coordsX = CSanim.getEquidistantPoints(array.length, width, csa.w / 2);
     const squares = [];
     for (let i = 0; i < array.length; i++) {

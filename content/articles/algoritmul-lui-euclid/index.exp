@@ -2,7 +2,7 @@ TITLE: Algoritmul lui Euclid în C++. CMMDC și CMMMC
 AUTHOR: Iulian Oleniuc
 DATE: 13/09/2020
 CATEGORIES: Algoritmică și structuri de date, Matematică
-TAGS: algoritmul lui euclid, cmmdc, cmmmc, descompunere în factori primi, divizibilitate, numere prime
+TAGS: algoritmul lui euclid, cmmdc, cmmmc, factorizare, divizibilitate, numere prime
 DESCRIPTION: În acest articol voi prezenta conceptele de CMMDC, CMMMC și Algoritmul lui Euclid atât prin scăderi repetate cât și prin împărțiri repetate.
 
 În acest articol voi prezenta conceptele de CMMDC (cel mai mare divizor comun) și CMMMC (cel mai mic multiplu comun), precum și Algoritmul lui Euclid, atât prin scăderi repetate, cât și prin împărțiri repetate. La final, vom discuta despre câteva aplicații la CMMDC și CMMMC.
@@ -96,7 +96,7 @@ Al doilea caz este trivial, iar primul se justifică astfel:
   > Dacă $d \mid c$, atunci, știind că $d \mid b$, rezultă că $d \mid c + b$, adică $d \mid a$.
   ---
 
-  Mai pe scurt, $d \mid b \rightarrow (d \mid a \leftrightarrow d \mid c)$. Cu alte cuvinte, perechile $(b, a)$ și $(b, c)$ au aceeași mulțime de divizori comuni. Așadar, cel mai mare divizor comun al fiecărei perechi trebuie și el să fie același. Adică, $\gcd(a, b) = \gcd(b, c)$.
+  Mai pe scurt, $d \mid b \to (d \mid a \leftrightarrow d \mid c)$. Cu alte cuvinte, perechile $(b, a)$ și $(b, c)$ au aceeași mulțime de divizori comuni. Așadar, cel mai mare divizor comun al fiecărei perechi trebuie și el să fie același. Adică, $\gcd(a, b) = \gcd(b, c)$.
 <<<
 
 ![400; Exemplu CMMDC](exemplu-cmmdc.png)
@@ -115,7 +115,7 @@ După cum am spus mai sus, această variantă a algoritmului nu este eficientă.
 
 Să ne uităm cum evoluează perechea de numere $(a, b) = (18, 5)$ în cazul algoritmului precedent:
 
-$$(18, 5) \rightarrow (13, 5) \rightarrow (8, 5) \rightarrow (3, 5)$$
+$$(18, 5) \to (13, 5) \to (8, 5) \to (3, 5)$$
 
 L-am scăzut pe $b$ din $a$ până când $a$ a devenit mai mic decât $b$. Practic, am simulat procesul de împărțire a lui $a$ la $b$ prin scăderi repetate. Astfel, la final $a$ a devenit $a \modd b$, adică restul împărțirii lui $a$ la $b$. Așadar, putem optimiza algoritmul inițial împărțind la fiecare pas numărul mai mare la cel mai mic, și reținând în acesta restul împărțirii. În cazul de mai sus economisim doi pași, însă în cazul $(a, b) = (10^9, 1)$ economisim un miliard de pași.
 
@@ -146,15 +146,15 @@ La fiecare pas, îl copiem pe $b$ în $a$ și pe $r$ (restul împărțirii) în 
 Să luăm din nou exemplul acela mare de la începutul articolului. Avem:
 
 $$\begin{align*}
-  (229\,320, 996\,072) & \rightarrow (996\,072, 229\,320) \rightarrow (229\,320, 78\,792) \rightarrow (78\,792, 71\,736)\\
-  & \rightarrow (71\,736, 7\,056) \rightarrow (7\,056, 1\,176) \rightarrow (1\,176, 0)
+  (229\,320, 996\,072) & \to (996\,072, 229\,320) \to (229\,320, 78\,792) \to (78\,792, 71\,736)\\
+  & \to (71\,736, 7\,056) \to (7\,056, 1\,176) \to (1\,176, 0)
 \end{align*}$$
 
 Numărul de pași efectuați este foarte mic în comparație cu numerele inițiale, ceea ce ne face să intuim că algoritmul are o complexitate de ordinul $O(\log(a + b))$. Se întâmplă ca intuiția să fie corectă, iar mai jos aveți demonstrația. E doar pentru cei interesați; în niciun caz nu aveți nevoie de ea la școală. Pentru clasa a noua, e suficient să știți că Algoritmul lui Euclid este... extrem de rapid.
 
 Vom analiza trei iterații consecutive ale algoritmului. Perechea $(a, b)$ devine $(b, c)$, unde $c = a \modd b$, iar $(b, c)$ devine $(c, d)$, unde $d = b \modd c$. Considerăm că $a \gt b$, de unde și $b \gt c$ și $c \gt d$.
 
-$$(a, b) \rightarrow (b, c) \rightarrow (c, d)$$
+$$(a, b) \to (b, c) \to (c, d)$$
 
 Știm că $d = b \modd c$, adică $b = qc + d$, pentru un $q$ natural. Dar $b \gt c \gt d$, așa că $q \ge 1$. Prin urmare,
 

@@ -2,7 +2,7 @@ TITLE: Descompunerea în factori primi. Probleme de divizibilitate în C++
 AUTHOR: Iulian Oleniuc
 DATE: 17/09/2020
 CATEGORIES: Algoritmică și structuri de date, Matematică
-TAGS: algoritmul lui euclid, cmmdc, cmmmc, combinatorică, descompunere în factori primi, divizibilitate, numere prime
+TAGS: algoritmul lui euclid, cmmdc, cmmmc, combinatorică, factorizare, divizibilitate, numere prime
 DESCRIPTION: Astăzi vom discuta despre descompunerea în factori primi a unui număr întreg și vom rezolva niște probleme clasice de divizibilitate în C++.
 
 În [articolul](algoritmul-lui-euclid) precedent am prezentat Algoritmul lui Euclid și am rezolvat în C++ câteva probleme legate de CMMDC și CMMMC. Astăzi vom discuta despre descompunerea unui număr în factori primi și vom rezolva niște probleme clasice de divizibilitate, majoritatea legate de factorizarea întregilor.

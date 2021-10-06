@@ -127,8 +127,8 @@ Dacă veți încerca să desenați un astfel de graf, veți vedea că trebuie ad
   Considerăm un șir oarecare format doar din caractere din mulțimea $\{a, b\}$. Mulțimea
 
   $$
-    R = \{r_1: \texttt{aab} \rightarrow \texttt{aaa}, r_2: \texttt{aba} \rightarrow \texttt{aab}, r_3: \texttt{abb} \rightarrow \texttt{aba},\\
-    r_4: \texttt{baa} \rightarrow \texttt{abb}, r_5: \texttt{bab} \rightarrow \texttt{aba}, r_6: \texttt{bba} \rightarrow \texttt{baa}, r_7: \texttt{bbb} \rightarrow \texttt{bab}\}
+    R = \{r_1: \texttt{aab} \to \texttt{aaa}, r_2: \texttt{aba} \to \texttt{aab}, r_3: \texttt{abb} \to \texttt{aba},\\
+    r_4: \texttt{baa} \to \texttt{abb}, r_5: \texttt{bab} \to \texttt{aba}, r_6: \texttt{bba} \to \texttt{baa}, r_7: \texttt{bbb} \to \texttt{bab}\}
   $$
 
   definește regulile de transformare care pot fi aplicate unui astfel de șir. Fiecare dintre aceste transformări, aplicată unui șir de caractere oarecare, va înlocui prima apariție a subșirului de trei caractere din partea stângă a regulii, cu subșirul din partea dreaptă. Pornind de la șirul inițial, vom aplica în mod repetat oricare dintre transformările din mulțimea $R$, atât timp cât acest lucru este posibil.

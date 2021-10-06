@@ -2,7 +2,7 @@ TITLE: Suma și numărul divizorilor. Indicatorul lui Euler
 AUTHOR: Iulian Oleniuc
 DATE: 03/10/2020
 CATEGORIES: Algoritmică și structuri de date, Matematică
-TAGS: numere prime, descompunere în factori primi, numărul divizorilor, suma divizorilor, indicatorul lui euler, funcții multiplicative
+TAGS: numere prime, factorizare, numărul divizorilor, suma divizorilor, indicatorul lui euler, funcții multiplicative
 DESCRIPTION: Astăzi vă voi prezenta câteva aplicații interesante la descompunerea unui număr întreg în factori primi, printre care indicatorul lui Euler!
 
 În acest articol voi prezenta câteva aplicații mai interesante la [descompunerea unui număr întreg în factori primi](descompunere-in-factori-primi): numărul divizorilor, suma divizorilor și indicatorul lui Euler. Ne vom axa pe demonstrarea formulelor pentru calculul acestor funcții, și implicit pe modul în care putem __deduce__ aceste formule.

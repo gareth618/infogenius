@@ -7,7 +7,7 @@ DESCRIPTION: În acest articol vom rezolva împreună 6 (șase) probleme algorit
 
 Principalul proiect în care m-am implicat în primul an de facultate (2020-2021) a fost FIICode -- un concurs de algoritmică, în stil ICPC, format din patru runde, organizat de studenții Facultății de Informatică din Iași. Prin __studenții__ mă refer la vreo zece persoane pasionate de programare competitivă, care până la urmă au rămas în jur de patru, dintre care a patra varia de la meeting la meeting. Noroc că în ultimii doi ani ni s-a alăturat și [Bicsi](https://codeforces.com/profile/bicsi), care a mai venit cu niște idei de probleme mișto.
 
-Până la urmă a fost o experiență foarte interesantă, cu nopți dormite o oră și jumătate, probleme inspirate din concursuri rusești dubioase, enunțuri scrise în timpul rundei, teste generate la zece minute **după** începerea rundei... Cu cinci minute înainte de runda a treia, noi abia terminasem cu trei probleme din cinci. La una dintre cele lipsă, comisia avea trei surse. Fiecare dădea diferit -- nici nu știam pe care să o folosim pentru a genera testele oficiale. O altă chestie mișto este că prin sursele concurenților am găsit comentarii de genul:
+Până la urmă a fost o experiență interesantă, cu nopți dormite o oră și jumătate, enunțuri scrise în timpul rundei, teste generate la zece minute **după** începerea rundei... Cu cinci minute înainte de runda a treia, noi abia terminasem cu trei probleme din cinci. La una dintre cele lipsă, comisia avea trei surse. Fiecare dădea diferit -- nici nu știam pe care să o folosim pentru a genera testele oficiale. O altă chestie mișto este că prin sursele concurenților am găsit comentarii de genul:
 
 ![300; Comentariu Baltagul](comentariu-baltagul.png)
 
@@ -95,11 +95,11 @@ Ce-i drept, nu erau departe de formula corectă:
 
 Să vedem totuși de ce `if`-ul ăsta funcționează. Vom demonstra deci că Alex (primul jucător) câștigă dacă și numai dacă cel puțin una dintre grămezile inițiale conține un număr par de pietre. Să presupunem că $a$ este grămada respectivă. Ei bine, Alex poate alege să renunțe la $b$ și să-l împartă pe $a$ în $1$ și $a - 1$:
 
-$$(a, b) \rightarrow (1, a - 1)$$
+$$(a, b) \to (1, a - 1)$$
 
 Acum avem două cazuri. Dacă $a - 1 = 1$, atunci niciuna dintre cele două grămezi nu mai poate fi divizată, așa că jocul se termină și Alex câștigă. Altfel, la pasul următor, Paul va fi obligat să împartă grămada $a - 1$ în două. Însă noi știm că $a - 1$ este un număr impar! Așadar, cele două grămezi care vor rezulta din această operație vor fi cu siguranță una pară și una impară. Iar de aici, Alex poate repeta această strategie până va ajunge la configurația $(1, 1)$:
 
-$$(a, b) \rightarrow (a, a - 1) \rightarrow (p_1, i_1) \rightarrow (1, p_1 - 1) \rightarrow (p_2, i_2) \rightarrow (1, p_2 - 1) \rightarrow \cdots \rightarrow (1, 1)$$
+$$(a, b) \to (a, a - 1) \to (p_1, i_1) \to (1, p_1 - 1) \to (p_2, i_2) \to (1, p_2 - 1) \to \cdots \to (1, 1)$$
 
 Deci, dacă o grămadă este pară, Alex are strategie sigură de câștig. Altfel, după prima mutare, Paul se va afla în situația de mai sus, așa că Alex va pierde. Iată cum paritățile celor două numere date determină din start câștigătorul :smile:
 
@@ -154,7 +154,7 @@ unde $\mathrm{inv}_a[i][j]$ reprezintă numărul de inversiuni care se formează
       vector invA(m + 1, vector<int>(n + 1));
       for (int i = 1; i <= m; i++) {
           for (int k = 1; k < i; k++)
-              invA[i][0] += (a[k] > a[i]);
+              invA[i][0] += a[k] > a[i];
           for (int j = 1; j <= n; j++)
               invA[i][j] = invA[i][j - 1] + (b[j] > a[i]);
       }
@@ -162,7 +162,7 @@ unde $\mathrm{inv}_a[i][j]$ reprezintă numărul de inversiuni care se formează
       vector invB(m + 1, vector<int>(n + 1));
       for (int j = 1; j <= n; j++) {
           for (int k = 1; k < j; k++)
-              invB[0][j] += (b[k] > b[j]);
+              invB[0][j] += b[k] > b[j];
           for (int i = 1; i <= m; i++)
               invB[i][j] = invB[i - 1][j] + (a[i] > b[j]);
       }
@@ -331,18 +331,14 @@ Cum noi avem de calculat $n$ expresii de felul ăsta, complexitatea poate să pa
 
   vector<pair<int, int>> getDiv(int n) {
       vector<pair<int, int>> div;
-      auto divide = [&](int d) {
-          if (n % d)
-              return;
-          div.emplace_back(d, 0);
-          while (n % d == 0) {
-              div.back().second++;
-              n /= d;
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0) {
+              div.emplace_back(d, 0);
+              while (n % d == 0) {
+                  div.back().second++;
+                  n /= d;
+              }
           }
-      };
-      divide(2);
-      for (int d = 3; d * d <= n; d += 2)
-          divide(d);
       if (n > 1)
           div.emplace_back(n, 1);
       return div;
@@ -369,9 +365,7 @@ Cum noi avem de calculat $n$ expresii de felul ăsta, complexitatea poate să pa
           cin >> v[i];
 
       vector<int> phiItr;
-      while (true) {
-          if (m == 1)
-              break;
+      while (m > 1) {
           phiItr.push_back(m);
           m = phi(getDiv(m));
       }
@@ -401,7 +395,7 @@ Cum noi avem de calculat $n$ expresii de felul ăsta, complexitatea poate să pa
   ---
 <<<
 
-În această problemă ni se dă un arbore cu portocale (un portocal), având costuri în noduri, pe care trebuie să efectuăm niște operații. Acestea pot fi de următoarele două tipuri:
+În această problemă ni se dă un arbore cu portocale (un portocal), având costuri pe noduri, pe care trebuie să efectuăm niște operații. Acestea pot fi de următoarele două tipuri:
 
 +++ 1.
 > **Update:** Se dă o tripletă $(x, y, z)$. Rădăcina arborelui devine $x$, iar dintre fiii lui $x$ îl alegem pe acela al cărui subarbore conține nodul $y$. Valorile tuturor nodurilor din acest subarbore cresc cu $z$ unități.
@@ -599,19 +593,17 @@ Complexitatea finală este $O(n \cdot 2^8)$. Recomand să vă uitați cu atenți
 
   class Sieve {
       vector<bool> sieve;
-      vector<int> primes = {2};
+      vector<int> primes;
 
   public:
-      Sieve(int n) : sieve(n + 1, true) {
-          sieve[0] = sieve[1] = false;
-          for (int j = 4; j <= n; j += 2)
-              sieve[j] = false;
-          for (int i = 3; i * i <= n; i += 2)
-              if (sieve[i])
-                  for (int j = i * i; j <= n; j += 2 * i)
-                      sieve[j] = false;
-          for (int i = 3; i <= n; i += 2)
-              if (sieve[i])
+      Sieve(int n) : sieve(n + 1) {
+          sieve[0] = sieve[1] = true;
+          for (int i = 2; i * i <= n; i++)
+              if (!sieve[i])
+                  for (int j = i * i; j <= n; j += i)
+                      sieve[j] = true;
+          for (int i = 2; i <= n; i++)
+              if (!sieve[i])
                   primes.push_back(i);
       }
 
@@ -641,14 +633,15 @@ Complexitatea finală este $O(n \cdot 2^8)$. Recomand să vă uitați cu atenți
       Sieve sieve(1e3);
       auto factorizationAndBkt = [&](int num, function<void(int, int)> callback) {
           vector<int> div;
-          for (int d : sieve)
+          for (int d : sieve) {
+              if (d * d > num)
+                  break;
               if (num % d == 0) {
                   div.push_back(d);
                   while (num % d == 0)
                       num /= d;
-                  if (num == 1)
-                      break;
               }
+          }
           if (num > 1)
               div.push_back(num);
           function<void(int, int, int)> bkt = [&](int pos, int prod, int cnt) {

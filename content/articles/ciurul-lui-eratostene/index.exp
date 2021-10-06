@@ -151,7 +151,7 @@ Când cu primul `for` ajungem la `euler[i]`, îi știm deja valoarea finală, a�
 
 $$n = \sum_{d \mid n} \varphi(d)$$.
 
-O demonstrație pentru această formulă, nu foarte riguroasă, dar destul de intuitivă este următoarea: Considerăm toate fracțiile de forma $x / n$, cu $1 \le x \le n$. Pentru $n = 10$, acestea sunt:
+O demonstrație pentru această formulă, nu foarte riguroasă, dar destul de intuitivă, este următoarea: Considerăm toate fracțiile de forma $x / n$, cu $1 \le x \le n$. Pentru $n = 10$, acestea sunt:
 
 $$\frac{1}{10}, \frac{2}{10}, \frac{3}{10}, \frac{4}{10}, \frac{5}{10}, \frac{6}{10}, \frac{7}{10}, \frac{8}{10}, \frac{9}{10}, \frac{10}{10}$$
 

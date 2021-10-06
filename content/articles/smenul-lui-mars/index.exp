@@ -216,7 +216,7 @@ Capetele segmentului se pot calcula foarte ușor: $x - l + y$ la stânga și $x 
 
 Ideea e că de fapt nu avem nevoie decât de $m$ elemente, corespunzătoare celor $m$ pescari. Pentru fiecare pește vom crea două evenimente: $(x - l + y, +1)$ și $(x + l - y + 1, -1)$ cu semnificația că de la abscisa $x - l + y$ se adaugă $1$, iar de la $x + l - y + 1$ se scade $1$. Punem toate evenimentele într-un vector pe care îl sortăm. Sortăm și vectorul cu pescarii, iar apoi practic îl interclasăm cu vectorul de evenimente. Când am ajuns la un pescar cu abscisa mai mare sau egală cu abscisa evenimentului curent, adunăm sau scădem $1$ din $\mathrm{mars}[j]$, în funcție de tipul evenimentului.
 
-În această problemă am învățat ce trebuie făcut când lucrăm cu update-uri pe vectori prea mari, câte ceva despre distanța Manhattan și poate un mod mai clar de a interclasa doi vectori (util când răspundem la query-uri offline). Iată sursa <del>de 100 de puncte</del> care ia Accepted:
+În această problemă am învățat ce trebuie făcut când lucrăm cu update-uri pe vectori prea mari, câte ceva despre distanța Manhattan și poate un mod mai clar de a interclasa doi vectori (util când răspundem la query-uri offline). Iată sursa ~~de 100 de puncte~~ care ia Accepted:
 
 ``` cpp -> Problema Fisherman
   #include <bits/stdc++.h>

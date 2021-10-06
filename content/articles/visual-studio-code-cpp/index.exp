@@ -103,9 +103,11 @@ Acum ar trebui să aveți totul pregătit pentru a putea rula surse C++. Pentru 
 
 ### `<bits/stdc++.h>`
 
-Cea mai mare problemă pe care am avut-o când am configurat VSCode a fost faptul că nu mă lăsa să folosesc `biblioteca <bits/stdc++.h>`, și mi-a luat ceva să găsesc o soluție. Problema apare pentru că `<bits/stdc++.h>` nu e un header standard C++, și într-un fel VSCode nu-l recunoaște dacă nu trimiți linker-ul direct la adresa directorului în care se află `bits`. Prin urmare, la `"C_Cpp.default.includePath"` trebuie adăugată adresa
+Cea mai mare problemă pe care am avut-o când am configurat VSCode a fost faptul că nu mă lăsa să folosesc `biblioteca <bits/stdc++.h>`, și mi-a luat ceva să găsesc o soluție. Problema apare pentru că `<bits/stdc++.h>` nu e un header standard C++, și într-un fel VSCode nu-l recunoaște dacă nu trimiți linker-ul direct la adresa directorului în care se află `bits`. Prin urmare, la `"C_Cpp.default.includePath"` trebuie adăugată adresa:
 
-`C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++/mingw32`.
+``` text
+  C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++/mingw32
+```
 
 Dacă ați copiat conținutul `settings.json` de mai sus, nu trebuie să mai faceți nimic.
 

@@ -111,7 +111,7 @@ Elementele lui $v$ sunt în continuare numere naturale, ceea ce ne garantează m
   }
 ```
 
-Dacă ne gândim puțin, putem folosi fără probleme funcția [lower_bound](cautare-binara/#header-8) din STL, căutarea binară fiind până la urmă pe un vector, nu pe o funcție:
+Dacă ne gândim puțin, putem folosi fără probleme funcția [`lower_bound`](cautare-binara/#header-8) din STL, căutarea binară fiind până la urmă pe un vector, nu pe o funcție:
 
 ``` cpp
   vector<int> ps(n + 1);
@@ -242,7 +242,7 @@ Pe lângă problemele din acest articol, pe care în marea lor parte le puteți 
 +++
 > [Divk](https://infoarena.ro/problema/divk)
 > [Flori5](https://infoarena.ro/problema/flori5)
-> [Grădina 3](https://infoarena.ro/problema/gradina3)
+> [Grădina3](https://infoarena.ro/problema/gradina3)
 > [Livada3](https://infoarena.ro/problema/livada3)
 ---
 

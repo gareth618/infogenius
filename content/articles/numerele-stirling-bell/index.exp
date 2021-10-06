@@ -148,7 +148,7 @@ Explicație: Putem forma o permutare de ordin $n$ pornind de la una de ordin $n 
 $$\begin{pmatrix}
   1 & 2 & \cdots & a & \cdots & n - 1\\
   \sigma(1) & \sigma(2) & \cdots & b & \cdots & \sigma(n - 1)
-  \end{pmatrix} \rightarrow \begin{pmatrix}
+  \end{pmatrix} \to \begin{pmatrix}
   1 & 2 & \cdots & a & \cdots & n - 1 & n\\
   \sigma(1) & \sigma(2) & \cdots & n & \cdots & \sigma(n - 1) & b
 \end{pmatrix}$$
