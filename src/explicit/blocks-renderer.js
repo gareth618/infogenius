@@ -133,4 +133,11 @@ export default function renderBlocks(ast, anchors) {
   if (ast.tag === 'quote') return <blockquote>{sons}</blockquote>;
   if (ast.tag === 'center') return <div className="div-center">{sons}</div>;
   if (ast.tag === 'right') return <div className="div-right">{sons}</div>;
+
+  if (ast.tag === 'header') {
+    if (ast.sons[0].tag.length === 2 && ast.sons[0].tag[0] === 'h') {
+      return <blockquote className={ast.sons[0].tag}>{sons}</blockquote>;
+    }
+    return <blockquote>{sons}</blockquote>;
+  }
 };

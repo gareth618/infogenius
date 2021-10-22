@@ -131,7 +131,7 @@ Folosind operatorul `=`, putem atribui unui pointer la `char` adresa de început
 
 Este destul de simplu să efectuăm operații de bază cu șirurile de caractere, cum ar fi ștergerea unui caracter, determinarea lungimii, concatenarea a două șiruri etc. Însă, aceste operații pot apărea într-un număr foarte mare de locuri în cadrul unui program, așa că C++ ne pune la dispoziție biblioteca [`<cstring>`](http://www.cplusplus.com/reference/cstring/), ce conține un set de funcții pentru prelucrarea șirurilor de caractere. În continuare le voi prezenta pe cele mai importante dintre ele.
 
->>>
+>>> header
   ### Funcția `strlen`
 
   ``` cpp
@@ -148,7 +148,7 @@ Funcția `strlen` returnează lungimea string-ului `str`. Aceasta este determina
   cout << strlen("string") << '\n'; // 6
 ```
 
->>>
+>>> header
   ### Funcția `strcpy`
 
   ``` cpp
@@ -175,7 +175,7 @@ Funcția `strcpy` copiază conținutul lui `src` în șirul care începe la pozi
 
 Complexitatea funcției `strcpy` este $O(n)$, unde $n$ este lungimea lui `src`.
 
->>>
+>>> header
   ### Funcția `strcat`
 
   ``` cpp
@@ -193,7 +193,7 @@ Funcția `strcat` concatenează șirurile `dest` și `src`, adică îl copiază 
 
 Complexitatea funcției `strcat` este $O(m + n)$, unde $m$ este lungimea lui `dest` și $n$ lungimea lui `src`. Asta pentru că `strcat` parcurge mai întâi șirul destinație, pentru a găsi poziția unde se află terminatorul nul, iar abia apoi copiază conținutul sursei, începând de la acea poziție.
 
->>>
+>>> header
   ### Funcția `strncpy`
 
   ``` cpp
@@ -209,7 +209,7 @@ Funcția `strncpy` este foarte asemănătoare cu `strcpy`, doar că nu copiază 
   cout << a << '\n'; // infogenius
 ```
 
->>>
+>>> header
   ### Funcția `strncat`
 
   ``` cpp
@@ -225,7 +225,7 @@ Funcția `strncat` este la rândul ei asemănătoare cu `strcat`, doar că nu co
   cout << a << '\n'; // A fi sau a nu fi
 ```
 
->>>
+>>> header
   ### Funcția `strcmp`
 
   ``` cpp
@@ -243,7 +243,7 @@ Valoarea returnată de `strcmp` este un număr strict pozitiv dacă `a` este mai
   cout << (!strcmp("string", "string"))        << '\n'; // 1
 ```
 
->>>
+>>> header
   ### Funcția `strchr`
 
   ``` cpp
@@ -260,7 +260,7 @@ Funcția `strchr` caută prima apariție a caracterului `chr` în șirul `str`. 
   cout << strchr(str, 'o') << '\n'; // ore
 ```
 
->>>
+>>> header
   ### Funcția `strstr`
 
   ``` cpp
@@ -278,7 +278,7 @@ Funcția `strstr` lucrează foarte asemănător cu `strchr`, doar că nu caută 
   // He he, n-am nevoie de StackOverflow!
 ```
 
->>>
+>>> header
   ### Funcția `strtok`
 
   ``` cpp

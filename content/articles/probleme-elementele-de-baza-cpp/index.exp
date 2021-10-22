@@ -9,7 +9,7 @@ DESCRIPTION: În acest articol voi prezenta câteva probleme elementare ce țin 
 
 ## Probleme cu operatori și expresii C++
 
->>>
+>>> header
   ### Problema 1.
 
   Să se scrie o expresie care testează dacă `a` este divizibil cu `b`, `a` și `b` fiind naturale, iar `b` nenul.
@@ -17,7 +17,7 @@ DESCRIPTION: În acest articol voi prezenta câteva probleme elementare ce țin 
 
 Dacă `a` este divizibil cu `b` înseamnă că restul împărțirii lui `a` la `b` este `0`. Expresia va fi `a % b == 0`.
 
->>>
+>>> header
   ### Problema 2.
 
   Să se scrie o expresie care testează dacă numărul natural `a` este nenul, și respectiv una care testează dacă este `0`.
@@ -25,7 +25,7 @@ Dacă `a` este divizibil cu `b` înseamnă că restul împărțirii lui `a` la `
 
 Soluția imediată, care folosește operatorul __diferit de__ este `a != 0`. Există și o soluție mai scurtă, ce testează exact același lucru, și anume `a`. Într-o structură de genul `if (a)`, numărul `a` se convertește la tipul `bool`. Astfel, dacă `a` este diferit de `0`, expresia devine `true`, iar altfel `false`. Similar, expresia `!a` testează dacă `a` nu este nenul, adică dacă este `0`.
 
->>>
+>>> header
   ### Problema 3.
 
   Să se testeze dacă `a` și `b` dau același rest la împărțirea la `k`. Considerăm că `a > b` și `k > 0`.
@@ -33,7 +33,7 @@ Soluția imediată, care folosește operatorul __diferit de__ este `a != 0`. Exi
 
 Se observă că dacă `a` și `b` dau același rest la împărțirea la `k`, atunci diferența lor este divizibilă cu `k`, deci soluția va fi `(a - b) % k == 0`.
 
->>>
+>>> header
   ### Problema 4.
 
   Să se afișeze rădăcina pătrată a numărului natural `n`, pătrat perfect.
@@ -41,7 +41,7 @@ Se observă că dacă `a` și `b` dau același rest la împărțirea la `k`, atu
 
 Pentru a nu implementa un algoritm care să extragă radicalul unui număr, vom folosi funcția `sqrt` din biblioteca `cmath`. Pentru a funcționa, trebuie inclusă la început biblioteca unde este definită funcția (`#include <cmath>`). Expresia va fi `cout << sqrt(n)`.
 
->>>
+>>> header
   ### Problema 5.
 
   Să se afișeze partea întreagă a numărului real `n`.
@@ -49,7 +49,7 @@ Pentru a nu implementa un algoritm care să extragă radicalul unui număr, vom 
 
 Vom folosi operatorul de conversie a tipului (din `double` în `int`). Acesta returnează partea întreagă a lui `n`, deci soluția este `(int) n`.
 
->>>
+>>> header
   ### Problema 6.
 
   Să se testeze dacă numărul `n` este pătrat perfect folosind funcția `sqrt`.
@@ -65,7 +65,7 @@ Funcția `sqrt` returnează mereu un `double` (un număr real). Cum un pătrat p
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 7.
 
   Să se scrie o expresie care testează dacă numărul întreg `x` aparține intervalului închis la ambele capete determinat de numerele `a` și `b`.
@@ -75,7 +75,7 @@ De multe ori în problemele de informatică cu intervale nu se specifică care d
 
 Expresia va fi: `a <= x && x <= b || b <= x && x <= a`.
 
->>>
+>>> header
   ### Problema 8.
 
   Să se afișeze codul ASCII al caracterului `chr`.
@@ -83,7 +83,7 @@ Expresia va fi: `a <= x && x <= b || b <= x && x <= a`.
 
 O variabilă de tip `char` reține [codul ASCII](https://www.ascii-code.com/) al caracterului pe care-l reprezintă, diferențele dintre un `char` și un `int` cu aceeași valoare sunt doar la citire și afișare. Când afișăm o variabilă de tip `char`, afișăm caracterul corespunzător ei, însă când afișăm un `int`, afișăm un număr. Deci, cea mai simplă soluție constă în conversia caracterului la `int`, pentru a putea fi afișat drept număr: `cout << (int) chr`.
 
->>>
+>>> header
   ### Problema 9.
 
   Să se scrie o expresie care testează dacă un caracter dat (`chr`) este o literă a alfabetului englez.
@@ -93,7 +93,7 @@ Vom testa dacă `chr` este o literă mică sau mare. Ne vom folosi de faptul că
 
 Deci, expresia va fi `'a' <= chr && chr <= 'z' || 'A' <= chr && chr <= 'Z'`.
 
->>>
+>>> header
   ### Problema 10.
 
   Se dă un caracter `chr`. Să se testeze dacă acesta este un caracter alb.
@@ -101,7 +101,7 @@ Deci, expresia va fi `'a' <= chr && chr <= 'z' || 'A' <= chr && chr <= 'Z'`.
 
 Vom testa dacă `chr` este __spațiu__, __tab__ sau __enter__: `chr == ' ' || chr == '\t' || chr == '\n'`.
 
->>>
+>>> header
   ### Problema 11.
 
   Să se afișeze modulul diferenței a două numere `a` și `b`.
@@ -109,7 +109,7 @@ Vom testa dacă `chr` este __spațiu__, __tab__ sau __enter__: `chr == ' ' || ch
 
 Avem două cazuri, `a > b` și `a <= b`. Putem folosi instrucțiunea `if`, dar o soluție simplă ce folosește operatorul condițional ternar este `a > b ? a - b : b - a`.
 
->>>
+>>> header
   ### Problema 12.
 
   Să se afișeze valoarea sumei $1 + 2 + \cdots + n$.
@@ -119,7 +119,7 @@ Desigur, putem aduna efectiv fiecare număr de la `1` la `n` într-o variabilă 
 
 ## Probleme cu instrucțiunea alternativă `if`
 
->>>
+>>> header
   ### Problema 1.
 
   Să se afișeze suma, diferența, produsul, câtul și restul împărțirii a două numere întregi date. Cazul în care `b` este `0` se va trata separat.
@@ -138,7 +138,7 @@ Desigur, putem aduna efectiv fiecare număr de la `1` la `n` într-o variabilă 
   }
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Să se afișeze maximul a două numere `a` și `b`.
@@ -151,7 +151,7 @@ Desigur, putem aduna efectiv fiecare număr de la `1` la `n` într-o variabilă 
       cout << b << '\n';
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Fiind dată nota unui elev, să se afișeze dacă acesta rămâne corigent sau promovează.
@@ -164,7 +164,7 @@ Desigur, putem aduna efectiv fiecare număr de la `1` la `n` într-o variabilă 
       cout << "promovat\n";
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Să se afișeze minimul a trei numere date (`a`, `b`, `c`).
@@ -184,7 +184,7 @@ Ne putem încurca în 100 de `if`-uri, dar cea mai simplă soluție este să cal
       cout << c << '\n';
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Stabiliți dacă numărul nenul `n` este negativ sau pozitiv.
@@ -197,7 +197,7 @@ Ne putem încurca în 100 de `if`-uri, dar cea mai simplă soluție este să cal
       cout << "pozitiv\n";
 ```
 
->>>
+>>> header
   ### Problema 6.
 
   Să se stabilească dacă un an calendaristic dat este bisect sau nu. Un an este bisect dacă se divide cu `4` și nu se divide cu `100`, sau dacă se divide cu `400`.
@@ -223,7 +223,7 @@ Ne putem încurca în 100 de `if`-uri, dar cea mai simplă soluție este să cal
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 7.
 
   Să se verifice dacă trei numere întregi date pot fi laturile unui triunghi.
@@ -239,7 +239,7 @@ Ne folosim de inegalitatea triunghiului. Ca trei numere să fie laturile unui tr
       cout << "DA\n";
 ```
 
->>>
+>>> header
   ### Problema 8.
 
   Fiind date laturile unui triunghi, să se determine dacă acesta este isoscel și nu este echilateral.
@@ -252,7 +252,7 @@ Ne folosim de inegalitatea triunghiului. Ca trei numere să fie laturile unui tr
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 9.
 
   Fiind date laturile unui triunghi ($a \ge b \ge c$), să se determine dacă acesta este dreptunghic, ascuțitunghic sau obtuzunghic.
@@ -275,7 +275,7 @@ Din teorema cosinusului putem deduce că:
       cout << "triunghi ascutitunghic\n";
 ```
 
->>>
+>>> header
   ### Problema 10.
 
   Se dau coordonatele a două puncte în plan (`x1`, `y1`, `x2`, `y2`). Să se stabilească dacă dreapta este verticală, orizontală sau oblică.
@@ -292,7 +292,7 @@ Dacă `x1 == x2`, atunci dreapta este paralelă cu axa $OY$, deci verticală. Da
       cout << "oblica\n";
 ```
 
->>>
+>>> header
   ### Problema 11.
 
   Se dă un număr `n` de maxim trei cifre. Să se determine câte cifre are.
@@ -307,7 +307,7 @@ Dacă `x1 == x2`, atunci dreapta este paralelă cu axa $OY$, deci verticală. Da
       cout << "3\n";
 ```
 
->>>
+>>> header
   ### Problema 12.
 
   Se dau coeficienții din ecuația de gradul al II-lea $ax^2 + bx + c = 0$, cu $a \gt 0$. Să se determine rădăcinile sale.
@@ -325,7 +325,7 @@ Dacă `x1 == x2`, atunci dreapta este paralelă cu axa $OY$, deci verticală. Da
   }
 ```
 
->>>
+>>> header
   ### Problema 13.
 
   Se dă o dată calendaristică (ziua: `z`, luna: `l`, anul: `a`), cele trei numere fiind nenule. Să se determine dacă este o dată corectă.
@@ -362,7 +362,7 @@ Dacă `x1 == x2`, atunci dreapta este paralelă cu axa $OY$, deci verticală. Da
 
 ## Probleme cu instrucțiunile repetitive (`for`, `while`, `do while`)
 
->>>
+>>> header
   ### Problema 1.
 
   Să se afișeze primele `n` numere naturale pare nenule în ordine crescătoare.
@@ -392,7 +392,7 @@ Totuși n-am făcut mare brânză, pentru că la fiecare pas se calculează `2 *
 
 Acum se face doar o adunare la fiecare pas. Uneori optimizările de genul ăsta chiar contează pentru numere mari, dar pentru cerința asta prefer prima variantă. O înmulțire cu `2` și o incrementare la fiecare pas nu înseamnă mai nimic.
 
->>>
+>>> header
   ### Problema 2.
 
   Să se calculeze $a^b$, pentru $a$ nenul.
@@ -406,7 +406,7 @@ Vom lua o variabilă `p` inițializată cu `1`, în care calculăm rezultatul, �
       p *= a;
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Să se afișeze $10^n$.
@@ -420,7 +420,7 @@ Atenție, scrie să se afișeze, deci nu trebuie neapărat să calculăm într-o
       cout << 0;
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Să se afișeze un dreptunghi format din cifre `0`, de lățime `m` (linii) și lungime `n` (coloane).
@@ -436,7 +436,7 @@ Pentru fiecare linie afișăm `n` caractere de `0`, urmate de enter.
   }
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Să se afișeze o piramidă de ordinul `n` ca mai jos.
@@ -460,7 +460,7 @@ Pentru linia `i` vom afișa primele `i` numere naturale nenule.
   }
 ```
 
->>>
+>>> header
   ### Problema 6.
 
   Să se afișeze un romb de ordinul `n` ca mai jos. Exemplul este pentru `n == 5`:
@@ -497,7 +497,7 @@ Nimic special, doar facem câteva observații pentru numărul de spații și de 
   }
 ```
 
->>>
+>>> header
   ### Problema 7.
 
   Se citește câte un număr natural până la introducerea lui `0`. Calculați suma lor.
@@ -513,7 +513,7 @@ Este un exemplu bun pentru folosirea instrucțiunii `do while`. O putem utiliza 
   } while (x);
 ```
 
->>>
+>>> header
   ### Problema 8.
 
   Se citește câte un număr natural nenul până la introducerea a două numere egale. Să se calculeze suma tuturor numerelor introduse.
@@ -533,7 +533,7 @@ Folosim o variabilă `xPrec` unde reținem `x`-ul citit la pasul anterior. Dacă
   }
 ```
 
->>>
+>>> header
   ### Problema 9.
 
   Se citesc `n` numere naturale, `n > 0`. Să se calculeze media aritmetică a celor impare.
@@ -553,7 +553,7 @@ Citim numerele cu un `for`. La fiecare pas testăm dacă numărul curent este im
   cout << sum / nr << '\n';
 ```
 
->>>
+>>> header
   ### Problema 10.
 
   Se dau două numere naturale nenule `n` și `b`. Să se afișeze numărul obținut prin conversia lui `n` din baza `10` în baza `b`.
@@ -572,7 +572,7 @@ Trebuia să bag într-un articol și algoritmul de conversie dintr-o bază în a
   cout << '\n';
 ```
 
->>>
+>>> header
   ### Problema 11.
 
   Se dă un număr format din `n` cifre în baza `b`. Să se afișeze numărul respectiv în baza `10`.

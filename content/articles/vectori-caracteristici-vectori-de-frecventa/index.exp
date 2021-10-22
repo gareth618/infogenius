@@ -11,7 +11,7 @@ Vectorii caracteristici și vectorii de frecvență reprezintă două aplicații
 
 Într-un __vector caracteristic__, pe poziția `i` este stocată o informație despre numărul `i`. De cele mai multe ori, pe poziția `i` se va găsi o valoare booleană (`true` sau `false`) care indică, spre exemplu, dacă `i` se află într-o listă dată de întregi sau nu. Asta e tot :smile: Acum, iată câteva probleme simple cu vectori caracteristici:
 
->>>
+>>> header
   ### Problema 1.
 
   Se citesc `n` numere întregi cuprinse între `-1000` și `1000`. Pentru fiecare dintre următoarele `q` numere date (din același interval), să se afișeze dacă acesta se regăsește în șirul dat.
@@ -98,7 +98,7 @@ Defectul acestui algoritm este că programul va crăpa pentru numere negative, d
   }
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Se dau `n` numere naturale de maxim `8` cifre. Să se afișeze cel mai mic și cel mai mare număr de `3` cifre care nu apar în șirul dat. Se garantează că există întotdeauna soluție.
@@ -131,7 +131,7 @@ După etapa citirii, va trebui doar să parcurgem vectorul caracteristic de la p
   }
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Se citesc `n` numere naturale de maxim `3` cifre. Să se afișeze, fără repetiții, în ordine crescătoare, numerele pare ce se regăsesc printre numerele date, iar apoi cele impare, în ordine descrescătoare.
@@ -169,7 +169,7 @@ Reținem numerele într-un vector caracteristic, iar apoi facem exact ce scrie �
 
 __Vectorii de frecvență__ seamănă izbitor de bine cu cei caracteristici, singura diferență fiind că pe poziția `i` aceștia rețin __numărul de apariții__ ale lui `i` (frecvența lui `i`).
 
->>>
+>>> header
   ### Problema 1.
 
   Se citesc `n` numere naturale de maxim `3` cifre. Să se determine numerele prime ce aparțin acestui șir, cât și frecvențele lor.
@@ -205,7 +205,7 @@ Reținem un vector de frecvență `frq` cu numărul de apariții ale tuturor num
   }
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Se citesc `n` numere naturale. Să se determine numărul cu cea mai mare frecvență. Dacă sunt mai multe soluții, se va afișa cea maximă.
@@ -241,7 +241,7 @@ După ce formăm vectorul de frecvență, calculăm frecvența maximă, reținâ
   }
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Se dă un număr natural `n` de maxim `8` cifre. Să se afișeze de câte ori apare fiecare cifră în acesta.

@@ -32,7 +32,7 @@ Această recurență face construcția șirului de sume parțiale să poată fi 
 
 Putem trece deja la aplicații! Am încercat să aleg 6 probleme clasice prin care să ilustrez cât mai multe tehnici ce folosesc conceptul de sume parțiale.
 
->>>
+>>> header
   ### Problema 1.
 
   Se dă un vector $v$ cu $n$ numere întregi, precum și $q$ întrebări de forma $x \text{ } y$ cu semnificația: __Care este suma elementelor din $v$ cuprinse între indicii $x$ și $y$?__ Să se răspundă eficient la cele $q$ întrebări.
@@ -55,7 +55,7 @@ Asta e probabil cea mai cunoscută problemă de sume parțiale, și cred că de 
   }
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Se dă un număr natural $k$ și un vector $v$ cu $n$ numere naturale. Atât $k$ cât și suma elementelor lui $v$ sunt mai mici sau egale cu $10^6$. Să se determine o secvență a lui $v$ cu proprietatea că suma elementelor ei este egală cu $k$.
@@ -81,7 +81,7 @@ Dacă la pasul $i$ am obținut o sumă parțială $ps$ pentru care $\mathrm{pos}
   }
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Se dă un număr $k \gt 0$ și un vector $v$ cu $n$ elemente. Atât $k$ cât și elementele lui $v$ sunt numere naturale, până în $10^9$. Să se determine o secvență a lui $v$ cu proprietatea că suma elementelor ei este egală cu $k$.
@@ -128,7 +128,7 @@ Dacă ne gândim puțin, putem folosi fără probleme funcția [`lower_bound`](c
 
 O problemă în care am folosit ideea de căutare binară pe șirul sumelor parțiale este [br](problema-br-oni-2009-clasa-9).
 
->>>
+>>> header
   ### Problema 4.
 
   Se dă un vector $v$ cu $n$ elemente numere naturale. Să se determine o secvență a lui $v$ astfel încât suma elementelor ei să fie divizibilă cu $n$.
@@ -156,7 +156,7 @@ Pentru a găsi ușor un indice $i \lt j$ astfel încât $\mathrm{ps}[i] = \mathr
   }
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Se dă o matrice $a$ cu $m$ linii și $n$ coloane. Să se determine suma maximă a elementelor unei submatrice a lui $a$ cu $x$ linii și $y$ coloane.
@@ -194,7 +194,7 @@ Astfel, am obținut un algoritm optim, de complexitate $O(mn)$. Iată și codul:
   cout << ans << '\n';
 ```
 
->>>
+>>> header
   ### Problema 6.
 
   Se dă un vector $v$ cu $n$ elemente din mulțimea $\{0, 1\}$. Să se determine numărul de secvențe ale lui $v$ ce conțin de două ori mai mulți de $1$ decât de $0$.

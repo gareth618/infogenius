@@ -7,7 +7,7 @@ DESCRIPTION: În acest articol vom rezolva câteva probleme elementare legate de
 
 Acum ceva timp am discutat despre ce sunt [matricele](matrice-cpp) și cum putem lucra cu ele în C++. În acest articol vom rezolva câteva probleme elementare legate de parcurgerea și generarea matricelor în C++. Majoritatea pot fi găsite pe [PbInfo](https://www.pbinfo.ro/probleme/categorii/46/tablouri-bidimensionale-matrice). Matricele cu care vom lucra vor avea elementele de tipul `int` și vor fi indexate de la $(1, 1)$.
 
->>>
+>>> header
   ## Problema 1.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane, având toate elementele distincte. Să se interschimbe liniile pe care se află cel mai mic și respectiv cel mai mare element din matrice.
@@ -40,7 +40,7 @@ La final, interschimbăm efectiv cele două linii `linMin` și `linMax`. Iterăm
   }
 ```
 
->>>
+>>> header
   ## Problema 2.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. De asemenea, se dau $q$ numere întregi. Pentru fiecare dintre acestea, să se determine dacă apare pe fiecare linie a matricei.
@@ -71,7 +71,7 @@ Citim pe rând fiecare număr dintre cele `q`. La fiecare pas, reținem într-o 
 
 Soluția este destul de înceată, având complexitatea $O(mn)$ per interogare, pentru că în cel mai rău caz numărul $x$ se găsește la finalul fiecărei linii. Dacă sortăm eficient elementele de pe fiecare linie a matricei, am putea reduce complexitatea la $O(m \log n)$, căci l-am putea [căuta binar](cautare-binara) pe $x$ pe fiecare linie. N-are sens să ne complicăm; scopul articolului este să învățăm să lucrăm cu matrice în C++.
 
->>>
+>>> header
   ## Problema 3.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. Să se rotească cu $90^{\text{o}}$ în sensul acelor de ceasornic matricea dată.
@@ -98,7 +98,7 @@ Urmează să copiem matricea $\mathrm{aux}$ în $\mathrm{mat}$, însă înainte 
           mat[i][j] = aux[i][j];
 ```
 
->>>
+>>> header
   ## Problema 4.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. Să se permute circular coloanele matricei cu o poziție la stânga.
@@ -133,7 +133,7 @@ Putem simplifica algoritmul observând că a permuta coloanele matricei cu o poz
   }
 ```
 
->>>
+>>> header
   ## Problema 5.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane. Să se determine câte elemente ale matricei au toți vecinii numere impare. Vecinii elementului $\mathrm{mat}[i][j]$ sunt $\mathrm{mat}[i - 1][j]$, $\mathrm{mat}[i + 1][j]$, $\mathrm{mat}[i][j - 1]$ și $\mathrm{mat}[i][j + 1]$ (dacă elementele acestea există, adică dacă se află în interiorul matricei).
@@ -173,7 +173,7 @@ O idee care uneori simplifică problemele de tipul ăsta este să __bordăm__ ma
   cout << ans << '\n';
 ```
 
->>>
+>>> header
   ## Problema 6.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane, $n$ fiind impar. Să se determine dacă matricea dată este simetrică față de coloana sa din mijloc.
@@ -198,7 +198,7 @@ Din nou, putem reduce problema de la matrice la vector. Verificăm dacă fiecare
   cout << (ans ? "DA\n" : "NO\n");
 ```
 
->>>
+>>> header
   ## Problema 7.
 
   Se dau două numere naturale nenule $m$ și $n$. Să se construiască o matrice $\mathrm{mat}$ cu $m$ linii și $n$ coloane cu proprietatea că, dacă o citim de la stânga la dreapta și de sus în jos, obținem șirul primelor $m \cdot n$ pătrate perfecte.
@@ -215,7 +215,7 @@ Reținem într-o variabilă $k$ inițializată cu $0$, radicalul pătratului per
       }
 ```
 
->>>
+>>> header
   ## Problema 8.
 
   Se dă o matrice $\mathrm{mat}$ cu $m \ge 1$ linii și $n \ge 1$ coloane, elementele sale luând valori din mulțimea $\{0, 1\}$. Se știe că matricea conține exact $p$ elemente egale cu $1$. Să se împartă matricea în $p / q$ zone conexe, astfel încât fiecare dintre ele să conțină exact $q$ elemente egale cu $1$. Se garantează că $p$ este divizibil cu $q$. O zonă se numește conexă dacă din fiecare celulă a sa se poate ajunge în oricare altă celulă din zona respectivă, fără a părăsi zona; la fiecare pas ne putem deplasa într-unul dintre cei patru vecini ai celulei curente.
@@ -256,7 +256,7 @@ Răspunsul generat pentru exemplul de mai sus va arăta așa:
 
 ![300; Partiționare matrice 2](partitionare-matrice-2.png)
 
->>>
+>>> header
   ## Problema 9.
 
   Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se înlocuiască matricea dată cu simetrica ei față de diagonala principală.
@@ -275,7 +275,7 @@ Pentru a obține simetrica matricei date, trebuie să interschimbăm fiecare ele
       }
 ```
 
->>>
+>>> header
   ## Problema 10.
 
   Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se înlocuiască matricea dată cu simetrica ei față de diagonala secundară.
@@ -294,7 +294,7 @@ Aici trebuie să vedem pentru fiecare element din stânga diagonalei secundare (
       }
 ```
 
->>>
+>>> header
   ## Problema 11.
 
   Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se afișeze șirul obținut prin parcurgerea matricei în formă de spirală.
@@ -320,7 +320,7 @@ Observăm că a parcurge o matrice în formă de spirală înseamnă a-i parcurg
   cout << '\n';
 ```
 
->>>
+>>> header
   ## Problema 12.
 
   Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se afișeze șirul obținut prin parcurgerea șerpuită a matricei date.
@@ -363,7 +363,7 @@ Observăm că pentru primele $n$ diagonale una dintre coordonate este mereu $1$ 
   cout << '\n';
 ```
 
->>>
+>>> header
   ## Problema 13.
 
   Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. Să se calculeze suma elementelor de pe fiecare diagonală a matricei.
@@ -380,7 +380,7 @@ Am văzut în articolul precedent că elementele aflate pe diagonala principală
   cout << sumDP << ' ' << sumDS << '\n';
 ```
 
->>>
+>>> header
   ## Problema 14.
 
   Se dă o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$. În cadrul acesteia, putem distinge cinci zone:
@@ -436,7 +436,7 @@ Iată codul:
   cout << sum << '\n';
 ```
 
->>>
+>>> header
   ## Problema 15.
 
   Să se genereze o matrice pătratică $\mathrm{mat}$ de dimensiune $n \ge 1$ cu proprietatea că suma elementelor de pe fiecare coloană este aceeași.

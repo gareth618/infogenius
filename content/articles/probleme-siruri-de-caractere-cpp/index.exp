@@ -7,7 +7,7 @@ DESCRIPTION: Într-un articol mai vechi am vorbit despre cum funcționează șir
 
 Într-un [articol](siruri-de-caractere-cpp) mai vechi am vorbit despre cum funcționează șirurile de caractere în C++. Astăzi voi rezolva câteva probleme elementare cu șiruri de caractere, ce folosesc funcțiile din biblioteca `<cstring>`. Majoritatea problemelor se pot găsi pe [PbInfo](https://www.pbinfo.ro/probleme/categorii/10/Siruri-de-caractere).
 
->>>
+>>> header
   ### Problema 1.
 
   Se dă un șir de caractere ce conține numai litere mici ale alfabetului englez și spații. Să se determine câte vocale din șir sunt cuprinse între două consoane.
@@ -46,7 +46,7 @@ Un detaliu important la această sursă este modul în care am parcurs string-ul
 
 (Mă rog, ei nici nu declară `i`-ul local în `for`, dar asta e altă poveste.) Parcurgerea asta are complexitatea $O(n^2)$, pentru că la fiecare pas se apelează funcția `strlen`, care pentru a determina lungimea lui `str`, este nevoită să-l parcurgă în întregime, până ajunge la terminatorul nul.
 
->>>
+>>> header
   ### Problema 2.
 
   Se dă o propoziție care conține numai litere mici ale alfabetului englez și spații. Să se afișeze cuvintele din propoziție care conțin numai vocale.
@@ -82,7 +82,7 @@ String-ul nostru poate conție spații, motiv pentru care trebuie citit cu `cin.
 
 Cine a înțeles bine pointerii, ar trebui să știe de ce apelul `check(ptr)` funcționează.
 
->>>
+>>> header
   ### Problema 3.
 
   Se dă un șir de caractere ce conține numai litere ale alfabetului englez și spații. Să se înlocuiască literele mari cu litere mici și vice-versa.
@@ -109,7 +109,7 @@ Din nou, citim șirul de caractere folosind `cin.getline`. Îl parcurgem caracte
   }
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Se dă o propoziție formată din litere mici ale alfabetului englez, spații și semnele de punctuație __virgulă__ și __punct__. Determinați un cuvânt palindrom din propoziție, primul în ordine alfabetică. Se garantează că există cel puțin un cuvânt palindrom în propoziția dată.
@@ -144,7 +144,7 @@ La fel ca la problema 2, citim șirul cu `cin.getline` și îl împărțim pe cu
   }
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Se dă un șir de caractere ce conține numai litere mici ale alfabetului englez. Să se afișeze literele care apar de exact două ori în șirul dat.
@@ -178,7 +178,7 @@ Probabil soluția cea mai clară și mai eficientă este să folosim un [vector 
   }
 ```
 
->>>
+>>> header
   ### Problema 6.
 
   Se dă un șir de caractere format din mai multe cuvinte, separate prin spații. Cuvintele pot conține atât litere mici, cât și litere mari ale alfabetului englez. Să se afișeze acronimul acestui grup de cuvinte. De exemplu, pentru `"Cash rules everything around me"`, se va afișa [`"CREAM"`](https://www.youtube.com/watch?v=PBwAxmrE194).
@@ -205,7 +205,7 @@ Nimic prea special aici. Împărțim șirul în cuvinte folosind `strtok`, iar p
   }
 ```
 
->>>
+>>> header
   ### Problema 7.
 
   Să se scrie un program care să afişeze prefixele şi sufixele unui cuvânt citit.
@@ -234,7 +234,7 @@ Sufixele se afișează ușor, deoarece sufixului care începe la poziția `i` î
   }
 ```
 
->>>
+>>> header
   ### Problema 8.
 
   Să se scrie un program care citeşte un şir de caractere format din litere mici ale alfabetului englez şi elimină din șir toate vocalele.
@@ -262,7 +262,7 @@ Parcurgem șirul, iar dacă la poziția `i` am găsit o vocală, o ștergem astf
   }
 ```
 
->>>
+>>> header
   ### Problema 9.
 
   Se dau două șiruri de caractere ce conțin doar litere mici ale alfabetului englez. Să se determine de câte ori apare al doilea șir în primul, precum și pozițiile la care apare acesta.
@@ -296,7 +296,7 @@ Folosim funcția `strstr` într-un mod similar celui în care folosim `strtok`. 
   }
 ```
 
->>>
+>>> header
   ### Problema 10.
 
   Se dă o propoziție care conține litere ale alfabetului englez, spații și semne de punctuație. Să se afișeze, pe linii separate, fiecare cuvânt și frecvența lui în șirul dat. Cuvintele se vor afișa în ordine lexicografică.
@@ -352,7 +352,7 @@ Revenind la problemă, trebuie menționat că `struct`-ul `Word` va conține și
 
 Problema putea fi rezolvată în câteva rânduri și mult mai eficient dacă foloseam STL, dar am ales soluția școlărească, care folosește string-uri C-style.
 
->>>
+>>> header
   ### Problema 11.
 
   Se dau trei șiruri de caractere `a`, `b` și `c`, care conțin doar litere ale alfabetului englez. Să se înlocuiască fiecare apariție a lui `b` în `a` cu `c`. Se garantează că nu există niciun prefix al șirului `b` care să fie egal cu vreun sufix de-al său; desigur, excepție face string-ul întreg.

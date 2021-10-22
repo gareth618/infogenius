@@ -103,7 +103,7 @@ Este bine de știut că oricare din cei trei „parametri” ai structurii `for`
 
 ### Exemple `for`
 
->>>
+>>> header
   #### Exemplul 1.
 
   **Afișarea textului `"InfoGenius\n"` de `618` ori**
@@ -139,7 +139,7 @@ Chiar și un `for` ce itera de la `618` la `1` ar fi fost bun în această situa
       cout << "InfoGenius\n";
 ```
 
->>>
+>>> header
   #### Exemplul 2.
 
   **Calcularea sumei a `n` numere date**
@@ -155,7 +155,7 @@ Acesta este un bun exemplu unde putem folosi un block de instrucțiuni subordona
   }
 ```
 
->>>
+>>> header
   #### Exemplul 3.
 
   **Căutarea celui mai mare număr divizibil cu `10` mai mic decât `n`**
@@ -169,7 +169,7 @@ Acesta este un bun exemplu unde putem folosi un block de instrucțiuni subordona
 
 La fiecare pas acest `for` execută instrucțiunea vidă (`;`). În problemele cu vectori, `for`-uri de genul ăsta sunt foarte utile. În plus, se mai poate observa ceva important. Ăsta e unul din `for`-urile unde suntem obligați să __nu__ declarăm iteratorul local. Dacă am face asta, nu l-am mai putea afișa când ieșim din `for`.
 
->>>
+>>> header
   #### Exemplul 4.
 
   **Parcurgerea unui interval din ambele direcții simultan**
@@ -190,7 +190,7 @@ Din nou, un exemplu practic se poate găsi în articolul [Probleme simple cu vec
 
 Un alt lucru bun de observat este că aici am folosit acolade fără instrucțiuni între ele, în loc de `;`. Este exact același lucru.
 
->>>
+>>> header
   #### Exemplul 5.
 
   **Afișarea unui pătrat de lungime `10` format din caractere `'.'`**
@@ -216,7 +216,7 @@ Acest exemplu arată că putem avea un `for` în alt `for` (`for`-uri imbricate)
   }
 ```
 
->>>
+>>> header
   #### Exemplul 6.
 
   **Formarea unui ciclu infinit**

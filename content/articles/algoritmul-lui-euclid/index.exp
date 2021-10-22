@@ -200,7 +200,7 @@ $$\lcm(a, b, c) = \lcm(\lcm(a, b), c)$$
 
 În continuare, voi prezenta cinci probleme legate de CMMDC și CMMMC.
 
->>>
+>>> header
   ### Problema 1.
 
   Se dau două numere naturale nenule $a$ și $b$. Să se determine dacă cele două numere sunt prime între ele. Două numere se numesc prime între ele, coprime sau relativ prime dacă singurul lor divizor comun este $1$.
@@ -214,7 +214,7 @@ Testăm pur și simplu dacă $\gcd(a, b) = 1$. By the way, două numere consecut
   }
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Se dau două fracții $a / b$ și $c / d$. Știind că $a$, $b$, $c$ și $d$ sunt numere naturale, iar $b$ și $d$ sunt nenule, să se afișeze suma celor două fracții sub forma unei fracții ireductibile $e / f$.
@@ -247,7 +247,7 @@ O fracție $x / y$ este ireductibilă dacă $\gcd(x, y) = 1$. Deci, ca să aduce
   cout << e << " / " << f << '\n';
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   O instalație de Crăciun consistă din $n \ge 1$ becuri de diferite culori. Știind că inițial toate becurile sunt aprinse și că fiecare bec $i$ (cu $1 \le i \le n$) se aprinde din $t_i$ în $t_i$ secunde, să se determine după cât timp toate becurile vor fi aprinse simultan din nou.
@@ -262,7 +262,7 @@ Răspunsul trebuie să fie divizibil cu fiecare dintre timpii dați. Cum ne inte
   cout << ans << '\n';
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Se consideră un dreptunghi de dimensiuni $a \times b$. Să se determine numărul minim de pătrate congruente în care poate fi împărțit dreptunghiul dat, precum și lungimea laturii acestora.
@@ -279,7 +279,7 @@ Se observă că lungimea laturii $l$ alese trebuie să fie divizibilă atât cu 
   cout << a * b / l / l << ' ' << l << '\n';
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Se dau două puncte în plan $A$ și $B$, ambele de coordonate întregi. Să se determine numărul punctelor laticeale de pe segmentul $[AB]$. Prin punct laticeal înțelegem punct de coordonate întregi.

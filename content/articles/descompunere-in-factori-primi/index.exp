@@ -7,7 +7,7 @@ DESCRIPTION: Astăzi vom discuta despre descompunerea în factori primi a unui n
 
 În [articolul](algoritmul-lui-euclid) precedent am prezentat Algoritmul lui Euclid și am rezolvat în C++ câteva probleme legate de CMMDC și CMMMC. Astăzi vom discuta despre descompunerea unui număr în factori primi și vom rezolva niște probleme clasice de divizibilitate, majoritatea legate de factorizarea întregilor.
 
->>>
+>>> header
   ## Problema 1.
 
   Se dă un număr natural nenul $n$. Să se afișeze toți divizorii numărului $n$.
@@ -80,7 +80,7 @@ Iar în caz că vrem să afișăm divizorii în ordine crescătoare, putem ca pe
   cout << '\n';
 ```
 
->>>
+>>> header
   ## Problema 2. ^^[Testul de primalitate]^^
 
   Se dă un număr natural nenul $n$. Să se verifice dacă $n$ este un număr prim sau nu.
@@ -122,7 +122,7 @@ Putem optimiza puțin codul căutând doar divizori proprii și dând `break` c�
   cout << (ok ? "DA\n" : "NO\n");
 ```
 
->>>
+>>> header
   ## Problema 3. ^^[Descompunerea în factori primi]^^
 
   Se dă un număr natural nenul $n$. Să se afișeze descompunerea sa în factori primi.
@@ -162,7 +162,7 @@ Pentru a reduce complexitatea __worst-case__ la $O(\sqrt{n})$, trebuie să ne op
       cout << n << " 1\n";
 ```
 
->>>
+>>> header
   ## Problema 4.
 
   Se dau două numere naturale nenule $a$ și $b$. Să se calculeze cel mai mare divizor comun al lor.
@@ -216,7 +216,7 @@ Soluția constă în a calcula descompunerile numerelor $a$ și $b$, reținând 
   cout << gcd << '\n';
 ```
 
->>>
+>>> header
   ## Problema 5.
 
   Se dau două numere naturale nenule $a$ și $b$. Să se verifice dacă descompunerile numerelor $a$ și $b$ conțin aceeași factori primi.
@@ -247,7 +247,7 @@ Descompunem în factori primi numerele $a$ și $b$, urmând să verificăm dacă
   cout << (descA == descB ? "DA\n" : "NU\n");
 ```
 
->>>
+>>> header
   ## Problema 6.
 
   Se dă un număr natural nenul $n$. Să se verifice dacă $n$ este un număr aproape prim. Un număr se numește aproape prim dacă poate fi scris sub forma unui produs de două numere prime distincte.
@@ -298,7 +298,7 @@ Totuși, există și o soluție în $O(\sqrt{n})$, care se bazează pe ideea de 
   cout << (cnt == 2 && prod == n ? "DA\n" : "NU\n");
 ```
 
->>>
+>>> header
   ## Problema 7.
 
   Se dau două numere naturale nenule $a$ și $b$. Să se afișeze divizorii comuni ai acestora.
@@ -321,7 +321,7 @@ Dacă un număr $d$ îl divide atât pe $a$, cât și pe $b$, atunci trebuie să
   cout << '\n';
 ```
 
->>>
+>>> header
   ## Problema 8.
 
   Se dă un număr natural nenul $n$. Să se determine câte perechi ordonate de numere naturale nenule $(a, b)$ există, cu proprietatea că $\lcm(a, b) = n$.
@@ -372,7 +372,7 @@ Prin urmare, răspunsul problemei este $(2z_1 + 1)(2z_2 + 1) \cdots (2z_k + 1)$.
   cout << ans << '\n';
 ```
 
->>>
+>>> header
   ## Problema 9.
 
   Se dă un număr natural $n$. Să se determine în câte zerouri se termină numărul $n! = 1 \cdot 2 \cdots n$.
@@ -429,7 +429,7 @@ Această formulă este un caz particular al formulei lui Legendre, care ne spune
 
 $$\left[\frac{n}{p^1}\right] + \left[\frac{n}{p^2}\right] + \cdots + \left[\frac{n}{p^{[\log_p n]}}\right]$$
 
->>>
+>>> header
   ## Problema 10.
 
   Se dă un număr natural $n$. Să se determine ultima cifră nenulă a numărului $n!$.

@@ -9,7 +9,7 @@ DESCRIPTION: În acest articol voi prezenta câteva probleme elementare cu vecto
 
 ## Probleme de parcurgere a unui vector
 
->>>
+>>> header
   ### Problema 1.
 
   Să se determine numărul de elemente impare din vector.
@@ -25,7 +25,7 @@ Se parcurge vectorul și dacă elementul curent este impar, soluția (pe care o 
   cout << nr << '\n';
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Să se determine numărul de elemente din vector care sunt multipli de `k`.
@@ -41,7 +41,7 @@ Aceeași idee ca mai sus, doar că la fiecare pas testăm dacă elementul curent
   cout << nr << '\n';
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Să se afișeze elementele vectorului de pe poziții pare, în ordinea crescătoare a indicilor.
@@ -55,7 +55,7 @@ Parcurgem vectorul din 2 în 2 pornind de la poziția `0`. Nu are importanță d
   cout << '\n';
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Să se afișeze elementele vectorului de pe poziții impare, în ordinea descrescătoare a indicilor.
@@ -69,7 +69,7 @@ De data asta contează paritatea lui `n`, deoarece nu mai pornim de la o poziți
   cout << '\n';
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Să se determine minimul și maximul elementelor din vector, precum și indicii acestor valori.
@@ -88,7 +88,7 @@ Vom folosi două variabile ce vor reține indicii minimului și respectiv maximu
   cout << v[iMax] << ' ' << iMax << '\n';
 ```
 
->>>
+>>> header
   ### Problema 6.
 
   Să se determine suma elementelor vectorului.
@@ -103,7 +103,7 @@ Pur și simplu parcurgem vectorul și adunăm într-o variabilă `sum` fiecare v
   cout << sum << '\n';
 ```
 
->>>
+>>> header
   ### Problema 7.
 
   Să se afișeze elementele vectorului cuprinse între indicii `a` și `b`.
@@ -117,7 +117,7 @@ Modificăm un pic antetul `for`-ului de la afișarea unui vector. Pornim de la `
   cout << '\n';
 ```
 
->>>
+>>> header
   ### Problema 8.
 
   Să se afle câte elemente ale vectorului aparțin intervalului închis determinat de primul și ultimul element.
@@ -133,7 +133,7 @@ Parcurgem vectorul și la fiecare pas testăm dacă elementul curent respectă c
   cout << nr << '\n';
 ```
 
->>>
+>>> header
   ### Problema 9.
 
   Să se inverseze elementele vectorului dat.
@@ -151,7 +151,7 @@ Putem folosi un contor care „merge” până la jumătatea vectorului, dar ar 
 
 ## Probleme de ștergere și de inserare a unor elemente într-un vector
 
->>>
+>>> header
   ### Problema 1.
 
   Să se șteargă elementul din vector de pe poziția `k`.
@@ -165,7 +165,7 @@ Se mută fiecare element de după poziția `k` pe poziția precedentă, după ca
   n--;
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Să se insereze elementul `x` înainte de poziția `k`.
@@ -180,7 +180,7 @@ Se mută elementele de la `n - 1` la `k` cu o poziție la dreapta, iar apoi se p
   n++;
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Să se afișeze toate permutările circulare spre stânga ale vectorului.
@@ -215,7 +215,7 @@ Observăm că numărul de permutări circulare spre stânga ale vectorului este 
 
 ## Probleme de verificare a unor proprietăți într-un vector
 
->>>
+>>> header
   ### Problema 1.
 
   Să se verifice dacă în vector există elemente impare.
@@ -237,7 +237,7 @@ Inițializăm o variabilă de tip `bool` numită `ok` cu `false`. Parcurgem vect
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Să se verifice dacă toate elementele vectorului sunt egale.
@@ -259,7 +259,7 @@ Din nou, folosim o variabilă `ok`, dar de data asta o inițializăm cu `true`. 
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Să se verifice dacă toate elementele vectorului sunt distincte două câte două.
@@ -282,7 +282,7 @@ Pentru fiecare element se testează dacă nu cumva este egal cu unul din dreapta
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Să se verifice dacă vectorul este ordonat crescător.
@@ -304,7 +304,7 @@ Pentru fiecare element, începând cu al doilea, testăm dacă este mai mic dec�
       cout << "NU\n";
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Știind că elementele vectorului sunt distincte două câte două, să se verifice dacă vectorul dat reprezintă o permutare a mulțimii `{1, 2, ..., n}`.
@@ -329,7 +329,7 @@ Se calculează minimul și maximul din vector. Dacă minimul e `1` și maximul e
 
 ## Probleme cu secvențele unui vector
 
->>>
+>>> header
   ### Problema 1.
 
   Știind că elementele vectorului pot fi doar `0` sau `1`, să se determine lungimea maximă a unei secvențe formate doar din `1`. O secvență a vectorului `v` este o succesiune de termeni aflați pe poziții consecutive în `v`.
@@ -352,7 +352,7 @@ Putem rezolva ușor problema calculând suma fiecărei secvențe posibile, îns�
   cout << sol << '\n';
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Numim __platou__ o secvență maximală a lui `v` formată din elemente egale între ele. Să se determine numărul de platouri ale lui `v`. De exemplu, pentru vectorul `(2, 2, 5, 5, 5, 3, 2, 7, 7, 7)`, platourile sunt `(2, 2)`, `(5, 5, 5)`, `(3)`, `(2)`, `(7, 7, 7)`, numărul acestora fiind `5`.
@@ -372,7 +372,7 @@ Procedăm aproape ca la problema precedentă. Ținem în `len` lungimea platoulu
   cout << sol << '\n';
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Să se determine suma maximă a unei secvențe de lungime `k <= n` din vectorul dat.

@@ -123,7 +123,7 @@ Returnează numărul de tic-uri ale ceasului trecute de la începerea execuției
 
 Biblioteca [`cstdlib`](http://www.cplusplus.com/reference/cstdlib/) definește niște funcții „comune”, care pot fi grupate astfel:
 
->>>
+>>> header
   #### Funcții pentru conversia string-urilor în numere
 
   `atoi` (ASCII to `int`), `atof` (ASCII to `double`) etc.
@@ -137,7 +137,7 @@ Biblioteca [`cstdlib`](http://www.cplusplus.com/reference/cstdlib/) definește n
   cout << y << '\n'; // 1.618
 ```
 
->>>
+>>> header
   #### Funcții pentru alocarea dinamică de memorie
 
   `calloc`, `free`, `malloc`, `realloc`
@@ -154,7 +154,7 @@ Din moment ce în C++ există operatorii `new` și `delete`, funcțiile astea nu
   v = (int*) realloc(v, 7 * sizeof(int)); // Se realocă memorie pentru 7 elemente de tip int.
 ```
 
->>>
+>>> header
   #### Funcții pentru comunicarea cu sistemul
 
   `exit(x)` (oprește execuția programului, returnând exit-code-ul `x`), `system(str)` (execută în cmd comanda `str`) etc.
@@ -167,7 +167,7 @@ Până acum, singurul context în care am folost `exit` a fost în cadrul unei f
   exit(0); // Se oprește execuția programului, returnând codul 0 (programul s-a încheiat cu succes).
 ```
 
->>>
+>>> header
   #### Funcții pentru generarea de numere random
 
   `srand`, `rand`
@@ -180,7 +180,7 @@ Funcția `rand` returnează un număr natural pseudo-random. Pentru a limita int
   cout << rand() % 10 << '\n'; // număr random din intervalul [0, 10)
 ```
 
->>>
+>>> header
   #### Funcții pentru căutarea și sortarea vectorilor
 
   `bsearch` (binary search), `qsort` (quicksort)

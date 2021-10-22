@@ -65,7 +65,7 @@ Acum că mi-am epuizat toate ideile de __creative writing__, cred că a venit mo
 
 ![250; Captcha tractor](captcha-tractor.png)
 
->>>
+>>> header
   ## Infinity War
 
   +++ none
@@ -116,7 +116,7 @@ Deci, dacă o grămadă este pară, Alex are strategie sigură de câștig. Altf
   }
 ^^^
 
->>>
+>>> header
   ## Cuinelo
 
   +++ none
@@ -182,7 +182,7 @@ unde $\mathrm{inv}_a[i][j]$ reprezintă numărul de inversiuni care se formează
   }
 ^^^
 
->>>
+>>> header
   ## Alex Combines
 
   +++ none
@@ -276,7 +276,7 @@ Luăm puteri $2^i$ cât mai mari, și încercăm să-l iterăm pe $f$ de $2^i$ o
   }
 ^^^
 
->>>
+>>> header
   ## Clown Fiesta
 
   +++ none
@@ -385,7 +385,7 @@ Cum noi avem de calculat $n$ expresii de felul ăsta, complexitatea poate să pa
   }
 ^^^
 
->>>
+>>> header
   ## Dr. Anei
 
   +++ none
@@ -551,7 +551,7 @@ Complexitate finală: $O((n + q) \log n)$.
   }
 ^^^
 
->>>
+>>> header
   ## Etianap
 
   +++ none

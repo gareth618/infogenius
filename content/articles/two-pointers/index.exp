@@ -7,7 +7,7 @@ DESCRIPTION: Two-Pointers este o tehnică folosită adesea în concursurile de i
 
 Two-Pointers este o tehnică folosită adesea în concursurile de informatică, dar mai cu seamă în problemele de la interviurile de angajare. Ea nu este un algoritm concret -- nici măcar un șablon --, ci mai degrabă o filosofie. Aceasta ne spune că putem optimiza diverse probleme de parcurgere a [vectorilor](vectori-cpp) folosind doi ?[pointeri](indici) $l$ (left) și $r$ (right), pe care la fiecare pas să-i incrementăm sau decrementăm, după caz. În acest articol vom rezolva șapte probleme interesante, care în total explorează trei moduri diferite de a aplica tehnica Two-Pointers.
 
->>>
+>>> header
   ## Problema 1.
 
   Se dă un vector $v$, indexat de la $1$, format din $n$ numere naturale nenule. Să se determine capetele unei subsecvențe a lui $v$ ce are suma elementelor egală cu $k$. Dacă nu există soluție, se va returna perechea $(0, 0)$. De exemplu, pentru $v = \langle 6, 1, 8, 3, 1, 4 \rangle$ și $k = 12$, un răspuns posibil este $(2, 4)$. ([link](https://www.pbinfo.ro/probleme/300/sumainsecv))
@@ -101,7 +101,7 @@ Vă recomand să rezolvați și [extinderea](https://www.pbinfo.ro/probleme/2943
 
 După cum spuneam, soluția asta merge doar pe numere pozitive. O soluție mai generală, și poate chiar mai straight-forward, se bazează pe sume parțiale, și am explicat-o [aici](sume-partiale/#header-4). Dezavantajul este că necesită un [vector de frecvență](vectori-caracteristici-vectori-de-frecventa), care în cazul numerelor negative ar trebui decalat. Nu mai zic că, dacă lucrăm cu numere ceva mai mari, acesta ar trebui transformat într-un [tabel de hashing]()TODO. Pe scurt, soluția cu Two-Pointers este mai simplă și nu necesită memorie auxiliară :wink:
 
->>>
+>>> header
   ## Problema 2.
 
   Pentru un număr natural $p$, cuprins între $1$ și $10^{10\,000}$, să se determine două numere naturale $l$ și $r$ astfel încât $l \cdot (l + 1) \cdots r = p$. Se garantează că există o soluție cu $1 \le l \le r \le 100\,000$. ([link](https://infoarena.ro/problema/produs))
@@ -150,7 +150,7 @@ Dar încă n-am terminat, pentru că am lua __time limit__ cu sursa asta. Trebui
   cout << l << ' ' << r << '\n';
 ```
 
->>>
+>>> header
   ## Problema 3.
 
   Se dă un vector $v$ de $n$ numere naturale. Să se determine câte subsecvențe ale lui $v$ conțin între $x$ și $y$ elemente distincte. ([link](https://infoarena.ro/problema/secv5))
@@ -181,7 +181,7 @@ Pentru a trece de la __exact__ la __cel mult__, nu avem decât ca, pentru fiecar
   cout << count(y) - count(x - 1) << '\n';
 ```
 
->>>
+>>> header
   ## Problema 4.
 
   Se dă un vector $v$, indexat de la $1$, format din $n$ numere întregi, ordonate crescător. Să se determine indicii a două elemente din $v$ care au suma egală cu $k$. Cele două elemente trebuie să fie situate pe poziții diferite. Dacă nu există soluție, se va returna perechea $(0, 0)$. De exemplu, pentru $v = \langle -4, -1, 0, 3, 7, 9 \rangle$ și $k = 2$, un răspuns posibil este $(2, 4)$. ([link](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/))
@@ -208,7 +208,7 @@ Când suma curentă este mai mică decât $k$, îl incrementăm pe $l$, înlocui
   return make_pair(0, 0);
 ```
 
->>>
+>>> header
   ## Problema 5.
 
   Se dă un vector $v$, indexat de la $1$, format din $n$ numere întregi. Să se determine indicii a trei elemente din $v$ care au suma egală cu $0$. Cele trei elemente trebuie să fie situate pe poziții diferite. Dacă nu există soluție, se va returna tripleta $(0, 0, 0)$. ([link](https://leetcode.com/problems/3sum/))
@@ -238,7 +238,7 @@ Până acum, complexitatea este de ordinul $O(n^2)$. Un $n$ de la iterarea lui $
   return make_tuple(0, 0, 0);
 ```
 
->>>
+>>> header
   ## Problema 6.
 
   Se dă un vector $v$ de $n$ numere naturale. Să se ordoneze elementele sale în așa fel încât cele pare să fie situate la început, iar cele impare la sfârșit. Sortarea trebuie să fie efectuată __in-place__, adică nu ne putem ajuta de o structură de date auxiliară. De exemplu, o sortare posibilă pentru vectorul $\langle 3, 2, 1, 4 \rangle$ este $\langle 4, 2, 3, 1 \rangle$. ([link](https://leetcode.com/problems/sort-array-by-parity/))
@@ -261,7 +261,7 @@ Complexitatea este $O(n)$. Iată și codul:
           l++;
 ```
 
->>>
+>>> header
   ## Problema 7.
 
   Se dă un vector $v$ format din $n$ numere din mulțimea $\{0, 1, 2\}$. Să se sorteze vectorul __in-place__. ([link](https://leetcode.com/problems/sort-colors/))

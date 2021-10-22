@@ -5,6 +5,7 @@ import { sanitize, toCamelCase, followsRegex } from '@utils/helpers';
 const BEG_TAGS = {
   root  : ['math', 'block', 'code', 'list', 'table', 'p'],
   quote : ['math', 'block', 'code', 'list', 'table', 'h', 'p'],
+  header: ['math', 'block', 'code', 'list', 'table', 'h', 'p'],
   item  : ['p'],
   center: ['p'],
   right : ['p']
@@ -13,6 +14,7 @@ const BEG_TAGS = {
 const MID_TAGS = {
   root  : ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
   quote : ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
+  header: ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
   item  : ['math', 'media', 'block', 'code', 'list', 'table', 'hr', 'h', 'p'],
   center: ['p'],
   right : ['p']
@@ -21,6 +23,7 @@ const MID_TAGS = {
 const END_TAGS = {
   root  : ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
   quote : ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
+  header: ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
   item  : ['math', 'media', 'block', 'code', 'list', 'table', 'p'],
   center: ['p'],
   right : ['p']
@@ -195,6 +198,7 @@ export default function parseBlocks(content, media, tag = 'root') {
     if (content[0].slice(0, 3) !== '>>>') return;
     const type
       = content[0].slice(3) === '' ? 'quote'
+      : content[0].slice(3) === ' header' ? 'header'
       : content[0].slice(3) === ' center' ? 'center'
       : content[0].slice(3) === ' right' ? 'right'
       : undefined;

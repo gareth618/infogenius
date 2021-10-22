@@ -140,7 +140,7 @@ După cum am zis, există și operatori compuși de atribuire pe biți (`|=`, `&
 
 ## Aplicații cu operațiile pe biți în C++
 
->>>
+>>> header
   ### Problema 1.
 
   Să se calculeze $2^k$.
@@ -153,7 +153,7 @@ Observăm că $2^k$ are toți biții $0$, mai puțin pe cel de pe poziția $k$ (
   1 << 3 = 00001000 = 2^3
 ```
 
->>>
+>>> header
   ### Problema 2.
 
   Să se determine câtul și restul împărțirii lui $n$ la $2^k$.
@@ -183,7 +183,7 @@ Deci, soluția este:
   n & ((1 << k) - 1) // restul
 ```
 
->>>
+>>> header
   ### Problema 3.
 
   Să se determine valoarea bitului de pe poziția $k$ din numărul $n$.
@@ -204,7 +204,7 @@ Rezultatul va fi $0$ dacă bitul este $0$, sau o valoare nenulă (mai exact $2^k
   bool bit = n & (1 << k);
 ```
 
->>>
+>>> header
   ### Problema 4.
 
   Să se verifice dacă $n$ este o putere a lui $2$.
@@ -225,7 +225,7 @@ Avem însă un caz special, când $n$ este $0$. Prin urmare, mai întâi ne vom 
   bool isPowOf2 = n && !(n & (n - 1));
 ```
 
->>>
+>>> header
   ### Problema 5.
 
   Să se afișeze descompunerea în baza $2$ a numărului pozitiv $n$.
@@ -238,7 +238,7 @@ Pur și simplu afișăm fiecare bit al lui $n$ de la stânga la dreapta. Putem a
       cout << (bool) (n & (1 << i));
 ```
 
->>>
+>>> header
   ### Problema 6.
 
   Să se marcheze cu $1$ bitul de pe poziția $k$ din numărul $n$.
@@ -259,7 +259,7 @@ Indiferent de valoarea inițială a bitului de pe poziția $k$ din $n$, valoarea
   n |= (1 << k);
 ```
 
->>>
+>>> header
   ### Problema 7.
 
   Să se marcheze cu $0$ bitul de pe poziția $k$ din numărul $n$.
@@ -280,7 +280,7 @@ Prin urmare, soluția este:
   n &= ~(1 << k)
 ```
 
->>>
+>>> header
   ### Problema 8.
 
   Să se codifice și apoi să se decodifice numărul $n$ folosind operația XOR.
@@ -288,7 +288,7 @@ Prin urmare, soluția este:
 
 Ne vom folosi de proprietatea `a ^ b ^ b == a`. Aceasta este adevărată pentru că `b ^ b == 0`, `a ^ 0 == a`, iar XOR-ul este asociativ. Vom considera `p` parola folosită în codificare. Atunci, `n ^ p` va fi $n$-ul codificat, iar `n ^ p ^ p` $n$-ul decodificat.
 
->>>
+>>> header
   ### Problema 9.
 
   Se dă un caracter `x` ce reprezintă o literă. Dacă `x` este o literă mare, să se convertească într-o literă mică, iar dacă `x` este o literă mică, să se convertească într-o literă mare.
@@ -325,7 +325,7 @@ Deci, răspunsul este:
   x ^= 'a' ^ 'A';
 ```
 
->>>
+>>> header
   ### Problema 10.
 
   Să se determine numărul biților cu valoarea $1$ din $n$.
@@ -353,7 +353,7 @@ De aici ne vine ideea să eliminăm la fiecare pas cel mai din dreapta bit de $1
   }
 ```
 
->>>
+>>> header
   ### Problema 11.
 
   Să se determine cel mai puțin semnificativ bit de $1$ (least significant bit, LSB) din $n$, pentru $n$ nenul. Adică, dacă acesta se află pe poziția $k$, să se determine $2^k$.
