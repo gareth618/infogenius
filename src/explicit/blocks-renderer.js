@@ -32,7 +32,7 @@ export default function renderBlocks(ast, anchors) {
   if (ast.tag === 'adsense') {
     return (
       <>
-        <ins
+        {/* <ins
           className="adsbygoogle"
           style={{ display: 'block', textAlign: 'center' }}
           data-ad-layout="in-article"
@@ -42,7 +42,7 @@ export default function renderBlocks(ast, anchors) {
         />
         <script dangerouslySetInnerHTML={{
           __html: '(adsbygoogle = window.adsbygoogle || []).push({ });'
-        }} />
+        }} /> */}
       </>
     );
   }
