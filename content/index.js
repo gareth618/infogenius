@@ -23,6 +23,10 @@ import BubbleSort from './articles/bubble-sort/bubble-sort';
 import InsertionSort from './articles/sortarea-prin-insertie/insertion-sort';
 import SelectionSort from './articles/sortarea-prin-selectie/selection-sort';
 
+import TwoPointers1 from './articles/two-pointers/two-pointers-1';
+import TwoPointers2 from './articles/two-pointers/two-pointers-2';
+import TwoPointers3 from './articles/two-pointers/two-pointers-3';
+
 import EuclideanAlgorithm from './articles/algoritmul-lui-euclid/euclidean-algorithm';
 import Trie from './articles/trie-xor-max/trie';
 import FunctionCall from './articles/functii-cpp/function-call';
@@ -57,6 +61,10 @@ export {
   BubbleSort,
   InsertionSort,
   SelectionSort,
+
+  TwoPointers1,
+  TwoPointers2,
+  TwoPointers3,
 
   EuclideanAlgorithm,
   Trie,

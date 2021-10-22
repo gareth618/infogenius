@@ -1,0 +1,285 @@
+TITLE: Tehnica Two-Pointers în C++
+AUTHOR: Iulian Oleniuc
+DATE: 22/10/2021
+CATEGORIES: Algoritmică și structuri de date
+TAGS: two-pointers, vectori, numere mari, factorizare, logaritmare, hashing, sortare
+DESCRIPTION: Two-Pointers este o tehnică folosită adesea în concursurile de informatică, dar mai cu seamă în problemele de la interviurile de angajare.
+
+Two-Pointers este o tehnică folosită adesea în concursurile de informatică, dar mai cu seamă în problemele de la interviurile de angajare. Ea nu este un algoritm concret -- nici măcar un șablon --, ci mai degrabă o filosofie. Aceasta ne spune că putem optimiza diverse probleme de parcurgere a [vectorilor](vectori-cpp) folosind doi ?[pointeri](indici) $l$ (left) și $r$ (right), pe care la fiecare pas să-i incrementăm sau decrementăm, după caz. În acest articol vom rezolva șapte probleme interesante, care în total explorează trei moduri diferite de a aplica tehnica Two-Pointers.
+
+>>>
+  ## Problema 1.
+
+  Se dă un vector $v$, indexat de la $1$, format din $n$ numere naturale nenule. Să se determine capetele unei subsecvențe a lui $v$ ce are suma elementelor egală cu $k$. Dacă nu există soluție, se va returna perechea $(0, 0)$. De exemplu, pentru $v = \langle 6, 1, 8, 3, 1, 4 \rangle$ și $k = 12$, un răspuns posibil este $(2, 4)$. ([link](https://www.pbinfo.ro/probleme/300/sumainsecv))
+<<<
+
+Soluția naivă presupune să explorăm în mod explicit fiecare subsecvență posibilă. Această idee poate fi implementată în două moduri, ambele conducând însă la algoritmi ineficienți. Prima variantă este să ne fixăm cu două `for`-uri indicii $l$ și $r$ ai subsecvenței curente, și să mai luăm un `for` pentru a calcula suma elementelor acesteia. Complexitate $O(n^3)$.
+
+``` cpp
+  for (int l = 1; l <= n; l++)
+      for (int r = l; r <= n; r++) {
+          int s = 0;
+          for (int i = l; i <= r; i++)
+              s += v[i];
+          if (s == k)
+              return make_pair(l, r);
+      }
+  return make_pair(0, 0);
+```
+
+Cealaltă variantă se obține observând că al treilea `for` din algoritmul de mai sus este redundant. Nu are sens să recalculăm suma pentru fiecare pereche $(l, r)$: Pentru un $l$ fixat, știm că suma elementelor până la $r$ este egală cu suma elementelor până la $r - 1$ plus $v[r]$. Așadar, putem actualiza suma curentă $s$ pe parcursul celui de-al doilea `for`. Noua complexitate este $O(n^2)$.
+
+``` cpp
+  for (int l = 1; l <= n; l++) {
+      int s = 0;
+      for (int r = l; r <= n; r++) {
+          s += v[r];
+          if (s == k)
+              return make_pair(l, r);
+      }
+  }
+  return make_pair(0, 0);
+```
+
+### Soluția în $O(n)$
+
+Totuși, încă se efectuează o grămadă de iterații inutile. Observăm că, dacă subsecvența curentă $[l, r]$ are suma elementelor mai mare decât $k$, atunci nu mai are rost să-l incrementăm pe $r$. Este clar că toate subsecvențele $[l, r']$, cu $r' \gt r$, vor avea și ele suma mai mare decât $k$.
+
+Asta pentru că elementele vectorului sunt pozitive -- altfel, ideea n-ar mai fi funcționat. Să luăm drept exemplu $v = \langle 3, 5, -4, 2 \rangle$ și $k = 6$. De acum încolo, vom nota cu $s(l, r)$ suma elementelor din subsecvența $[l, r]$. Avem $s(1, 2) = 8 \gt 6$ și $s(1, 4) = 6$. Dacă pentru $l = 1$ ne-am opri cu $r$ în $2$, am rata soluția $(1, 4)$, care este și unică.
+
+Deci, când suma curentă îl depășește pe $k$, ne oprim din a-l incrementa pe $r$ și trecem la următorul $l$. Iar aici intervine observația cheie. După ce îl incrementăm pe $l$, are sens să-l resetăm complet pe $r$, sau îl putem lăsa așa și eventual să-i adăugăm un $\pm 1$?
+
+$$\cdots \text{ } v[l - 1] \text{ } \overbrace{\underbrace{v[l] \text{ } v[l + 1] \text{ } \cdots \text{ } v[r - 1]}_{\lt k} \text{ } v[r]}^{\gt k} \text{ } v[r + 1] \text{ } \cdots$$
+
+Răspunsul este că da, îl putem lăsa pe $r$ exact așa cum este. Se vede clar din schema de mai sus că, pentru capătul din stânga fixat în $l + 1$, cel din dreapta nu are rost să fie mai mic decât $r$. Am obține o sumă mai mică decât $s(l, r - 1)$, care deja este mai mică decât $k$.
+
+### Two-Pointers in effect
+
+Și iată că am ajuns la formularea clasică a șmenului:
+
+>>>
+  Inițializăm suma curentă $s$ cu $0$. Pornim cu $l = 1$ și $r = 0$, marcând că începem cu subsecvența vidă ce începe în $1$. La fiecare pas, comparăm $s$ cu $k$. Dacă $s = k$, returnăm perechea $(l, r)$. Altfel, dacă $s \lt k$, îl incrementăm pe $r$, iar dacă $s \gt k$, îl incrementăm pe $l$.
+<<<
+
+Să analizăm puțin și complexitatea algoritmului. Cel mai nefavorabil caz este cel în care nu avem soluție, pentru că parcurgem tot vectorul. Mai exact, ne oprim abia după ce $r \gt n$. La fiecare pas, incrementăm exact una dintre variabilele $l$ și $r$. Prin urmare, numărul maxim de iterații efectuate este $2n$: Pointer-ul $r$ ia pe rând toate valorile de la $1$ la $n$, iar $l$ pornește din $1$ și crește din $1$ în $1$ până ne oprim, atingând în cel mai rău caz valoarea $n$. Așadar, algoritmul este liniar, având complexitatea $O(n)$.
+
+``` cpp
+  int l = 1, r = 0, s = 0;
+  while (s != k) {
+      if (s < k) {
+>         if (r == n)
+>             return make_pair(0, 0);
+          s += v[++r];
+      }
+      if (s > k)
+          s -= v[l++];
+  }
+  return make_pair(l, r);
+```
+
+Iată și o implementare ușor mai clară, care scapă de `if`-ul ăla enervant. Îl iterăm frumos pe $r$ de la $1$ la $n$, iar la fiecare pas îl ajustăm pe $l$, incrementându-l cât este nevoie.
+
+``` cpp
+  int l = 1, s = 0;
+  for (int r = 1; r <= n; r++) {
+      s += v[r];
+      while (s > k)
+          s -= v[l++];
+      if (s == k)
+          return make_pair(l, r);
+  }
+  return make_pair(0, 0);
+```
+
+Nu în ultimul rând, am pregătit mai jos o animație care ar trebui să clarifice totul :yey:
+
+![](two-pointers-1.js)
+
+Vă recomand să rezolvați și [extinderea](https://www.pbinfo.ro/probleme/2943/maru) la 2D a problemei. Ideea este să comprimăm coloanele matricei, cum am explicat și [aici](subsecventa-de-suma-maxima/#header-7).
+
+### Dacă aveam și numere negative
+
+După cum spuneam, soluția asta merge doar pe numere pozitive. O soluție mai generală, și poate chiar mai straight-forward, se bazează pe sume parțiale, și am explicat-o [aici](sume-partiale/#header-4). Dezavantajul este că necesită un [vector de frecvență](vectori-caracteristici-vectori-de-frecventa), care în cazul numerelor negative ar trebui decalat. Nu mai zic că, dacă lucrăm cu numere ceva mai mari, acesta ar trebui transformat într-un [tabel de hashing]()TODO. Pe scurt, soluția cu Two-Pointers este mai simplă și nu necesită memorie auxiliară :wink:
+
+>>>
+  ## Problema 2.
+
+  Pentru un număr natural $p$, cuprins între $1$ și $10^{10\,000}$, să se determine două numere naturale $l$ și $r$ astfel încât $l \cdot (l + 1) \cdots r = p$. Se garantează că există o soluție cu $1 \le l \le r \le 100\,000$. ([link](https://infoarena.ro/problema/produs))
+<<<
+
+În principiu, putem folosi direct ideea de la problema precedentă, deoarece șirul produselor parțiale ale secvenței $\langle 1, 2, 3, \ldots \rangle$ este și el (strict) monoton. Problema este că nouă deja ni se dau niște numere foarte mari. E prea greu să lucrăm și cu produsele lor. Aici intervine o tehnică foarte drăguță, numită __logaritmare__, care se bazează pe faptul că
+
+$$\log(a \cdot b) = \log(a) + \log(b)$$,
+
+indiferent de baza aleasă pentru logaritm. Prin urmare, în loc să calculăm produse de numere mari, putem calcula sume din logaritmii lor. Logaritmii naturali de exemplu. Aceștia încap lejer pe `double`.
+
+Tot ce mai rămâne de făcut este să logaritmăm numărul dat, pentru că asta e valoarea la care trebuie să ajungă suma noastră. Știm din enunț că $p$ se poate scrie drept produsul unor numere mai mici decât $10^5$, de unde e clar că descompunerea sa în factori primi nu poate conține niciun factor mai mare de $10^5$. Așadar, putem aplica algoritmul clasic de [factorizare](descompunere-in-factori-primi), adunând pe parcurs logaritmii necesari. Deci, în ceea ce privește operațiile cu [numere mari]()TODO, avem nevoie doar de împărțirea la un număr mic.
+
+Dar încă n-am terminat, pentru că am lua __time limit__ cu sursa asta. Trebuie să mai optimizăm un lucru, și anume numărul de împărțiri efectuate. În loc să-l împărțim pe $p$ la un număr mic $x$ de foarte multe ori, îl putem împărți o dată și bine la o putere mare a acestuia. Mai exact, la $x^{[\log_x 2 \cdot 10^9]}$, unde $2 \cdot 10^9$ este (aproximativ) valoarea maximă a tipului `int`. După aceea, vom face și împărțiri direct la $x$, cât mai este nevoie. [Aici](https://infoarena.ro/job_detail/2504783?action=view-source) aveți sursa completă, iar mai jos doar partea relevantă.
+
+``` cpp
+  double target = 0;
+  for (int prime : sieve) {
+      if (p.isOne())
+          break;
+      if (p % prime == 0) {
+          int pwr = 1, exp = 0, add = 0;
+          while (pwr <= 2e9 / prime) {
+              add++;
+              pwr *= prime;
+          }
+          while (p % pwr == 0) {
+              exp += add;
+              p /= pwr;
+          }
+          while (p % prime == 0) {
+              exp++;
+              p /= prime;
+          }
+          target += log(prime) * exp;
+      }
+  }
+
+  double sum = 0;
+  int l = 1, r = 1;
+  while (abs(sum - target) > 1e-6)
+      if (sum > target)
+          sum -= log(l++);
+      else
+          sum += log(++r);
+  cout << l << ' ' << r << '\n';
+```
+
+>>>
+  ## Problema 3.
+
+  Se dă un vector $v$ de $n$ numere naturale. Să se determine câte subsecvențe ale lui $v$ conțin între $x$ și $y$ elemente distincte. ([link](https://infoarena.ro/problema/secv5))
+<<<
+
+În primul rând, trebuie să scăpăm de $x$ și $y$. Nu putem folosi Two-Pointers dacă trebuie să ținem cont simultan de două restricții similare -- una de maxim și una de minim. Rezolvarea acestui inconvenient este foarte simplă: Reducem problema la a calcula $f(k)$: numărul de subsecvențe care conțin cel mult $k$ elemente distincte. Astfel, răspunsul va fi $f(y) - f(x - 1)$.
+
+Să ne imaginăm că în loc de __cel mult__ avem __exact__ $k$ elemente distincte. Putem aplica Two-Pointers ca până acum. Inițializăm secvența curentă cu $[1, 0]$ și repetăm următorul procedeu până când terminăm de explorat fiecare $r$ posibil: Dacă avem mai puțin de $k$ elemente distincte, îl incrementăm pe $r$, iar dacă avem mai mult de $k$, îl incrementăm pe $l$. Frecvența valorilor luate în considerare poate fi ținută într-un `unordered_map`, iar numărul acestora într-o variabilă $\mathit{cnt}$.
+
+Pentru a trece de la __exact__ la __cel mult__, nu avem decât ca, pentru fiecare $r$ de la $1$ la $n$, să adăugăm valoarea $r - l + 1$ la răspuns: Știm că $l$ este cel mai mic $l'$ astfel încât $s(l', r) \le k$, de unde $l'$ poate lua $r - l + 1$ valori.
+
+``` cpp
+  auto count = [&](int max) {
+      int64_t ans = 0;
+      unordered_map<int, int> frq;
+      int l = 1, cnt = 0;
+      for (int r = 1; r <= n; r++) {
+          if (++frq[v[r]] == 1)
+              while (++cnt > max) {
+                  if (--frq[v[l]] == 0)
+                      cnt--;
+                  l++;
+              }
+          ans += r - l + 1;
+      }
+      return ans;
+  };
+  cout << count(y) - count(x - 1) << '\n';
+```
+
+>>>
+  ## Problema 4.
+
+  Se dă un vector $v$, indexat de la $1$, format din $n$ numere întregi, ordonate crescător. Să se determine indicii a două elemente din $v$ care au suma egală cu $k$. Cele două elemente trebuie să fie situate pe poziții diferite. Dacă nu există soluție, se va returna perechea $(0, 0)$. De exemplu, pentru $v = \langle -4, -1, 0, 3, 7, 9 \rangle$ și $k = 2$, un răspuns posibil este $(2, 4)$. ([link](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/))
+<<<
+
+De data aceasta, cei doi pointeri nu mai pot merge în aceeași direcție: Fie că-l incrementăm pe $l$ sau pe $r$, suma dintre $v[l]$ și $v[r]$ tot în sus va merge, pentru că vectorul este sortat. Însă, noi trebuie să avem posibilitatea de a o și micșora. De aceea, pe $l$ îl vom itera de la stânga la dreapta, iar pe $r$ de la dreapta la stânga.
+
+Când suma curentă este mai mică decât $k$, îl incrementăm pe $l$, înlocuindu-l astfel cu un număr mai mare (sau egal). Similar, când suma depășește target-ul, îl decrementăm pe $r$, înlocuindu-l cu un număr potențial mai mic. Ne oprim când $l \ge r$.
+
+![](two-pointers-2.js)
+
+În mod evident, complexitatea algoritmului este $O(n)$. Repet, ideea funcționează doar pentru că vectorul este sortat. Demonstrația corectitudinii se bazează pe un invariant foarte asemănător cu cel descris la prima problemă, așa că o las ca temă pentru cititor.
+
+``` cpp
+  int l = 1, r = n;
+  while (l < r) {
+      if (v[l] + v[r] == k)
+          return make_pair(l, r);
+      if (v[l] + v[r] < k)
+          l++;
+      else
+          r--;
+  }
+  return make_pair(0, 0);
+```
+
+>>>
+  ## Problema 5.
+
+  Se dă un vector $v$, indexat de la $1$, format din $n$ numere întregi. Să se determine indicii a trei elemente din $v$ care au suma egală cu $0$. Cele trei elemente trebuie să fie situate pe poziții diferite. Dacă nu există soluție, se va returna tripleta $(0, 0, 0)$. ([link](https://leetcode.com/problems/3sum/))
+<<<
+
+Cele trei numere $a$, $b$ și $c$ trebuie să verifice așadar relația $a + b + c = 0$. Altfel spus, $a + b = -c$. Păi, pentru un $c$ fixat, răspunsul se obține rezolvând problema precedentă pe vectorul obținut prin ștergerea lui $c$, unde $k = -c$. Partea cu ștergerea lui $c$ din vector pare complicată, pentru că am obține doi noi subvectori, unul la stânga la $c$ și unul la dreapta sa. Aceștia ar trebui tratați ca și cum ar fi unul singur atunci când aplicăm Two-Pointers pe ei. Însă, impunând ca $c$ să fie cel mai din dreapta element dintre cele trei, va fi de ajuns să-i căutăm pe $a$ și $b$ doar în stânga sa.
+
+Până acum, complexitatea este de ordinul $O(n^2)$. Un $n$ de la iterarea lui $c$ și altul de la căutarea liniară a elementelor $a$ și $b$ în stânga lui. Mai trebuie doar să sortăm vectorul inițial, pentru că altfel n-am putea aplica Two-Pointers pentru $a$ și $b$. Asta înseamnă încă un $O(n \log n)$, dar asta nu influențează complexitatea, deoarece $n^2$ crește mai repede. Atunci când sortăm vectorul, trebuie avut grijă să nu pierdem indicii inițiali ai elementelor în $v$.
+
+``` cpp
+  vector<pair<int, int>> w(n + 1);
+  for (int i = 1; i <= n; i++)
+      w[i] = make_pair(v[i], i);
+  sort(w.begin() + 1, w.end());
+
+  for (int i = 3; i <= n; i++) {
+      int l = 1, r = i - 1;
+      while (l < r) {
+          if (w[l].first + w[r].first == -w[i].first)
+              return make_tuple(w[l].second, w[r].second, w[i].second);
+          if (w[l].first + w[r].first < -w[i].first)
+              l++;
+          else
+              r--;
+      }
+  }
+  return make_tuple(0, 0, 0);
+```
+
+>>>
+  ## Problema 6.
+
+  Se dă un vector $v$ de $n$ numere naturale. Să se ordoneze elementele sale în așa fel încât cele pare să fie situate la început, iar cele impare la sfârșit. Sortarea trebuie să fie efectuată __in-place__, adică nu ne putem ajuta de o structură de date auxiliară. De exemplu, o sortare posibilă pentru vectorul $\langle 3, 2, 1, 4 \rangle$ este $\langle 4, 2, 3, 1 \rangle$. ([link](https://leetcode.com/problems/sort-array-by-parity/))
+<<<
+
+În primul rând, vom trata toate numerele pare ca pe $0$ și toate numerele impare ca pe $1$. Putem sorta in-place vectorul dat iterând doi pointeri $l$ (de la stânga) și $r$ (de la dreapta), menținând la fiecare pas următorul invariant: Subsecvența $[1, l]$ conține doar $0$-uri, iar subsecvența $[r, n]$ conține doar $1$-uri. Când cu unul dintre pointeri găsim un element care nu e la locul lui ($1$ în stânga sau $0$ în dreapta), îl ținem pe loc, până când va găsi și celălalt pointer un asemenea element. În acel moment, interschimbăm elementele $v[l]$ și $v[r]$, după care avansăm cu ambii pointeri.
+
+![](two-pointers-3.js)
+
+Complexitatea este $O(n)$. Iată și codul:
+
+``` cpp
+  int l = 1, r = n;
+  while (l < r)
+      if (v[l] % 2 == 1 && v[r] % 2 == 0)
+          swap(v[l], v[r]);
+      else if (v[l] % 2 == 1)
+          r--;
+      else
+          l++;
+```
+
+>>>
+  ## Problema 7.
+
+  Se dă un vector $v$ format din $n$ numere din mulțimea $\{0, 1, 2\}$. Să se sorteze vectorul __in-place__. ([link](https://leetcode.com/problems/sort-colors/))
+<<<
+
+Aici nu ne mai putem descurca cu Two-Pointers. Avem nevoie de Three-Pointers :tongue: Aceștia vor fi $l$, $m$ și $r$. Subsecvența $[1, l - 1]$ conține numai $0$, $[l, m - 1]$ numai $1$, $[r + 1, n]$ numai $2$, iar $[m, r]$ conține elementele ce n-au fost încă explorate.
+
+La fiecare pas, ne uităm la elementul $v[m]$. Dacă este egal cu $0$, trebuie mutat în prima secvență, așa că vom face swap între $v[l]$ și $v[m]$, după care incrementăm ambii pointeri. Dacă $v[m] = 1$, este foarte bine, îl lăsăm pe $1$ acolo și incrementăm $m$-ul. Dacă $v[m] = 2$, trebuie mutat către finalul vectorului. Facem swap între $v[m]$ și $v[r]$, după care îl decrementăm pe $r$. Din nou, complexitatea este liniară.
+
+``` cpp
+  int l = 1, m = 1, r = n;
+  while (m <= r)
+      if (v[m] == 0)
+          swap(v[l++], v[m++]);
+      else if (v[m] == 1)
+          m++;
+      else
+          swap(v[m], v[r--]);
+```
+
+**Sfârșit!** Sper că acum este clar cum stă treaba cu tehnica Two-Pointers: care este intuiția din spate și de ce (sau când) este corectă :cool: Ca întotdeauna, dacă aveți vreo întrebare, nu ezitați să o lăsați mai jos într-un comentariu!
