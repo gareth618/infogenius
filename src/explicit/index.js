@@ -5,25 +5,25 @@ import renderBlocks from './blocks-renderer';
 import { trimPost } from '@utils/helpers';
 
 function placeAds(ast) {
-  // const dfs = ast => {
-  //   let length = 0;
-  //   for (const son of ast.sons) {
-  //     if (['bold', 'ital', 'strk', 'high', 'link'].includes(son.tag)) length += dfs(son);
-  //     else if (['text', 'code', 'math', 'kbrd'].includes(son.tag)) length += son.content.length;
-  //   }
-  //   return length;
-  // };
-  // const newSons = [];
-  // for (let i = 0; i < ast.sons.length; i++) {
-  //   if (i > 0
-  //     && ast.sons[i - 1].tag === 'p' && dfs(ast.sons[i - 1]) >= 250
-  //     && ast.sons[i - 0].tag === 'p' && dfs(ast.sons[i - 0]) >= 250
-  //     && Math.random() < .3) {
-  //       newSons.push({ tag: 'adsense' });
-  //     }
-  //   newSons.push(ast.sons[i]);
-  // }
-  // ast.sons = newSons;
+  const dfs = ast => {
+    let length = 0;
+    for (const son of ast.sons) {
+      if (['bold', 'ital', 'strk', 'high', 'link'].includes(son.tag)) length += dfs(son);
+      else if (['text', 'code', 'math', 'kbrd'].includes(son.tag)) length += son.content.length;
+    }
+    return length;
+  };
+  const newSons = [];
+  for (let i = 0; i < ast.sons.length; i++) {
+    if (i > 0
+      && ast.sons[i - 1].tag === 'p' && dfs(ast.sons[i - 1]) >= 250
+      && ast.sons[i - 0].tag === 'p' && dfs(ast.sons[i - 0]) >= 250
+      && Math.random() < .3) {
+        newSons.push({ tag: 'adsense' });
+      }
+    newSons.push(ast.sons[i]);
+  }
+  ast.sons = newSons;
   return ast;
 }
 
