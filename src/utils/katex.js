@@ -5,7 +5,7 @@ export const MACROS = {
   '\\cmmmc': '\\operatorname{cmmmc}',
   '\\lcm': '\\operatorname{lcm}',
   '\\modd': '\\operatorname{mod}',
-  '\\moddd': '\\,\\,(\\operatorname{mod}#1)'
+  '\\pmodd': '\\,\\,(\\operatorname{mod}#1)'
 };
 
 export function testKatex(math) {

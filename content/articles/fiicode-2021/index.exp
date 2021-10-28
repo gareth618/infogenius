@@ -299,17 +299,17 @@ Prin urmare, vă dau direct enunțul formal: Avem un vector $a$ format din $n$ n
 
 Mai întâi, voi arăta cum putem calcula $a^b \modd m$, unde $b$ este un număr __foarte__ mare. Sper că este clar că nu putem pur și simplu să-l înlocuim pe $b$ cu $b \modd m$. Nu așa funcționează matematica. În schimb, ne putem folosi de faptul că $m$ este coprim cu toate elementele din $a$, pentru că este prim și diferit de ele. Această condiție ne permite să aplicăm [Teorema lui Euler]()TODO, care ne spune că
 
-$$a^{\varphi(m)} \equiv 1 \moddd{m}$$,
+$$a^{\varphi(m)} \equiv 1 \pmodd{m}$$,
 
 unde $a$ și $m$ sunt coprime.
 
 Astfel, observăm că putem reduce drastic valoarea exponentului $b$:
 
-$$a^b \equiv a^{b \modd \varphi(m)} \moddd{m}$$
+$$a^b \equiv a^{b \modd \varphi(m)} \pmodd{m}$$
 
 Similar, pentru un power-tower de lungime $3$, obținem:
 
-$$a^{b^c} \equiv a^{b^{c \modd \varphi(\varphi(m))} \modd \varphi(m)} \moddd{m}$$
+$$a^{b^c} \equiv a^{b^{c \modd \varphi(\varphi(m))} \modd \varphi(m)} \pmodd{m}$$
 
 Și tot așa.
 
