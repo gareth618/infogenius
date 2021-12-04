@@ -35,6 +35,7 @@ import Lee from './articles/algoritmul-lui-lee/lee';
 import BinarySearch from './articles/cautare-binara/binary-search';
 import Tsp from './articles/problema-comis-voiajorului-backtracking/tsp';
 import NewAnimation from './articles/infogenius-v2/new-animation';
+import Merge from './articles/interclasare/merge.js';
 
 export {
   PiBuffonsNeedle,
@@ -73,5 +74,6 @@ export {
   Lee,
   BinarySearch,
   Tsp,
-  NewAnimation
+  NewAnimation,
+  Merge
 };
