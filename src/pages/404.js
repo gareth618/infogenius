@@ -29,7 +29,7 @@ export default function NotFoundPage({ data }) {
 };
 
 export const pageQuery = graphql`
-  query GetSiteTitle {
+  query GetSiteTitle404 {
     site {
       siteMetadata {
         title

@@ -14,10 +14,14 @@ export default getFirestore();
 
 // rules_version = '2';
 // service cloud.firestore {
+//   function isAdmin(uid) {
+//     return uid == "[removed]";
+//   }
 //   match /databases/{database}/documents/comments {
 //     match /{document=**} {
 //       allow read;
 //       allow create: if request.auth != null;
+//       allow update: if isAdmin(request.auth.uid);
 //     }
 //   }
 //   match /databases/{database}/documents/users {

@@ -17,7 +17,7 @@ Se dă un vector de lungime $2 \cdot n$, ce conține codurile unor vârcolaci. D
 
 ## Soluție
 
-Enunțul e destul de ciudat, probabil pentru a ne îndepărta de la ideea că nu trebuie decât să aflăm elementul majoritar al fiecărui vector. Cuvântul __Mozart__ (care știu că e scris greșit) ar trebui totuși să ne ajute; soluția problemei e la fel de clasică precum muzica lui Mozzart :yey:
+Enunțul e destul de ciudat, probabil pentru a ne îndepărta de la ideea că nu trebuie decât să aflăm elementul majoritar al fiecărui vector. Cuvântul __Mozart__ ar trebui totuși să ne ajute; soluția problemei e la fel de clasică precum muzica lui Mozart :yey:
 
 Folosim algoritmul optim pentru găsirea elementului majoritar, de complexitate $O(n)$, pe care l-am prezentat și în articolul despre problema [livada](problema-livada-oji-2010-clasa-9). Totuși, ceva nu e bine. Algoritmul presupune parcurgerea vectorului de două ori, iar pentru asta ar trebui să reținem cumva vectorul, deși n-avem destulă memorie. Șmecheria este să efectuăm prima parte a algoritmului, reținând doar candidatul corespunzător fiecărui test (într-un vector `cand`), iar apoi să redeschidem fișierul pentru a doua parcurgere a vectorilor, în care verificăm pentru fiecare dacă are într-adevăr un element majoritar, folosind valorile găsite mai înainte:
 
