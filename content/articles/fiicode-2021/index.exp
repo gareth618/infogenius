@@ -418,7 +418,6 @@ Desigur, nu putem sta să reînrădăcinăm arborele la fiecare query, așa că 
               pos[node].push_back(euler.size());
               euler.push_back(node);
           }
-      }
   }
 ```
 

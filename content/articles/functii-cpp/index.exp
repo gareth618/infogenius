@@ -76,7 +76,7 @@ Această implementare are o groază de dezavantaje:
 +++
   E mult mai lungă decât e nevoie.
 ~~~
-  E predispusă la erori. Faptul că secvența cu Algoritmul lui Euclid este copiată de atâtea ori, crește probabilitatea să înlocuiești greșit numele unei variabile. Și chiar dacă nu o copiezi efectiv, cu copy-paste, ci regândești algoritmul de fiecare dată, la un moment dat te plictisești din cauza rutinei și începi să scrii `/` în loc de `%`, scrii variabila greșită în condiția din `while` și așa mai departe.
+  E predispusă la erori. Faptul că secvența cu Algoritmul lui Euclid este copiată de atâtea ori crește probabilitatea să înlocuiești greșit numele unei variabile. Și chiar dacă nu o copiezi efectiv, cu copy-paste, ci regândești algoritmul de fiecare dată, la un moment dat te plictisești din cauza rutinei și începi să scrii `/` în loc de `%`, scrii variabila greșită în condiția din `while` și așa mai departe.
 ~~~
   Oricum ai efectua copierea, vei irosi mult prea mult timp scriind cod în felul ăsta. Iar Algoritmul lui Euclid încă e simplu, dar puteam avea ceva mult mai complex în locul lui.
 ~~~
