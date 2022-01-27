@@ -70,6 +70,7 @@ export const plugins = [
         {
           userAgent: '*',
           disallow: [
+            '/admin/',
             '/termeni-conditii/',
             '/politica-cookies/',
             '/contact/',

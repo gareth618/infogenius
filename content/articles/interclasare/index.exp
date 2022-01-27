@@ -148,7 +148,7 @@ O aplicație importantă a interclasării este efectuarea operațiilor de reuniu
 
 Modificările pe care trebuie să i le aducem algoritmului de interclasare pentru a obține reuniunea și respectiv intersecția a două mulțimi sunt: Pentru reuniune, când $a[i] = b[j]$, vom avansa în ambii vectori, ca să nu introducem de două ori aceeași valoare în $c$.
 
-``` cpp -> Reuniune
+``` cpp
   int i = 0, j = 0;
   while (i < m || j < n)
       if (a[i] < b[j])
@@ -163,7 +163,7 @@ Modificările pe care trebuie să i le aducem algoritmului de interclasare pentr
 
 Pentru intersecție, introducem elemente în $c$ __doar__ atunci când $a[i] = b[j]$, pentru că celelalte (până la pasul respectiv) nu se regăsesc în ambii vectori.
 
-``` cpp -> Intersecție
+``` cpp
   int i = 0, j = 0;
   while (i < m || j < n)
       if (a[i] < b[j])

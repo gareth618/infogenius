@@ -77,7 +77,7 @@ export default function CodeBlock({ info }) {
   return (
     <div
       className={styles.macosWindow}
-      style={info.label == null ? { } : { borderTopLeftRadius: 0 } }
+      style={info.label == null ? { } : { borderTopLeftRadius: 0 }}
     >
       <div className={styles.macosTopbar}>
         <div className={styles.macosMenu}>

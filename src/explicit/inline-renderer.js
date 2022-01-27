@@ -55,10 +55,10 @@ function renderKbrd(str) {
 function renderEmoj(str) {
   str = str.slice(1, -1);
   const key = EMOJIS[str];
-  if (!/\d\/\d/.test(key)) return <img className="twemoji" alt="" draggable="false" src={`https://twemoji.maxcdn.com/v/13.0.1/svg/${key}.svg`} />;
+  if (!/\d\/\d/.test(key)) return <img className="twemoji" alt={`:${str}:`} draggable="false" src={`https://twemoji.maxcdn.com/v/13.0.1/svg/${key}.svg`} />;
   const jsx = [];
-  for (let i = 0; i < parseInt(key[0]); i++) jsx.push(<img key={uuidv4()} className="twemoji" alt="" draggable="false" src="https://twemoji.maxcdn.com/v/13.0.1/svg/2b50.svg" />);
-  for (let i = parseInt(key[0]); i < 5; i++) jsx.push(<img key={uuidv4()} className="twemoji" alt="" draggable="false" src="https://twemoji.maxcdn.com/v/13.0.1/svg/2b50.svg" style={{ filter: 'grayscale(100%)' }} />);
+  for (let i = 0; i < parseInt(key[0]); i++) jsx.push(<img key={uuidv4()} className="twemoji" alt={`:${str}:`} draggable="false" src="https://twemoji.maxcdn.com/v/13.0.1/svg/2b50.svg" />);
+  for (let i = parseInt(key[0]); i < 5; i++) jsx.push(<img key={uuidv4()} className="twemoji" alt={`:${str}:`} draggable="false" src="https://twemoji.maxcdn.com/v/13.0.1/svg/2b50.svg" style={{ filter: 'grayscale(100%)' }} />);
   return jsx;
 }
 

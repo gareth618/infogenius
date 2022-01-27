@@ -1,5 +1,6 @@
 import React from 'react';
 import uuidv4 from 'uuid';
+import { navigate } from 'gatsby';
 
 import { Comment } from '@components/comments';
 import * as styles from './CommentSection.module.css';
@@ -10,6 +11,8 @@ import { onSnapshot, collection, query, where, doc, getDoc } from 'firebase/fire
 
 export default function CommentSection({ articleSlug, setParentComment }) {
   const [comments, setComments] = React.useState([]);
+  const [firstLoad, setFirstLoad] = React.useState(true);
+
   React.useEffect(() => {
     const loadComments = async docs => {
       const documents = [];
@@ -44,13 +47,22 @@ export default function CommentSection({ articleSlug, setParentComment }) {
           ...cleanComment
         };
       }));
+
+      if (firstLoad) {
+        const url = window.location.href;
+        const pos = url.indexOf('#comment');
+        if (pos !== -1) {
+          setFirstLoad(false);
+          navigate(`/${articleSlug}/${url.slice(pos)}`);
+        }
+      }
     };
 
     return onSnapshot(
       query(collection(firestore, 'comments'), where('slug', '==', articleSlug)),
       docs => loadComments(docs), () => setComments(null)
     );
-  }, [articleSlug]);
+  }, [articleSlug, firstLoad]);
 
   const commentList = comments == null
     ? (
@@ -75,7 +87,7 @@ export default function CommentSection({ articleSlug, setParentComment }) {
       <h2 className={styles.title}>
         {comments == null
           ? '(?) comentarii'
-          : `${comments.length}${comments.length >= 20 ? ' de' : ''} comentarii`}
+          : `${comments.length}${comments.length >= 20 ? ' de' : ''} comentari${comments.length === 1 ? 'u' : 'i'}`}
       </h2>
       {commentList}
     </section>

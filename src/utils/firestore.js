@@ -15,7 +15,7 @@ export default getFirestore();
 // rules_version = '2';
 // service cloud.firestore {
 //   function isAdmin(uid) {
-//     return uid == "[removed]";
+//     return uid == "3MOScVcB3NbpfHPiMjpW8szYD5w2";
 //   }
 //   match /databases/{database}/documents/comments {
 //     match /{document=**} {

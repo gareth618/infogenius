@@ -46,13 +46,14 @@ export default function Comment({ info, setParentComment, preview }) {
 
   return (
     <div className={styles.comment} style={info.parent !== '' ? { marginLeft: 'calc(50px + 2rem)' } : { }}>
+      <div className={styles.anchor} id={`comment-${info.id}`} />
       <div className={styles.header}>
         <div className={styles.meta}>
           <div className={styles.avatar}>
             {avatar}
           </div>
           <div>
-            <div className={styles.name} id={`comment-${info.id}`}>
+            <div className={styles.name}>
               <a href={`#comment-${info.id}`}>{info.name}</a>
             </div>
             <div className={styles.date}>

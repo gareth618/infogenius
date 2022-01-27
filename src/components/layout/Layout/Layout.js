@@ -110,8 +110,7 @@ export default function Layout({ sidebar, children }) {
             notif => notif.comment !== notification.comment
           )
         });
-        navigate(`/${notification.slug}/`);
-        setTimeout(() => navigate(`/${notification.slug}#comment-${notification.comment}`), 1618);
+        navigate(`/${notification.slug}/#comment-${notification.comment}`);
       }}
     >
       <Notification />&nbsp;&nbsp;<span>{notification.name}</span>
