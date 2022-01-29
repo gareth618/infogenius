@@ -104,10 +104,16 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  color: #888;
-  font-size: 20px;
+  padding: 5px 7px 7px 7px;
+  border-radius: .25rem;
+  color: #bbb;
+  background: #444;
   line-height: 1;
   z-index: 1;
+}
+
+.copy-btn.small {
+  padding: 2px 3px 3px 3px;
 }
 
 .code-wrapper:hover .copy-btn {

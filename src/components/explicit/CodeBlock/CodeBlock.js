@@ -17,30 +17,46 @@ import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-latex';
 import 'prismjs/components/prism-markdown';
+prism.highlightAll = () => { };
 
 export default function CodeBlock({ info }) {
-  const content = React.useMemo(() => {
-    const preClasses = [styles.codeBlock];
-    if (info.crop) preClasses.push(styles.cropped);
-    if (info.title != null) preClasses.push(styles.numbered);
-    if (info.title != null) preClasses.push(styles[`digits${info.code.length.toString().length}`]);
-    if (info.lang === 'bash' && info.code[0] !== '#!/bin/bash') preClasses.push(styles.dollars);
+  const [clicked, setClicked] = React.useState(false);
+  const copyCode = () => {
+    navigator.clipboard.writeText(info.code.join('\n'));
+    setClicked(true);
+    setTimeout(() => { setClicked(false); }, 1618);
+  };
 
-    const preStyles = ['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'auto' };
-    if (info.label != null) preStyles.borderTopLeftRadius = 0;
-    if (info.label != null && info.title == null) preStyles.marginTop = 0;
+  const preClasses = [styles.codeBlock];
+  if (info.crop) preClasses.push(styles.cropped);
+  if (info.title != null) preClasses.push(styles.numbered);
+  if (info.title != null) preClasses.push(styles[`digits${info.code.length.toString().length}`]);
+  if (info.lang === 'bash' && info.code[0] !== '#!/bin/bash') preClasses.push(styles.dollars);
 
-    const lines = prism
-      .highlight(info.code.join('\n'), prism.languages[info.lang], info.lang)
-      .split('\n').map((line, index) => (
-        <div
-          key={uuidv4()}
-          style={info.high[index] ? { background: '#333' } : { }}
-          dangerouslySetInnerHTML={{ __html: line === '' ? '\n' : line }}
-        />
-      ));
+  const preStyles = ['markdown', 'bash'].includes(info.lang) ? { whiteSpace: 'pre-wrap' } : { overflowX: 'auto' };
+  if (info.label != null) preStyles.borderTopLeftRadius = 0;
+  if (info.label != null && info.title == null) preStyles.marginTop = 0;
 
-    return (
+  const lines = prism
+    .highlight(info.code.join('\n'), prism.languages[info.lang], info.lang)
+    .split('\n').map((line, index) => (
+      <div
+        key={uuidv4()}
+        style={info.high[index] ? { background: '#333' } : { }}
+        dangerouslySetInnerHTML={{ __html: line === '' ? '\n' : line }}
+      />
+    ));
+
+  const codeBlock = (
+    <div className={styles.codeWrapper}>
+      <button
+        type="button"
+        className={styles.copyBtn + (info.code.length === 1 ? ' ' + styles.small : '')}
+        style={clicked ? { pointerEvents: 'none' } : { }}
+        onClick={clicked ? () => { } : copyCode}
+      >
+        {clicked ? <ClipboardTwo /> : <ClipboardOne />}
+      </button>
       <pre
         className={preClasses.join(' ')}
         style={preStyles}
@@ -49,27 +65,6 @@ export default function CodeBlock({ info }) {
           {lines}
         </code>
       </pre>
-    );
-  }, [info]);
-
-  const [clicked, setClicked] = React.useState(false);
-  const copyCode = () => {
-    navigator.clipboard.writeText(info.code.join('\n'));
-    setClicked(true);
-    setTimeout(() => { setClicked(false); }, 1618);
-  };
-
-  const codeBlock = (
-    <div className={styles.codeWrapper}>
-      <button
-        type="button"
-        className={styles.copyBtn}
-        style={clicked ? { pointerEvents: 'none' } : { }}
-        onClick={clicked ? () => { } : copyCode}
-      >
-        {clicked ? <ClipboardTwo /> : <ClipboardOne />}
-      </button>
-      {content}
     </div>
   );
 
