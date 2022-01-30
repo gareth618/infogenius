@@ -100,7 +100,7 @@
 }
 
 .explicit table {
-  margin: 0 auto;
+  margin: 5px auto;
   border-collapse: collapse;
   position: relative;
 }

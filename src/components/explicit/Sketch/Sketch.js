@@ -7,7 +7,7 @@ export default function Sketch({ script }) {
   React.useEffect(() => {
     const myP5 = new p5(script, ref.current);
     const fun = () => {
-      if (ref.current.children?.[0] == null) {
+      if (ref.current?.children?.[0] == null) {
         setTimeout(fun, 618);
         return;
       }
