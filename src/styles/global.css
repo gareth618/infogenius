@@ -56,7 +56,7 @@ body {
 .os-other { display: none; }
 
 code {
-  padding: .2rem .4rem;
+  padding: .2rem .3rem;
   background: var(--code);
   border-radius: .25rem;
   font-size: 85%;

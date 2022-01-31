@@ -99,7 +99,7 @@ $$(a, b) \to (1, a - 1)$$
 
 Acum avem două cazuri. Dacă $a - 1 = 1$, atunci niciuna dintre cele două grămezi nu mai poate fi divizată, așa că jocul se termină și Alex câștigă. Altfel, la pasul următor, Paul va fi obligat să împartă grămada $a - 1$ în două. Însă noi știm că $a - 1$ este un număr impar! Așadar, cele două grămezi care vor rezulta din această operație vor fi cu siguranță una pară și una impară. Iar de aici, Alex poate repeta această strategie până va ajunge la configurația $(1, 1)$:
 
-$$(a, b) \to (a, a - 1) \to (p_1, i_1) \to (1, p_1 - 1) \to (p_2, i_2) \to (1, p_2 - 1) \to \cdots \to (1, 1)$$
+$$(a, b) \to (1, a - 1) \to (p_1, i_1) \to (1, p_1 - 1) \to (p_2, i_2) \to (1, p_2 - 1) \to \cdots \to (1, 1)$$
 
 Deci, dacă o grămadă este pară, Alex are strategie sigură de câștig. Altfel, după prima mutare, Paul se va afla în situația de mai sus, așa că Alex va pierde. Iată cum paritățile celor două numere date determină din start câștigătorul :smile:
 
