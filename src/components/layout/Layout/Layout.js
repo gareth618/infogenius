@@ -41,7 +41,7 @@ export default function Layout({ sidebar, children }) {
           <section className={styles.content}>{children}</section>
           {sidebar && (
             <aside className={styles.sidebar}>
-              {/* <ins
+              <ins
                 className="adsbygoogle"
                 style={{ display: 'inline-block', width: 200, height: 600 }}
                 data-ad-client="ca-pub-2051821579024751"
@@ -49,7 +49,7 @@ export default function Layout({ sidebar, children }) {
               />
               <script dangerouslySetInnerHTML={{
                 __html: '(adsbygoogle = window.adsbygoogle || []).push({ });'
-              }} /> */}
+              }} />
             </aside>
           )}
         </div>
@@ -68,16 +68,6 @@ export default function Layout({ sidebar, children }) {
       element.style.display = 'inline';
     }
   });
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      const head = document.getElementsByTagName('head')[0];
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2051821579024751';
-      head.appendChild(script);
-    }, 1618);
-  }, []);
 
   const [userEmail, setUserEmail] = React.useState(null);
   React.useEffect(() => onAuthStateChanged(getAuth(), user => {

@@ -42,12 +42,12 @@ După ce am instalat cele trei extensii, trebuie să configurăm comanda pentru 
     "terminal.integrated.fontSize": 18,
     "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
     "terminal.integrated.allowChords": false,
-
     "debug.console.fontSize": 18,
     "debug.console.fontFamily": "Consolas, 'Courier New', monospace",
 
-    "code-runner.ignoreSelection": true,
     "code-runner.runInTerminal": true,
+    "code-runner.preserveFocus": false,
+    "code-runner.ignoreSelection": true,
     "code-runner.executorMap": {
       "cpp": "cd $dir ; if ($?) { g++ -std=c++17 -Wall -Wextra $fileName -o $fileNameWithoutExt } ; if ($?) { .\\$fileNameWithoutExt }"
     },
@@ -74,12 +74,12 @@ După ce am instalat cele trei extensii, trebuie să configurăm comanda pentru 
     "terminal.integrated.fontSize": 18,
     "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
     "terminal.integrated.allowChords": false,
-
     "debug.console.fontSize": 18,
     "debug.console.fontFamily": "Consolas, 'Courier New', monospace",
 
-    "code-runner.ignoreSelection": true,
     "code-runner.runInTerminal": true,
+    "code-runner.preserveFocus": false,
+    "code-runner.ignoreSelection": true,
     "code-runner.executorMap": {
       "c": "cd $dir && clang -std=c17 -Wall -Wextra $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt && rm $fileNameWithoutExt",
       "cpp": "cd $dir && clang++ -std=c++17 -Wall -Wextra $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt && rm $fileNameWithoutExt"
