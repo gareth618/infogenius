@@ -41,6 +41,7 @@ export default function Layout({ sidebar, children }) {
           <section className={styles.content}>{children}</section>
           {sidebar && (
             <aside className={styles.sidebar}>
+              <p style={{ margin: '1rem', color: 'royalblue' }}>fac niște teste… în producție, normal</p>
               <ins
                 className="adsbygoogle"
                 style={{ display: 'inline-block', width: 200, height: 600 }}
