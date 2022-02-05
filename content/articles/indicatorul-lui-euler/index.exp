@@ -1,0 +1,183 @@
+TITLE: Suma și numărul divizorilor. Indicatorul lui Euler
+AUTHOR: Iulian Oleniuc
+DATE: 03/10/2020
+CATEGORIES: Algoritmică și structuri de date, Matematică
+TAGS: numere prime, factorizare, numărul divizorilor, suma divizorilor, indicatorul lui euler, funcții multiplicative
+DESCRIPTION: Astăzi vă voi prezenta câteva aplicații interesante la descompunerea unui număr întreg în factori primi, printre care indicatorul lui Euler!
+
+În acest articol voi prezenta câteva aplicații mai interesante la [descompunerea unui număr întreg în factori primi](descompunere-in-factori-primi): numărul divizorilor, suma divizorilor și indicatorul lui Euler. Ne vom axa pe demonstrarea formulelor pentru calculul acestor funcții, și implicit pe modul în care putem __deduce__ aceste formule.
+
+### Funcția $\sigma_x(n)$
+
+Înainte de a începe, țin să menționez că, în literatura de specialitate, notația folosită pentru suma divizorilor lui $n$, ridicați la puterea $x$, este $\sigma_x(n)$:
+
+$$\sigma_x(n) \triangleq \sum_{d \mid n} d^x$$
+
+În particular, $\sigma_0(n)$ reprezintă **numărul** divizorilor lui $n$, iar $\sigma_1(n)$ reprezintă **suma** divizorilor lui $n$. De exemplu:
+
+$$\begin{align*}
+  \sigma_0(6) &= 1^0 + 2^0 + 3^0 + 6^0 = 4\\
+  \sigma_1(6) &= 1^1 + 2^1 + 3^1 + 6^1 = 12
+\end{align*}$$
+
+Vom păstra aceste notații și în continuare.
+
+## Numărul divizorilor unui întreg
+
+După cum am zis, numărul divizorilor unui număr natural nenul $n$ se notează cu $\sigma_0(n)$. Formula pentru numărul divizorilor este destul de cunoscută. Dacă descompunerea în factori primi a lui $n$ este $p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}$, atunci:
+
+$$\sigma_0(n) = (e_1 + 1)(e_2 + 1) \cdots (e_k + 1) = \prod_{i = 1}^{k} (e_i + 1)$$
+
+Demonstrația este foarte simplă: Numărul $n$ este divizibil cu $d$ dacă și numai dacă $d$ poate fi scris sub forma $p_1^{e'_1} p_2^{e'_2} \cdots p_k^{e'_k}$, astfel încât fiecare exponent $e'_i$ să fie mai mic sau egal cu $e_i$. Ei bine, fiecare $e'_i$ poate lua $e_i + 1$ valori: $0, 1, \ldots, e_i$. Conform [regulii produsului](combinatorica/#header-2), numerele $e_i + 1$ se înmulțesc, iar de aici obținem formula inițială.
+
+Iată cum putem calcula eficient $\sigma_0(n)$ în C++, modificând foarte puțin algoritmul clasic de descompunere în factori primi:
+
+``` cpp -> Numărul divizorilor
+  int num = 1;
+  for (int d = 2; d * d <= n; d++) {
+      int e = 1;
+      while (n % d == 0) {
+          e++;
+          n /= d;
+      }
+      num *= e;
+  }
+  if (n > 1)
+      num *= 2;
+  cout << num << '\n';
+```
+
+Puteți observa că, înainte de linia 8, nu a mai fost nevoie să testez dacă $n$ este divizibil cu $d$. Asta pentru că, dacă nu se intră în `while`, rezultatul va fi înmulțit cu $1$, iar asta nu-l va afecta.
+
+## Suma divizorilor unui întreg
+
+Suma divizorilor unui număr natural nenul $n$ se notează cu $\sigma_1(n)$. Păstrând notația de mai sus pentru descompunerea lui $n$ în factori primi, suma divizorilor se calculează astfel:
+
+$$\sigma_1(n) = \frac{p_1^{e_1 + 1} - 1}{p_1 - 1} \cdot \frac{p_2^{e_2 + 1} - 1}{p_2 - 1} \cdots \frac{p_k^{e_k + 1} - 1}{p_k - 1} = \prod_{i = 1}^k \frac{p_i^{e_i + 1} - 1}{p_i - 1}$$
+
+Pentru a demonstra formula, vom porni de la un caz particular: $n = p^x$, unde $p$ este un număr prim. În acest caz, singurii divizori ai lui $n$ sunt $1, p, p^2, \ldots, p^x$. Aceștia se află într-o progresie geometrică de rație $p$. Prin urmare,
+
+$$\sigma_1(p^x) = \frac{p^{x + 1} - 1}{p - 1}$$.
+
+La pasul următor, vom considera că $n = p^x q^y$, unde $p$ și $q$ sunt numere prime distincte. Avem:
+
+$$\begin{align*}
+  \sigma_1(p^x q^y) &= p^0 q^0 + p^0 q^1 + p^0 q^2 + \cdots + p^0 q^y\\
+  &+ p^1 q^0 + p^1 q^1 + p^1 q^2 + \cdots + p^1 q^y\\
+  &+ p^2 q^0 + p^2 q^1 + p^2 q^2 + \cdots + p^2 q^y\\
+  &\text{ }\text{ }\vdots\\
+  &+ p^x q^0 + p^x q^1 + p^x q^2 + \cdots + p^x q^y
+\end{align*}$$
+
+Dacă de pe fiecare linie $i$ îl dăm în factor pe $p^i$, iar mai apoi factorizăm $q^0 + q^1 + \cdots + q^y$, obținem:
+
+$$\sigma_1(p^x q^y) = (p^0 + p^1 + \cdots + p^x) (q^0 + q^1 + \cdots + q^y) = \sigma_1(p^x) \sigma_1(q^y)$$
+
+Generalizând, ajungem la formula inițială:
+
+$$\sigma_1(p_1^{e_1} p_2^{e_2} \cdots p_k^{e_k}) = \sigma_1(p_1^{e_1}) \sigma_1(p_2^{e_2}) \cdots \sigma_1(p_k^{e_k}) = \prod_{i = 1}^k \frac{p_i^{e_i + 1} - 1}{p_i - 1}$$
+
+Iată și o implementare în C++ a acestei formule:
+
+``` cpp -> Suma divizorilor
+  int sum = 1;
+  for (int d = 2; d * d <= n; d++) {
+      int pwr = d;
+      while (n % d == 0) {
+          pwr *= d;
+          n /= d;
+      }
+      sum *= (pwr - 1) / (d - 1);
+  }
+  if (n > 1)
+      sum *= (n * n - 1) / (n - 1);
+  cout << sum << '\n';
+```
+
+## Indicatorul lui Euler
+
+Indicatorul lui Euler se notează cu $\varphi(n)$ și reprezintă numărul de numere naturale nenule mai mici sau egale cu $n$ care sunt prime cu $n$. De exemplu, $\varphi(1) = 1$, $\varphi(6) = 2$, $\varphi(11) = 10$. De remarcat că acel __sau egale cu__ este pus doar pentru a asigura faptul că $\varphi(1) = 1$, orice $x \gt 1$ nefiind prim cu el însuși. Formula pentru calculul indicatorului este:
+
+$$\varphi(n) = \prod_{i = 1}^k p_i^{e_i - 1}(p_i - 1) = n \prod_{i = 1}^k \left( 1 - \frac{1}{p_i} \right)$$
+
+Chiar dacă a doua variantă a formulei este mai elegantă, deoarece nu folosește exponenții $e_i$, noi o vom folosi pe prima, pentru a evita lucrul cu `double`. Iată deci calcularea lui $\varphi(n)$ în C++:
+
+``` cpp -> Indicatorul lui Euler
+  int phi = 1;
+  for (int d = 2; d * d <= n; d++)
+      if (n % d == 0) {
+          phi *= d - 1;
+          n /= d;
+          while (n % d == 0) {
+              phi *= d;
+              n /= d;
+          }
+      }
+  if (n > 1)
+      phi *= n - 1;
+  cout << phi << '\n';
+```
+
+### Demonstrația formulei
+
+În cele ce urmează, pasionații de matematică pot urmări demonstrația formulei de mai sus. Avantajul ei este că nu necesită folosirea [Teoremei Chineze a Resturilor](https://en.wikipedia.org/wiki/Chinese_remainder_theorem)TODO, spre deosebire de majoritatea demonstrațiilor găsite de mine pe net. Mai întâi, va trebui să introducem conceptul de __funcție multiplicativă__:
+
+>>>
+  #### Funcții multiplicative
+
+  În teoria numerelor, o funcție $f$ definită pe $\mathbb{N}^*$ se numește __multiplicativă__ dacă are proprietatea că $f(1) = 1$ și că $f(ab) = f(a)f(b)$, oricare ar fi $a$ și $b$ două numere naturale nenule __prime între ele__. Atât numărul cât și suma divizorilor sunt funcții multiplicative, acest fapt bazându-se pe formulele deja demonstrate. În cazul indicatorului lui Euler, va fi mai ușor să deducem formula dacă mai întâi demonstrăm multiplicitatea funcției.
+<<<
+
+Așadar, trebuie să demonstrăm că $\varphi(mn) = \varphi(m) \varphi(n), \forall m, n \in \mathbb{N}^*, (m, n) = 1$. Vom aranja numerele de la $1$ la $mn$ sub forma unei matrice cu $m$ linii și $n$ coloane. Să luăm drept exemplu $m = 5$ și $n = 3$:
+
+$$\begin{matrix}
+  1 & 2 & 3\\
+  4 & 5 & 6\\
+  7 & 8 & 9\\
+  10 & 11 & 12\\
+  13 & 14 & 15
+\end{matrix}$$
+
+#### Partea cu $\varphi(n)$
+
+Pentru ca un număr să fie prim cu $mn$, el trebuie să fie prim atât cu $m$, cât și cu $n$. În acest sens, haideți să vedem mai întâi ce numere din matrice sunt prime cu $n$. Elementul de pe poziția $(i, j)$ are forma $(i - 1)n + j$. Este evident că $((i - 1)n + j, n) = (j, n)$. Deci, $(a_{ij}, n) = 1$ dacă și numai dacă $(j, n) = 1$. Așadar, elementele prime cu $n$ sunt cele de pe coloanele $j$ pentru care $(j, n) = 1$. Numărul acestor coloane este $\varphi(n)$.
+
+#### Partea cu $\varphi(m)$
+
+Acum, de pe aceste coloane ne interesează doar numerele prime cu $m$. Să vedem ce resturi obținem dacă împărțim toate elementele matricei din exemplu la $m$:
+
+$$\begin{matrix}
+  1 & 2 & 3\\
+  4 & 0 & 1\\
+  2 & 3 & 4\\
+  0 & 1 & 2\\
+  3 & 4 & 0
+\end{matrix}$$
+
+Aparent, pe fiecare coloană obținem toate resturile posibile modulo $m$. Dacă asta este adevărat întotdeauna, înseamnă că pe fiecare coloană $j$, cu $(j, n) = 1$, avem $\varphi(m)$ numere prime cu $m$, de unde $\varphi(mn) = \varphi(m) \varphi(n)$.
+
+Deci, mai rămâne să demonstrăm că pe nicio coloană $k$ nu putem găsi două resturi egale. Vom presupune prin reducere la absurd că putem. Cum elementele de pe coloana $k$ sunt de forma $xn + k$, cu $0 \le x \lt m$, ar trebui să existe două elemente $pn + k$ și $qn + k$, cu $p \neq q$, congruente modulo $m$. Asta ar însemna că diferența lor, $(p - q)n$, ar fi divizibilă cu $m$. Cum $n$ este prim cu $m$, rămâne ca $p - q$ să fie divizibil cu $m$. Însă, din cauza faptului că $0 \le p, q \lt m$, singura posibilitate este $p = q$. Contradicție cu $p \neq q$. Deci, presupunerea făcută este falsă, ceea ce înseamnă că formula $\varphi(mn) = \varphi(m) \varphi(n)$ este într-adevăr corectă.
+
+#### Formula pentru $\varphi(p^x)$
+
+Pentru $n = p^x$, singurele valori pe care le poate lua [CMMDC](algoritmul-lui-euclid)-ul dintre $n$ și un număr mai mic sau egal cu el sunt $1, p, \ldots, p^k$. Prin urmare, numerele care nu sunt prime cu $n$ sunt multiplii lui $p$, și anume $p, 2p, \ldots, p^{x - 1} p$, numărul lor fiind $p^{x - 1}$. Asta înseamnă că
+
+$$\varphi(n) = p^x - p^{x - 1} = p^{x - 1} (p - 1)$$.
+
+#### Generalizarea
+
+Acum putem generaliza foarte ușor formula, folosindu-ne de multiplicitatea indicatorului:
+
+$$\varphi(n) = \prod_{i = 1}^k \varphi(p_i^{e_i}) = \prod_{i = 1}^k p_i^{e_i - 1}(p_i - 1)$$
+
+## Probleme recomandate
+
++++
+> [Suma și numărul divizorilor](https://infoarena.ro/problema/ssnd)
+> [Suma divizorilor](https://infoarena.ro/problema/sumdiv)
+> [Fracții](https://infoarena.ro/problema/fractii)
+---
+
+Problema Fracții am explicat-o [aici](ciurul-lui-eratostene/#header-7). De asemenea, un exercițiu bun este să adaptați [Ciurul lui Eratostene](ciurul-lui-eratostene) din problema Fracții pentru a calcula eficient suma și numărul divizorilor __tuturor__ numerelor naturale de la $1$ la $n$. În plus, o aplicație importantă a indicatorului lui Euler este Teorema lui Euler, care e foarte utilă în calculul inversului modular, despre care voi scrie într-un articol viitor.
+
+Dacă aveți vreo întrebare despre cele trei aplicații la descompunerea în factori primi, nu ezitați să o adresați mai jos, într-un comentariu :smile: Iar dacă vi s-a părut un articol interesant, nu uitați să-i dați un share pe FaceBook!

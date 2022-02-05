@@ -1,0 +1,223 @@
+TITLE: Biblioteca standard C -- cmath, cstdlib și altele
+AUTHOR: Iulian Oleniuc
+DATE: 22/06/2019
+CATEGORIES: Limbajul C++
+TAGS: c++, cmath, cstdlib, cstring, numere random în c++
+DESCRIPTION: Biblioteca standard a limbajului C++ este alcătuită din următoarele patru mari componente: biblioteca standard C, biblioteca STL...
+
+Biblioteca standard a limbajului C++ este alcătuită din următoarele patru mari componente:
+
++++
+> biblioteca standard C
+> biblioteca standard pentru input/ output
+> biblioteca STL (Standard Template Library)
+> bibliotecile pentru multi-threading
+---
+
+Biblioteca standard pentru input/ output am prezentat-o [aici](citire-scriere-c-cpp); ea se ocupă de citirea și scrierea datelor în fișiere. Despre STL și multi-threading voi scrie în articolele următoare, însă acum mă voi concentra asupra bibliotecii standard C.
+
+## Biblioteca standard C
+
+Această bibliotecă a fost moștenită din limbajul C și conține headere precum `cmath`, `climits` și `cassert`. Majoritatea mai există doar pentru a păstra compatibilitatea înapoi și uniformitatea limbajului. Din acest motiv, ele prezintă interes foarte scăzut pentru programator. De exemplu, în limbajul C, header-ul `cstdbool` nu făcea decât să definească tipul `bool` și constantele `false` și `true` prin macro-uri (`#define`-uri). În C++ însă, tipul `bool` este un tip de date fundamental, așa că acest header a devenit complet inutil.
+
+Headerele din biblioteca standard C aveau nume de forma `header.h`, dar în C++ s-au transformat în `cheader` din două motive: În primul rând, după această modificare nu mai trebuie să precizăm extensia `.h` când includem headere standard în programul nostru. În al doilea rând, nu doar că și-au schimbat numele, dar a fost necesar ca în unele dintre aceste headere să fie făcute niște modificări atunci când au fost trecute la C++. De exemplu, în biblioteca `climits`, care conține constante cu valorile minime/ maxime suportate de tipurile de date fundamentale, s-au adăugat trei noi constante: `LLONG_MIN`, `LLONG_MAX` și `ULLONG_MAX`. Acestea se referă la tipurile `(unsigned) long long int`, care la început nu existau în C.
+
+## Biblioteci importante din C
+
+După cum am spus, majoritatea bibliotecilor moștenite din C sunt aproape inutile, așa că mai jos le voi prezenta doar pe cele mai importante:
+
+### `<cmath>`
+
+Biblioteca [`cmath`](http://www.cplusplus.com/reference/cmath/) conține un set de funcții matematice foarte utile:
+
++++
+> **funcții trigonometrice:** `sin`, `cos`, `tan` (tangentă), `asin`, `acos`, `atan` (__a__ vine de la __arc__), `atan2` etc.
+> **funcții exponențiale:** `exp` ($e^x$), `log` ($\ln$), `log2` ($\log_2$), `log10` ($\lg$) etc.
+> **funcții putere și radical:** `pow` (putere), `sqrt` (radical) etc.
+> **funcții pentru aproximări:** `floor` (rotunjire în jos, adică parte întreagă), `ceil` (rotunjire în sus) etc.
+> **funcții pentru calcularea modulului unui număr:** `std::abs` etc.
+---
+
+De reținut că funcțiile trigonometrice lucrează cu radiani, și nu cu grade. În caz că vă întrebați ce face funcția `atan2`, ei bine, `atan2(x, y)` returnează măsura unghiului format de segmentul determinat de origine și punctul $(x, y)$ cu axa $OX$. Este utilă când se lucrează cu coordonate polare, de exemplu în algoritmul [__Graham Scan__]()TODO.
+
+``` cpp
+  cout << sin(3.1415)  << '\n'; //  0.000
+  cout << atan2(1, 1)  << '\n'; //  0.785 = PI / 4
+
+  cout << exp(3)       << '\n'; // 20.086
+  cout << log(exp(3))  << '\n'; //  3.000
+  cout << log2(1024)   << '\n'; // 10.000
+  cout << log10(0.01)  << '\n'; // -2.000
+
+  cout << pow(7, 2)    << '\n'; // 49.000
+  cout << sqrt(25)     << '\n'; //  5.000
+
+  cout << floor(1.618) << '\n'; //  1.000
+  cout << ceil(1.618)  << '\n'; //  2.000
+
+  cout << abs(-13)     << '\n'; // 13.000
+```
+
+#### Funcția `abs` nu este portabilă
+
+Totuși, există o mare problemă de portabilitate cu funcțiile `abs`. În `cmath` există o grămadă de overload-uri pentru funcția `abs`: unul pentru `float`, unul pentru `double`, unul pentru `long double`, și altele pentru tipurile întregi, care returnează tot `double`. Toate acestea sunt incluse în `namespace`-ul `std`, deci pentru a le folosi trebuie ori să scriem `using namespace std;`, ori să punem `std::` în fața funcției. Există însă și în `cstdlib` o funcție `abs`, cu overload-uri pentru `int`, `long int` și `long long int`, care __nu__ e inclusă în `namespace`-ul `std`.
+
+Problema e că dacă includem ambele biblioteci și apelăm `abs` pentru un `int`, compilatorul s-ar putea să nu știe ce funcție să apeleze, pentru că ar exista în același timp și `double abs(int)`, și `int abs(int)`. În plus, compilatoarele mai vechi n-ar ști nici dintre cele din `cmath` pe care să o apeleze. De exemplu, GCC 4.3.2 ar afișa următoarea eroare:
+
+``` text
+  main.cpp:35: error: call of overloaded 'abs(int)' is ambiguous
+  /usr/include/c++/4.3/cmath:99: note: candidates are: double std::abs(double)
+  /usr/include/c++/4.3/cmath:103: note: float std::abs(float)
+  /usr/include/c++/4.3/cmath:107: note: long double std::abs(long double)
+```
+
+Mai multe detalii [aici](https://stackoverflow.com/a/21393170/8142516). Pe scurt, funcția `abs` este o dezordine totală. De aceea eu prefer să-mi declar mereu propria funcție `abs` când am nevoie de ea:
+
+``` cpp
+  inline int abs(int x) {
+      return x < 0 ? -x : x;
+  }
+```
+
+### `<climits>`
+
+După cum am zis și mai sus, biblioteca [`climits`](http://www.cplusplus.com/reference/climits/) conține constante cu valorile minime/ maxime ce pot fi stocate pe tipurile de date fundamentale. De exemplu, `INT_MIN` și `INT_MAX` sunt constantele corespunzătoare tipului `int`. Sunt utile când vrem să inițializăm o variabilă cu o valoare foarte mică sau foarte mare, pentru a calcula maximul/ minimul dintre mai multe numere. Dezavantajul este că biblioteca asta e inclusă cumva automat atunci când rulăm programul cu anumite compilatoare, caz în care sunt șanse mari să uităm să o includem. Asta explică majoritatea erorilor mele de compilare de pe .campion, PbInfo și InfoArena.
+
+``` cpp
+  int mx = INT_MIN;
+  for (int i = 0; i < n; i++)
+      mx = max(mx, v[i]);
+```
+
+Un alt dezavantaj al folosirii acestor constante în contextul precizat mai sus este că pot duce ușor la overflow-uri: De multe ori mi s-a întâmplat ca într-o problemă de programare dinamică să adun două variabile inițializate cu `INT_MAX` cu scopul de a obține un nou „infinit”, însă produceam overflow, obținând un număr negativ (`-2`), care nici pe de parte nu mai reprezenta infinitul. În ultimul timp am început să renunț la `INT_MIN` și `INT_MAX` în favoarea constantelor de genul `-1e8` și `+1e8`. Sunt suficient de mari, nu produc overflow, conțin doar `3-4` caractere...
+
+### `<cassert>`
+
+În [`cassert`](http://www.cplusplus.com/reference/cassert/) este definită funcția `assert(expresie)`. Dacă expresia transmisă ca parametru se evaluează la `0` (`false`), se abandonează execuția programului, afișându-se o eroare de genul `Assertion failed: expresie, file main.cpp, line 7`. Cred că mulți am întâlnit pentru prima dată funcția asta uitându-ne peste sursele oficiale ale problemelor de olimpiadă. Acolo `assert` este folosită la greu de către autorii problemelor pentru a verifica corectitudinea formatului datelor de intrare.
+
+``` cpp
+  assert(cin >> x); // Se verifică dacă x a putut fi citit.
+  assert(1 <= x && x <= 100); // Se verifică dacă x aparține intervalului [0, 100].
+```
+
+### `<ctime>`
+
+Biblioteca [`ctime`](http://www.cplusplus.com/reference/ctime/) se ocupă de lucrul cu unitățile de timp. Dintre funcțiile definite în `ctime`, doar două mi s-au părut mai interesante:
+
+#### `time(NULL)`
+
+Returnează timpul curent, exprimat în secunde, sub forma unei variabile de tipul `time_t` (care de fapt e un `typedef` la `int`). Secundele sunt numărate de la 1 ianuarie 1970, ora 00:00. În 2038, tipul `time_t` [va face overflow](https://en.wikipedia.org/wiki/Year_2038_problem). Deci, dacă pe 19 ianuarie 2038, la ora 03:14:07 UTC, toate calculatoarele din lume vor exploda, veți ști de ce.
+
+#### `clock()`
+
+Returnează numărul de tic-uri ale ceasului trecute de la începerea execuției programului. Un tic poate fi echivalat în mod normal cu o milisecundă. Această funcție folosește și ea un tip special de date, `clock_t`, dar și acesta este un alias al `int`-ului. Putem folosi funcția `clock` ca să măsurăm câte milisecunde durează execuția anumitor părți din program:
+
+``` cpp
+  int x = clock();
+  for (int i = 0; i < 100000000; i++);
+  int y = clock();
+  cout << y - x << '\n'; // ~200
+```
+
+### `<cstdlib>`
+
+Biblioteca [`cstdlib`](http://www.cplusplus.com/reference/cstdlib/) definește niște funcții „comune”, care pot fi grupate astfel:
+
+>>> header
+  #### Funcții pentru conversia string-urilor în numere
+
+  `atoi` (ASCII to `int`), `atof` (ASCII to `double`) etc.
+<<<
+
+``` cpp
+  int x = atoi("123");
+  cout << x << '\n'; // 123
+
+  double y = atof("1.618");
+  cout << y << '\n'; // 1.618
+```
+
+>>> header
+  #### Funcții pentru alocarea dinamică de memorie
+
+  `calloc`, `free`, `malloc`, `realloc`
+<<<
+
+Din moment ce în C++ există operatorii `new` și `delete`, funcțiile astea nu prea își mai au rostul. Totuși, le voi explica pe scurt: `calloc(nr, sz)` alocă un bloc de memorie de `nr` elemente, fiecare de lungime `sz` bytes, având toți biții inițializați cu `0`. `calloc`, la fel ca `malloc` și `realloc`, returnează un pointer `void` la zona de memorie alocată. Acesta trebuie convertit la un pointer către tipul nostru de date, pentru a putea lucra cu el.
+
+`free(p)` eliberează zona de memorie indicată de `p`. `malloc(lg)` funcționează similar cu `calloc`, doar că ia ca parametru direct numărul de bytes de alocat, și nu îi inițializează cu `0`. `realloc(p, lg)` schimbă lungimea zonei de memorie indicată de `p`. În caz că `lg` depășește lungimea inițială, se verifică dacă elementele necesare de la dreapta blocului de memorie sunt libere. Dacă da, se alocă restul memoriei acolo, dar dacă nu, se alocă un nou bloc de memorie, se copiază acolo conținutul precedent, și se eliberează fosta zonă de memorie.
+
+``` cpp
+  int *v = (int*) calloc(10, sizeof(int)); // Se alocă memorie pentru 10 elemente de tip int, inițializate cu 0.
+  free(v); // Se eliberează memoria alocată anterior.
+  v = (int*) malloc(5 * sizeof(int)); // Se alocă memorie pentru 5 elemente de tip int.
+  v = (int*) realloc(v, 7 * sizeof(int)); // Se realocă memorie pentru 7 elemente de tip int.
+```
+
+>>> header
+  #### Funcții pentru comunicarea cu sistemul
+
+  `exit(x)` (oprește execuția programului, returnând exit-code-ul `x`), `system(str)` (execută în cmd comanda `str`) etc.
+<<<
+
+Până acum, singurul context în care am folost `exit` a fost în cadrul unei funcții de backtracking, pentru a ieși din program imediat după ce am găsit o soluție validă. Se poate observa că în cadrul funcției `main`, un apel de forma `exit(x)` este echivalent cu `return x;`.
+
+``` cpp
+  system("cls"); // Se șterge conținutul din consolă.
+  exit(0); // Se oprește execuția programului, returnând codul 0 (programul s-a încheiat cu succes).
+```
+
+>>> header
+  #### Funcții pentru generarea de numere random
+
+  `srand`, `rand`
+<<<
+
+Funcția `rand` returnează un număr natural pseudo-random. Pentru a limita intervalul său de valori, putem folosi operația modulo. Concret, `rand() % x` va produce un număr random natural mai mic decât `x`. Generatorul de numere random din C se bazează pe o relație de recurență, ceea ce îl face să genereze aceleași numere „random” la fiecare rulare a programului. Pentru a remedia asta, la început trebuie să apelăm funcția `srand(seed)`, care va inițializa generatorul cu valoarea `seed`. Ca `seed`-ul să difere de la o rulare a programului la alta, cea mai simplă soluție este să folosim `time(NULL)`.
+
+``` cpp
+  srand(time(NULL));
+  cout << rand() % 10 << '\n'; // număr random din intervalul [0, 10)
+```
+
+>>> header
+  #### Funcții pentru căutarea și sortarea vectorilor
+
+  `bsearch` (binary search), `qsort` (quicksort)
+<<<
+
+Având în vedere modul lor de utilizare, putem spune că cele două funcții sunt strămoși ai STL-ului. Sunt greu de folosit, și inutile acum că există STL, dar totuși mi se pare interesant să analizăm cum funcționează. Ele se bazează pe pointeri `void` și pe pointeri la funcții, pentru că în C nu existau template-uri sau supraîncărcarea de operatori.
+
+`qsort(v, lg, sz, cmp)` sortează vectorul indicat de `v`, de lungime `lg`, cu elemente de câte `sz` bytes, folosind funcția de comparare `cmp`. Aceasta trebuie să aibă neapărat antetul `int cmp(const void* x, const void* y)`, și să returneze un număr negativ dacă `x < y`, `0` dacă `x == y`, sau un număr pozitiv dacă `x > y`. Când lucrăm cu numere, putem sintetiza aceste `if`-uri returnând pur și simplu `x - y`.
+
+Funcția `bsearch(p, v, lg, sz, cmp)` caută binar valoarea indicată de `p` în vectorul indicat de `v`, de lungime `lg`, cu elemente de câte `sz` bytes, folosind funcția `cmp`, care se definește ca la `qsort`. Pointer-ul `p` trebuie să fie și el de tip `void`. Funcția va returna un pointer către __o__ zonă de memorie unde a fost găsit `*p`, sau `NULL` dacă nu a fost găsit.
+
+``` cpp
+  int cmp(const void* x, const void* y) {
+      return *(int*) x - *(int*) y;
+  }
+
+  int main() {
+      int v[] = {5, 1, 12, 9, 3, 30, 48};
+      qsort(v, 7, sizeof(int), cmp);
+
+      int toFind = 12;
+      int *ptr = (int*) bsearch(&toFind, v, 7, sizeof(int), cmp);
+
+      if (ptr)
+          cout << toFind << " a fost gasit la adresa " << ptr << '\n';
+      else
+          cout << toFind << " nu a fost gasit\n";
+      return 0;
+  }
+```
+
+### `<cstdio>`
+
+[`cstdio`](http://www.cplusplus.com/reference/cstdio/) conține funcții specifice pentru lucrul cu fișiere C. Nu voi intra în detalii, pentru că am vorbit deja despre citirea/ afișarea datelor în C [aici](citire-scriere-c-cpp).
+
+### `<cstring>`
+
+[`cstring`](http://www.cplusplus.com/reference/cstring/) conține funcții pentru lucrul cu string-uri C-style. Voi scrie un [articol](siruri-de-caractere-cpp) separat despre șirurile de caractere din C și despre biblioteca `cstring`.
+
+Cam astea mi s-au părut mie cele mai utile funcții din biblioteca standard C. Urmează curând un articol despre Standard Template Library :smile:

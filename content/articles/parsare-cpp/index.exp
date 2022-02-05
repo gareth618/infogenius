@@ -1,0 +1,244 @@
+TITLE: Parsarea fișierelor și citirea rapidă a datelor în C++
+AUTHOR: Iulian Oleniuc
+DATE: 05/07/2020
+CATEGORIES: Limbajul C++
+TAGS: c++, citire rapidă, oop, parsare, programare competitivă
+DESCRIPTION: Parsarea unui fișier presupune prelucrarea lui drept șir de caractere, extrăgând din acesta informațiile de care avem nevoie.
+
+În multe probleme de informatică, citirea standard din C++ este prea înceată pentru a ne permite să ne încadrăm în limita de timp. De obicei, asta se întâmplă la problemele în care autorul dorește să facă diferența între două soluții care, deși au complexități diferite, cum ar fi $O(n)$ și $O(n \log n)$, în practică se comportă cam la fel. Singurul mod de a departaja două astfel de soluții este rularea lor pe teste foarte mari... Atât de mari, încât timpul consumat de citirea datelor depășește adesea timpul rezolvării efective a problemei. Dacă limita de timp ar fi suficient de mare ca să-i permită unei soluții __optime__, ce folosește citire __obișnuită__, să obțină punctaj maxim, asta i-ar da voie și unei soluții cu o complexitate bună, __dar nu optimă__, ce folosește citire __rapidă__, să obțină același punctaj, ceea ce nu ar fi corect.
+
+![500; Citire obișnuită vs. Parsare](citire-obisnuita-parsare.png)
+
+Comisia Olimpiadei Internaționale de Informatică a rezolvat elegant problema asta, eliminând nevoia citirii unui input. Astfel, la IOI primești datele de intrare prin intermediul parametrilor unei funcții. Tu trebuie să o completezi în așa fel încât să returneze răspunsul corect al problemei. Totuși, nu este fezabil pentru un site ca InfoArena sau CodeForces să adopte strategia asta, deoarece ar trebui să refacă evaluatoarele pentru mii de probleme și ar complica în general lucrurile. Prin urmare, soluția este să folosim cu toții citirea rapidă atunci când este cazul. În acest articol voi vorbi despre cum putem citi rapid datele de intrare în C++, folosind parsare și nu numai.
+
+## Citirea rapidă din consolă
+
+Citirea datelor din consolă este din start mult mai înceată decât cea din fișierele obișnuite. Putem rezolva asta prin următoarele două linii de cod:
+
+``` cpp
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+```
+
+Inserate înaintea operațiilor de input/ output, pot reduce __drastic__ timpul de execuție al programului. De exemplu, la problema [asta](https://codeforces.com/gym/102566/problem/F), am depășit limita de o secundă pe testul 2 cu [citire obișnuită](https://codeforces.com/gym/102566/submission/75170422), însă am luat Accepted în doar 0.38 secunde [optimizând citirea](https://codeforces.com/gym/102566/submission/75170771). Puteți citi [aici](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull) despre rolul fiecărei dintre cele două instrucțiuni. Pe noi ne interesează mai mult efectul secundar al lor, și anume accelerarea citirii din consolă, esențială în foarte multe probleme de pe CodeForces și alte online judge-uri.
+
+## Parsarea fișierelor în C++
+
+Când vine vorba de citirea datelor din fișier, optimizările de mai sus nu mai pot fi aplicate. Totuși, de ce citirea obișnuită din fișiere nu este optimă? Mitul spune că de vină este arhitectura orientată pe obiect a clasei `ifstream`, însă motivul adevărat este că funcțiile membre ale acesteia sunt foarte generaliste, permițând folosirea a tot felul de reguli ciudate de formatare. Același dezavantaj îl are și funcția [`fscanf`](citire-scriere-c-cpp/#header-9), care nu aduce cine știe ce beneficiu față de citirea cu `ifstream`. Aici intervine parsarea.
+
+Conform dicționarului Cambridge, __to parse__ înseamnă __a descompune o propoziție în părți de vorbire (substantiv, verb etc.)__. În mod similar, parsarea unui fișier presupune prelucrarea lui drept șir de caractere, extrăgând din acesta informațiile de care avem nevoie (numere, caractere etc.) folosindu-ne de funcții proprii. Parsarea este mai rapidă decât citirea obișnuită deoarece se axează doar pe citirea tipurilor de date de care avem nevoie. De obicei, e vorba numai de numere întregi.
+
+## Parsarea fișierelor de intrare
+
+În continuare, voi prezenta implementarea unei clase numite `InParser`, ce are un comportament asemănător cu cel al clasei `ifstream`, tocmai pentru a fi ușor de utilizat. Acest model de implementare permite tranziția rapidă de la citirea cu `ifstream` la cea parsată atunci când realizezi că ai nevoie de ea: Pur și simplu adaugi definiția clasei `InParser` și înlocuiești `ifstream` cu `InParser` în declarația `ifstream fin("fisier.in");`. Cred că implementarea este suficient de intuitivă ca să poată fi înțeleasă fără cine știe ce cunoștințe legate de programarea orientată pe obiect.
+
+### Structura clasei `InParser`
+
+``` cpp
+  class InParser {
+      vector<char> str;
+      int ptr;
+      ifstream fin;
+
+      char getChar();
+      template<class T> T getInt();
+
+  public:
+      InParser(const char* name);
+      ~InParser();
+      template<class T> friend InParser& operator>>(InParser& in, T& num);
+  };
+```
+
+În șirul `str` vom citi succesiv câte un calup de caractere de lungime arbitrară (`100.000` să zicem) din fișierul `fin`. Ca tip de date am ales un `vector<char>`, permițând astfel șirului să poată fi alocat dinamic, ca să nu risipim memoria de pe stivă la declararea locală a unui obiect de tipul `InParser`. În variabila `ptr` reținem poziția la care ne aflăm momentan în șirul `str`. Când terminăm de procesat calupul curent (când `ptr` ajunge la `100.000`), îl citim pe următorul și resetăm `ptr` la `0`.
+
+### Funcția `getChar`
+
+Funcția `getChar` ne returnează următorul caracter din `str` și îl incrementează pe `ptr`. Înainte de asta, testează dacă am epuizat caracterele din calupul curent. În caz afirmativ, citește în `str` următoarele `100.000` de caractere din `fin` și resetează `ptr` la `0`. Pentru asta, am folosit funcția `read(char* str, int len)`, membră a clasei `ifstream`, care citește în `str` o secvență de `len` caractere.
+
+``` cpp
+  char getChar() {
+      if (ptr == int(str.size())) {
+          fin.read(str.data(), str.size());
+          ptr = 0;
+      }
+      return str[ptr++];
+  }
+```
+
+Expresia `str.data()` returnează un pointer către vectorul propriu-zis al obiectului `str`, iar `str.size()` returnează lungimea lui `str`.
+
+### Funcția `getInt`
+
+Funcția `getInt` are rolul de a ne returna următorul număr întreg din fișierul nostru, folosindu-se de apeluri repetate ale funcției `getChar`. Algoritmul este următorul: Citim caractere cât timp acestea nu sunt cifre sau semnul minus. Dacă după asta tocmai am dat de un minus, reținem în variabila `sgn` valoarea `-1`, semn că numărul curent e negativ. Apoi, mai citim un caracter ca să trecem la numărul propriu-zis. Dacă în schimb am dat de o cifră, înseamnă că numărul e pozitiv, așa că `sgn` devine `+1`. După aceea, citim caractere cât timp acestea sunt cifre, construind pe parcurs în `num` modulul numărului, pe care la final îl înmulțim cu `sgn`. Ca să fim siguri că citirea ultimului număr se va încheia corect, trebuie să ni se garanteze că fișierul de intrare se termină cu un __newline__, ceea ce în mod normal este adevărat.
+
+``` cpp
+  template<class T>
+  T getInt() {
+      char chr = getChar();
+      while (!isdigit(chr) && chr != '-')
+          chr = getChar();
+      int sgn = +1;
+      if (chr == '-') {
+          sgn = -1;
+          chr = getChar();
+      }
+      T num = 0;
+      while (isdigit(chr)) {
+          num = num * 10 + chr - '0';
+          chr = getChar();
+      }
+      return sgn * num;
+  }
+```
+
+Am făcut funcția un `template`, ca să nu fie nevoie să definesc câte o funcție diferită pentru fiecare tip de întreg. Astfel, chiar dacă la un moment dat citim un `int`, iar mai târziu un `long long int`, va fi suficientă o singură funcție `getInt`, care va declara variabila `num` folosind tipul de date pe care vrem să-l citim (`T`).
+
+### Constructorul și destructorul
+
+Constructorul și destructorul sunt două funcții apelate automat la crearea și respectiv distrugerea unui obiect de tipul clasei noastre, `InParser`. Constructorul primește ca parametru numele fișierului și inițializează cele trei variabile membre: `str` devine un vector de lungime `1e5` (dacă vrem să folosim altă valoare, ăsta e singurul loc unde trebuie să o modificăm!), `ptr` este inițializat cu `str.size()` (ca la primul apel al funcției `getChar` să fie extrase primele caractere din fișier), iar `fin` devine un nou obiect de tipul `ifstream`, corespunzător fișierului cu numele `name`. Destructorul este mai simplu; rolul lui este de a închide fișierul `fin`. Închiderea unui fișier de intrare este opțională, dar de ce să nu o folosim dacă tot ne dă șansa să scriem un destructor care chiar face ceva? :yey:
+
+``` cpp
+  InParser(const char* name) : str(1e5), ptr(str.size()), fin(name) { }
+  ~InParser() { fin.close(); }
+```
+
+### Operatorul de extracție din stream (`>>`)
+
+Mai trebuie doar să supraîncărcăm operatorul `>>` pentru tipuri de date întregi. N-o să intru în detalii cu sintaxa.
+
+``` cpp
+  template<class T>
+  friend InParser& operator>>(InParser& in, T& num) {
+      num = in.getInt<T>();
+      return in;
+  }
+```
+
+La finalul apelului acestei funcții, variabila `num`, transmisă prin referință, trebuie să aibă valoarea numărului proaspăt citit. Pentru asta e responsabilă linia 3. În plus, funcția trebuie să returneze o referință către stream-ul `in`, pentru a permite efectuarea de citiri înlănțuite (`fin >> a >> b >> c;`).
+
+### Exemplu de utilizare
+
+Acum că avem definiția completă a clasei, iată o sursă demonstrativă:
+
+``` cpp -> Parsarea citirii
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  class InParser {
+      vector<char> str;
+      int ptr;
+      ifstream fin;
+
+      char getChar() {
+          if (ptr == int(str.size())) {
+              fin.read(str.data(), str.size());
+              ptr = 0;
+          }
+          return str[ptr++];
+      }
+
+      template<class T>
+      T getInt() {
+          char chr = getChar();
+          while (!isdigit(chr) && chr != '-')
+              chr = getChar();
+          int sgn = +1;
+          if (chr == '-') {
+              sgn = -1;
+              chr = getChar();
+          }
+          T num = 0;
+          while (isdigit(chr)) {
+              num = num * 10 + chr - '0';
+              chr = getChar();
+          }
+          return sgn * num;
+      }
+
+  public:
+      InParser(const char* name) : str(1e5), ptr(str.size()), fin(name) { }
+      ~InParser() { fin.close(); }
+
+      template<class T>
+      friend InParser& operator>>(InParser& in, T& num) {
+          num = in.getInt<T>();
+          return in;
+      }
+  };
+
+  int main() {
+      InParser fin("file.in");
+      int a; int64_t b; fin >> a >> b;
+      cout << a + b << '\n';
+      return 0;
+  }
+^^^
+
+## Parsarea fișierelor de ieșire
+
+Până acum am discutat despre parsarea citirii în C++. Uneori însă, este nevoie să optimizăm și scrierea în fișiere. Asta se întâmplă mult mai rar, pentru că de obicei dimensiunea output-ului la problemele de informatică este relativ redusă, având ordinul $O(1)$ sau $O(n)$. Eu unul n-am avut niciodată nevoie să parsez ieșirea, însă am scris o clasă și pentru asta. Clasa `OutParser` seamănă foarte mult cu `InParser`, așa că vă voi arăta codul direct:
+
+``` cpp -> Parsarea afișării
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  class OutParser {
+      vector<char> str;
+      int ptr;
+      ofstream fout;
+
+      void putChar(char chr) {
+          if (ptr == int(str.size())) {
+              fout.write(str.data(), str.size());
+              ptr = 0;
+          }
+          str[ptr++] = chr;
+      }
+
+      template<class T>
+      void putInt(T num) {
+          if (num < 0) {
+              putChar('-');
+              num *= -1;
+          }
+          if (num > 9)
+              putInt(num / 10);
+          putChar(num % 10 + '0');
+      }
+
+  public:
+      OutParser(const char* name) : str(1e5), ptr(0), fout(name) { }
+      ~OutParser() { fout.write(str.data(), ptr); fout.close(); }
+
+      template<class T>
+      friend OutParser& operator<<(OutParser& out, const T num) {
+          out.putInt(num);
+          return out;
+      }
+
+      friend OutParser& operator<<(OutParser& out, const char chr) {
+          out.putChar(chr);
+          return out;
+      }
+
+      friend OutParser& operator<<(OutParser& out, const char* str) {
+          for (int i = 0; str[i]; i++)
+              out.putChar(str[i]);
+          return out;
+      }
+  };
+
+  int main() {
+      OutParser fout("file.out");
+      int a, b; cin >> a >> b;
+      fout << a << " + " << b << " = " << a + b << '\n';
+      return 0;
+  }
+^^^
+
+Pentru clasa asta a fost nevoie să supraîncarc operatorul de inserție în stream atât pentru numere întregi, cât și pentru caractere și string-uri, pentru că la afișare avem întotdeauna nevoie de un spațiu, un enter sau un `"-1\n"`. În rest, mecanismul e simplu: Transformăm numerele în șiruri de caractere, ale căror elemente le inserăm pe rând în `str`. Când terminăm de umplut block-ul de caractere, îl „vărsăm” în `fout` și resetăm `ptr` la `0`. Întotdeauna este mai rapid să afișăm șiruri de caractere cu totul, decât caracter cu caracter. La fel este și în cazul citirii.
+
+Cam atât despre parsare. Țin să menționez că asta e cea mai clean implementare a parsării, fiind singura pe care am văzut-o să fie 100% C++. Adică, celelalte parsări folosesc în interiorul claselor fișiere C-style, nu de tip `ifstream/ofstream`. Însă, eu am observat că există alternative C++ la funcțiile `fread` și `fwrite`, reușind să creez două clase care nu emit niciun warning la compilare! Dacă aveți vreo întrebare legată de parsarea în C++, nu ezitați să o adresați mai jos, într-un comentariu :smile:
+
+**PS:** Parsarea mai este, desigur, un mod de a-ți asigura o poziție în topul celor mai rapide cinci surse în cadrul diverselor probleme de pe InfoArena.

@@ -1,0 +1,91 @@
+TITLE: Problema comis-voiajorului [Programare dinamică]
+AUTHOR: Iulian Oleniuc
+DATE: 27/06/2019
+CATEGORIES: Algoritmică și structuri de date, Programare dinamică
+TAGS: bitmask, dinamică pe stări exponențiale, operații pe biți, problema comis-voiajorului, programare dinamică
+DESCRIPTION: În articolul de astăzi voi prezenta problema comis-voiajorului rezolvată prin programare dinamică pe stări exponențiale.
+
+Într-un [articol](problema-comis-voiajorului-backtracking) mai vechi am prezentat problema comis-voiajorului și rezolvarea ei prin backtracking. Totuși, pentru date de intrare mici (numărul de noduri sub $20$), există o soluție mai eficientă, bazată pe programare dinamică. Tehnica folosită se numește __dinamică pe stări exponențiale__, sau dinamică pe configurații. În continuare, vom avea în vedere restricțiile din problema [Ciclu hamiltonian de cost minim](https://infoarena.ro/problema/hamilton) de pe InfoArena.
+
+## Enunț
+
+Se dă un graf orientat ponderat cu $n \le 18$ vârfuri (indexate de la $0$) și $m$ arce. Fiecare arc $(i, j)$ are asociat un cost $\mathrm{ad}[i][j]$. Să se determine un ciclu hamiltonian de cost minim în acest graf, sau să se afișeze `"Nu exista solutie"` dacă graful nu este hamiltonian. Fiind vorba despre un graf orientat, corect ar fi să spunem __circuit__ hamiltonian, dar voi păstra formularea de pe InfoArena.
+
+## Soluție prin programare dinamică
+
+Faptul că numărul de noduri este foarte mic (maxim $18$) ne duce cu gândul că probabil o soluție exponențială se va încadra în timp. Dacă ați mai rezolvat până acum vreo problemă de dinamică pe stări exponențiale, sau dacă vă pricepeți la programare dinamică în general, probabil că deja v-ați prins cum arată subproblemele. Dacă nu, veți afla acum tehnica prin care se abordează o astfel de problemă.
+
+### Formularea subproblemelor
+
+Dinamica va fi $\mathrm{dp}[mask][i] =$ costul minim al unui drum ce vizitează exact o singură dată fiecare nod din submulțimea $mask$, care începe din nodul $0$, și se termină în nodul $i$, sau $\infty$ în caz că nu există un astfel de drum. Veți afla mai încolo de ce am fixat începutul drumului în $0$. Parametrul $mask$ este o [mască de biți](operatii-pe-biti-cpp/#header-19) ce codifică o submulțime de noduri ale grafului: Bitul $k$ este setat la $1$ dacă și numai dacă nodul $k$ face parte din submulțimea respectivă.
+
+### Găsirea relației de recurență
+
+Acum că am formulat subproblema, este relativ simplu să deducem recurența. Dacă drumul se termină în nodul $i$, cu siguranță penultimul nod din componența drumului va fi un nod $j$ pentru care există arcul $(j, i)$. Evident, costul minim al unui drum optim pentru submulțimea $mask$ ce se termină în $(j, i)$ este egal cu costul minim al unui drum optim pentru submulțimea `mask ^ (1 << i)`, la care se adaugă costul arcului $(j, i)$, adică $\mathrm{ad}[j][i]$. (Prin `mask ^ (1 << i)` se codifică submulțimea obținută eliminându-l pe $i$ din $mask$. Este echivalent cu `mask - (1 << i)`.) Calculăm această valoare pentru fiecare $j$ posibil, și alegem minimul dintre ele, recurența fiind:
+
+$$\mathrm{dp}[mask][i] = \min_{\forall j, \exists (j, i)} \left\{\mathrm{dp}[mask - 2^i][j] + \mathrm{ad}[j][i]\right\}$$
+
+### Folosirea rezultatelor
+
+După ce am calculat dinamica, mai avem de făcut ceva pentru a ajunge la soluție. În $\mathrm{dp}[2^n - 1][i]$ avem costul minim al unui drum hamiltonian pentru întregul graf. Pentru a-l transforma în ciclu, mai rămâne să-i adăugăm la final arcul $(i, 0)$. Acum se poate vedea de ce am fixat nodul de start în $0$. Dacă n-ar fi fost fixat, n-am fi știut ce arc să adăugăm pentru a forma ciclu, așa că ar fi trebuit să mai avem o dimensiune la dinamică -- nodul de start. Însă, acesta __poate__ fi ales de la început, deoarece ciclul final oricum trebuie să conțină toate nodurile. Așadar, rezultatul problemei va fi:
+
+$$\mathrm{sol} = \min_{0 \le i \lt n} \left\{\mathrm{dp}[2^n - 1][i] + \mathrm{ad}[i][0]\right\}$$
+
+Dacă am obținut $\infty$, înseamnă că nu există soluție.
+
+## Implementare în C++
+
+Câteva detalii de implementare: În $\mathrm{in}[i]$ am reținut o listă cu nodurile $j$ pentru care există arcul $(j, i)$, iar în $\mathrm{ad}[i][j]$ costul arcului $(i, j)$. Am avut nevoie și de liste și de matrice de adiacență pentru a putea parcurge vecinii unui nod eficient, dar și pentru a accesa $\mathrm{ad}[i][0]$ în $O(1)$.
+
+Pentru calcularea stărilor dinamicii, am început cu cazul de bază ($\mathrm{dp}[1][0] = 0$), iar pe restul submulțimilor le-am parcurs din $2$ în $2$, pentru că submulțimile care nu au bitul $0$ setat la $1$ nu sunt valide. Infinitul l-am reprezentat prin constanta `1e9`, care este suficient de mare pentru problema noastră.
+
+``` cpp -> Problema comis-voiajorului
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  ifstream fin("hamilton.in");
+  ofstream fout("hamilton.out");
+
+  int main() {
+      int n, m; fin >> n >> m;
+      vector<vector<int>> in(n), ad(n, vector<int>(n, 1e9));
+      for (int i = 0; i < m; i++) {
+          int x, y, z; fin >> x >> y >> z;
+          in[y].push_back(x); ad[x][y] = z;
+      }
+
+      vector<vector<int>> dp(1 << n, vector<int>(n, 1e9));
+      dp[1][0] = 0;
+      for (int mask = 3; mask < (1 << n); mask += 2) // Parcurg submulțimile.
+          for (int i = 1; i < n; i++) // Parcurg biții din mask.
+              if (mask & (1 << i)) // Testez dacă bitul e setat la 1.
+                  for (int j : in[i]) // Dacă da, parcurg nodurile j care intră în i.
+                      dp[mask][i] = min(dp[mask][i], dp[mask ^ (1 << i)][j] + ad[j][i]); // Actualizez dp-ul.
+
+      int sol = 1e9;
+      for (int i = 1; i < n; i++)
+          sol = min(sol, dp[(1 << n) - 1][i] + ad[i][0]);
+      if (sol == 1e9)
+          fout << "Nu exista solutie\n";
+      else
+          fout << sol << '\n';
+      return 0;
+  }
+^^^
+
+## Complexitate
+
+Se vede clar că numărul de stări ale dinamicii crește exponențial din cauza numărului de submulțimi ale nodurilor. De aici și numele de programare dinamică pe stări exponențiale. Complexitatea în spațiu a algoritmului este $O(n \cdot 2^n)$.
+
+Timpul de calculare a unei stări $\mathrm{dp}[mask][i]$ este egal cu numărul de noduri $j$ ce „intră” în $i$. Astfel, timpul necesar pentru calcularea __tuturor__ stărilor ce îl au ca prim parametru pe $mask$ se amortizează la $O(m)$. Deci, complexitatea în timp a algoritmului este $O(m \cdot 2^n)$.
+
+## Probleme recomandate
+
++++
+> [Ubuntzei](https://infoarena.ro/problema/ubuntzei)
+> [Coins](https://infoarena.ro/problema/coins)
+> [Pavare](https://infoarena.ro/problema/pavare)
+> [Ture](https://infoarena.ro/problema/ture)
+---
+
+Problemele recomandate nu sunt legate tocmai de problema comis-voiajorului, dar se folosesc de conceptul de programare dinamică pe stări exponențiale. Cea mai interesantă mi se pare problema Pavare, pentru că îmbină backtracking-ul cu dinamica. Pe lângă aceste probleme, un exercițiu bun este să vă gândiți cum se poate reconstitui soluția având deja calculată matricea $\mathrm{dp}$. Dacă aveți vreo întrebare despre această tehnică de programare dinamică, o puteți lăsa într-un comentariu :smile:

@@ -1,0 +1,121 @@
+TITLE: Problema reteta -- OJI 2009, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 28/06/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: căutare binară, clasa 10, evaluare de expresii, oji 2009, șiruri de caractere
+DESCRIPTION: Problema reteta, de clasa a 10-a, s-a dat în 2009 la OJI. Ni se dă o rețetă codificată sub forma unui șir de caractere într-un mod mai...
+
++++ none
+> **Dificultate:** :1/5:
+> **Autor:** Emanuela Cerchez
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/reteta2), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=1098)
+---
+
+## Rezumat
+
+Ni se dă o rețetă codificată sub forma unui șir de caractere, într-un mod mai neobișnuit. Rețeta este scrisă pe un singur rând, unde sunt precizate ingredientele folosite, cantitățile necesare, ordinea în care se execută operațiile, precum și timpul pentru care se amestecă fiecare grup de ingrediente. De exemplu:
+
+`(((zahar 100 ou 3)5 unt 100 nuca 200)4 (lapte 200 cacao 50 zahar 100) 3)20`
+
+Semnificația rețetei: Se amestecă `100` grame de zahăr cu `3` ouă pentru `5` minute. Se adaugă `100` grame de unt și `200` de nucă, și se amestecă toată compoziția pentru `4` minute. Apoi, timp de `3` minute se amestecă `200` grame de lapte, `50` grame de cacao și `100` de zahăr. La final, se amestecă cele două compoziții pentru `20` de minute.
+
+Trebuie să determinăm timpul total de preparare a rețetei și cantitățile necesare din fiecare ingredient. Ingredientele trebuie afișate în ordine alfabetică.
+
+## Soluție
+
+Pentru reținerea ingredientelor din rețetă am definit `struct`-ul `Ing`, ce conține câmpul `cnt` (frecvența ingredientului) și `str` (numele său). Am reținut un vector cu ingredientele, sortat după numele lor. Astfel, am putut folosi căutare binară pentru găsirea unui ingredient în vector și actualizarea frecvenței sale. Când acesta nu se găsește, îl inserăm pe poziția unde se oprește căutarea binară. Pentru calcularea timpului total de preparare a rețetei, pur și simplu se adună toate numerele scrise imediat după parantezele închise (ignorând spațiile).
+
+Mai rămâne de discutat parsarea (citirea) expresiei. Eu am creat o copie a rețetei în variabila `aux`, pe care am împărțit-o în cuvinte folosind funcția `strtok`. Apoi, am parcurs originalul șirului de caractere (`str`), reținând caracterul precedent (pentru a ști când să actualizăm răspunsul la a doua cerință). Dacă dăm de o cifră sau de o literă, actualizăm vectorul de ingrediente sau timpul total de preparare folosind string-ul delimitat de `strtok` ce începe pe aceeași poziție, iar apoi trecem la următorul spațiu.
+
+Puteam obține o sursă mai eficientă folosind un __treap__ (`map`-ul din STL), pentru a insera în timp logaritmic noile ingrediente. Dar, fiind o problemă destul de clasică cu șiruri de caractere, am lăsat varianta cu vectori și string-uri din C :wink:
+
+## Sursă C++
+
+``` cpp -> Problema Rețeta
+  #include <cstring>
+  #include <cstdlib>
+  #include <fstream>
+
+  #define SMAX 30
+  #define IMAX 110
+  #define LMAX 1010
+
+  std::ifstream fin("reteta.in");
+  std::ofstream fout("reteta.out");
+
+  struct Ing {
+      int cnt;
+      char str[SMAX];
+  };
+
+  int tmp; // timpul total
+  char str[LMAX], aux[LMAX];
+
+  int nrIng;
+  Ing ing[IMAX];
+
+  /// Funcția ce returnează poziția unui ingredient în ing
+  int find(char* str) {
+      // Căutăm binar ingredientul în vector:
+      int k, m, st = -1, dr = nrIng;
+      while (dr - st > 1) {
+          m = (st + dr) / 2;
+          k = strcmp(str, ing[m].str);
+          if (k > 0)
+              st = m;
+          else if (k < 0)
+              dr = m;
+          else
+              return m;
+      }
+
+      // Ingredientul nu a fost găsit, deci îl inserăm:
+      for (int i = nrIng; i > dr; i--)
+          ing[i] = ing[i - 1];
+
+      strcpy(ing[dr].str, str);
+      ing[dr].cnt = 0;
+
+      nrIng++; // Actualizăm numărul de elemente.
+      return dr;
+  }
+
+  int main() {
+      int pos;
+      char *p, prc;
+
+      // Citim rețeta și o copiem în aux:
+      fin.getline(str, LMAX);
+      strcpy(aux, str);
+
+      // Împărțim aux în numere și cuvinte:
+      p = strtok(aux, "( )");
+      while (p)
+          p = strtok(NULL, "( )");
+
+      // Parsăm expresia:
+      for (p = str; *p; p++)
+          if (*p == ')')
+              prc = ')';
+          else if ('a' <= *p && *p <= 'z') {
+              prc = 'a';
+              pos = find(aux + (p - str));
+              p += strlen(aux + (p - str)) - 1;
+          }
+          else if ('0' <= *p && *p <= '9') {
+              if (prc == ')')
+                  tmp += atoi(aux + (p - str));
+              else
+                  ing[pos].cnt += atoi(aux + (p - str));
+              p += strlen(aux + (p - str)) - 1;
+          }
+
+      // Afișăm rezultatele:
+      fout << tmp << '\n';
+      for (int i = 0; i < nrIng; i++)
+          fout << ing[i].str << ' ' << ing[i].cnt << '\n';
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Rețeta, lasă un comentariu și te voi ajuta :smile:

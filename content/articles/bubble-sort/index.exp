@@ -1,0 +1,89 @@
+TITLE: Bubble Sort în C++ -- Sortarea prin metoda bulelor
+AUTHOR: Iulian Oleniuc
+DATE: 08/07/2018
+CATEGORIES: Algoritmică și structuri de date, Sortare
+TAGS: bubble sort, sortare, vectori
+DESCRIPTION: Bubble Sort (Sortarea prin metoda bulelor) este probabil cea mai simplă metodă de sortare a unui vector, printre primele pe care le învățăm.
+
+Bubble Sort, sau sortarea prin metoda bulelor, este probabil cea mai simplă metodă de sortare a unui [vector](vectori-cpp), printre primele învățate la școală. Aceasta se numește metoda bulelor, deoarece modul în care elementele vectorului se deplasează spre poziția lor finală poate fi asemănat cu felul în care bulele de aer se ridică în partea superioară a unei sticle de suc. Vom considera că vrem să sortăm vectorul $v$, indexat de la $1$, de lungime $n$.
+
+## Algoritm
+
+Pentru fiecare pereche de elemente consecutive din vectorul $v$, dacă cele două numere nu sunt în ordine crescătoare, le inversăm. Repetăm procesul cât timp vectorul nu este sortat. Ne dăm seama că nu am terminat de sortat vectorul dacă la parcurgerea sa am efectuat măcar o interschimbare. Iată implementarea algoritmului Bubble Sort în C++:
+
+``` cpp -> Bubble Sort
+  bool sorted;
+  do {
+      sorted = true;
+      for (int i = 1; i < n; i++)
+          if (v[i] > v[i + 1]) {
+              int aux = v[i];
+              v[i] = v[i + 1];
+              v[i + 1] = aux;
+              sorted = false;
+          }
+  } while (!sorted);
+```
+
+Am modelat sintagma __repetă cât timp__ prin instrucțiunea `do while`. În structura repetitivă, consider inițial că vectorul este sortat, inițializând variabila `sorted` cu `true`. Apoi, pentru fiecare element, mai puțin ultimul, testez dacă e mai mare decât următorul. Dacă da, înseamnă că cele două valori trebuie inversate, așa că pe următoarele trei linii am interschimbat valorile celor două elemente, folosind o variabilă auxiliară `aux`. Apoi, am marcat faptul că vectorul nu este încă sortat, schimbând valoarea lui `sorted` în `false`.
+
+Dacă vrem să modificăm algoritmul pentru a sorta vectorul descrescător, nu avem decât ca pe linia 5 să schimbăm operatorul din `<` în `>`. Se poate înțelege foarte ușor cum funcționează Bubble Sort prin animația de mai jos:
+
+![](bubble-sort.js)
+
+## Complexitate
+
+Din păcate, deși Bubble Sort este un algoritm foarte simplu, este și foarte ineficient. În cel mai rău caz, acesta face $O(n^2)$ pași. Un $n$ vine de la numărul de iterații din cadrul `for`-ului, iar celălalt din numărul de intrări în `do while`. Cel mai rău caz este cel în care vectorul dat este sortat descrescător (în ordinea opusă celei în care vrem să-l sortăm).
+
+Singurul avantaj al Bubble Sort-ului e că este proiectat de așa natură încât se oprește la __doar o__ intrare în `do while` după ce vectorul este deja sortat. Foarte puțini algoritmi de sortare sunt capabili să detecteze dacă au terminat de sortat vectorul și să se oprească.
+
+Deși există mai multe metode de sortare cu aceeași complexitate ca Bubble Sort, ele sunt mai rapide în practică. Asta se datorează numărului foarte mare de interschimbări (__swap__-uri) efectuate de Bubble Sort. În medie, eficiența acestui algoritm reprezintă 70% din cea a [sortării prin selecție](sortarea-prin-selectie).
+
+## Optimizări
+
+Numărând pașii de la $1$, se observă că după pasul $k$ (a $k$-a intrare în `do while`), al $k$-lea cel mai mare număr din vector ajunge pe poziția sa corespunzătoare. Putem deci să scurtăm parcurgerea din `for`, micșorând intervalul, și prin urmare numărul de swap-uri.
+
+``` cpp
+  int m = n;
+  bool sorted;
+  do {
+      sorted = true;
+      for (int i = 1; i < m; i++)
+          if (v[i] > v[i + 1]) {
+              int aux = v[i];
+              v[i] = v[i + 1];
+              v[i + 1] = aux;
+              sorted = false;
+          }
+      m--;
+  } while (!sorted);
+```
+
+Dacă ne uităm un pic mai atent, ne putem da seama că de fapt, după __ultimul__ swap ce se produce în cadrul `for`-ului, elementele rămase în dreapta sunt deja sortate. Prin urmare, putem micșora și mai mult numărul de iterații efectuate de fiecare `for`:
+
+``` cpp
+  int m = n;
+  int nextM;
+  bool sorted;
+  do {
+      sorted = true;
+      for (int i = 1; i < m; i++)
+          if (v[i] > v[i + 1]) {
+              int aux = v[i];
+              v[i] = v[i + 1];
+              v[i + 1] = aux;
+              nextM = i;
+              sorted = false;
+          }
+      // Elementele de la nextM + 1 la n sunt deja la locul lor:
+      m = nextM;
+  } while (!sorted);
+```
+
+## Concluzie
+
+În concluzie, Bubble Sort este un algoritm simplu, potrivit pentru introducerea în algoritmii de sortare și în studiul complexității. Dar, chiar și cu optimizarea de mai sus, este prea ineficient pentru a fi utilizat în practică, așa că rămâne doar un subiect ce generează niște probleme teoretice interesante.
+
+Una dintre ele este [Trouble Sort](https://codingcompetitions.withgoogle.com/codejam/round/00000000000000cb/00000000000079cb), dată anul acesta la runda de calificare a concursului [Google Code Jam](https://codingcompetitions.withgoogle.com/codejam/). În această problemă este vorba despre o variație a algoritmului Bubble Sort, care fiind gândită un pic greșit, duce de fapt la sortarea independentă a elementelor de pe poziții de paritate diferită.
+
+Dacă aveți vreo întrebare legată de algoritmul Bubble Sort, nu ezitați să o lăsați mai jos, într-un comentariu :smile:

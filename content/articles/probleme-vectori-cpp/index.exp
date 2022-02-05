@@ -1,0 +1,408 @@
+TITLE: Probleme simple cu vectori în C++
+AUTHOR: Iulian Oleniuc
+DATE: 29/10/2017
+CATEGORIES: Limbajul C++
+TAGS: c++, inserare, parcurgere, ștergere, vectori
+DESCRIPTION: În acest articol voi prezenta câteva probleme elementare cu vectori în C++, ce presupun prelucrarea elementelor unui vector, verificarea...
+
+În acest articol voi prezenta câteva probleme elementare cu [vectori în C++](vectori-cpp), ce presupun prelucrarea elementelor unui vector, verificarea unor proprietăți, parcurgerea unui vector etc. Problemele sunt simple, însă fiecare are o idee bună de reținut. Pentru toate acestea vom considera un vector `v[VMAX]`, de tip `int`, indexat de la `0`, cu numărul de elemente `n`.
+
+## Probleme de parcurgere a unui vector
+
+>>> header
+  ### Problema 1.
+
+  Să se determine numărul de elemente impare din vector.
+<<<
+
+Se parcurge vectorul și dacă elementul curent este impar, soluția (pe care o reținem într-o variabilă `nr`) se incrementează.
+
+``` cpp
+  int nr = 0;
+  for (int i = 0; i < n; i++)
+      if (v[i] % 2)
+          nr++;
+  cout << nr << '\n';
+```
+
+>>> header
+  ### Problema 2.
+
+  Să se determine numărul de elemente din vector care sunt multipli de `k`.
+<<<
+
+Aceeași idee ca mai sus, doar că la fiecare pas testăm dacă elementul curent este divizibil cu numărul `k`.
+
+``` cpp
+  int nr = 0;
+  for (int i = 0; i < n; i++)
+      if (v[i] % k == 0)
+          nr++;
+  cout << nr << '\n';
+```
+
+>>> header
+  ### Problema 3.
+
+  Să se afișeze elementele vectorului de pe poziții pare, în ordinea crescătoare a indicilor.
+<<<
+
+Parcurgem vectorul din 2 în 2 pornind de la poziția `0`. Nu are importanță dacă `n` este par sau impar.
+
+``` cpp
+  for (int i = 0; i < n; i += 2)
+      cout << v[i] << ' ';
+  cout << '\n';
+```
+
+>>> header
+  ### Problema 4.
+
+  Să se afișeze elementele vectorului de pe poziții impare, în ordinea descrescătoare a indicilor.
+<<<
+
+De data asta contează paritatea lui `n`, deoarece nu mai pornim de la o poziție fixă. Pentru a începe de la o poziție pară, vom folosi expresia compactă `n % 2 ? n - 2 : n - 1`. Operatorul `?:` este mai puțin folosit la școală, așa că dacă nu îl cunoașteți, puteți consulta [acest articol](operatori-expresii-cpp).
+
+``` cpp
+  for (int i = n % 2 ? n - 2 : n - 1; i >= 1; i -= 2)
+      cout << v[i] << ' ';
+  cout << '\n';
+```
+
+>>> header
+  ### Problema 5.
+
+  Să se determine minimul și maximul elementelor din vector, precum și indicii acestor valori.
+<<<
+
+Vom folosi două variabile ce vor reține indicii minimului și respectiv maximului din vector, `iMin` și `iMax`. Le inițializăm pe ambele cu `0`, ceea ce înseamnă că inițial atât minimul cât și maximul sunt egale cu primul element din vector. Apoi parcurgem restul vectorului și actualizăm cele două valori. Nu este necesar să reținem încă două variabile pentru minim și maxim, deoarece avem deja aceste valori în vector și le putem accesa foarte simplu.
+
+``` cpp
+  int iMin = 0;
+  int iMax = 0;
+  for (int i = 1; i < n; i++) {
+      if (v[i] < v[iMin]) iMin = i;
+      if (v[i] > v[iMax]) iMax = i;
+  }
+  cout << v[iMin] << ' ' << iMin << '\n';
+  cout << v[iMax] << ' ' << iMax << '\n';
+```
+
+>>> header
+  ### Problema 6.
+
+  Să se determine suma elementelor vectorului.
+<<<
+
+Pur și simplu parcurgem vectorul și adunăm într-o variabilă `sum` fiecare valoare din el. Trebuie să fim atenți însă la intervalul de valori ale elementelor vectorului, deoarece suma va putea depăși maximul pe care îl suportă tipul `int`, caz în care va trebui să folosim `(unsigned) long long int`. Sau, în cel mai rău caz, numere mari, desigur :yey:
+
+``` cpp
+  int sum = 0;
+  for (int i = 0; i < n; i++)
+      sum += v[i];
+  cout << sum << '\n';
+```
+
+>>> header
+  ### Problema 7.
+
+  Să se afișeze elementele vectorului cuprinse între indicii `a` și `b`.
+<<<
+
+Modificăm un pic antetul `for`-ului de la afișarea unui vector. Pornim de la `a` și ne oprim la `b`.
+
+``` cpp
+  for (int i = a; i <= b; i++)
+      cout << v[i] << ' ';
+  cout << '\n';
+```
+
+>>> header
+  ### Problema 8.
+
+  Să se afle câte elemente ale vectorului aparțin intervalului închis determinat de primul și ultimul element.
+<<<
+
+Parcurgem vectorul și la fiecare pas testăm dacă elementul curent respectă condiția dată. Dacă da, incrementăm soluția. Nu este o idee grozavă să inițializăm răspunsul cu `2` și să sărim peste primul și ultimul element, știind că ele respectă condiția. Asta pentru că în cazul în care vectorul ar avea un singur element, am afișa `2` în loc de `1`.
+
+``` cpp
+  int nr = 0;
+  for (int i = 0; i < n; i++)
+      if (v[0] <= v[i] && v[i] <= v[n - 1])
+          nr++;
+  cout << nr << '\n';
+```
+
+>>> header
+  ### Problema 9.
+
+  Să se inverseze elementele vectorului dat.
+<<<
+
+Putem folosi un contor care „merge” până la jumătatea vectorului, dar ar trebui să găsim o formulă în funcție de acesta pentru a determina indicele elementului din dreapta cu care trebuie să-l interschimbăm... În plus, ar fi și ineficient să se calculeze acea expresie la fiecare pas, așa că cea mai bună variantă este următoarea: Folosim 2 iteratori, unul pentru stânga și unul pentru dreapta. La fiecare pas îl incrementăm pe cel stâng și îl decrementăm pe cel drept, apoi interschimbăm elementele corespunzătoare. Ne oprim când stânga depășește dreapta.
+
+``` cpp
+  for (int st = 0, dr = n - 1; st < dr; st++, dr--) {
+      int aux = v[st];
+      v[st] = v[dr];
+      v[dr] = aux;
+  }
+```
+
+## Probleme de ștergere și de inserare a unor elemente într-un vector
+
+>>> header
+  ### Problema 1.
+
+  Să se șteargă elementul din vector de pe poziția `k`.
+<<<
+
+Se mută fiecare element de după poziția `k` pe poziția precedentă, după care se actualizează valoarea lui `n`.
+
+``` cpp
+  for (int i = k + 1; i < n; i++)
+      v[i - 1] = v[i];
+  n--;
+```
+
+>>> header
+  ### Problema 2.
+
+  Să se insereze elementul `x` înainte de poziția `k`.
+<<<
+
+Se mută elementele de la `n - 1` la `k` cu o poziție la dreapta, iar apoi se pune valoarea `x` pe poziția `k` și se actualizează `n`.
+
+``` cpp
+  for (int i = n; i > k; i--)
+      v[i] = v[i - 1];
+  v[k] = x;
+  n++;
+```
+
+>>> header
+  ### Problema 3.
+
+  Să se afișeze toate permutările circulare spre stânga ale vectorului.
+<<<
+
+Pentru șirul `1 2 3`, permutările circulare spre stânga sunt cele de mai jos:
+
+``` text
+  1 2 3
+  2 3 1
+  3 1 2
+```
+
+Observăm că numărul de permutări circulare spre stânga ale vectorului este egal cu numărul său de elemente, adică `n` în cazul nostru. În plus, prima permutare coincide cu șirul inițial. Pentru celelalte `n - 1` permutări, mutăm elementele de pe pozițiile `1`, `2`, ..., `n - 1` cu o poziție la stânga, iar pe primul îl ducem la final.
+
+``` cpp
+  for (int i = 0; i < n; i++)
+      cout << v[i] << ' ';
+  cout << '\n';
+
+  for (int it = 1; it < n; it++) {
+      int aux = v[0];
+      for (int i = 1; i < n; i++)
+          v[i - 1] = v[i];
+      v[n - 1] = aux;
+
+      for (int i = 0; i < n; i++)
+          cout << v[i] << ' ';
+      cout << '\n';
+  }
+```
+
+## Probleme de verificare a unor proprietăți într-un vector
+
+>>> header
+  ### Problema 1.
+
+  Să se verifice dacă în vector există elemente impare.
+<<<
+
+Inițializăm o variabilă de tip `bool` numită `ok` cu `false`. Parcurgem vectorul iar dacă găsim un element impar, `ok` devine `true` și ne oprim (prin `break`).
+
+``` cpp
+  bool ok = false;
+  for (int i = 0; i < n; i++)
+      if (v[i] % 2) {
+          ok = true;
+          break;
+      }
+
+  if (ok)
+      cout << "DA\n";
+  else
+      cout << "NU\n";
+```
+
+>>> header
+  ### Problema 2.
+
+  Să se verifice dacă toate elementele vectorului sunt egale.
+<<<
+
+Din nou, folosim o variabilă `ok`, dar de data asta o inițializăm cu `true`. Parcurgem vectorul iar dacă dăm de un element care e diferit de `v[0]`, `ok` devine `false` și ne oprim prin `break`.
+
+``` cpp
+  bool ok = true;
+  for (int i = 1; i < n; i++)
+      if (v[i] != v[0]) {
+          ok = false;
+          break;
+      }
+
+  if (ok)
+      cout << "DA\n";
+  else
+      cout << "NU\n";
+```
+
+>>> header
+  ### Problema 3.
+
+  Să se verifice dacă toate elementele vectorului sunt distincte două câte două.
+<<<
+
+Pentru fiecare element se testează dacă nu cumva este egal cu unul din dreapta lui. Dacă da, răspunsul devine __NU__. Dacă am ști că intervalul de valori ale elementelor din vector e relativ mic, am putea optimiza soluția prin folosirea unui [vector de frecvență](vectori-caracteristici-vectori-de-frecventa).
+
+``` cpp
+  bool ok = true;
+  for (int i = 0; i < n - 1; i++)
+      for (int j = i + 1; j < n; j++)
+          if (v[i] == v[j]) {
+              ok = false;
+              break;
+          }
+
+  if (ok)
+      cout << "DA\n";
+  else
+      cout << "NU\n";
+```
+
+>>> header
+  ### Problema 4.
+
+  Să se verifice dacă vectorul este ordonat crescător.
+<<<
+
+Pentru fiecare element, începând cu al doilea, testăm dacă este mai mic decât precedentul. Dacă da, răspunsul devine __NU__.
+
+``` cpp
+  bool ok = true;
+  for (int i = 1; i < n; i++)
+      if (v[i] < v[i - 1]) {
+          ok = false;
+          break;
+      }
+
+  if (ok)
+      cout << "DA\n";
+  else
+      cout << "NU\n";
+```
+
+>>> header
+  ### Problema 5.
+
+  Știind că elementele vectorului sunt distincte două câte două, să se verifice dacă vectorul dat reprezintă o permutare a mulțimii `{1, 2, ..., n}`.
+<<<
+
+Se calculează minimul și maximul din vector. Dacă minimul e `1` și maximul e `n`, atunci răspunsul este __DA__.
+
+``` cpp
+  int min = v[0];
+  int max = v[0];
+
+  for (int i = 1; i < n; i++) {
+      min = v[i] < min ? v[i] : min;
+      max = v[i] > max ? v[i] : max;
+  }
+
+  if (min == 1 && max == n)
+      cout << "DA\n";
+  else
+      cout << "NU\n";
+```
+
+## Probleme cu secvențele unui vector
+
+>>> header
+  ### Problema 1.
+
+  Știind că elementele vectorului pot fi doar `0` sau `1`, să se determine lungimea maximă a unei secvențe formate doar din `1`. O secvență a vectorului `v` este o succesiune de termeni aflați pe poziții consecutive în `v`.
+<<<
+
+Putem rezolva ușor problema calculând suma fiecărei secvențe posibile, însă voi trece direct la soluția eficientă. Parcurgem vectorul ținând în variabila `len` lungimea secvenței curente de formate numai din `1` (care se termină în `i`). Dacă elementul curent este `1`, incrementăm `len`. Altfel, actualizăm rezultatul dacă e cazul, și resetăm lungimea curentă la `0`. Această resetare se va petrece chiar dacă elementul precedent a fost și el `0`, dar asta nu influențează nici corectitudinea, nici complexitatea algoritmului. Trebuie să fim atenți însă ca la final să luăm în considerare și lungimea ultimei secvențe de `1`, adică cea care se termină pe poziția `n - 1`.
+
+``` cpp
+  int sol = 0, len = 0;
+  for (int i = 0; i < n; i++)
+      if (v[i])
+          len++;
+      else {
+          if (len > sol)
+              sol = len;
+          len = 0;
+      }
+  if (len > sol)
+      sol = len;
+  cout << sol << '\n';
+```
+
+>>> header
+  ### Problema 2.
+
+  Numim __platou__ o secvență maximală a lui `v` formată din elemente egale între ele. Să se determine numărul de platouri ale lui `v`. De exemplu, pentru vectorul `(2, 2, 5, 5, 5, 3, 2, 7, 7, 7)`, platourile sunt `(2, 2)`, `(5, 5, 5)`, `(3)`, `(2)`, `(7, 7, 7)`, numărul acestora fiind `5`.
+<<<
+
+Procedăm aproape ca la problema precedentă. Ținem în `len` lungimea platoului curent. Inițializăm `len` cu `1` și începem să parcurgem vectorul de la poziția `1`. Dacă elementul curent este egal cu cel precedent, îl incrementăm pe `len`. Dacă nu, înseamnă că am ajuns la finalul unui platou. În acest caz, incrementăm soluția și îl resetăm pe `len` la `1`. Pentru a nu mai trata la final ultima secvență, l-am inițializat pe `sol` cu `1` de la început.
+
+``` cpp
+  int sol = 1, len = 1;
+  for (int i = 1; i < n; i++)
+      if (v[i] == v[i - 1])
+          len++;
+      else {
+          sol++;
+          len = 1;
+      }
+  cout << sol << '\n';
+```
+
+>>> header
+  ### Problema 3.
+
+  Să se determine suma maximă a unei secvențe de lungime `k <= n` din vectorul dat.
+<<<
+
+Pentru a rezolva problema eficient, trebuie să facem următoarea observație: Când trecem de la secvența de lungime `k` ce se termină în `i` la cea care se termină în `i + 1`, elementul `v[i - k + 1]` dispare, iar `v[i + 1]` apare. Astfel, putem calcula în timp constant suma unei secvențe de lungime `k` bazându-ne pe suma secvenței precedente. Această tehnică poartă numele de __Sliding Window__.
+
+Deci, calculăm mai întâi suma primelor `k` elemente, iar apoi parcurgem vectorul începând cu poziția `k`, scăzând la fiecare pas elementul `v[i - k]` și adăugându-l pe `v[i]`. Pe parcurs reținem suma maximă a unei secvențe de lungime `k`.
+
+``` cpp
+  int sum = 0;
+  for (int i = 0; i < k; i++)
+      sum += v[i];
+  int sol = sum;
+  for (int i = k; i < n; i++) {
+      sum += v[i] - v[i - k];
+      sol = max(sol, sum);
+  }
+  cout << sol << '\n';
+```
+
+## Sortarea unui vector
+
+A sorta un vector înseamnă a-i ordona elementele după un anumit criteriu (de obicei, crescător). Problema sortării unui vector este mai mult decât fundamentală în informatică, așa că există o grămadă de algoritmi care o rezolvă, mai mult sau mai puțin eficient. Deocamdată am scris despre:
+
++++
+> [Bubble Sort](bubble-sort)
+> [Sortarea prin selecție](sortarea-prin-selectie)
+> [Sortarea prin inserție](sortarea-prin-insertie)
+> [Sortarea prin numărare](sortarea-prin-numarare)
+---
+
+Vă recomand să citiți și articolul despre [vectori caracteristici și vectori de frecvență](vectori-caracteristici-vectori-de-frecventa), pentru că aceștia sunt două aplicații foarte importante ale vectorilor. Dacă aveți vreo problemă cu vectori care vă dă bătăi de cap, scrieți un comentariu și vă voi ajuta :smile:

@@ -1,0 +1,78 @@
+TITLE: Problema Tăietura -- ONI 2017, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 17/07/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, oni 2017, șmenul lui mars, sume parțiale
+DESCRIPTION: Problema taietura, de clasa a 10-a, a fost dată la ONI în 2017. Se dă un vector v format din n numere întregi. O tăietură în poziția...
+
++++ none
+> **Dificultate:** :4/5:
+> **Autor:** Adrian Budău, Patrick Sava
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/taietura), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=2197)
+---
+
+## Rezumat
+
+Se dă un vector $v$ format din $n$ numere întregi. O tăietură în poziția $p$ reprezintă o secvență a vectorului ce conține poziția $p$. Valoarea unei tăieturi este dată de suma tuturor elementelor ce trec prin ea. Se definește funcția $\mathrm{MulT}(i)$ drept numărul de tăieturi în $i$ de sumă $0$. Trebuie să aflăm valoarea acestei funcții pentru fiecare $i$ cuprins între $1$ și $n$.
+
+## Soluție
+
+Construim un vector $\mathrm{dp}$ de sume parțiale: $\mathrm{dp}[i] = v[i] + \mathrm{dp}[i - 1]$, pentru $i$ strict pozitiv, și $\mathrm{dp}[0] = 0$. Putem observa că orice tăietură cu suma $0$ are sumele parțiale de la capete egale. Mai exact, dacă o tăietură cu suma $0$ începe pe poziția $i$ și se termină pe poziția $j$, atunci $\mathrm{dp}[i - 1] = \mathrm{dp}[j]$. Motivul este că suma acestei tăieturi este dată de $\mathrm{dp}[j] - \mathrm{dp}[i - 1]$.
+
+Considerăm că avem $k$ elemente din $\mathrm{dp}$ cu valoarea $s$, și că înainte de poziția $i$ avem $x$. Atunci, în poziția $i$, acestea determină $x \cdot (k - x)$ tăieturi cu suma $0$. Deci, $\mathrm{MulT}(i)$, pentru orice $i$ cuprins între $\mathrm{pos}(x) + 1$ și $\mathrm{pos}(x + 1)$, trebuie incrementată cu $x \cdot (k - x)$. Putem face asta foarte eficient folosind [Șmenul lui Mars](smenul-lui-mars), dar mai întâi trebuie să explic cum am implementat partea din paragraful anterior.
+
+Ne interesează ca pentru fiecare sumă parțială să reținem pozițiile pe care apare aceasta. Pentru că sumele astea aparțin unui interval foarte mare, nu puteam folosi un vector de frecvență, așa că am ales un `std::map< long long int, std::vector<int> >`, numit `hash`. Cheia este suma parțială, iar valoarea este vectorul cu pozițiile sale, ordonat crescător, și indexat de la $0$. În timp ce am citit elementele, am construit `map`-ul; nu avea sens să rețin și vectorul de sume parțial în sine.
+
+Apoi, am parcurs sumele parțiale din `hash` (nu contează ordinea), folosind iteratorul `sum`. Pentru fiecare poziție pe care apare `sum.first` în `v` (poziție care în `sum.second` se află pe poziția `i`), am adunat la `mars[i + 1]` pe `sum.second.size() - 2 * i - 1`. La final, afișăm vectorul `mars` exact ca în varianta clasică a șmenului, la fiecare pas adunând pe `v[i - 1]` la `v[i]`.
+
+Relația precedentă nu e prea intuitivă, dar merge demonstrată matematic destul de ușor. Pentru simplitate, considerăm că rezolvăm problema doar pentru suma parțială `sum`. Să zicem că suntem pe poziția `i` în `hash[sum].second`, și că notăm cu `n` pe `hash[sum].second.size()`. Atunci, din Șmenul lui Mars rezultă că pentru orice `j` cuprins între `hash[sum].second[i] + 1` și `hash[sum].second[i + 1]`, afișăm:
+
+$$(n - 1 - 2 \cdot 0) + (n - 1 - 2 \cdot 1) + \cdots + (n - 1 - 2 \cdot i)$$
+
+Ceea ce este echivalent cu formula scrisă mai sus, dedusă din regula produsului:
+
+$$\begin{align*}
+  & (n - 1 - 2 \cdot 0) + (n - 1 - 2 \cdot 1) + \cdots + (n - 1 - 2 \cdot i)\\
+  = & n(i + 1) - (i + 1) - 2(0 + 1 + \cdots + i)\\
+  = & (n - 1)(i + 1) - 2 \cdot \frac{i(i + 1)}{2}\\
+  = & (i + 1)(n - i - 1)
+\end{align*}$$
+
+## Sursă C++
+
+``` cpp -> Problema Tăietura
+  #include <map>
+  #include <vector>
+  #include <fstream>
+
+  #define DMAX 100010
+
+  std::ifstream fin("taietura.in");
+  std::ofstream fout("taietura.out");
+
+  int n;
+  long long int mars[DMAX];
+  std::map< long long int, std::vector<int> > hash;
+
+  int main() {
+      fin >> n;
+      hash[0].push_back(0);
+
+      long long int sum = 0;
+      for (int i = 1; i <= n; i++) {
+          int val; fin >> val;
+          hash[sum += val].push_back(i);
+      }
+
+      for (auto sum : hash)
+          for (int i = 0; i < sum.second.size(); i++)
+              mars[sum.second[i] + 1] = 1LL * sum.second.size() - 2 * i - 1;
+
+      for (int i = 1; i <= n; i++)
+          fout << (mars[i] += mars[i - 1]) << ' ';
+      fout << '\n';
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Tăietura, lasă un comentariu și te voi ajuta :smile:

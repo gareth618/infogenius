@@ -7,7 +7,7 @@
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby clean && gatsby develop -H 0.0.0.0",
-    "build": "cross-env GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",
+    "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },
@@ -22,7 +22,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@loadable/component": "^5.15.0",
-    "cross-env": "^7.0.3",
     "esm": "^3.2.25",
     "firebase": "^9.0.1",
     "gatsby": "^3.9.1",

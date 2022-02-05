@@ -1,0 +1,301 @@
+TITLE: Instrucțiunile repetitive în C++: `for`, `while`, `do while`
+AUTHOR: Iulian Oleniuc
+DATE: 24/06/2018
+CATEGORIES: Limbajul C++
+TAGS: c++, do while, for, range-based for, structura repetitivă, while
+DESCRIPTION: Ca orice alt limbaj de programare, C++ are un set de instrucțiuni repetitve. În C++, instrucțiunile repetitive sunt for, while și do while.
+
+Ca orice alt limbaj de programare, C++ are un set de instrucțiuni repetitve. Instrucțiunile repetitive au rolul de a repeta execuția unui set de instrucțiuni pentru un anumit număr de ori, sau cât timp o condiție dată este îndeplinită. În C++, aceste instrucțiuni sunt `for`, `while` și `do while`.
+
+## Instrucțiunea `while`
+
+Instrucțiunea `while` este cea mai simplă instrucțiune repetitivă din limbajul C++. Ea are rolul de a executa un set de instrucțiuni cât timp o condiție este adevărată.
+
+### Sintaxă `while`
+
+``` cpp
+  while (conditie)
+      instructiune / block de instructiuni
+```
+
+### Semantică `while`
+
+Mai intâi, se testează dacă `conditie` este adevărată. Dacă da, se execută `instructiune`, și procesul o ia de la capăt. Dacă nu, se iese din `while`.
+
+### Exemple `while`
+
+``` cpp
+  int n = 5;
+  while (n < 10)
+      n += 2;
+```
+
+Inițial, `n` este `5`. Cum `5 < 10`, se execută instrucțiunea `n += 2`, `n` devenind `7`. Și `7 < 10`, așa că `n` ajunge la valoarea `9`. Se intră din nou în while, iar apoi `n` devine `11`. De data asta `11 < 10` este fals, așa că se iese din `while` și se continuă cu execuția următoarei instrucțiuni din program.
+
+``` cpp
+  while (n--) {
+      cin >> x;
+      cout << x << '\n';
+  }
+```
+
+Cred că este destul de clar că, la fiecare pas, se citește și se afișează câte un număr (reținut în variabila `x`). Mai interesant este să ne dăm seama de câte ori se intră în `while`, pentru că avem o condiție mai neobișnuită. Ei bine, de fiecare dată când se evaluează `n--`, de fapt se testează dacă `n` este nenul. Apoi, indiferent de rezultat, `n` se decrementează. (Mai multe detalii despre operatorul sufix `--` [aici](operatori-expresii-cpp/#header-10).) Dacă `n` este `0`, se iese din `while`. Se observă că după `while`, `n` are valoarea `-1`.
+
+``` cpp
+  while (true)
+      cout << 1;
+```
+
+Acest `while` va afișa cifra `1` de o infinitate de ori (cât timp adevărul este adevărat).
+
+## Instrucțiunea `do while`
+
+Instrucțiunea `do while` seamănă foarte bine cu `while`, diferența majoră fiind că `do while` testează condiția __după__ ce se execută setul de instrucțiuni.
+
+### Sintaxă `do while`
+
+``` cpp
+  do
+      instructiune / block de instructiuni
+  while (conditie);
+```
+
+### Semantică `do while`
+
+Se începe prin execuția instrucțiunii `instructiune`. Apoi, se testează `conditie`. În cazul în care condiția este îndeplinită, procesul se reia. Dacă nu, se iese din `do while`. Se poate observa că setul de instrucțiuni este executat cel puțin o dată, datorită poziționării testului de condiție.
+
+![400; while VS do while](while-vs-do-while.png)
+
+**Atenție!** Din păcate, în cadrul `conditie` nu se pot folosi variabile locale declarate în block-ul de instrucțiuni subordonat `do while`-ului.
+
+### Exemplu `do while`
+
+``` cpp
+  do {
+      cin >> x;
+      sum += x;
+  } while (x != -1);
+```
+
+În acest exemplu, se vor citi numere și se vor aduna la suma `sum` până când se introduce valoarea `-1` (inclusiv).
+
+## Instrucțiunea `for`
+
+Instrucțiunea `for` este folosită de obicei pentru a itera printre numerele dintr-un interval în ordine crescătoare sau descrescătoare. Însă, limbajul C a inovat cu adevărat instrucțiunea `for`, făcând-o mult mai flexibilă și mai practică.
+
+### Sintaxă `for`
+
+``` cpp
+  for (instructiune1; conditie; instructiune2)
+      instructiune / block de instructiuni
+```
+
+Este bine de știut că oricare din cei trei „parametri” ai structurii `for` poate lipsi, însă cele două caractere `;` sunt obligatorii, pentru a-i separa. Dacă `conditie` lipsește, se consideră că valoarea sa de adevăr este `true` întotdeauna.
+
+### Semantică `for`
+
++++ 1.
+> Se execută `instructiune1`. Aceasta este o instrucțiune de inițializare, ce se execută o singură dată. De obicei, inițializează o variabilă contor (iterator) cu o anumită valoare, de la care se începe iterația.
+> Se testează `conditie`. Dacă aceasta este adevărată, se continuă cu pasul următor. Dacă nu, se iese imediat din `for` și programul continuă cu instrucțiunile următoare.
+> Se execută `instructiune`.
+> Se execută `instructiune2`, care de obicei incrementează sau decrementează iteratorul.
+---
+
+### Exemple `for`
+
+>>> header
+  #### Exemplul 1.
+
+  **Afișarea textului `"InfoGenius\n"` de `618` ori**
+<<<
+
+``` cpp
+  for (i = 0; i < 618; i++)
+      cout << "InfoGenius\n";
+```
+
+Observăm că pentru acest `for`, `i`-ul (`i` de la iterator) trebuie declarat (ca orice altă variabilă) mai sus. În C++ s-a adăugat posibilitatea declarării iteratorilor locali chiar în `for`, ceea ce în C nu era posibil. Pe de o parte este avantajos, pentru că ne ajută să menținem un program cât mai modularizat, dar are și dezavantaje despre care vom discuta imediat. Până una alta, cam așa arată versiunea C++ a `for`-ului de mai sus:
+
+``` cpp
+  for (int i = 0; i < 618; i++)
+      cout << "InfoGenius\n";
+
+  cout << i << '\n'; // eroare
+  // i-ul este local în for. După ieșirea din for, nu
+  // ne mai putem atinge de variabila i declarată în for.
+```
+
+Acesta este un exemplu în care variabila contor este folosită doar pentru a menține numărul curent de pași. Așa că, un `for` ce mergea de la `1` până la `618` (inclusiv) ar fi avut exact același efect.
+
+``` cpp
+  for (i = 1; i <= 618; i++)
+      cout << "InfoGenius\n";
+```
+
+Chiar și un `for` ce itera de la `618` la `1` ar fi fost bun în această situație.
+
+``` cpp
+  for (i = 618; i >= 1; i--)
+      cout << "InfoGenius\n";
+```
+
+>>> header
+  #### Exemplul 2.
+
+  **Calcularea sumei a `n` numere date**
+<<<
+
+Acesta este un bun exemplu unde putem folosi un block de instrucțiuni subordonat `for`-ului. La fiecare pas vom citi valoarea numărului curent în `x`, iar apoi vom actualiza suma.
+
+``` cpp
+  cin >> n;
+  for (i = 0; i < n; i++) {
+      cin >> x;
+      sum += x;
+  }
+```
+
+>>> header
+  #### Exemplul 3.
+
+  **Căutarea celui mai mare număr divizibil cu `10` mai mic decât `n`**
+<<<
+
+``` cpp
+  // i se decrementează cât timp i nu e divizibil cu 10:
+  for (i = n; i % 10; i--);
+  cout << i << '\n';
+```
+
+La fiecare pas acest `for` execută instrucțiunea vidă (`;`). În problemele cu vectori, `for`-uri de genul ăsta sunt foarte utile. În plus, se mai poate observa ceva important. Ăsta e unul din `for`-urile unde suntem obligați să __nu__ declarăm iteratorul local. Dacă am face asta, nu l-am mai putea afișa când ieșim din `for`.
+
+>>> header
+  #### Exemplul 4.
+
+  **Parcurgerea unui interval din ambele direcții simultan**
+<<<
+
+``` cpp
+  for (st = 1, dr = 10; st < dr; st++, dr--) {
+  }
+```
+
+Din nou, un exemplu practic se poate găsi în articolul [Probleme simple cu vectori în C++](probleme-vectori-cpp). Am vrut să vă arăt că `for`-ul este al doilea context în care operatorul de concatenare a instrucțiunilor (`,`) este cel mai folosit. Primul este declararea a mai multe variabile de același tip printr-o singură instrucțiune. Ei bine, le putem combina :smile:
+
+``` cpp
+  // st și dr vor fi variabile locale în for
+  for (int st = 1, dr = 10; st < dr; st++, dr--) {
+  }
+```
+
+Un alt lucru bun de observat este că aici am folosit acolade fără instrucțiuni între ele, în loc de `;`. Este exact același lucru.
+
+>>> header
+  #### Exemplul 5.
+
+  **Afișarea unui pătrat de lungime `10` format din caractere `'.'`**
+<<<
+
+``` cpp
+  for (int i = 0; i < 10; i++) { // iterăm printre linii
+      for (int j = 0; j < 10; j++) // iterăm printre coloane
+          cout << '.';
+      cout << '\n';
+  }
+```
+
+Acest exemplu arată că putem avea un `for` în alt `for` (`for`-uri imbricate). Totuși, este o problemă cu secvența de cod de mai sus. La fiecare pas din primul `for`, când se intră în al doilea, se declară variabila `j`. Deci `j` va fi declarat de `10` ori. Dacă declaram ambele variabile contor înaintea `for`-urilor, `j` ar fi fost declarat o singură dată, deci ar fi o soluție ceva mai bună. La concursuri și olimpiade nu risc să-i declar local când e vorba de `for`-uri imbricate, chiar dacă nu cred că asta a făcut vreodată departajarea între două punctaje prin timpul de execuție. Dar când lucrez acasă probleme de info, prefer iteratorii locali mereu, pentru că sunt mult mai comozi.
+
+Încă ceva interesant despre iteratorii locali. Secvența următoare de cod funcționează la fel de bine ca cea de mai sus. Când se iese din al doilea `for` și se continuă cu `i++` din primul, al doilea `i` deja nu mai există, așa că nu va intra în conflict cu primul, generând un rezultat corect.
+
+``` cpp
+  for (int i = 0; i < 10; i++) {
+      for (int i = 0; i < 10; i++)
+          cout << '.';
+      cout << '\n';
+  }
+```
+
+>>> header
+  #### Exemplul 6.
+
+  **Formarea unui ciclu infinit**
+<<<
+
+``` cpp
+  for (; ; );
+```
+
+Inițial, acest `for` nu face nimic. Apoi, pentru totdeauna, nu face nimic de câte două ori. Acesta este un exemplu de ciclu infinit, echivalentul lui `while (true)` și al lui `do ; while (true);`.
+
+## Instrucțiunile `break` și `continue`
+
+Adeseori, pentru a nu scrie condiții prea lungi în instrucțiunile repetitive, folosim `break` și `switch`. Ele pot fi utilizate atât în `for`, cât și în `(do) while`. Instrucțiunea `break` face programul să iasă imediat din structura repetitivă curentă, fără să mai testeze vreo condiție logică. În schimb, instrucțiunea `continue` are rolul de a trece direct la pasul următor din instrucțiunea repetitivă. Mai precis, te trimite la finalul block-ului de cod curent. Am folosit [vectori](vectori-cpp) pentru a ilustra câte un exemplu clar cu cele două instrucțiuni.
+
+### Exemplu `break`
+
+``` cpp
+  for (i = 0; i < n; i++)
+      if (v[i] == 618) {
+          cout << "DA\n";
+          break;
+      }
+```
+
+În acest exemplu, se caută valoarea `618` în vectorul `v`, și se afișează `"DA\n"` doar dacă aceasta există. Când am găsit-o, am dat un `break`, pentru că nu are sens să continuăm căutarea printre următoarele elemente. Iată și varianta în care nu se folosește `break`:
+
+``` cpp
+  bool ok = false;
+  for (i = 0; i < n && !ok; i++)
+      if (v[i] == 618)
+          ok = true;
+  if (ok)
+      cout << "DA\n";
+```
+
+### Exemplu `continue`
+
+``` cpp
+  for (i = 0; i < n; i++) {
+      if (v[i] == 618)
+          continue;
+      sum += v[i];
+  }
+```
+
+Aici adunăm la `sum` doar elementele din `v` diferite de `618`. Desigur, problema se putea rezolva în mai puține linii de cod, fără `continue`. De obicei, `continue` este folosit ca să dăm repede la o parte cazurile care nu ne interesează.
+
+## Bonus: Range-based `for`
+
+Acesta este un tip mai special de `for`, introdus în C++11, special pentru STL. Cel mai probabil n-ați auzit de el la școală :smile: El are rolul de a itera printre elementele unui container STL, ajutându-ne să scriem mult mai puțin cod decât cu un `for` obișnuit (în special pentru containere ca `map`). Sintaxa este următoarea:
+
+``` cpp
+  for (tipIterator i : container)
+      instructiune / block de instructiuni
+```
+
+Iteratorul trebuie să fie neapărat declarat local în `for`. Iată cum funcționează un range-based `for` pentru `std::vector`:
+
+``` cpp
+  vector<int> v = {6, 1, 8};
+  for (int i : v)
+      cout << i;
+  // Se afișează 618.
+```
+
+Acesta este echivalentul a:
+
+``` cpp
+  vector<int> v = {6, 1, 8};
+  for (int i = 0; i < int(v.size()); i++)
+      cout << v[i];
+  // Se afișează 618.
+```
+
+De multe ori, în astfel de `for`-uri, iteratorul este declarat folosind [`auto`](variabile-tipuri-de-date-cpp). Motivul este că, din nou, te scutește de ceva tastat la containeri ca `map`, unde iteratorii sunt mai complicați. Voi scrie mai detaliat despre acest tip de `for` în articolele următoare despre STL.
+
+Pe cât de util este range-based `for`-ul, pe atât de atenți trebuie să fim la concursuri dacă putem folosi facilitățile C++11. Evaluatorul învechit de pe site-ul __.campion__, de exemplu, nu acceptă așa ceva.
+
+===
+
+Sper că n-am ratat nimic important despre instrucțiunile repetitive. Puteți găsi mai multe aplicații cu acestea în articolul [Probleme cu elementele de bază ale limbajului C++](probleme-elementele-de-baza-cpp). De asemenea, o sursă bună de antrenament este [PbInfo](https://www.pbinfo.ro/?pagina=probleme-lista&tag=7). Dacă aveți vreo întrebare legată de instrucțiunile repetitive din C++, lăsați un comentariu mai jos și vă voi ajuta :smile:

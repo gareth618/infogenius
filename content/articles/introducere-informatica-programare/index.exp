@@ -1,0 +1,208 @@
+TITLE: Introducere în informatică și programare
+AUTHOR: Iulian Oleniuc
+DATE: 22/06/2017
+CATEGORIES: Diverse
+TAGS: algoritmică, compilator, limbaj de programare
+DESCRIPTION: Informatica este știința care se ocupă cu procesarea sistematică a informației, de obicei prin intermediul unui calculator.
+
+Informatica este știința care se ocupă cu procesarea sistematică a informației, de obicei prin intermediul unui calculator. Informatica s-a dezvoltat cutremurător în ultimul secol, și a ajuns să fie folosită în mai toate domeniile de activitate. Iată o scurtă listă cu cele mai importante evenimente din dezvoltarea informaticii, până la apariția primelor calculatoare:
+
++++
+  **1623:** Wilhelm Schickard a proiectat o mașină de calcul, însă proiectul a fost abandonat din cauza unui incendiu ce a distrus clădirea în care se afla prototipul.
+~~~
+  **1640:** Blaise Pascal, un renumit matematician, fizician și filozof francez a construit pascalina, un dispozitiv mecanic de calcul.
+~~~
+  **1672:** Gottfried Wilhelm Leibniz a inventat Socotitorul în trepte, pe care l-a finalizat în 1694.
+~~~
+  **1703:** Gottfried Leibniz a dezvoltat __algebra booleană__, care stă la baza sistemelor de calcul din ziua de astăzi, deoarece această algebră folosește doar valorile `0` și `1`, care sunt cel mai ușor de reprezentat din punct de vedere fizic. De exemplu, `0` poate fi un bec stins, iar `1` unul aprins.
+~~~
+  **1801:** Joseph Marie Jacquard a creat un război ce funcționa pe baza cartelelor perforate, demonstrând că mașinile pot fi construite în jurul sistemului binar.
+~~~
+  **1835:** Charles Babbage a inventat mașina analitică, pe care însă nu a reușit să o construiască. Aceasta era alimentată de un motor cu aburi și funcționa pe baza cartelelor perforate.
+~~~
+  **1936:** Alan Turing a descris în 1936 principiile de funcționare ale Mașinii Turing, o mașină de calcul programabilă. Aceasta a fost implementată pentru prima oară, mai târziu, de John von Neumann, care a definit o arhitectură ce folosea aceeași memorie atât pentru stocarea programelor cât și a datelor.
+~~~
+  **1945:** A fost finalizată construirea ENIAC-ului (Electronic Numerical Integrator And Computer), primul calculator electronic care putea efectua 5.000 de operații de adunare și scădere pe secundă, fiind de o mie de ori mai rapid decât celelalte mașini. ENIAC cântărea 30 de tone și folosea peste 18.000 de tuburi!
+~~~
+  **1954:** IBM lansează un calculator mai mic, IBM 650, care cântărea peste 900 kg.
+~~~
+  **1957:** Este lansat Fortran, primul limbaj de programare de nivel înalt.
+---
+
+![1000; ENIAC](eniac.png)
+
+Acesta a fost doar începutul, căci lucrurile au evoluat foarte repede de atunci: Au apărut primele computere personale cu interfață grafică, C++ -- primul limbaj ce suportă __programare orientată pe obiect__ (OOP), primele telefoane inteligente și așa mai departe.
+
+## Ce este un algoritm?
+
+Un algoritm este un set de pași ce trebuie urmați pentru a rezolva o problemă. Această noțiune stă la baza informaticii și a fost definită de matematicianul persan Al-Khwarizmi. Algoritmii sunt implementați de obicei prin scrierea unui program, folosind un limbaj de programare. Un exemplu de algoritm este cel de preparare a unei rețete culinare, folosind diverse ingrediente și unelte:
+
+>>>
+  +++ 1.
+  > Încălzește cuptorul la 160 °C.
+  > Pregătește ingredientele: făină, unt, zahăr, lapte și ouă.
+  > Amestecă ingredientele într-un bol.
+  > Toarnă amestecul într-o tavă.
+  > Lasă preparatul la copt 50 de minute.
+  ---
+<<<
+
+Proprietățile pe care orice algoritm trebuie să le aibă într-o măsură mai mică sau mai mare sunt:
+
++++
+  **Corectitudinea:** Algoritmul trebuie să furnizeze o soluție corectă pentru problema dată.
+~~~
+  **Determinismul:** Pentru un set de date de intrare anume, algoritmul trebuie să returneze întotdeauna același rezultat.
+~~~
+  **Generalitatea:** Algoritmul trebuie să rezolve o clasă de probleme, nu doar o problemă particulară. De exemplu, dacă vrem să elaborăm un algoritm care rezolvă o ecuație de gradul al II-lea, e de preferat ca acesta să poată rezolva __orice__ ecuație de forma $ax^2+bx+c=0$, indiferent de valorile variabilelor $a$, $b$ și $c$.
+~~~
+  **Claritatea:** Algoritmul nu trebuie să conțină ambiguități.
+~~~
+  **Finitudinea:** Algoritmul trebuie să se oprească într-un număr finit de pași -- mai exact, să nu intre într-o buclă infinită.
+~~~
+  **Eficiența:** Algoritmul trebuie să fie cât mai eficient, adică să se oprească după un număr cât mai mic de pași. Dacă se poate demonstra că numărul de pași pe care îi face algoritmul pentru a rezolva problema este cel mai mic posibil, atunci algoritmul este __optim__.
+---
+
+## Ce este un limbaj de programare?
+
+Un limbaj de programare este un set bine definit de expresii și reguli pentru formularea instrucțiunilor ce urmează a fi executate de către un calculator. Cu alte cuvinte, cu ajutorul lor putem implementa algoritmi pentru a crea diverse aplicații. Limbajele de programare pot fi de nivel scăzut, mediu sau înalt, în funcție de cât de ușor comunică cu procesorul și de cât de mult pot __abstractiza__ datele (cât de mult se apropie de un limbaj natural).
+
+![400; Limbaje de programare](limbaje-de-programare.png)
+
+### Limbaje Low-Level
+
+Limbajele Low-Level sunt cele mai performante, și sunt folosite de obicei la dezvoltarea sistemelor de operare. Limbajul de cel mai scăzut nivel este __codul mașină__, care rulează direct pe procesor. În acest limbaj se folosesc doar cifrele binare, așa că practic este imposibil să programezi direct în el. Codul mașină este urmat de limbajele de asamblare, care sunt și ele greoaie, dar mult mai OK. Mai jos aveți un exemplu de cod Assembly, care mută bytes în memorie dintr-o parte în alta:
+
+``` text
+  MOV EAX, [EBX]
+  MOV [ESI + EAX], CL
+  MOV DS, DX
+```
+
+Continuăm cu C, urmat de [C++](introducere-cpp) (datorită OOP-ului), care sunt undeva între Low-Level și Mid-Level. Acestea permit destul de multă abstractizare de date, însă în multe situații programatorul trebuie să facă manual lucruri pe care, în alte limbaje, le-ar face chiar limbajul în sine, cum ar fi eliberarea de memorie când ștergem o variabilă alocată dinamic. Totuși, multe dintre jocurile 3D de succes sunt făcute (în mare parte) în C++, datorită vitezei sale. Iată o secvență de cod C++ care adună două numere introduse de la tastatură și afișează în consolă suma lor:
+
+``` cpp
+  int a, b;
+  cin >> a >> b;
+  cout << a + b << '\n';
+```
+
+### Limbaje Mid-Level
+
+Limbajele Mid-Level sunt folosite de obicei pentru a programa aplicații obișnuite, deoarece sunt foarte ușor de înțeles. Aici includem Java și C#. Iată un program Java care, pe scurt, creează o fereastră în centrul căreia desenează un pătrat roșu:
+
+``` java
+  import java.awt.Color;
+  import java.awt.Graphics;
+  import java.awt.Graphics2D;
+
+  import javax.swing.JFrame;
+  import javax.swing.JPanel;
+
+  @SuppressWarnings("serial")
+  public class Panel extends JPanel {
+
+    @Override
+    public void paint(Graphics g) {
+      super.paint(g);
+      Graphics2D g2d = (Graphics2D) g;
+      g2d.setColor(Color.RED);
+      g2d.fillRect(100, 100, 100, 100);
+    }
+
+    public static void main(String[] args) {
+      Panel panel = new Panel();
+      JFrame frame = new JFrame("Patrat");
+      frame.add(panel);
+      frame.setSize(300, 300);
+      frame.setResizable(false);
+      frame.setLocationRelativeTo(null);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+    }
+  }
+```
+
+### Limbaje High-Level
+
+Majoritatea limbajelor High-Level sunt __interpretate__ și au performanță mai slabă, însă sunt foarte ușor de utilizat. Aici intră JavaScript și Python. JavaScript a fost conceput inițial pentru a adăuga funcționalitate paginilor web, însă odată cu apariția lui [Node.JS](https://nodejs.org/en/) în 2009, un program care permite rularea de cod JS și în afara browser-ului, JavaScript a devenit un limbaj cu care poți să faci aproape orice. În plus, are una dintre cele mai elegante sintaxe pe care le-am văzut vreodată. Iată o funcție JavaScript care primește ca parametru un șir de numere naturale `arr` și returnează un alt șir, conținând toate pozițiile din `arr` pe care se află numere prime.
+
+``` javascript
+  function fun(arr) {
+    const isPrime = n => {
+      if (n < 2) return false;
+      for (let d = 2; d * d <= n; d++) {
+        if (n % d === 0) {
+          return false;
+        }
+      }
+      return true;
+    };
+    return arr
+      .map((num, pos) => ({ num, pos }))
+      .filter(entry => isPrime(entry.num))
+      .map(entry => entry.pos);
+  }
+```
+
+## Ce sunt sintaxa și semantica?
+
+Sintaxa unui limbaj de programare este un set de reguli ce trebuie respectate pentru a scrie cod corect. De exemplu, o regulă de sintaxă din C++ ne spune că, după (aproape) orice instrucțiune, trebuie să punem `;`. Semantica unei instrucțiuni reprezintă efectul acesteia. De exemplu, în C++, expresia `x++` returnează valoarea variabilei `x`, după care adună `1` la aceasta.
+
+## Ce sunt compilatoarele și interpretoarele?
+
+__Compilatorul__ este un program care transformă __codul sursă__ al unui proiect în cod mașină, creând un fișier executabil. Unele limbaje de programare sunt compilate (se pot compila printr-un compilator), iar celelalte sunt interpretate. Limbajele interpretate sunt cele în care instrucțiunile nu sunt direct executate de calculator, ci de un program auxiliar, care este scris de obicei în limbajul nativ al mașinii.
+
+![400; Compilator](compilator.png)
+
+Din moment ce limbajele compilate folosesc __direct__ limbajul nativ al mașinii, sunt mult mai rapide decât cele interpretate. Interpretoarele sunt însă mult mai ușor de programat, fiind foarte dificil să scrii compilatoare de calitate. De asemenea, un avantaj al limbajelor interpretate este că nu necesită o etapă de compilare; ele execută instrucțiunile direct.
+
+Compilatoarele sunt tot mai inteligente, așa că au ajuns să facă singure mici optimizări în cadrul programului. În plus, dacă ai vreo eroare de sintaxă sau o eroare la run-time (în timpul rulării programului), atât compilatoarele cât și interpretoarele le specifică clar în consolă.
+
+## Ce este un mediu de programare (IDE)?
+
+Putem scrie programe în orice editor de text, cum ar fi NotePad, însă folosirea unui mediu de programare (Integrated Development Environment) este mult mai convenabilă. Un mediu de programare face foarte multe lucruri în locul programatorului, și îl ajută să fie mai productiv. Câteva dintre facilitățile pe care le oferă aproape orice IDE sunt:
+
++++
+  **Syntax Highlighting:** Evidențiază elementele de sintaxă în moduri cât mai diverse (variabile de o culoare, operatori de altă culoare, funcții de altă culoare etc.). Acest lucru face codul mai lizibil.
+~~~
+  **AutoComplete:** În timp ce scrii cod îți apar pop-up-uri mici cu sugestii de cuvinte. Te scutește de niște tastat.
+~~~
+  **Documentație:** Ținând câteva clipe cursorul pe o funcție, o clasă sau o altă entitate, ți se va deschide un pop-up cu o scurtă documentație despre aceasta.
+~~~
+  **Compilare/Interpretare:** Dai click pe un buton de run și îți rulează programul. Nu mai trebuie să intri în terminal (Command Prompt pentru Windows) și să tastezi comenzi complicate pentru a compila și rula programul.
+~~~
+  **Debugger:** Un feature care te ajută să depanezi programul, adică să găsești bug-urile (erorile logice), prin afișarea unui tabel de variabile, de exemplu.
+~~~
+  **Consolă:** O zonă în care poți introduce și afișa diferite date. Și ea ajută la debugging. Dacă simți că la o anumită linie din program s-a schimbat în mod neașteptat valoarea unei variabile, o poți afișa în consolă ca să te prinzi de unde vine problema. Consola poate fi găzduită și de terminal.
+---
+
+![400; Mediu de programare](mediu-de-programare.png)
+
+## Ce sunt bibliotecile, framework-urile și API-urile?
+
+O bibliotecă reprezintă un set de fișiere ce conțin implementările unor funcții, clase etc. Bibliotecile pot fi folosite în programele noastre pentru a nu reinventa roata de fiecare dată când începem un nou proiect. Orice limbaj trebuie să vină cu un set standard de biblioteci în care să fie implementate lucrurile de bază, cum ar fi funcțiile de citire și scriere pentru consolă. De multe ori vom folosi biblioteci create de alții. De exemplu, C++ nu vine cu o bibliotecă grafică, așa că pentru a crea o aplicație C++ cu interfață grafică vom avea nevoie de o bibliotecă precum SFML sau SDL.
+
+Un framework este un software ce poate conține biblioteci, programe suport și chiar un limbaj de scripting. În general, un framework conține unelte care ajută la dezvoltarea unui software. Acestea pot fi accesate printr-un API. Un API (Application Programming Interface) este un set funcții și proceduri care permit crearea de aplicații cu acces la facilitățile unui sistem de operare sau ale altor servicii. Un exemplu foarte popular de framework pentru JavaScript este [React](https://reactjs.org/). El combină HTML și JavaScript într-un mod care face scrierea de interfețe pentru utilizator un proces foarte plăcut.
+
+## Ce sunt bug-urile?
+
+Un bug este o eroare dintr-un program, care poate produce rezultate neașteptate. Căutarea și rezolvarea acestor bug-uri se numește debugging (depanare), și este cea mai ~~nașpa~~ distractivă parte din job-ul unui programator. Poate dura și câteva luni să rezolvi un bug, iar de multe ori asta înseamnă să generezi alte bug-uri. De obicei, când un programator nu reușește să rezolve un bug, apelează la [Stack Overflow](https://stackoverflow.com/), un forum extrem de activ, cu o vechime de aproape 10 ani, unde milioane de programatori din toată lumea sunt pregătiți să ~~îți închidă thread-urile în nas~~ te ajute.
+
+## Coder, hacker, programator, informatician, dezvoltator
+
+Aparent, cele cinci cuvinte înseamnă același lucru, însă există câteva diferențe între aceste „profesii”. Un coder este o persoană care poate traduce limbajul omenesc într-un limbaj de programare sau de mark-up (ca HTML), și cam atât. Majoritatea lucrează pe partea de front-end a website-urilor și o bună parte dintre ei chiar urăsc matematica. Hackerii sunt cei care lucrează foarte repede cu calculatorul (tastează rapid, iubesc să folosească terminalul etc.). Ei înțeleg foarte profund anumite zone ale tehnologiei.
+
+Programatorii scriu cod și înțeleg bine algoritmii; de obicei lucrează cel mai bine singuri. Informaticienii (Computer scientists) înțeleg cum funcționează calculatoarele, sunt experți în algoritmică și de obicei sunt și matematicieni. Dezvoltatorii (Developerii) sunt cei care au câte un pic din fiecare. Se pot adapta la o grămadă de tehnologii și limbaje, și le pot asambla în așa fel încât să funcționeze bine împreună. În plus, dezvoltatorii lucrează în echipă și comunică bine cu ceilalți.
+
+![400; Coder, hacker, programator, informatician, dezvoltator](tipuri-de-programator.png)
+
+## „Care este cel mai bun limbaj de programare?”
+
+^^[Update 2021]^^ Asta mi s-a părut mult timp o întrebare inutilă și enervantă, pentru că depinde foarte mult de context. Fiecare limbaj este bun pe un anumit domeniu. (Mai puțin PHP, care nu e bun de nimic :tongue:) De exemplu, Python excelează la statistică și inteligență artificială. Totuși, întrebarea începe să capete sens atunci când vorbim de începători.
+
+Ca prim limbaj de programare recomand JavaScript sau C++. Primul este mult mai friendly, plus că ne permite să creăm [chestii](fractali-p5js) drăguțe cu el fără mari bătăi de cap. Al doilea este mai greoi, dar mai adecvat pentru cei pasionați de algoritmică. În plus, dacă înveți C++ ca lumea (trebuie să treci de varianta de la școală, adică C cu `cin` și `cout`), vei avea o înțelegere mult mai profundă despre programare în general.
+
+===
+
+Sper că v-am format o imagine de ansamblu cât mai clară despre informatică și programare. Puteți începe să învățați limbajul C++ citind [acest articol](introducere-cpp). Dacă aveți întrebări, nu ezitați să le adresați mai jos, în comentarii :smile:

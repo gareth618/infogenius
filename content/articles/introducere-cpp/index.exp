@@ -1,0 +1,115 @@
+TITLE: Introducere în limbajul C++. Comentarii în C++
+AUTHOR: Iulian Oleniuc
+DATE: 26/06/2017
+CATEGORIES: Limbajul C++
+TAGS: c++, codeblocks, comentarii, compilator, ide
+DESCRIPTION: C++ este un limbaj compilat, care suportă atât programare procedurală cât și programare orientată pe obiecte. C++ a fost dezvoltat de...
+
+C++ este un limbaj compilat, care suportă atât __programare procedurală__ cât și __programare orientată pe obiect__. C++ a fost dezvoltat de către Bjarne Stroustrup, îmbunătățind limbajul C, prin adăugarea claselor, funcțiilor virtuale, supraîncărcării operatorilor, template-urilor și excepțiilor. Cel mai nou standard al limbajului este C++17, precedat de C++14. [Aici](http://www.cplusplus.com/reference/) găsiți toată documentația pentru bibliotecile standard C++.
+
+![500; Limbajul C++](limbajul-cpp.png)
+
+Pentru a lucra în C++, aveți nevoie de un mediu de programare. Pentru început e OK CodeBlocks. Click [aici](http://sourceforge.net/projects/codeblocks/files/Binaries/16.01/Windows/codeblocks-16.01mingw-setup.exe) pentru a-l instala împreună cu MinGW (care conține un compilator C++ pentru Windows). Câteva chestii importante:
+
++++
+  Pentru a crea un nou proiect pentru consolă, __New Project > Console Application__.
+~~~
+  Pentru a compila și rula proiectul, __apăsați ;F9;__.
+~~~
+  Pentru a putea folosi facilitățile C++14, __Settings > Compiler > Compiler Flags > Click pe unul dintre flag-uri > New Flag > Creați un flag ca mai jos > OK__. Apoi căutați flag-ul în listă și activați-l.
+
+  ![400; C++14 Flag](cpp14-flag.png)
+~~~
+  CodeBlocks ține deschis terminalul după ce rulăm un proiect pentru consolă. Programul real (__folder-ul proiectului > bin > Debug > proiect.exe__) îl închide imediat când se ajunge la instrucțiunea `return 0;` din funcția `main`. Dacă vrem neapărat să nu se întâmple asta, putem scrie `cin.get();` înainte de `return 0;`. Această metodă așteaptă apăsarea unei taste.
+---
+
+Programul propriu-zis se află într-un fișier sursă (sau mai multe) cu extensia `.cpp`. CodeBlocks îl numește implicit `main.cpp`.
+
+În C++, o regulă de sintaxă spune că după fiecare instrucțiune (excepție fac directivele preprocesor, ca `#include`) trebuie pus caracterul `;`. Așa arată un program C++ care afișează suma a două numere întregi, introduse de la tastatură:
+
+``` cpp
+  #include <iostream>
+
+  using std::cin;
+  using std::cout;
+
+  int a, b;
+
+  int main() {
+      cin >> a >> b;
+      cout << a + b << '\n';
+      return 0;
+  }
+```
+
+Ca la aproape orice limbaj de programare, nu contează câte spații sau enter-uri punem între instrucțiuni (excepție la directivele preprocesor), operatori etc. Scopul este să ne facem codul cât mai lizibil. Iar pentru asta mai există și comentarii.
+
+## Comentarii în C++
+
+Comentariile sunt secvențe de cod pe care compilatorul le ignoră; ele au doar rolul de a fi citite de programatori. Comentariile pentru o singură linie încep cu `//`. Tot ce este urmat de aceste slash-uri, până la sfârșitul liniei, va fi ignorat de compilator. Dacă vrem să scriem un comentariu care se întinde pe mai multe linii, acesta trebuie să înceapă cu `/*` și să se termine cu `*/`. Iată cum arată programul de mai sus comentat:
+
+``` cpp
+  /* Includem header-ul iostream, care conține informații despre
+  citirea datelor standard în C++. Headerele (fișierele *.h) fac legătura
+  cu bibliotecile (fișiere *.a, *.dll etc.), iar după ce le includem
+  în program, putem folosi practic bibliotecile corespunzătoare. */
+  #include <iostream>
+
+  // Anunțăm ca vom folosi entitățile cin și cout
+  // din numele de spațiu std:
+  using std::cin;
+  using std::cout;
+
+  int a, b; // Declarăm variabilele globale a și b.
+
+  /** main este funcția principală, pe care orice program C++
+  trebuie sa o aibă. De aici începe execuția programului. */
+  int main() {
+      cin >> a >> b; // Citim a și b.
+      cout << a + b << '\n'; // Afișăm a + b. '\n' înseamnă enter.
+      return 0; // Returnăm 0 deoarece, dacă s-a ajuns aici,
+                // programul s-a executat fără probleme.
+  } /* Acoladele grupează mai multe instrucțiuni formând
+  un block de cod. */
+```
+
+Putem folosi diacritice în scrierea comentariilor doar dacă setăm codificarea documentului în UTF-8. În CodeBlocks, asta se face automat dacă folosim diacritice în program și dăm save. Prin diacritice mă refer mai mult la `ș` și `ț`, căci restul sunt incluse în codul ASCII.
+
+### `using namespace std;`
+
+În majoritatea tutorialelor de C++ de pe net (și nu numai) veți vedea că în loc de `using std::cin;` și `using std::cout;` scrie `using namespace std;`. Această instrucțiune anunță compilatorul că vom folosi toate entitățile definite în namespace-ul `std`, adică în loc să le accesăm prin `std::nume`, vom scrie direct `nume`. Este util să facem asta, deoarece poate deveni enervant să apară peste tot acel `std::`. DAR, șansele să avem nevoie cu adevărat de toate chestiile din `std` sunt zero, așa că prefer să le includ manual doar pe cele pe care le folosesc, cum am făcut cu `cin` și `cout`.
+
+Este o bună practică în proiectele mari, pentru că poate vei declara la un moment dat o variabilă cu același nume ca una dintr-un namespace pe care ai uitat că l-ai inclus, și nu vei mai ști la care te referi. Mai multe detalii despre namespace-uri într-un articol viitor.
+
+### `#include <bits/stdc++.h>`
+
+La fel și cu `#include <bits/stdc++.h>`. Este un header care practic include mai toate bibliotecile standard C++. Dacă scrii linia asta de cod la începutul sursei, nu vei mai fi nevoit să incluzi pe rând fiecare bibliotecă pe care o folosești. Problemele sunt chiar mai mari decât la `using namespace std;`. Să incluzi mai multe biblioteci decât folosești consumă memorie și mărește timpul de compilare al programului. În plus, acest header nu este standard, el făcând parte doar din biblioteca compilatorului GCC. Deci, programul nu se va compila dacă folosești alt compilator.
+
+### Update 1 ianuarie 2020
+
+După 3 ani și ceva de programare competitivă la modul serios, am renunțat la decizia de a nu folosi cele două linii de cod descrise mai sus. Când ajungi să utilizezi atâtea containere STL ca mine și să ai nevoie de funcții de genul `min`, `max`, `abs` tot timpul, realizezi că e o uriașă pierdere de timp să incluzi bibliotecile pe rând și să scrii `using std::` pentru fiecare entitate în parte. Repet, asta e valabil doar în programarea competitivă, nu în cadrul proiectelor reale.
+
+## Comentarii documentație în C++
+
+Există și comentarii documentație, pentru o linie sau mai multe. Cel pentru o linie începe cu `///`, iar cel pentru mai multe linii începe cu `/**` și se termină cu `*/`. Aceste comentarii sunt foarte utile, deoarece puse imediat înaintea unei funcții, metode sau clase, atunci când vom ține cursorul peste acea entitate, mediul va deschide un pop-up cu documentația -- ce am scris în comentariu. Mai mult, putem include și etichete HTML pentru a evidenția anumite cuvinte. De asemenea, prin `@param` putem specifica informații despre parametrii funcției, iar prin `@return` detalii despre ce returnează aceasta. Exemplu:
+
+``` cpp
+  /**
+   * **main** este o funcție foarte
+   * __importantă__!
+   *
+   * @param void
+   * @return 0 dacă programul s-a executat fără probleme
+   */
+  int main() {
+      return 0;
+  }
+```
+
+Iată efectul:
+
+![1000; Comentariu documentație în C++](comentariu-documentatie-cpp.png)
+
+Este la modă ca fiecare linie din comentariu să înceapă cu `*`, însă e opțional, și nu afectează cu nimic documentația.
+
+Următorul articol despre C++ ce ar trebui citit este [Variabile și tipuri de date în C++](variabile-tipuri-de-date-cpp). Dacă aveți vreo întrebare despre limbajul C++, o puteți adresa într-un comentariu mai jos :smile:

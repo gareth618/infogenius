@@ -1,0 +1,202 @@
+TITLE: Ciurul lui Eratostene în C++. Problema Fracții de pe InfoArena
+AUTHOR: Iulian Oleniuc
+DATE: 30/06/2018
+CATEGORIES: Algoritmică și structuri de date, Matematică
+TAGS: ciurul lui eratostene, divizibilitate, indicatorul lui euler, numere prime
+DESCRIPTION: Ciurul lui Eratostene este un algoritm clasic folosit pentru determinarea tuturor numerelor prime mai mici sau egale cu un număr natural n.
+
+Ciurul lui Eratostene este un algoritm clasic folosit pentru determinarea tuturor numerelor prime mai mici sau egale cu un număr natural dat $n$. Acesta a fost creat de matematicianul grec Eratostene, și este predecesorul multor algoritmi mai eficienți, precum Ciurul lui Atkin și Ciurul lui Euler. În acest articol voi prezenta Ciurul lui Eratostene, împreună cu niște optimizări obișnuite și o aplicație interesantă.
+
+>>>
+  >>> center
+    Strike the twos and strike the threes
+    The Sieve of Eratosthenes!
+    When the multiples sublime,
+    The numbers that remain are prime.
+  <<<
+<<<
+
+## Algoritm
+
++++ 1.
+> Se scrie pe o foaie o listă cu toate numerele naturale de la $2$ la $n$.
+> Se caută în listă primul număr care nu a fost tăiat (și pe care încă nu l-am folosit).
+> Se taie de pe foaie toți multiplii numărului ales mai înainte, cu excepția lui.
+> Dacă încă nu am ajuns la finalul listei căutând numere netăiate, se revine la pasul 2.
+---
+
+La final, toate numerele netăiate din listă sunt cele prime. De fiecare dată, numărul găsit la pasul 2 chiar este prim, pentru că, dacă ar fi fost divizibil cu vreun număr prim mai mic decât el, ar fi fost tăiat deja. Apoi, evident că numerele tăiate la pasul 3, fiind divizibile cu un număr prim mai mic decât ele, sunt numere compuse.
+
+## Exemplu
+
+Iată o animație făcută de mine care ilustrează modul în care funcționează algoritmul pentru $n = 250$. Cu alb am reprezentat numerele nevizitate, cu portocaliu numerele tăiate, cu albastru numerele prime și cu verde numărul prim curent.
+
+![](eratosthenes-sieve.js)
+
+## Implementare
+
+Reținem un vector `sieve` (__ciur__ în engleză), de tip `bool`, cu semnificația `sieve[i] == true` dacă numărul `i` nu este prim, iar `false` dacă `i` este prim. Am ales codificarea pe dos pentru că în C++ vectorii globali sunt automat inițializați cu `0`, și n-are rost să mai facem o parcurgere pentru a-l schimba pe `0` în `1`. Cum numerele `0` și `1` nu sunt nici prime, nici compuse, le vom marca de la început cu `true`: `sieve[0] = sieve[1] = true;`.
+
+Apoi, alegem primul număr cu valoarea `false` din vectorul `sieve`, și marcăm multiplii săi cu `true`. Repetăm acest proces până când toate numerele neprime din `sieve` vor fi marcate cu `true`. Iată algoritmul scris în C++:
+
+``` cpp -> Ciurul lui Eratostene
+  sieve[0] = sieve[1] = true;
+  for (int i = 2; i <= n; i++) // Parcurgem vectorul sieve.
+      if (!sieve[i]) // Dacă numărul curent este prim,
+          for (int j = 2 * i; j <= n; j += i) // parcurgem multiplii săi
+              sieve[j] = true; // și îi marcăm drept numere compuse.
+```
+
+## Optimizări
+
+Pe linia 4, putem porni `for`-ul de la `i * i`, pentru că toți multiplii lui `i` de forma `k * i`, cu `k < i`, au fost deja tăiați. Din același motiv, pe linia 2, putem itera `i`-ul până la $\sqrt{n}$: Orice număr compus mai mare decât $\sqrt{n}$ are printre divizori cel puțin un număr prim mai mic decât $\sqrt{n}$, pe care l-am folosit deja. Putem scrie condiția `i <= sqrt(n)`, dar e ineficientă, pentru că apelul funcției `sqrt` va calcula radicalul lui `n` la fiecare pas. O metodă mai elegantă este `i * i <= n`.
+
+``` cpp -> Ciurul lui Eratostene
+  sieve[0] = sieve[1] = true;
+  for (int i = 2; i * i <= n; i++)
+      if (!sieve[i])
+          for (int j = i * i; j <= n; j += i)
+              sieve[j] = true;
+```
+
+O altă idee de optimizare este să căutăm numerele prime (pe linia 2) din 2 în 2, deoarece știm că toate numerele prime mai mari decât `2` sunt impare. Deci, îl vom trata pe `2` separat, iar primul `for` îl vom începe de la `3`.
+
+``` cpp -> Ciurul lui Eratostene
+  sieve[0] = sieve[1] = true;
+  for (int j = 4; j <= n; j += 2)
+      sieve[j] = true;
+  for (int i = 3; i * i <= n; i += 2)
+      if (!sieve[i])
+          for (int j = i * i; j <= n; j += 2 * i)
+              sieve[j] = true;
+```
+
+Pe linia 6 am incrementat `j`-ul cu `2 * i`, pentru a nu itera și printre multiplii pari.
+
+O ultimă optimizare pe care i-o putem aduce programului ține de memorie. Cum vectorul conține elemente de tipul `bool`, putem implementa un vector pe biți (despre care am vorbit la finalul articolului despre [operații pe biți](operatii-pe-biti-cpp/#header-18)). Astfel, vom folosi de 8 ori mai puțină memorie, dar rareori se întâmplă să nu avem suficientă memorie pentru un ciur obișnuit.
+
+## Sursă C++
+
+Iată o sursă C++ completă ce folosește Ciurul lui Eratostene pentru a determina toate numerele prime mai mici sau egale cu $n$, precum și numărul lor.
+
+``` cpp -> Primele n numere prime
+  #include <iostream>
+  using namespace std;
+  const int VMAX = 618;
+
+  int n;
+  bool sieve[VMAX];
+
+  int sol; // numărul de numere prime
+  int primes[VMAX]; // numerele prime
+
+  int main() {
+      cin >> n;
+      sieve[0] = sieve[1] = true;
+      for (int j = 4; j <= n; j += 2)
+          sieve[j] = true;
+      for (int i = 3; i * i <= n; i += 2)
+          if (!sieve[i])
+              for (int j = i * i; j <= n; j += 2 * i)
+                  sieve[j] = true;
+
+      primes[sol++] = 2;
+      for (int i = 3; i <= n; i += 2)
+          if (!sieve[i])
+              primes[sol++] = i;
+
+      cout << sol << '\n';
+      for (int i = 0; i < sol; i++)
+          cout << sieve[i] << ' ';
+      cout << '\n';
+      return 0;
+  }
+^^^
+
+## Complexitate
+
+De fiecare dată când se ajunge la pasul 2, algoritmul face $n / i$ pași pentru a tăia numerele compuse multipli de $i$. În total, asta înseamnă
+
+$$\frac{n}{2} + \frac{n}{3} + \frac{n}{5} + \frac{n}{7} + \cdots + \frac{n}{k}$$,
+
+unde $k$ este cel mai mare număr prim mai mic sau egal cu $n$. Factorizându-l pe $n$ obținem
+
+$$n \left ( \frac{1}{2} + \frac{1}{3} + \frac{1}{5} + \frac{1}{7} + \cdots + \frac{1}{k} \right )$$.
+
+Al doilea factor, adică suma inverselor numerelor prime până la $k$, crește la fel de repede ca funcția $\ln(\ln(n))$, [conform lui Euler](https://en.wikipedia.org/wiki/Divergence_of_the_sum_of_the_reciprocals_of_the_primes). Așadar, complexitatea algoritmului este $O(n \ln(\ln(n)))$. S-ar mai adăuga un $O(\sqrt{n})$, care este numărul de iterații făcute de primul `for`, dar asta nu influențează complexitatea. La nivelul clasei a 9-a, este de ajuns să știți că Ciurul lui Eratostene face (mult) mai puțin decât $O(n^2)$ operații. De fapt, algoritmul lucrează aproape în timp liniar, căci în practică $O(\ln(\ln(n)))$ poate fi aproximat cu $O(1)$.
+
+## Aplicație la Ciurul lui Eratostene: Problema Fracții de pe InfoArena
+
+De obicei, Ciurul lui Eratostene este folosit pentru marcarea rapidă a numerelor prime la începutul programului, pentru ca mai apoi să poată fi testată primalitatea oricărui număr în $O(1)$. Un alt rol al Ciurului este optimizarea [descompunerii în factori primi](descompunere-in-factori-primi) atunci când trebuie să descompunem multe numere. Cu ajutorul lui, putem precalcula șirul numerelor prime mai mici sau egale cu $\sqrt{n}$, pentru ca în timpul descompunerii să parcurgem doar numere prime.
+
+Însă, există probleme în care este mult mai greu să-ți dai seama că poți folosi tehnica ciurului. Una dintre ele este problema [Fracții](https://infoarena.ro/problema/fractii) de pe InfoArena. În problema Fracții trebuie să aflăm numărul de fracții ireductibile de forma $p / q$, cu $1 \le p, q \le n$. Plecăm de la două observații imediate:
+
++++
+  Dacă $p / q$ este ireductibilă, atunci și $q / p$ este ireductibilă. Deci, este de ajuns să numărăm fracțiile ireductibile de forma $p / q$, cu $2 \le p \lt q$, iar apoi să înmulțim rezultatul cu $2$. După aceea, adunăm $1$ la rezultat, pentru că pe $1 / 1$ nu am numărat-o.
+~~~
+  Numărul de fracții ireductibile de forma $p / q$, cu $p \le q$ este egal cu numărul de numere mai mici sau egale cu $q$, prime cu el. Adică [indicatorul lui Euler](indicatorul-lui-euler/#header-4), $\varphi(q)$ :smile:
+---
+
+Problema se rezumă la a calcula eficient indicatorul lui Euler pentru fiecare număr natural de la $2$ la $n$. Putem folosi formula $\varphi(n) = (p_1 - 1) p_1^{k_1 - 1} \cdots (p_r - 1) p_r^{k_r - 1}$ pentru fiecare număr, dar nu se încadrează în timp pentru toate testele. Avem nevoie de o soluție mai inteligentă. Aici intervine Ciurul lui Eratostene.
+
+Reținem un vector `euler`, unde `euler[i]` reprezintă $\varphi(i)$. Inițial, pentru fiecare index `i` de la `2` la `n` îi atribuim lui `euler[i]` valoarea `i - 1`, pentru că `i` nu este prim cu el însuși. Apoi, aplicăm tehnica ciurului ca mai jos:
+
+``` cpp
+  for (int i = 2; i <= n; i++)
+      for (int j = 2 * i; j <= n; j += i)
+          euler[j] -= euler[i];
+```
+
+Când cu primul `for` ajungem la `euler[i]`, îi știm deja valoarea finală, așa că actualizăm indicatorul pentru multiplii mai mari ai lui `i`. Se observă că algoritmul se folosește de faptul că
+
+$$n = \sum_{d \mid n} \varphi(d)$$.
+
+O demonstrație pentru această formulă, nu foarte riguroasă, dar destul de intuitivă, este următoarea: Considerăm toate fracțiile de forma $x / n$, cu $1 \le x \le n$. Pentru $n = 10$, acestea sunt:
+
+$$\frac{1}{10}, \frac{2}{10}, \frac{3}{10}, \frac{4}{10}, \frac{5}{10}, \frac{6}{10}, \frac{7}{10}, \frac{8}{10}, \frac{9}{10}, \frac{10}{10}$$
+
+Acum, aducem fiecare fracție la forma sa ireductibilă, și le ordonăm crescător după numitor:
+
+$$\frac{1}{1}, \frac{1}{2}, \frac{1}{5}, \frac{2}{5}, \frac{3}{5}, \frac{4}{5}, \frac{1}{10}, \frac{3}{10}, \frac{7}{10}, \frac{9}{10}$$
+
+Se observă că fiecare numitor este un divizor al lui $n$, și că numărătorii fracțiilor cu numitorul $d$ iau ca valori toate numerele mai mici sau egale cu $d$, prime cu $d$, care în total sunt $\varphi(d)$. De aici, formula dată se obține imediat.
+
+## Sursă C++ Fracții
+
+``` cpp -> Problema Fracții
+  #include <fstream>
+  using namespace std;
+
+  ifstream fin("fractii.in");
+  ofstream fout("fractii.out");
+
+  int n;
+  long long int sol;
+  int euler[1000010];
+
+  int main() {
+      fin >> n;
+      for (int i = 2; i <= n; i++)
+          euler[i] = i - 1;
+      for (int i = 2; i <= n; i++) {
+          sol += euler[i];
+          for (int j = 2 * i; j <= n; j += i)
+              euler[j] -= euler[i];
+      }
+      fout << 2 * sol + 1 << '\n';
+      return 0;
+  }
+```
+
+## Probleme recomandate
+
++++
+> [Prime1](http://varena.ro/problema/prime1)
+> [Extraprime](http://varena.ro/problema/extraprime)
+> [Fracții](https://infoarena.ro/problema/fractii)
+> [Numere Prime](https://infoarena.ro/problema/prim)
+> [Cmmdc2](https://infoarena.ro/problema/cmmdc2)
+> [Movedel](https://infoarena.ro/problema/movedel)
+---
+
+Dacă aveți vreo întrebare despre Ciurul lui Eratostene, nu ezitați să o adresați mai jos, în rubrica de comentarii :smile:

@@ -1,0 +1,160 @@
+TITLE: Problema Expresie -- OJI 2011, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 25/06/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, evaluare de expresii, mediana unui șir, oji 2011, programare dinamică, recursivitate indirectă, stl, subsecvența de sumă maximă
+DESCRIPTION: Problema expresie, de clasa a 10-a, s-a dat în 2011 la OJI. În problema expresie se dă o expresie aritmetică ponderată, formată din unul...
+
++++ none
+> **Dificultate:** :2/5:
+> **Autor:** Eugen Nodea
+> **Online:** [InfoArena](https://infoarena.ro/problema/expresie2), [PbInfo](https://www.pbinfo.ro/probleme/1067/expresie7)
+---
+
+## Rezumat
+
+Se dă o așa-numită __expresie aritmetică ponderată__, formată din unul sau mai multe $k$__-șiruri__, paranteze rotunde și paranteze pătrate. Un $k$-șir este o enumerare de $k$ numere despărțite prin virgulă. Expresia se evaluează în modul următor:
+
++++
+> Un $k$-șir neîncadrat între paranteze (de tipul 0) se evaluează drept suma elementelor șirului.
+> Un $k$-șir încadrat între paranteze rotunde (de tipul 1) se evaluează drept secvența de sumă maximă a șirului.
+> Un $k$-șir încadrat între paranteze pătrate (de tipul 2) se evaluează drept mediana șirului (elementul aflat pe poziția $[(k + 1) / 2]$) în șirul sortat, $k$-șirurile fiind indexate de la $1$.
+---
+
+Trebuie să determinăm câte numere întregi conține expresia dată și care este valoarea ei.
+
+## Soluție
+
+Prima cerință necesită doar un `strtok` pe șirul de caractere dat. Delimitatorii sunt toate caracterele ce pot apărea în expresie, cu excepția cifrelor. Însă, pentru că trebuie să și evaluăm expresia, în funcția pentru parsarea întregilor (`getInt`) am și incrementat numărul lor, răspunzând la ambele cerințe simultan.
+
+Pentru evaluarea expresiei am folosit __recursivitate indirectă__. O abordare cu stivă era mai greu de implementat pentru că trebuie lucrat cu vectori. Am scris o funcție `eval` ce parcurge șirul cu un pointer global `p` (nu pointer ca tip de date), ce indică poziția curentă din șir. Când se ajunge la o paranteză rotundă, se apelează funcția `getRot`, care evaluează un $k$-șir de tipul 1. În cazul unei paranteze pătrate, se apelează funcția `getPtr`, care evaluează un $k$-șir de tipul 2.
+
+Pentru $k$-șirurile de tipul 1, am determinat secvența de sumă maximă prin __programare dinamică__. Este vorba despre simpla relație de recurență $\mathrm{dp}[i] = \max(v[i], \mathrm{dp}[i - 1] + v[i])$. Pentru $k$-șirurile de tipul 2, este de ajuns să sortăm șirul și să-i accesăm elementul din mijloc pentru a-i afla mediana.
+
+Până aici soluția folosește niște algoritmi obișnuiți pentru o județeană de a 10-a. DAR, mai trebuie să fim atenți la un aspect. Vectorii unde sunt stocate șirurile procesate de fiecare funcție ocupă multă memorie, iar în combinație cu numărul maxim de apeluri simultane pe stivă (egal cu adâncimea maximă a expresiei), provoacă __stack overflow__ pe multe teste. Vectorii pot fi declarați cumva global pentru a scăpa de overflow? În niciun caz. Vectorii trebuie să fie locali; altfel același vector ar fi folosit de sute de apeluri în același timp.
+
+Soluția este să folosim vectori din STL. De exemplu, în timp ce se evaluează un $k$-șir de tipul 1, se ajunge în interiorul lui la unul de tipul 2, care trebuie evaluat înainte de a citi restul elementelor din primul. Deci, de ce să păstrăm de la începutul apelului spațiu și pentru ele printr-un vector static? Folosind un vector alocat dinamic, întotdeauna pe stivă va fi reținut numărul minim de valori necesare.
+
+## Sursă C++
+
+``` cpp -> Problema Expresie
+  #include <vector>
+  #include <fstream>
+  #include <algorithm>
+
+  #define SMAX 100010
+
+  using std::sort;
+  using std::vector;
+
+  std::ifstream fin("expresie.in");
+  std::ofstream fout("expresie.out");
+
+  int nr, val, p;
+  char str[SMAX];
+
+  inline int max(int x, int y);
+  inline bool isDigit(char chr);
+
+  void eval();
+  int getInt();
+
+  int getRot();
+  int getPtr();
+
+  int main() {
+      fin >> str;
+      eval();
+      fout << nr << '\n' << val << '\n';
+      return 0;
+  }
+
+  inline int max(int x, int y) {
+      return x > y ? x : y;
+  }
+
+  inline bool isDigit(char chr) {
+      return '0' <= chr && chr <= '9';
+  }
+
+  int getInt() {
+      nr++;
+      if (isDigit(str[p + 1])) {
+          p++;
+          return (str[p - 1] - '0') * 10 + str[p] - '0';
+      }
+      return str[p] - '0';
+  }
+
+  void eval() {
+      for (p = 0; str[p]; p++)
+          if (isDigit(str[p]))
+              val += getInt();
+          else if (str[p] == '-') {
+              p++;
+              val -= getInt();
+          }
+          else if (str[p] == '(')
+              val += getRot();
+          else if (str[p] == '[')
+              val += getPtr();
+  }
+
+  int getRot() {
+      vector<int> v;
+      vector<int> dp;
+
+      for (p++; str[p] != ')'; p++)
+          if (isDigit(str[p])) {
+              v.push_back(getInt());
+              dp.push_back(0);
+          }
+          else if (str[p] == '-') {
+              p++;
+              v.push_back(-getInt());
+              dp.push_back(0);
+          }
+          else if (str[p] == '(') {
+              v.push_back(getRot());
+              dp.push_back(0);
+          }
+          else if (str[p] == '[') {
+              v.push_back(getPtr());
+              dp.push_back(0);
+          }
+
+      if (!v.size())
+          return 0;
+
+      int maxSum = dp[0] = v[0];
+      for (int i = 1; i < dp.size(); i++) {
+          dp[i] = max(v[i], dp[i - 1] + v[i]);
+          if (maxSum < dp[i])
+              maxSum = dp[i];
+      }
+      return maxSum;
+  }
+
+  int getPtr() {
+      vector<int> v;
+      for (p++; str[p] != ']'; p++)
+          if (isDigit(str[p]))
+              v.push_back(getInt());
+          else if (str[p] == '-') {
+              p++;
+              v.push_back(-getInt());
+          }
+          else if (str[p] == '(')
+              v.push_back(getRot());
+          else if (str[p] == '[')
+              v.push_back(getPtr());
+
+      if (!v.size())
+          return 0;
+
+      sort(v.begin(), v.end());
+      return v[(v.size() + 1) / 2 - 1];
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Expresie, lasă un comentariu și te voi ajuta :smile:

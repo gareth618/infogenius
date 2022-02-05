@@ -1,0 +1,93 @@
+TITLE: Problema Șir -- OJI 2017, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 12/01/2020
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, combinatorică, invers modular, oji 2017, programare dinamică
+DESCRIPTION: Considerăm șirurile de lungime n care încep cu 1 și pentru care fiecare element este mai mare decât precedentul cu cel mult 1. Să se...
+
++++ none
+> **Dificultate:** :2/5:
+> **Autor:** Rodica Pintea
+> **Online:** [InfoArena](https://infoarena.ro/problema/sirul2), [PbInfo](https://www.pbinfo.ro/probleme/2000/sir9)
+---
+
+## Rezumat
+
+Considerăm șirurile de lungime $n$, care încep cu $1$, cu proprietatea că fiecare element este mai mare decât predecesorul lui cu cel mult $1$. Să se determine numărul de șiruri ce se termină în $u$, și respectiv numărul de șiruri în care un element apare de cel mult $r$ ori.
+
+## Soluție
+
+Răspunsul pentru prima cerință este $C_{n - 1}^{u - 1}$, iar explicația este exact cea de la numărul de partiții ordonate ale unui număr natural, din [acest](partitii-numar-natural) articol. Șirul nostru este partiționat în $u$ secvențe, iar noi trebuie să alegem capetele acestora. Cum ultima secvență are capătul fixat în poziția $n$, rămâne să alegem capetele doar pentru primele $u - 1$ secvențe. Acestea trebuie să ia valori distincte din mulțimea $\{1, 2, \ldots, n - 1\}$, așa că numărul lor este $C_{n - 1}^{u - 1}$. Având nevoie de o singură combinare, o vom calcula folosind invers modular, pe baza formulei:
+
+$$C_{n - 1}^{u - 1} = (n - 1)! \cdot (u - 1)!^{-1} \cdot (n - u)!^{-1}$$
+
+La a doua cerință vom folosi programare dinamică astfel: Notăm cu $\mathrm{dp}[i]$ numărul de șiruri de lungime $i$ cu proprietatea dată. Putem obține un șir de lungime $i$ adăugând $j$ valori egale la un șir de lungime $i - j$, unde $1 \le j \le r$. Valorile adăugate sunt unic determinate de ultimul element al șirului de lungime $i - j$. Adică, dacă acesta se termină în $x$, atunci șirul nou se va termina în $j$ de $x + 1$. Deci, recurența este:
+
+$$\mathrm{dp}[i] = \mathrm{dp}[i - 1] + \mathrm{dp}[i - 2] + \cdots + \mathrm{dp}[i - r]$$
+
+Dinamica poate fi calculată imediat în $O(n \cdot r)$, însă poate fi optimizată foarte ușor făcând următoarea observație. Scriem una sub alta recurențele pentru $\mathrm{dp}[i]$ și $\mathrm{dp}[i - 1]$:
+
+$$\begin{align*}
+  \mathrm{dp}[i] &= \mathrm{dp}[i - 1] + \mathrm{dp}[i - 2] + \cdots + \mathrm{dp}[i - r]\\
+  \mathrm{dp}[i - 1] &= \mathrm{dp}[i - 2] + \mathrm{dp}[i - 3] + \cdots + \mathrm{dp}[i - r - 1]
+\end{align*}$$
+
+Dacă scădem cele două relații, se vor reduce o grămadă de termeni și vom obține:
+
+$$\mathrm{dp}[i] - \mathrm{dp}[i - 1] = \mathrm{dp}[i - 1] - \mathrm{dp}[i - r - 1]$$
+
+De unde:
+
+$$\mathrm{dp}[i] = 2 \cdot \mathrm{dp}[i - 1] - \mathrm{dp}[i - r - 1]$$
+
+Evident, complexitatea pentru calcularea noii recurențe este $O(n)$.
+
+## Sursă C++
+
+``` cpp -> Problema Șir
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  const int NMAX = 100010;
+  const int MOD = 20173333;
+
+  ifstream fin("sir9.in");
+  ofstream fout("sir9.out");
+
+  int p, n, u;
+  int dp[NMAX];
+
+  int pwr(int a, int b) {
+      if (!b)
+          return 1;
+      if (b & 1)
+          return 1LL * a * pwr(1LL * a * a % MOD, b >> 1) % MOD;
+      return pwr(1LL * a * a % MOD, b >> 1);
+  }
+
+  int modInv(int n) {
+      return pwr(n, MOD - 2);
+  }
+
+  int fact(int n) {
+      int f = 1;
+      for (int i = 2; i <= n; i++)
+          f = 1LL * f * i % MOD;
+      return f;
+  }
+
+  int main() {
+      fin >> p >> n >> u;
+      if (p == 1)
+          fout << 1LL * fact(n - 1) * modInv(fact(u - 1)) % MOD * modInv(fact(n - u)) % MOD << '\n';
+      else {
+          dp[0] = dp[1] = 1;
+          for (int i = 2; i <= n; i++)
+              dp[i] = (2 * dp[i - 1] - (i >= u - 1 ? dp[i - u - 1] : 0) + MOD) % MOD;
+          fout << dp[n] << '\n';
+      }
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Șir, lasă un comentariu și te voi ajuta :smile:

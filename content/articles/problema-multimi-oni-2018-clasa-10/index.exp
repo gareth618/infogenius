@@ -1,0 +1,143 @@
+TITLE: Problema Mulțimi -- ONI 2018, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 31/05/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, oni 2018, operații pe biți
+DESCRIPTION: Problema multimi a fost dată în 2018 la ONI, la clasa a 10-a. În această problemă ni se dau n mulțimi scrise sub forma A=x-y/z.
+
++++ none
+> **Dificultate:** :4/5:
+> **Autor:** Alin Burța
+> **Online:** [InfoArena](https://infoarena.ro/problema/multimi4), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=2460)
+---
+
+## Rezumat
+
+În această problemă ni se dau $n$ mulțimi scrise sub forma `A=x-y/z`. Asta înseamnă că mulțimea $A$ este o secvență a unei progresii aritmetice cu primul termen $x$ și rația $z$, ultimul termen al ei cuprins în $A$ fiind $y$. Trebuie să evaluăm o expresie care operează cu mulțimile date, ce poate conține operatori de reuniune (`+`) și de intersecție (`*`), cât și paranteze. Mai exact, trebuie să afișăm cardinalul și elementele mulțimii obținute.
+
+## Soluție
+
+Abordarea mea în timpul concursului a fost să evaluez expresia în mod obișnuit, folosind o două stive. Șmecheria era să rețin operanzii (mulțimile) cât mai eficient, încât să nu depășesc memoria în timpul rulării programului (ceea ce n-aș fi putut face cu vectori statici) și să pot insera și căuta elemente cât mai repede. Soluția era evident un treap, adică `set`-ul din STL. Această soluție mi-a adus 60 de puncte. Practic, asta e metoda brută, dar nu mulți de a 10-a știu să folosească STL. Și sigur cei care nu știu STL nu știu nici să implementeze un treap de la 0 :wink:
+
+Soluția de 100 de puncte constă în a determina care dintre elementele reuniunii mulțimilor date se regăsesc și în mulțimea finală. Fiecărei mulțimi $x$ îi putem asocia un bit $1$ dacă elementul $y$ îi aparține, respectiv $0$ dacă nu. Având în vedere că mulțimile sunt de fapt secvențe de progresii aritmetice, putem determina în $O(1)$ dacă $y \in x$. Acum, pentru a afla dacă $y$ îi aparține și mulțimii finale, adaptăm expresia dată astfel: Înlocuim numele mulțimilor cu biții respectivi și operatorii pentru mulțimi cu operatorii logici corespunzători (__sau__ pentru __reuniune__, __și__ pentru __intersecție__).
+
+De exemplu, avem elementul $1$ și mulțimile $A = \{1, 2, 3\}$, $B = \{3, 7\}$, $C = \{1\}$, $D = \{1, 5, 9\}$, iar expresia este `A * C + B * (A + D)`. Vom calcula valoarea expresiei `1 && 1 || 0 && (1 || 1)`. Vom obține $1$, și într-adevăr, elementul $1$ îi aparține mulțimii $\{1, 3\}$.
+
+Totuși, algoritmul nu este suficient de eficient, pentru că este posibil să parsăm expresia de prea multe ori. Datorită faptului că numărul maxim de mulțimi este de doar $16$, putem precalcula valoarea expresiei pentru toate configurațiile de biți posibile, adică $2^{16}$ -- un număr decent.
+
+În implementarea de mai jos am folosit [operații pe biți](operatii-pe-biti-cpp) pentru eleganță în construirea configurațiilor. Tot secretul problemei era să observăm că putem transforma operațiile pe mulțimi în operații logice la nivel de elemente.
+
+## Sursă C++
+
+``` cpp -> Problema Mulțimi
+  #include <set>
+  #include <vector>
+  #include <fstream>
+
+  #include <cstdlib>
+  #include <cstring>
+
+  #define NMAX 16
+  #define SMAX 1010
+
+  std::ifstream fin("multimi5.in");
+  std::ofstream fout("multimi5.out");
+
+  // struct pentru mulțimi:
+  struct Mult {
+      int r; // rația
+      int a, b; // primul și ultimul element
+  };
+
+  int n;
+  Mult mult[NMAX + 10]; // vectorul de mulțimi
+
+  std::set<int> reun; // reuniunea mulțimilor
+  std::vector<int> sol; // mulțimea finală
+  bool config[1 << NMAX + 10]; // vectorul configurațiilor
+
+  char str[SMAX]; // expresia dată
+  int ind['Z' + 10]; // ind[chr] = indicele mulțimii chr
+
+  int vfOp; char stOp[SMAX]; // stiva de operatori
+  int vfMt; bool stMt[SMAX]; // stiva de operanzi
+
+  /// Funcție pentru citirea informațiilor despre fiecare mulțime:
+  void read(int it) {
+      fin >> str;
+      ind[str[0]] = it; // Asociem literei mulțimii numărul ei.
+
+      char *p;
+      mult[it].a = atoi(p = strtok(str + 2, "-/"));
+      mult[it].b = atoi(p = strtok(NULL, "-/"));
+      mult[it].r = atoi(p = strtok(NULL, "-/"));
+
+      // Inserăm elementele mulțimii curente în reuniune:
+      for (int i = mult[it].a; i <= mult[it].b; i += mult[it].r)
+          reun.insert(i);
+  }
+
+  int main() {
+      fin >> n;
+      for (int i = 0; i < n; i++)
+          read(i);
+
+      fin >> str;
+      int nrSubm = 1 << n;
+
+      // Precalculăm configurațiile, parsând la fiecare pas expresia:
+      for (int subm = 1; subm < nrSubm; subm++) {
+          vfOp = vfMt = 0;
+          for (int i = 0; str[i]; i++)
+              if (str[i] == '(' || str[i] == '*' || str[i] == '+')
+                  stOp[++vfOp] = str[i];
+              else if (str[i] == ')') {
+                  while (stOp[vfOp] == '+') {
+                      vfOp--;
+                      stMt[vfMt - 1] = stMt[vfMt - 1] || stMt[vfMt];
+                      vfMt--;
+                  }
+
+                  if (stOp[--vfOp] == '*') {
+                      vfOp--;
+                      stMt[vfMt - 1] = stMt[vfMt - 1] && stMt[vfMt];
+                      vfMt--;
+                  }
+              }
+              else {
+                  stMt[++vfMt] = subm & (1 << ind[str[i]]);
+                  if (stOp[vfOp] == '*') {
+                      vfOp--;
+                      stMt[vfMt - 1] = stMt[vfMt - 1] && stMt[vfMt];
+                      vfMt--;
+                  }
+              }
+
+          while (stOp[vfOp] == '+') {
+              vfOp--;
+              stMt[vfMt - 1] = stMt[vfMt - 1] || stMt[vfMt];
+              vfMt--;
+          }
+          config[subm] = stMt[1];
+      }
+
+      for (int it : reun) {
+          int subm = 0; // Aici construim configurația lui it.
+          for (int i = 0; i < n; i++)
+              // Testăm dacă it îi aparține mulțimii curente:
+              if (mult[i].a <= it && it <= mult[i].b && (it - mult[i].a) % mult[i].r == 0)
+                  subm |= 1 << i;
+
+          if (config[subm])
+              sol.push_back(it);
+      }
+
+      fout << sol.size() << '\n';
+      for (int i = 0; i < sol.size(); i++)
+          fout << sol[i] << ' ';
+      fout << '\n';
+      return 0;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Mulțimi, lasă un comentariu și te voi ajuta :smile:

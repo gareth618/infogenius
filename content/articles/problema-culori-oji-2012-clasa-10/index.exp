@@ -1,0 +1,135 @@
+TITLE: Problema Culori -- OJI 2012, Clasa a 10-a
+AUTHOR: Iulian Oleniuc
+DATE: 27/06/2018
+CATEGORIES: Probleme de olimpiadă
+TAGS: clasa 10, combinatorică, numere mari, oji 2012, programare dinamică
+DESCRIPTION: Problema Culori, de clasa a 10-a, a fost dată în 2012 la OJI. În problema culori, trebuie să determinăm numărul de moduri în care poate...
+
++++ none
+> **Dificultate:** :2/5:
+> **Autor:** Carmen Popescu
+> **Online:** [InfoArena](https://www.infoarena.ro/problema/culori3), [PbInfo](https://www.pbinfo.ro/?pagina=probleme&id=1031)
+---
+
+## Rezumat
+
+În problema culori, trebuie să determinăm numărul de moduri în care poate fi pictat un gard cu $n$ scânduri, având la dispoziție culorile alb, albastru, roșu, verde și galben. O configurație a culorilor scândurilor de pe gard trebuie să respecte totuși următoarele condiții:
+
++++
+> După o scândură **albă**, trebuie să urmeze una **albastră**.
+> Dacă o scândură **albastră**, trebuie să urmeze una **albă** sau **roșie**.
+> Dacă o scândură **roșie**, trebuie să urmeze una **albastră** sau **verde**.
+> Dacă o scândură **verde**, trebuie să urmeze una **roșie** sau **galbenă**.
+> Dacă o scândură **galbenă**, trebuie să urmeze una **verde**.
+---
+
+## Soluție
+
+Aceasta este o problemă destul de simplă de programare dinamică. Vom codifica culorile astfel: $0$ pentru alb, $1$ pentru albastru, $2$ pentru roșu, $3$ pentru verde și $4$ pentru galben. Rescriind relațiile date, obținem:
+
++++
+> $0$ poate fi precedat doar de $1$.
+> $1$ poate fi precedat doar de $0$ și $2$.
+> $2$ poate fi precedat doar de $1$ și $3$.
+> $3$ poate fi precedat doar de $2$ și $4$.
+> $4$ poate fi precedat doar de $3$.
+---
+
+Notând cu $\mathrm{dp}[i][j]$ numărul de moduri în care poate fi vopsit un gard de lungime $i$, astfel încât culoarea ultimei scânduri să fie $j$, obținem următoarele recurențe:
+
++++
+> $\mathrm{dp}[1][0] = \mathrm{dp}[1][1] = \mathrm{dp}[1][2] = \mathrm{dp}[1][3] = \mathrm{dp}[1][4] = 1$
+> $\mathrm{dp}[i][0] = \mathrm{dp}[i - 1][1]$
+> $\mathrm{dp}[i][1] = \mathrm{dp}[i - 1][0] + \mathrm{dp}[i - 1][2]$
+> $\mathrm{dp}[i][2] = \mathrm{dp}[i - 1][1] + \mathrm{dp}[i - 1][3]$
+> $\mathrm{dp}[i][3] = \mathrm{dp}[i - 1][2] + \mathrm{dp}[i - 1][4]$
+> $\mathrm{dp}[i][4] = \mathrm{dp}[i - 1][3]$
+---
+
+Evident, răspunsul va fi $\mathrm{dp}[i][0] + \mathrm{dp}[i][1] + \mathrm{dp}[i][2] + \mathrm{dp}[i][3] + \mathrm{dp}[i][4]$. Trebuie să implementăm suma pe numere mari, deoarece rezultatele vor crește destul de repede. De asemenea, din cauza numerelor mari este nevoie să reținem doar două linii din matricea $\mathrm{dp}$, pentru a economisi memoria. Putem face asta pentru că linia $\mathrm{dp}[i]$ se bazează doar pe linia $\mathrm{dp}[i - 1]$.
+
+## Sursă C++
+
+``` cpp -> Problema Culori
+  #include <fstream>
+  #define LGMAX 2000
+
+  std::ifstream fin("culori.in");
+  std::ofstream fout("culori.out");
+
+  struct BigInt {
+      int lg;
+      short int nr[LGMAX];
+  };
+
+  void print(BigInt a);
+  void init(BigInt& a, int val);
+
+  void copy(BigInt& dest, BigInt src);
+  void sum(BigInt a, BigInt b, BigInt& s);
+
+  int n;
+  BigInt sol;
+  BigInt dp[2][5];
+
+  int main() {
+      bool ind = 0;
+      for (int i = 0; i < 5; i++)
+          init(dp[ind][i], 1);
+
+      fin >> n;
+      for (int i = 2; i <= n; i++, ind ^= 1) {
+          copy(dp[!ind][0], dp[ind][1]);
+          sum(dp[ind][0], dp[ind][2], dp[!ind][1]);
+          sum(dp[ind][1], dp[ind][3], dp[!ind][2]);
+          sum(dp[ind][2], dp[ind][4], dp[!ind][3]);
+          copy(dp[!ind][4], dp[ind][3]);
+      }
+
+      for (int i = 0; i < 5; i++)
+          sum(sol, dp[ind][i], sol);
+      print(sol);
+      return 0;
+  }
+
+  void init(BigInt& a, int val) {
+      if (!val) {
+          a.lg = 1;
+          a.nr[0] = 0;
+          return;
+      }
+      a.lg = 0;
+      while (val) {
+          a.nr[a.lg++] = val % 10;
+          val /= 10;
+      }
+  }
+
+  void print(BigInt a) {
+      for (int i = a.lg - 1; i >= 0; i--)
+          fout << a.nr[i];
+      fout << '\n';
+  }
+
+  void copy(BigInt& dest, BigInt src) {
+      dest.lg = src.lg;
+      for (int i = 0; i < src.lg; i++)
+          dest.nr[i] = src.nr[i];
+  }
+
+  void sum(BigInt a, BigInt b, BigInt& s) {
+      for (int i = a.lg; i < LGMAX; i++) a.nr[i] = 0;
+      for (int i = b.lg; i < LGMAX; i++) b.nr[i] = 0;
+      int t = 0, val;
+      s.lg = a.lg > b.lg ? a.lg : b.lg;
+      for (int i = 0; i < s.lg; i++) {
+          val = a.nr[i] + b.nr[i] + t;
+          s.nr[i] = val % 10;
+          t = val / 10;
+      }
+      if (t)
+          s.nr[s.lg++] = t;
+  }
+^^^
+
+Dacă ai vreo nedumerire cu privire la problema Culori, lasă un comentariu și te voi ajuta :smile:

@@ -1,0 +1,479 @@
+TITLE: Funcții (Subprograme) în C++
+AUTHOR: Iulian Oleniuc
+DATE: 22/09/2020
+CATEGORIES: Limbajul C++
+TAGS: algoritmul lui euclid, cmmdc, cmmmc, funcții, pointeri, stivă, vectori
+DESCRIPTION: Funcțiile sunt un concept indispensabil în contextul programării. Ele sunt prezente în orice limbaj de programare și ne ajută să scriem...
+
+Funcțiile sunt un concept indispensabil în contextul programării. Ele sunt prezente în orice limbaj de programare și ne ajută să scriem cod modular, lizibil și ușor de întreținut. Rolul lor principal este de a ne scăpa de secvențele de cod repetitive, permițându-ne să le scriem în cadrul unei funcții, pe care să o apelăm de fiecare dată când avem nevoie de secvența respectivă de cod. În acest articol vom discuta despre funcții în C++. Funcțiile se mai numesc și subprograme, dar numai profesorii mai folosesc termenul ăsta.
+
+## De ce avem nevoie de funcții?
+
+Să luăm drept exemplu [problema 2](algoritmul-lui-euclid/#header-13) din articolul despre Algoritmul lui Euclid. În această problemă trebuie să calculăm suma a două fracții $a / b$ și $c / d$. Ziceam că pentru a evita să facem overflow la `int`, ar fi bine să procedăm așa:
+
++++ 1.
+> Simplificăm prima fracție prin $\gcd(a, b)$.
+> Simplificăm a doua fracție prin $\gcd(c, d)$.
+> Calculăm $l = \lcm(b, d)$.
+> Amplificăm prima fracție prin $l / b$.
+> Amplificăm a doua fracție prin $l / d$.
+> Adunăm numărătorii celor două fracții.
+> Simplificăm noua fracție $e / f$ prin $\gcd(e, f)$.
+---
+
+În caz că nu ați citit [articolul](algoritmul-lui-euclid) respectiv, deși vă recomand să o faceți, prin $\gcd$ mă refer la CMMDC, iar prin $\lcm$ la CMMMC.
+
+### Implementarea fără funcții
+
+Observați câte CMMDC-uri trebuie să calculăm? Patru, dintre care unul vine de la un CMMMC. Dacă ar fi să rezolvăm problema fără funcții, codul va arăta cam așa:
+
+``` cpp
+  int gcdAB = a, cpyB = b;
+  while (cpyB) {
+      int r = gcdAB % cpyB;
+      gcdAB = cpyB;
+      cpyB = r;
+  }
+  a /= gcdAB;
+  b /= gcdAB;
+
+  int gcdCD = c, cpyD = d;
+  while (cpyD) {
+      int r = gcdCD % cpyD;
+      gcdCD = cpyD;
+      cpyD = r;
+  }
+  c /= gcdCD;
+  d /= gcdCD;
+
+  int lcmBD = b, cpyD1 = d;
+  while (cpyD1) {
+      int r = lcmBD % cpyD1;
+      lcmBD = cpyD1;
+      cpyD1 = r;
+  }
+  lcmBD = b * d / lcmBD;
+  a *= lcmBD / b;
+  c *= lcmBD / d;
+
+  int e = a + c;
+  int f = lcmBD;
+
+  int gcdEF = e, cpyF = f;
+  while (cpyF) {
+      int r = gcdEF % cpyF;
+      gcdEF = cpyF;
+      cpyF = r;
+  }
+  e /= gcdEF;
+  f /= gcdEF;
+
+  cout << e << " / " << f << '\n';
+```
+
+Această implementare are o groază de dezavantaje:
+
++++
+  E mult mai lungă decât e nevoie.
+~~~
+  E predispusă la erori. Faptul că secvența cu Algoritmul lui Euclid este copiată de atâtea ori crește probabilitatea să înlocuiești greșit numele unei variabile. Și chiar dacă nu o copiezi efectiv, cu copy-paste, ci regândești algoritmul de fiecare dată, la un moment dat te plictisești din cauza rutinei și începi să scrii `/` în loc de `%`, scrii variabila greșită în condiția din `while` și așa mai departe.
+~~~
+  Oricum ai efectua copierea, vei irosi mult prea mult timp scriind cod în felul ăsta. Iar Algoritmul lui Euclid încă e simplu, dar puteam avea ceva mult mai complex în locul lui.
+~~~
+  Este foarte greu să modifici pe viitor secvența de cod pe care ai tot copiat-o. Poate că, dintr-un motiv sau altul, vrei să înlocuiești Algoritmul lui Euclid prin împărțiri repetate cu cel prin scăderi repetate. Va trebui să modifici codul în patru locuri.
+~~~
+  Că tot vorbeam de viitor, dacă vei reciti codul peste câteva zile, săptămâni sau luni, va fi foarte greu, dacă nu imposibil, să descifrezi ce naiba ai scris acolo.
+---
+
+### Implementarea cu funcții
+
+Ca să scăpăm de toate problemele astea, ne vin în ajutor funcțiile. O funcție este o secvență de instrucțiuni pe care, după ce o definim și îi dăm un nume, o putem apela de câte ori vrem în cadrul programului. De fiecare dată când o apelăm, îi dăm un set de variabile cu care să lucreze, aceste variabile numindu-se __parametri__. Eventual, după ce a terminat de procesat parametrii respectivi, funcția va returna o valoare.
+
+În problema noastră, ne-ar fi util să definim o funcție `gcd` care primește ca parametri două numere întregi `a` și `b`, și le calculează CMMDC-ul:
+
+``` cpp
+  int gcd(int a, int b) {
+      while (b) {
+          int r = a % b;
+          a = b;
+          b = r;
+      }
+      return a;
+  }
+```
+
+Voi vorbi despre sintaxă într-o clipă. După ce am definit funcția, o putem apela oriunde, de exemplu în cadrul lui `main`. Apropo, `main` este și ea o funcție. Deci, dacă folosim funcții, soluția problemei noastre va arăta așa:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  int gcd(int a, int b) {
+      while (b) {
+          int r = a % b;
+          a = b;
+          b = r;
+      }
+      return a;
+  }
+
+  int main() {
+      int a, b, c, d; cin >> a >> b >> c >> d;
+      int gcdAB = gcd(a, b); a /= gcdAB; b /= gcdAB;
+      int gcdCD = gcd(c, d); c /= gcdCD; d /= gcdCD;
+      int lcmBD = b * d / gcd(b, d);
+      a *= lcmBD / b;
+      c *= lcmBD / d;
+      int e = a + c;
+      int f = lcmBD;
+      int gcdEF = gcd(e, f);
+      e /= gcdEF;
+      f /= gcdEF;
+      cout << e << " / " << f << '\n';
+      return 0;
+  }
+```
+
+Ar fi frumos să definim o funcție și pentru CMMMC. În general este util să definim funcții când lucrăm cu funcții matematice, precum CMMDC, CMMMC, modul, minim, maxim, putere, radical etc. Cum în noua funcție `lcm` vom avea nevoie de un apel la `gcd`, `lcm` va trebui definit __după__ `gcd`:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  int gcd(int a, int b) {
+      while (b) {
+          int r = a % b;
+          a = b;
+          b = r;
+      }
+      return a;
+  }
+
+  int lcm(int a, int b) {
+      return a * b / gcd(a, b);
+  }
+
+  int main() {
+      int a, b, c, d; cin >> a >> b >> c >> d;
+      int gcdAB = gcd(a, b); a /= gcdAB; b /= gcdAB;
+      int gcdCD = gcd(c, d); c /= gcdCD; d /= gcdCD;
+      int lcmBD = lcm(b, d);
+      a *= lcmBD / b;
+      c *= lcmBD / d;
+      int e = a + c;
+      int f = lcmBD;
+      int gcdEF = gcd(e, f);
+      e /= gcdEF;
+      f /= gcdEF;
+      cout << e << " / " << f << '\n';
+      return 0;
+  }
+```
+
+Perfect. Acum că v-ați făcut o idee despre ce sunt funcțiile, să trecem la teorie.
+
+## Definirea unei funcții
+
+În C++, sintaxa definirii unei funcții este:
+
+``` cpp
+  tip nume(tipParam1 numeParam1, tipParam2 numeParam2, ..., tipParamN numeParamN) {
+      instrucțiuni
+  }
+```
+
+Unde:
+
++++
+> `tip` este tipul de date al valorii returnate de funcție. În cazul în care funcția nu returnează nicio valoare, tipul va fi `void`.
+> `nume` este numele funcției. Numele funcției este un identificator care trebuie să respecte aceleași reguli ca și numele unei variabile.
+> `tipParamI` este tipul de date al parametrului `i`.
+> `numeParamI` este numele parametrului `i`.
+> `n >= 0`, adică funcția poate să nu aibă niciun parametru, cum este cazul lui `main`.
+---
+
+Prima linie, cea cu numele funcției și cu lista de parametri (numiți și __argumente__), se numește __antetul__ funcției, iar block-ul de instrucțiuni delimitat de acolade se numește __corpul__ funcției. Parametrii din cadrul antetului funcției se numesc parametri __formali__, iar cei din cadrul unui apel se numesc parametri __efectivi__. Li se mai zice __actuali__, dar asta cred că e o traducere proastă a termenului __actual__, care în engleză înseamnă __efectiv__. Oricum după ce terminați de învățat despre funcții nu mai aveți treabă cu termenii ăștia :tongue:
+
+## Declararea unei funcții
+
+Să considerăm următorul exemplu:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+      int a, b; cin >> a >> b;
+      cout << a << " + " << b << " = " << sum(a, b) << '\n';
+      return 0;
+  }
+
+  int sum(int a, int b) {
+      return a + b;
+  }
+```
+
+Puteți observa că am definit funcția `sum` __după__ ce am apelat-o. Asta va produce o eroare de compilare, deoarece compilatorul evaluează sursa linie cu linie, iar când va ajunge la apelul respectiv, nu va ști ce structură are funcția `sum`, pentru că nu a fost încă definită. Dacă vrem neapărat, putem lăsa definiția funcției acolo, cu condiția să menționăm prototipul ei (adică să o declarăm) mai sus, __înainte__ să o apelăm:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  int sum(int, int);
+
+  int main() {
+      int a, b; cin >> a >> b;
+      cout << a << " + " << b << " = " << sum(a, b) << '\n';
+      return 0;
+  }
+
+  int sum(int a, int b) {
+      return a + b;
+  }
+```
+
+Acum compilatorul va ști că funcția `sum` primește doi parametri de tipul `int` și că returnează o valoare de tipul `int`. Instrucțiunile pe care le efectuează sunt mai puțin importante deocamdată. Compilatorul va afla care sunt acestea atunci când va da de definiția funcției. Sintaxa declarării unei funcții în C++ este:
+
+``` cpp
+  tip nume(tipParam1, tipParam2, ..., tipParamN);
+```
+
+Dacă dorim, putem menționa și numele parametrilor pe lângă tipurile acestora, dar este inutil din moment ce compilatorul n-are nevoie de ele momentan.
+
+Singurul caz în care chiar avem nevoie să __declarăm__ funcții este cel în care folosim __recursivitate indirectă__, concept despre care voi discuta în alt articol.
+
+## Variabilele locale și parametrii formali
+
+După cum am spus și în articolul despre [variabile în C++](variabile-tipuri-de-date-cpp), variabilele locale sunt cele declarate într-un block de cod, adică între `{ }` (sau în antetul unui `for`). Ele sunt vizibile doar în cadrul acelui block, adică pot fi folosite doar de instrucțiunile din interiorul lui. În continuare, prin variabile locale ne vom referi doar la cele locale pentru o anumită funcție, adică la cele declarate direct în corpul funcției.
+
+``` cpp
+  int MOD = 13; // variabilă globală
+
+  int sumaModuloMOD(int a, int b) {
+      int s; // variabilă locală în sumaModuloMOD
+      s = (a + b) % MOD;
+      return s;
+  }
+
+  int main() {
+      int a, b; // variabile locale în main
+      cin >> a >> b;
+      cout << sumaModuloMOD(a, b) << '\n';
+      cout << s << '\n'; // s nu (mai) există
+      return 0;
+  }
+```
+
+În definiția unei funcții putem folosi atât variabile globale, cât și variabile locale. Cele din urmă sunt inițializate automat cu valori random de pe __stivă__ (la care ajungem acuși), așa că de cele mai multe ori va trebui să le inițializăm noi cu zero sau cu ce avem nevoie.
+
+Parametrii formali se comportă exact ca niște variabile locale, fiind inițializați cu valorile transmise de apelul funcției. Deci, în funcția `gcd` de mai devreme nu e nevoie să facem copii variabilelor `a` și `b`, pentru că noi nu lucrăm direct cu variabilele din funcția de unde a fost apelat `gcd`, ci cu niște copii locale ale lor.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  int gcd(int a, int b) {
+      while (b) {
+          int r = a % b;
+          a = b;
+          b = r;
+      }
+      cout << a << '\n'; // 4
+      return a;
+  }
+
+  int main() {
+      int a = 20, b = 24;
+      cout << gcd(a, b) << '\n';
+      cout << a << '\n'; // 20
+      return 0;
+  }
+```
+
+## Instrucțiunea `return`
+
+Când am terminat ce aveam de făcut în funcție și vrem să returnăm o anumită valoare, putem face asta scriind `return val;`. De exemplu, iată o funcție ce primește ca parametru un număr natural și verifică dacă acesta e prim, returnând `true` sau `false` în funcție de rezultat:
+
+``` cpp
+  bool isPrime(int n) {
+      bool ok = n > 1;
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0) {
+              ok = false;
+              break;
+          }
+      return ok;
+  }
+```
+
+Totuși, nu ne obligă nimeni să dăm `return` abia la finalul funcției. O putem face și mai devreme, iar asta ne permite să scriem funcții mai concise și mai clare:
+
+``` cpp
+  bool isPrime(int n) {
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0)
+              return false;
+      return n >= 2;
+  }
+```
+
+Să luăm și un exemplu de funcție `void`, care nu returnează niciun rezultat. Poate vrem doar să afișăm dacă `n` este prim, nu să și returnăm `true` sau `false`:
+
+``` cpp
+  void isPrime(int n) {
+      bool ok = n > 1;
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0) {
+              ok = false;
+              break;
+          }
+      cout << (ok ? "DA" : "NU");
+  }
+```
+
+După cum se poate observa, nu am scris nicăieri `return`, pentru că nu este nevoie. Totuși, ne-ar fi util să putem ieși din funcția `void` când vrem noi, ca să putem rescrie funcția într-o manieră asemănătoare cu cea de mai devreme. Ei bine, putem face asta pur și simplu scriind `return;`:
+
+``` cpp
+  void isPrime(int n) {
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0) {
+              cout << "NU";
+              return;
+          }
+      cout << (n >= 2 ? "DA" : "NU");
+  }
+```
+
+## Cum funcționează un apel de funcție?
+
+Când apelăm o funcție, acesteia i se alocă memorie pe [__stivă__]()TODO -- o zonă de memorie specială, folosită de calculator pentru efectuarea apelurilor de funcții; după cum îi zice și numele, aceasta funcționează ca o stivă. Mai exact, se alocă memorie pentru parametrii formali, pentru variabilele locale și pentru __adresa de revenire__. Nu știu exact cum arată aceasta, dar ea îi indică calculatorului unde trebuie să se întoarcă în program după încheiera apelului. Apoi, se copiază valorile parametrilor efectivi în parametrii formali și se execută funcția.
+
+![400; Exemplu apel de funcție](exemplu-apel.png)
+
+După ce se iese din funcție, se eliberează zona de memorie din vârful stivei, alocată apelului curent, și execuția programului continuă din locul indicat de adresa de revenire. Atunci când se eliberează zona respectivă de memorie, rămân tot felul de „gunoaie” în locul ei, biții acesteia nefiind resetați la zero, probabil din motive de eficiență. Din cauza asta variabilele locale sunt inițializate implicit cu valori „random” de pe stivă.
+
+Dacă încă nu vă este foarte clar cum sunt procesate apelurile de funcții, sau de ce acestea se comportă ca o stivă, sper că animația de mai jos vă va forma o imagine mai clară. Nu uitați că o puteți pune pe pauză oricând, dând click pe ea. Asta e valabil pentru toate animațiile de pe acest site.
+
+![](function-call.js)
+
+## Transmiterea parametrilor prin referință
+
+Probabil că mulți dintre voi ați folosit măcar o dată funcția `swap` din STL. Aceasta primește ca parametri două variabile și le interschimbă. Haideți să programăm și noi funcția noastră `mySwap`, care să interschimbe doar variabile de tipul `int`:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  void mySwap(int a, int b) {
+      int aux = a;
+      a = b;
+      b = aux;
+  }
+
+  int main() {
+      int a = 1, b = 4;
+      mySwap(a, b);
+      cout << a << ' ' << b << '\n'; // 1 4
+      return 0;
+  }
+```
+
+Dacă o veți testa, veți observa că n-are niciun efect -- valorile variabilelor `a` și `b` din funcția `main` rămân aceleași. Asta pentru că, atunci când apelăm funcția `mySwap`, __valorile__ parametrilor efectivi sunt __copiate__ în cei formali. Astfel, orice modificări am aduce asupra lor, ele vor rămâne în funcția `mySwap`. Trebuie să avem acces la zona de memorie unde este stocată fiecare dintre cele două variabile.
+
+Soluția C-style este să folosim pointeri. În loc să transmitem drept parametri valorile celor două variabile, le vom transmite adresele de memorie. Acum nu vom mai interschimba valorile a două variabile locale, ci valorile din zonele de memorie indicate de cei doi pointeri.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  void mySwap(int* a, int* b) {
+      int aux = *a;
+      *a = *b;
+      *b = aux;
+  }
+
+  int main() {
+      int a = 1, b = 4;
+      mySwap(&a, &b);
+      cout << a << ' ' << b << '\n'; // 4 1
+      return 0;
+  }
+```
+
+Varianta asta e cam urâtă din punct de vedere sintactic, pentru că tot trebuie să folosim operatorii de referențiere (`&`) și de dereferențiere (`*`). De aceea, în C++ există o metodă mult mai ușor de utilizat, ce nu presupune decât să punem un ampersand (`&`) înaintea numelui parametrului ce dorim să fie transmis prin referință.
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  void mySwap(int& a, int& b) {
+      int aux = a;
+      a = b;
+      b = aux;
+  }
+
+  int main() {
+      int a = 1, b = 4;
+      mySwap(a, b);
+      cout << a << ' ' << b << '\n'; // 4 1
+      return 0;
+  }
+```
+
+Totuși, e bine de știut că faza cu ampersand-ul nu e doar o regulă de sintaxă, cum cred cei mai mulți. Ampersand-ul marchează de fapt un tip de date (`int&`, `char&`, `float&` sunt tipuri de date). O variabilă de tipul `tip&` se comportă ca un pointer gata dereferențiat. Cu alte cuvinte, atunci când scriem `int &a = b`, putem spune că practic i-am dat variabilei `a` încă un nume (`b`), în sensul că, fie că lucrăm cu `a`, fie că lucrăm cu `b`, modificăm valoarea aceleași zone de memorie.
+
+``` cpp
+  int a = 5;
+  int &b = a;
+  a++; cout << a << ' ' << b << '\n'; // 6 6
+  b++; cout << a << ' ' << b << '\n'; // 7 7
+```
+
+## Transmiterea tablourilor ca parametri
+
+Sintaxa pentru a transmite un vector drept parametru pentru o funcție este:
+
+``` cpp
+  void f(int v[]) {
+      ...
+  }
+```
+
+Dacă dorim, putem menționa dimensiunea maximă a vectorului, cum facem în cazul unei declarații obișnuite, dar este opțional:
+
+``` cpp
+  void f(int v[100]) {
+      ...
+  }
+```
+
+Evident, putem transmite ca parametri și tablouri multidimensionale. Regula este să specificăm lungimea fiecărei dimensiuni, eventual mai puțin a primeia -- aceasta e singura opțională. Compilatorul trebuie să cunoască aceste lungimi pentru a ști cum să acceseze în memorie elementele tabloului. Mai multe detalii [aici](matrice-cpp/#header-2).
+
+``` cpp
+  void f(int v1[], int v2[][300], int v3[][100][400]) {
+      ...
+  }
+```
+
+Atunci când o funcție primește ca parametru un tablou, acesta este transmis automat prin referință. Și nici nu poate fi transmis altfel, din motive de eficiență. Deci, modificările efectuate asupra lui se vor păstra și după încheierea apelului.
+
+Iată un exemplu practic de funcție ce folosește ca parametru un vector:
+
+``` cpp
+  #include <iostream>
+  using namespace std;
+
+  void read(int& n, int v[]) {
+      cin >> n;
+      for (int i = 0; i < n; i++)
+          cin >> v[i];
+  }
+
+  int main() {
+      int n, v[100];
+      read(n, v);
+      return 0;
+  }
+```
+
+Mai sunt multe lucruri de spus despre funcțiile din C++ (supraîncărcare, variabile statice, parametri impliciți etc), dar nu se studiază la școală, așa că le păstrez pentru altă dată. Puteți pune în practică ce ați învățat în acest articol pe [PbInfo](https://www.pbinfo.ro/probleme/categorii/13/subprograme). Dacă aveți vreo întrebare legată de funcții în C++, o puteți adresa mai jos, într-un comentariu :smile:
