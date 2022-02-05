@@ -49,5 +49,9 @@
     "esm": "^3.2.25",
     "uuid": "^3.4.0",
     "@loadable/component": "^5.15.0"
+  },
+
+  "devDependencies": {
+    "sharp": "^0.29.0"
   }
 }
