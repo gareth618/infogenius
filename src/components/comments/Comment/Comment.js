@@ -6,6 +6,17 @@ import { Reply, Close } from '@utils/icons';
 import * as styles from './Comment.module.css';
 
 export default function Comment({ info, setParentComment, preview }) {
+  React.useEffect(() => {
+    const os
+      = navigator.userAgent.indexOf('Mac') !== -1 ? 'os-macos'
+      : navigator.userAgent.indexOf('Linux') !== -1 ? 'os-linux'
+      : 'os-other';
+    const elements = document.getElementsByClassName(os);
+    for (const element of elements) {
+      element.style.display = 'inline';
+    }
+  });
+
   const avatar = info.email === 'bloggareth@gmail.com'
     ? (
       <StaticImage
