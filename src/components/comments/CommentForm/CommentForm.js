@@ -29,7 +29,7 @@ export default function CommentForm({ formRef, articleSlug, parentComment, setPa
 
   const [userEmail, setUserEmail] = React.useState(null);
   React.useEffect(() => onAuthStateChanged(getAuth(), user => {
-    setUserEmail(user == null ? null : user.email)
+    setUserEmail(user == null ? null : user.email);
   }), []);
   const logIn = () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())

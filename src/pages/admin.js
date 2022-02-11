@@ -6,44 +6,60 @@ import { graphql } from 'gatsby';
 
 import { ExplicitEditor } from '@components/comments';
 import { Layout } from '@components/layout';
+import * as styles from '@styles/admin.module.css';
 
 import firestore from '@utils/firestore';
-import { onSnapshot, collection, query, orderBy, limit, doc, getDoc, setDoc } from 'firebase/firestore';
+import { onSnapshot, collection, query, orderBy, limit, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 
-function Comment({ idComment, initContent }) {
-  const [content, setContent] = React.useState(initContent);
+function Comment({ info }) {
+  const [parent, setParent] = React.useState(info.parent);
+  const [content, setContent] = React.useState(info.content);
   const updateComment = async () => {
-    const docRef = doc(firestore, 'comments', idComment);
+    const docRef = doc(firestore, 'comments', info.id);
     const docObj = await getDoc(docRef);
     await setDoc(docRef, {
       content,
       email: docObj.data().email,
-      parent: docObj.data().parent,
-      slug: docObj.data().slug,
+      parent,
+      slug: info.slug,
       timestamp: docObj.data().timestamp
     });
   };
+
+  const [del, setDel] = React.useState(3);
+  const incDel = async () => {
+    setDel(del - 1);
+    if (del === 1) {
+      await deleteDoc(doc(firestore, 'comments', info.id));
+    }
+  };
+
   return (
     <>
       <ExplicitEditor
         input={content}
         setInput={setContent}
       />
-      <button
-        style={{
-          display: 'block',
-          margin: '1rem 0',
-          padding: '1rem',
-          width: '100%',
-          borderRadius: '.5rem',
-          color: 'white',
-          background: 'dodgerblue',
-          fontWeight: 'bold'
-        }}
-        onClick={updateComment}
-      >
-        Actualizează!
-      </button>
+      <div className={styles.menu}>
+        <div className={styles.id}>
+          {info.id}
+        </div>
+        <input
+          className={styles.parent}
+          value={parent}
+          onChange={event => setParent(event.target.value)}
+        />
+        <a
+          className={styles.view}
+          href={`https://infogenius.ro/${info.slug}/#comment-${info.id}`}
+          target="_blank"
+          rel="noreferrer"
+        >view</a>
+        {del > 0 && <button type="button" className={styles.del} onClick={incDel}>delete</button>}
+        {del > 1 && <button type="button" className={styles.del} onClick={incDel}>delete</button>}
+        {del > 2 && <button type="button" className={styles.del} onClick={incDel}>delete</button>}
+        <button type="button" className={styles.update} onClick={updateComment}>update</button>
+      </div>
     </>
   );
 }
@@ -57,13 +73,15 @@ export default function Admin({ data }) {
       const comments = await Promise.all(
         documents.map(async document => ({
           id: document.id,
+          parent: document.data().parent,
+          slug: document.data().slug,
           content: document.data().content
         }))
       );
       setComments(comments);
     };
     return onSnapshot(
-      query(collection(firestore, 'comments'), orderBy('timestamp', 'desc'), limit(5)),
+      query(collection(firestore, 'comments'), orderBy('timestamp', 'desc'), limit(10)),
       docs => loadComments(docs), () => setComments(null)
     );
   }, []);
@@ -78,14 +96,8 @@ export default function Admin({ data }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
       <Layout>
-        <div style={{ marginBottom: '-1rem' }}>
-          {comments.map(comment => (
-            <Comment
-              key={uuidv4()}
-              idComment={comment.id}
-              initContent={comment.content}
-            />
-          ))}
+        <div>
+          {comments.map(comment => <Comment key={uuidv4()} info={comment} />)}
         </div>
       </Layout>
     </>

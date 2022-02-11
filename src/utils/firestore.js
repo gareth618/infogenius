@@ -22,6 +22,7 @@ export default getFirestore();
 //       allow read;
 //       allow create: if request.auth != null;
 //       allow update: if isAdmin(request.auth.uid);
+//       allow delete: if isAdmin(request.auth.uid);
 //     }
 //   }
 //   match /databases/{database}/documents/users {

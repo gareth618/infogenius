@@ -1,0 +1,30 @@
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  align-items: stretch;
+  margin: 1rem 0;
+}
+
+.menu:last-child {
+  margin-bottom: 0;
+}
+
+.menu * {
+  display: block;
+  padding: 1rem;
+  border-radius: .5rem;
+  color: white;
+  font-weight: bold;
+}
+
+.id,
+.parent {
+  flex: 1;
+}
+
+.id { background: #666; }
+.parent { background: darkorange; }
+.view { background: royalblue; }
+.del { background: red; }
+.update { background: limegreen; }
