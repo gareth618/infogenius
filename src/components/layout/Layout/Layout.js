@@ -1,6 +1,7 @@
 import React from 'react';
 import uuidv4 from 'uuid';
 import { navigate } from 'gatsby';
+import { renderKbd } from '@utils/helpers';
 
 import { Header } from '@components/layout';
 import { Footer } from '@components/layout';
@@ -48,7 +49,7 @@ export default function Layout({ sidebar, children }) {
                 data-ad-slot="2342079856"
               />
               <script dangerouslySetInnerHTML={{
-                __html: '(adsbygoogle = window.adsbygoogle || []).push({ });'
+                __html: 'setTimeout(() => (adsbygoogle = window.adsbygoogle || []).push({ }), 1618);'
               }} />
             </aside>
           )}
@@ -59,14 +60,7 @@ export default function Layout({ sidebar, children }) {
   ), [sidebar, children]);
 
   React.useEffect(() => {
-    const os
-      = navigator.userAgent.indexOf('Mac') !== -1 ? 'os-macos'
-      : navigator.userAgent.indexOf('Linux') !== -1 ? 'os-linux'
-      : 'os-other';
-    const elements = document.getElementsByClassName(os);
-    for (const element of elements) {
-      element.style.display = 'inline';
-    }
+    renderKbd(navigator, document);
   });
 
   const [userEmail, setUserEmail] = React.useState(null);

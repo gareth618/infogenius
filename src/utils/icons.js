@@ -6,6 +6,7 @@ import { faClipboard as faClipboardTwo } from '@fortawesome/free-solid-svg-icons
 
 import {
   faHandPointUp, faSearch, faTimes, faSun, faMoon,
+  faEye, faPencilAlt, faInfoCircle,
   faAngleDoubleLeft, faAngleDoubleRight, faPaperPlane, faReply, faBell
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,6 +22,9 @@ export function Search      () { return <FontAwesomeIcon className="fa-fw" icon=
 export function Close       () { return <FontAwesomeIcon className="fa-fw" icon={faTimes           } />; };
 export function Light       () { return <FontAwesomeIcon className="fa-fw" icon={faSun             } />; };
 export function Dark        () { return <FontAwesomeIcon className="fa-fw" icon={faMoon            } />; };
+export function Preview     () { return <FontAwesomeIcon className="fa"    icon={faEye             } />; };
+export function Edit        () { return <FontAwesomeIcon className="fa"    icon={faPencilAlt       } />; };
+export function Info        () { return <FontAwesomeIcon className="fa"    icon={faInfoCircle      } />; };
 export function Old         () { return <FontAwesomeIcon className="fa"    icon={faAngleDoubleLeft } />; };
 export function New         () { return <FontAwesomeIcon className="fa"    icon={faAngleDoubleRight} />; };
 export function Send        () { return <FontAwesomeIcon className="fa"    icon={faPaperPlane      } />; };

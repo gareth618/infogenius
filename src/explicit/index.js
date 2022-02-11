@@ -173,9 +173,12 @@ function getExcerpt(ast) {
 }
 
 export function render(str, media) {
+  const ADSENSE = false;
   if (media == null) return renderInline(fixKatexBug({ tag: 'root', sons: parseInline(str) }).sons);
   if (Object.keys(media).length === 0) return renderBlocks(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), false);
-  return renderBlocks(placeAds(makeAnchors(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), { val: 0 })), true);
+  return ADSENSE
+    ? renderBlocks(placeAds(makeAnchors(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), { val: 0 })), true)
+    : renderBlocks(makeAnchors(fixLists(fixKatexBug(parseBlocks(trimPost(str), media))), { val: 0 }), true);
 };
 
 export function renderExcerpt(str, media) {

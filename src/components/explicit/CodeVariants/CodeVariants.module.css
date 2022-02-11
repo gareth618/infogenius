@@ -3,6 +3,10 @@
   margin: 1rem 0 0 0;
 }
 
+.buttons-container + div {
+  margin-top: 0;
+}
+
 .button {
   display: block;
   padding: 1rem 0 1rem 1rem;

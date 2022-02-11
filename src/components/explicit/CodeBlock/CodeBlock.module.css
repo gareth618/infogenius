@@ -55,6 +55,7 @@
 .digits-2 div::before { width: 1.2rem; }
 
 .macos-window {
+  margin: 1rem 0;
   background: #111;
   border-radius: .5rem;
 }

@@ -3,6 +3,8 @@ import uuidv4 from 'uuid';
 
 import { Helmet } from 'react-helmet';
 import { graphql } from 'gatsby';
+
+import { ExplicitEditor } from '@components/comments';
 import { Layout } from '@components/layout';
 
 import firestore from '@utils/firestore';
@@ -23,22 +25,9 @@ function Comment({ idComment, initContent }) {
   };
   return (
     <>
-      <textarea
-        style={{
-          display: "block",
-          marginBottom: "1rem",
-          padding: "1rem",
-          width: "100%",
-          height: "200px",
-          resize: "none",
-          border: "none",
-          borderRadius: ".5rem",
-          background: "var(--form-one)",
-          color: "var(--text)",
-          fontFamily: "'Source Code Pro', monospace"
-        }}
-        value={content}
-        onChange={event => setContent(event.target.value)}
+      <ExplicitEditor
+        input={content}
+        setInput={setContent}
       />
       <button
         style={{
@@ -89,13 +78,15 @@ export default function Admin({ data }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Helmet>
       <Layout>
-        {comments.map((comment, index) => (
-          <Comment
-            key={uuidv4()}
-            idComment={comment.id}
-            initContent={comment.content}
-          />
-        ))}
+        <div style={{ marginBottom: '-1rem' }}>
+          {comments.map(comment => (
+            <Comment
+              key={uuidv4()}
+              idComment={comment.id}
+              initContent={comment.content}
+            />
+          ))}
+        </div>
       </Layout>
     </>
   );

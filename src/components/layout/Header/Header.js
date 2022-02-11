@@ -85,7 +85,7 @@ export default function Header() {
             <Link to="/">
               <img src={Logo} alt="home" draggable="false" />
             </Link>
-            <span>v2.0</span>
+            <span>v2.1</span>
           </div>
 
           <div className={stylesHeader.navContainer}>

@@ -73,6 +73,7 @@
 
 .explicit ul,
 .explicit ol {
+  margin: 1rem 0;
   padding-inline-start: 2.5rem;
 }
 

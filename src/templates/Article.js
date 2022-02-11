@@ -8,9 +8,9 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 import { render } from '@explicit';
 import { slugify, sanitize } from '@utils/helpers';
 
+import { CommentContext } from '@components/comments';
 import { Layout } from '@components/layout';
 import { Donations } from '@components/others';
-import { CommentContext } from '@components/comments';
 import * as styles from '@styles/article.module.css';
 
 export default function Article({ data, pageContext: article }) {

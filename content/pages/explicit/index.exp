@@ -1,0 +1,456 @@
+TITLE: Limbajul Explicit
+
+[Explicit](https://github.com/Gareth618/explicit-highlighter) este limbajul de markup pe care l-am dezvoltat pentru acest blog. El este folosit atât de către mine pentru scrierea articolelor, cât și de către useri pentru scrierea comentariilor. Scopul său este codificarea intuitivă a anumitor tipuri de conținut specifice tematicii acestui website, cum ar fi expresii matematice, secvențe de cod, animații pentru diverși algoritmi (asta doar pentru admin :tongue:). Desigur, puteam folosi [MarkDown](https://www.markdownguide.org/basic-syntax/), însă acest limbaj avea niște dezavantaje:
+
++++
+> prea permisiv -- de exemplu, ar permite userilor să posteze orice fel de imagini în comentarii
+> parser greu de ajustat, ceea ce îngreuna stilizarea unor componente ca block-urile de cod
+> imposibilitatea de a crea sintaxă nouă pentru componente ca animațiile JS
+> bug extrem de enervant legat de punctuația de după expresiile matematice
+---
+
+În continuare, voi prezenta elementele de sintaxă Explicit ce pot fi folosite în scrierea eficientă de comentarii pe InfoGenius.
+
+## Secvențe de cod `code`
+
+``` explicit
+  Pentru a incrementa elementul situat pe poziția `i` în `v`, scriem `v[i]++`.
+```
+
+Pentru a afișa caracterul ` `` `, trebuie să-l scriem de două ori. Secvențele de cod pot conține la început și la sfârșit spații, care vor fi ignorate. Astfel, putem scrie expresii precum
+
+``` explicit
+  Sintaxa pentru un template literal în JavaScript este ` ``text`` `.
+```
+
+care va fi interpretată drept ` ``text`` `.
+
+## Combinații de taste ;kbd;
+
+``` explicit
+  Pentru a copia textul selectat, tastăm ;Ctrl+C;.
+  Pentru a copia textul selectat, tastăm ;w(Ctrl+C) l(Ctrl+C) m(CmdC);.
+  Pentru a copia textul selectat, tastăm ;wl(Ctrl+C) m(CmdC);.
+```
+
+Prima variantă va afișa `Ctrl+C` întotdeauna. A doua variantă va afișa text diferit în funcție de sistemul de operare: întâi Windows, apoi Linux, iar la final MacOS. În a treia variantă, `wl` va afișa același text atât pe Windows cât și pe Linux. Codurile pentru tastele speciale de pe MacOS sunt `Cmd`, `Ctrl`, `Option` și `Shift`.
+
+## Emoji-uri :tractor:
+
+???
+  c > `:yey:`
+  c > :yey:
+  c > `:lol:`
+  c > :lol:
+  c > `:hehe:`
+  c > :hehe:
+  c > `:haha:`
+  c > :haha:
+~~~
+  c > `:wink:`
+  c > :wink:
+  c > `:love:`
+  c > :love:
+  c > `:cool:`
+  c > :cool:
+  c > `:smirk:`
+  c > :smirk:
+~~~
+  c > `:tongue:`
+  c > :tongue:
+  c > `:sad:`
+  c > :sad:
+  c > `:cry:`
+  c > :cry:
+  c > `:wow:`
+  c > :wow:
+~~~
+  c > `:smile:`
+  c > :smile:
+  c > `:tractor:`
+  c > :tractor:
+  c > `:think:`
+  c > :think:
+  c > `:party:`
+  c > :party:
+~~~
+  c > `:golden:`
+  c > :golden:
+  c > `:silver:`
+  c > :silver:
+  c > `:bronze:`
+  c > :bronze:
+  c > `:farmer:`
+  c > :farmer:
+!!!
+
+De asemenea, prin emoji-uri putem exprima rating-uri. Sintaxa este `:x/5:`, unde $1 \le x \le 5$, iar rezultatul arată cam așa: :3/5:.
+
+## Expresii matematice $E = mc^2$
+
+``` explicit
+  Formula lui Euler este $e^{i \pi} = -1$.
+```
+
+Formula lui Euler este $e^{i \pi} = -1$.
+
+``` explicit
+  $$\varphi(n) = \prod_{i = 1}^k p_i^{e_i - 1}(p_i - 1)$$
+```
+
+$$\varphi(n) = \prod_{i = 1}^k p_i^{e_i - 1}(p_i - 1)$$
+
+``` explicit
+  $$a^{b^c} \equiv a^{b^{c \modd \varphi(\varphi(m))} \modd \varphi(m)} \pmodd{m}$$
+```
+
+$$a^{b^c} \equiv a^{b^{c \modd \varphi(\varphi(m))} \modd \varphi(m)} \pmodd{m}$$
+
+În primul exemplu avem o formulă inline, pe când celelalte două sunt de tip block. Cele din urmă admit și enter-uri. Limbajul folosit pentru scrierea expresiilor matematice este, desigur, LaTeX. Aveți [aici](https://katex.org/docs/support_table.html) simbolurile ce pot fi folosite, iar [aici](https://katex.org/docs/supported.html) funcțiile.
+
+## Link-uri
+
+``` explicit
+  [link intern](infogenius-v2)
+  [link extern](https://www.google.ro/)
+```
+
+La link-urile interne, adică la articolele de pe InfoGenius, adresa trebuie să conțină doar slug-ul articolului. La cele externe, adresa trebuie să fie completă (cu tot cu `https`). Cele două tipuri de link-uri se comportă diferit, atât în backend cât și în frontend.
+
+## Abrevieri
+
+``` explicit
+  ?[ONI](Olimpiada Națională de Informatică)
+```
+
+Rezultatul este ?[ONI](Olimpiada Națională de Informatică). Din păcate, explicația nu este vizibilă și pe mobil.
+
+## Formatări
+
+``` explicit
+  **bold**
+  __italic__
+  ~~tăiat~~
+  ^^evidențiat^^
+```
+
+**bold**
+__italic__
+~~tăiat~~
+^^evidențiat^^
+
+## Linie orizontală
+
+``` explicit
+  bla bla
+
+  ===
+
+  bla bla bla
+```
+
+bla bla
+
+===
+
+bla bla bla
+
+## Subtitluri
+
+``` explicit
+  ## Header 2
+  ### Header 3
+  #### Header 4
+  ##### Header 5
+  ###### Header 6
+```
+
+`#` nu există, tag-ul `<h1>` fiind destinat doar titlurilor de articole și pagini.
+
+## Citate
+
+``` explicit
+  >>>
+    Computer science is no more about computers than astronomy is about telescopes.
+  <<<
+```
+
+>>>
+  Computer science is no more about computers than astronomy is about telescopes.
+<<<
+
+Explicit dispune de o sintaxă similară pentru alinierea textului la dreapta sau în mijloc:
+
+``` explicit
+  >>> center
+    text centrat
+  <<<
+```
+
+>>> center
+  text centrat
+<<<
+
+``` explicit
+  >>> right
+    text aliniat la dreapta
+  <<<
+```
+
+>>> right
+  text aliniat la dreapta
+<<<
+
+Există și `>>> header` care tratează blockquote-ul ca pe un subtitlu, oferindu-i o margine superioară mai mare.
+
+## Liste
+
+``` explicit
+  +++
+  > item 1
+  > item 2
+  > item 3
+  ---
+```
+
++++
+> item 1
+> item 2
+> item 3
+---
+
+``` explicit
+  +++
+    item 1 -- paragraf 1
+
+    item 1 -- paragraf 2
+  ~~~
+    bla bla
+
+    $$i \triangleq \sqrt{-1}$$
+
+    bla bla
+  ~~~
+    bla
+    bla bla
+  ---
+```
+
++++
+  item 1 -- paragraf 1
+
+  item 1 -- paragraf 2
+~~~
+  bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
+
+  $$i \triangleq \sqrt{-1}$$
+
+  bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
+~~~
+  bla
+  bla bla
+---
+
+Prima sintaxă este pentru liste scurte, ce nu necesită spațiere între itemi. A doua sintaxă suportă itemi formați din mai multe paragrafe, sau mai bine spus din mai multe block-uri. Indiferent de sintaxa aleasă, putem schimba tipul listei adăugând după `+++` una dintre variantele `1.`, `a.`, `A.`, `i.`, `I.` (eventual încadrate între `**` și `**`) și `none`.
+
+## Tabele
+
+``` explicit
+  ???
+    L 1 2 > cell 1
+    C > cell 2
+  ~~~
+    c > cell 3
+    r 1 2 > cell 4
+  ~~~
+    c > cell 5
+    c > cell 6
+    c > cell 7
+  ~~~
+    c 1 3 > cell 8
+  !!!
+```
+
+???
+  L 1 2 > cell 1
+  C > cell 2
+~~~
+  c > cell 3
+  r 1 2 > cell 4
+~~~
+  c > cell 5
+  c > cell 6
+  c > cell 7
+~~~
+  c 1 3 > cell 8
+!!!
+
+Principiul este același cu cel al tabelelor HTML, doar că sintaxa este mai curată. `~~~` delimitează liniile tabelului, iar fiecare linie din cod reprezintă o celulă. Primul caracter este `l`, `c` sau `r`, simbolizând alinierea textului din celulă. Dacă litera este majusculă, atunci celula va fi de tip __header__. Caracterul poate fi urmat de unul sau două numere, reprezentând întinderea celulei pe linii și respectiv coloane. În mod implicit, aceste valori sunt `1`.
+
+## Block-uri de cod
+
+``` explicit
+  ``` cpp
+    int a; cin >> a;
+    int b; cin >> b;
+    cout << a + b << '\n';
+  ```
+```
+
+``` cpp
+  int a; cin >> a;
+  int b; cin >> b;
+  cout << a + b << '\n';
+```
+
+Limbajele disponibile sunt:
+
++++
+> `html`
+> `css`
+> `javascript`
+> `json`
+> `c`
+> `cpp`
+> `java`
+> `python`
+> `bash`
+> `text`
+> `latex`
+> `markdown`
+> `explicit`
+---
+
+``` explicit
+  ``` javascript
+    console.log(1);
+  > console.log(2);
+  > console.log(3);
+    console.log(4);
+  > console.log(5);
+    console.log(6);
+  > console.log(7);
+    console.log(8);
+    console.log(9);
+    console.log(10);
+  > console.log(11);
+    console.log(12);
+  > console.log(13);
+    console.log(14);
+    console.log(15);
+    console.log(16);
+  > console.log(17);
+    console.log(18);
+  > console.log(19);
+    console.log(20);
+    console.log(21);
+    console.log(22);
+  > console.log(23);
+    console.log(24);
+    console.log(25);
+  ^^^
+```
+
+``` javascript
+  console.log(1);
+> console.log(2);
+> console.log(3);
+  console.log(4);
+> console.log(5);
+  console.log(6);
+> console.log(7);
+  console.log(8);
+  console.log(9);
+  console.log(10);
+> console.log(11);
+  console.log(12);
+> console.log(13);
+  console.log(14);
+  console.log(15);
+  console.log(16);
+> console.log(17);
+  console.log(18);
+> console.log(19);
+  console.log(20);
+  console.log(21);
+  console.log(22);
+> console.log(23);
+  console.log(24);
+  console.log(25);
+^^^
+
+Dacă block-ul este încheiat cu `^^^`, atunci înălțimea block-ului afișat va fi limitată. În plus, dacă o linie din cod este precedată de `>`, atunci aceasta va fi evidențiată.
+
+``` explicit
+  ``` cpp -> Testul de primalitate
+    bool prime(int n) {
+        if (n < 2)
+            return false;
+        for (int d = 2; d * d <= n; d++)
+            if (n % d == 0)
+                return false;
+        return true;
+    }
+  ```
+```
+
+``` cpp -> Testul de primalitate
+  bool prime(int n) {
+      if (n < 2)
+          return false;
+      for (int d = 2; d * d <= n; d++)
+          if (n % d == 0)
+              return false;
+      return true;
+  }
+```
+
+Block-ul poate avea și titlu, caz în care liniile vor fi numerotate automat.
+
+``` explicit
+  ``` cpp -> Hello World => C++
+    #include <iostream>
+    using namespace std;
+
+    int main() {
+        cout << "Hello world!\n";
+        return 0;
+    }
+  ``` java -> Hello World => Java
+    public class HelloWorld {
+        public static void main(String[] args) {
+            System.out.println("Hello world!");
+        }
+    }
+  ``` javascript -> Hello World => JavaScript
+    console.log('Hello world!');
+  ```
+```
+
+``` cpp -> Hello World => C++
+  #include <iostream>
+  using namespace std;
+
+  int main() {
+      cout << "Hello world!\n";
+      return 0;
+  }
+``` java -> Hello World => Java
+  public class HelloWorld {
+      public static void main(String[] args) {
+          System.out.println("Hello world!");
+      }
+  }
+``` javascript -> Hello World => JavaScript
+  console.log('Hello world!');
+```
+
+Putem combina mai multe block-uri de cod, asociindu-i fiecăruia câte un label. Acest feature este util atunci când vrem să rezolvăm aceeași problemă în mai multe limbaje, sau sub sisteme de operare diferite. De menționat că label-urile nu ne obligă să folosim și titluri.
+
+===
+
+Nu în ultimul rând, caracterele ^^...^^ și ^^--^^ pot fi obținute scriind `...` și respectiv `--`.
+
+În general, Explicit este un limbaj __opinionated__, în sensul că are o sintaxă foarte strictă. De exemplu, elementele de tip block, de pildă un paragraf urmat de un block de cod, trebuie separate obligatoriu de o linie goală. Spațierea și indentarea contează foarte mult, astfel că un tab pus greșit va anula efectul dorit al block-ului respectiv, iar acesta va fi interpretat drept paragraf.
+
+În principiu, acesta e un aspect pozitiv, pentru că face ca multe task-uri să fie mai ușor de realizat în Explicit decât în MarkDown, cum ar fi scrierea de elemente de tip block în liste imbricate. Însă, pentru a ușura scrierea comentariilor, puteți previzualiza rezultatul folosind primul buton din colțul dreapta-sus al editorului :wink:

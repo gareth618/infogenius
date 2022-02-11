@@ -62,3 +62,14 @@ export function followsRegex(str, regex) {
   if (match[0].length < str.length) return;
   return match.groups || { };
 };
+
+export function renderKbd(navigator, document) {
+  const os
+    = navigator.userAgent.indexOf('Mac') !== -1 ? 'os-macos'
+    : navigator.userAgent.indexOf('Linux') !== -1 ? 'os-linux'
+    : 'os-other';
+  const elements = document.getElementsByClassName(os);
+  for (const element of elements) {
+    element.style.display = 'inline';
+  }
+};

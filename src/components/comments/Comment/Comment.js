@@ -2,19 +2,13 @@ import React from 'react';
 import { StaticImage } from 'gatsby-plugin-image';
 
 import { render } from '@explicit';
+import { renderKbd } from '@utils/helpers';
 import { Reply, Close } from '@utils/icons';
 import * as styles from './Comment.module.css';
 
 export default function Comment({ info, setParentComment, preview }) {
   React.useEffect(() => {
-    const os
-      = navigator.userAgent.indexOf('Mac') !== -1 ? 'os-macos'
-      : navigator.userAgent.indexOf('Linux') !== -1 ? 'os-linux'
-      : 'os-other';
-    const elements = document.getElementsByClassName(os);
-    for (const element of elements) {
-      element.style.display = 'inline';
-    }
+    renderKbd(navigator, document);
   });
 
   const avatar = info.email === 'bloggareth@gmail.com'

@@ -4,6 +4,7 @@ import { graphql, useStaticQuery } from 'gatsby';
 import { useLocalStorage } from '@utils/hooks';
 import { Share, SignIn, Send } from '@utils/icons';
 import * as styles from './CommentForm.module.css';
+import { ExplicitEditor } from '@components/comments';
 
 import firestore from '@utils/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
@@ -41,30 +42,11 @@ export default function CommentForm({ formRef, articleSlug, parentComment, setPa
       .catch(error => alert(`Ups! S-a produs o eroare în timpul deconectării :(\n${error.code}`));
   };
 
+  const [textareaValue, setTextareaValue] = useLocalStorage(`InfoGenius.commentDraft.${articleSlug}`, '');
   const [inputValue, setInputValue] = useLocalStorage('InfoGenius.userName', '');
   const handleInputChange = event => setInputValue(event.target.value);
   const fixInputInput = event => {
     if (event.code === 'Enter') {
-      event.preventDefault();
-    }
-  };
-
-  const [textareaValue, setTextareaValue] = useLocalStorage(`InfoGenius.commentDraft.${articleSlug}`, '');
-  const handleTextareaChange = event => setTextareaValue(event.target.value);
-
-  const textareaRef = React.useRef(null);
-  const fixTextareaInput = event => {
-    if (event.code === 'Tab') {
-      const pos = textareaRef.current.selectionStart;
-      setTextareaValue(
-        textareaRef.current.value.slice(0, pos)
-        + '  ' +
-        textareaRef.current.value.slice(pos)
-      );
-      setTimeout(() => {
-        textareaRef.current.selectionStart = pos + 2;
-        textareaRef.current.selectionEnd = pos + 2;
-      }, 0);
       event.preventDefault();
     }
   };
@@ -93,7 +75,7 @@ export default function CommentForm({ formRef, articleSlug, parentComment, setPa
         parent: parentComment == null ? '' : parentComment.id,
         slug: articleSlug,
         email: userEmail,
-        content: textareaValue,
+        content: textareaValue.trim().split('\n').map(line => line.trimRight()).join('\n'),
         timestamp: Timestamp.now()
       })).id;
 
@@ -161,13 +143,9 @@ export default function CommentForm({ formRef, articleSlug, parentComment, setPa
         <h2 className={styles.title}>
           Lasă un comentariu!
         </h2>
-        <textarea
-          ref={textareaRef}
-          className={styles.comment}
-          placeholder="Comentariu"
-          value={textareaValue}
-          onChange={handleTextareaChange}
-          onKeyDown={fixTextareaInput}
+        <ExplicitEditor
+          input={textareaValue}
+          setInput={setTextareaValue}
         />
         <div className={styles.bottom}>
           <input

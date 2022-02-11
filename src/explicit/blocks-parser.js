@@ -32,7 +32,7 @@ const END_TAGS = {
 const LANGS = [
   'html', 'css', 'javascript', 'json',
   'c', 'cpp', 'java', 'python',
-  'bash', 'text', 'latex', 'markdown'
+  'bash', 'text', 'latex', 'markdown', 'explicit'
 ];
 
 function parseSons(content, media, tag) {
