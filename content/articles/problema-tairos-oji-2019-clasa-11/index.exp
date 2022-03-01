@@ -32,7 +32,7 @@ Așadar, dacă notăm cu `dp[i]` numărul de noduri de pe nivelul $i$ care la un
 ``` cpp
   int ans = 0;
   for (int j = 0; j <= min(n - 1, d); j++)
-     ans += dp[d - j] * nonLeaves[j];
+      ans += dp[d - j] * nonLeaves[j];
 ```
 
 Mai avem de calculat vectorul `dp`. Pentru asta vom folosi programare dinamică, iar recurența este destul de simplă. Dacă la etapa curentă un nod de pe nivelul $i$ este frunză, atunci la etapa următoare acesta va contribui cu câte `leaves[x]` frunze pe fiecare nivel $i + x$. Prin `leaves[i]` am notat numărul de frunze de pe nivelul $i$ din arborele inițial. Dacă nivelul $i$ nu există, `leaves[i]` este considerat $0$. Recurența este:
@@ -56,38 +56,38 @@ Mai întâi am făcut un DFS pe arborele inițial, calculând pe parcurs vectori
   const int MOD = 1e9 + 7;
 
   int main() {
-     int n, d; fin >> n >> d;
-     vector<vector<int>> ad(n + 1);
-     for (int i = 1; i < n; i++) {
-         int x, y; fin >> x >> y;
-         ad[x].push_back(y);
-         ad[y].push_back(x);
-     }
+      int n, d; fin >> n >> d;
+      vector<vector<int>> ad(n + 1);
+      for (int i = 1; i < n; i++) {
+          int x, y; fin >> x >> y;
+          ad[x].push_back(y);
+          ad[y].push_back(x);
+      }
 
-     vector<int> leaves(n + 1);
-     vector<int> nonLeaves(n + 1);
-     function<void(int, int, int)> dfs = [&](int node, int fath, int dpth) {
-         if (ad[node].size() == 1 && ad[node][0] == fath)
-             leaves[dpth]++;
-         else
-             nonLeaves[dpth]++;
-         for (int nghb : ad[node])
-             if (nghb != fath)
-                 dfs(nghb, node, dpth + 1);
-     };
-     dfs(1, 0, 0);
+      vector<int> leaves(n + 1);
+      vector<int> nonLeaves(n + 1);
+      function<void(int, int, int)> dfs = [&](int node, int fath, int dpth) {
+          if (ad[node].size() == 1 && ad[node][0] == fath)
+              leaves[dpth]++;
+          else
+              nonLeaves[dpth]++;
+          for (int nghb : ad[node])
+              if (nghb != fath)
+                  dfs(nghb, node, dpth + 1);
+      };
+      dfs(1, 0, 0);
 
-     vector<int> dp(d + 1);
-     dp[0] = 1;
-     for (int i = 1; i <= d; i++)
-         for (int j = 0; j <= min(n - 1, i); j++)
-             dp[i] = (dp[i] + 1LL * dp[i - j] * leaves[j]) % MOD;
+      vector<int> dp(d + 1);
+      dp[0] = 1;
+      for (int i = 1; i <= d; i++)
+          for (int j = 0; j <= min(n - 1, i); j++)
+              dp[i] = (dp[i] + 1LL * dp[i - j] * leaves[j]) % MOD;
 
-     int ans = 0;
-     for (int j = 0; j <= min(n - 1, d); j++)
-         ans = (ans + 1LL * dp[d - j] * nonLeaves[j]) % MOD;
-     fout << ans << '\n';
-     return 0;
+      int ans = 0;
+      for (int j = 0; j <= min(n - 1, d); j++)
+          ans = (ans + 1LL * dp[d - j] * nonLeaves[j]) % MOD;
+      fout << ans << '\n';
+      return 0;
   }
 ^^^
 

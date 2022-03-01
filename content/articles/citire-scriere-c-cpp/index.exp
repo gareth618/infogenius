@@ -172,7 +172,7 @@ Notațiile cu `%` se numesc specificatori de format, și diferă în funcție de
 
 Există și modificatori: `h` pentru `short` (`int`), `l` pentru `long` (`int`) și `double`, `ll` pentru `long long` (`int`) și `L` pentru `long` (`double`). Deci `%lf` va fi `double`, `%Llf` `long double`, `%hd` `short int` etc. Pentru a include caracterul `%` în format, se folosește `%%`, pentru a nu se confunda cu un specificator.
 
-Următorii parametri reprezintă adresele (sunt marcate cu `&`) variabilelor care sunt citite. Aflați mai multe despre funcția `scanf` [aici](http://www.cplusplus.com/reference/cstdio/scanf/).
+Următorii parametri reprezintă adresele (sunt marcate cu `&`) variabilelor care sunt citite. Aflați mai multe despre funcția `scanf` [aici](https://www.cplusplus.com/reference/cstdio/scanf/).
 
 ### Funcția `printf`
 

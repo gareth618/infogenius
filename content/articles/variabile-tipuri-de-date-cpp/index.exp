@@ -145,7 +145,7 @@ Porțiunile italice sunt opționale în specificarea numelui tipului, însă nu 
 
 ### Tipul caracter
 
-O variabilă de tip `char` stochează un caracter, mai exact codul său [ASCII](http://www.ascii-code.com/). De aceea, tipul caracter este folosit și pentru a stoca numere întregi micuțe. Pentru calculator, un caracter și codul său ASCII sunt același lucru, diferența se vede doar la citire și afișare.
+O variabilă de tip `char` stochează un caracter, mai exact codul său [ASCII](https://www.ascii-code.com/). De aceea, tipul caracter este folosit și pentru a stoca numere întregi micuțe. Pentru calculator, un caracter și codul său ASCII sunt același lucru, diferența se vede doar la citire și afișare.
 
 ### Tipul întreg/ natural
 

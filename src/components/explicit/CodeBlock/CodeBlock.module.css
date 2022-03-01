@@ -50,9 +50,11 @@
 
 .digits-1 div { padding-left: calc(3.7rem + 1px); }
 .digits-2 div { padding-left: calc(4.2rem + 1px); }
+.digits-3 div { padding-left: calc(4.7rem + 1px); }
 
 .digits-1 div::before { width: 0.7rem; }
 .digits-2 div::before { width: 1.2rem; }
+.digits-3 div::before { width: 1.7rem; }
 
 .macos-window {
   margin: 1rem 0;

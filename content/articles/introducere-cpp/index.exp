@@ -5,11 +5,11 @@ CATEGORIES: Limbajul C++
 TAGS: c++, codeblocks, comentarii, compilator, ide
 DESCRIPTION: C++ este un limbaj compilat, care suportă atât programare procedurală cât și programare orientată pe obiecte. C++ a fost dezvoltat de...
 
-C++ este un limbaj compilat, care suportă atât __programare procedurală__ cât și __programare orientată pe obiect__. C++ a fost dezvoltat de către Bjarne Stroustrup, îmbunătățind limbajul C, prin adăugarea claselor, funcțiilor virtuale, supraîncărcării operatorilor, template-urilor și excepțiilor. Cel mai nou standard al limbajului este C++17, precedat de C++14. [Aici](http://www.cplusplus.com/reference/) găsiți toată documentația pentru bibliotecile standard C++.
+C++ este un limbaj compilat, care suportă atât __programare procedurală__ cât și __programare orientată pe obiect__. C++ a fost dezvoltat de către Bjarne Stroustrup, îmbunătățind limbajul C, prin adăugarea claselor, funcțiilor virtuale, supraîncărcării operatorilor, template-urilor și excepțiilor. Cel mai nou standard al limbajului este C++17, precedat de C++14. [Aici](https://www.cplusplus.com/reference/) găsiți toată documentația pentru bibliotecile standard C++.
 
 ![500; Limbajul C++](limbajul-cpp.png)
 
-Pentru a lucra în C++, aveți nevoie de un mediu de programare. Pentru început e OK CodeBlocks. Click [aici](http://sourceforge.net/projects/codeblocks/files/Binaries/16.01/Windows/codeblocks-16.01mingw-setup.exe) pentru a-l instala împreună cu MinGW (care conține un compilator C++ pentru Windows). Câteva chestii importante:
+Pentru a lucra în C++, aveți nevoie de un mediu de programare. Pentru început e OK CodeBlocks. Click [aici](https://sourceforge.net/projects/codeblocks/files/Binaries/16.01/Windows/codeblocks-16.01mingw-setup.exe) pentru a-l instala împreună cu MinGW (care conține un compilator C++ pentru Windows). Câteva chestii importante:
 
 +++
   Pentru a crea un nou proiect pentru consolă, __New Project > Console Application__.

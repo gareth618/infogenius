@@ -28,7 +28,7 @@ După cum am spus, majoritatea bibliotecilor moștenite din C sunt aproape inuti
 
 ### `<cmath>`
 
-Biblioteca [`cmath`](http://www.cplusplus.com/reference/cmath/) conține un set de funcții matematice foarte utile:
+Biblioteca [`cmath`](https://www.cplusplus.com/reference/cmath/) conține un set de funcții matematice foarte utile:
 
 +++
 > **funcții trigonometrice:** `sin`, `cos`, `tan` (tangentă), `asin`, `acos`, `atan` (__a__ vine de la __arc__), `atan2` etc.
@@ -81,7 +81,7 @@ Mai multe detalii [aici](https://stackoverflow.com/a/21393170/8142516). Pe scurt
 
 ### `<climits>`
 
-După cum am zis și mai sus, biblioteca [`climits`](http://www.cplusplus.com/reference/climits/) conține constante cu valorile minime/ maxime ce pot fi stocate pe tipurile de date fundamentale. De exemplu, `INT_MIN` și `INT_MAX` sunt constantele corespunzătoare tipului `int`. Sunt utile când vrem să inițializăm o variabilă cu o valoare foarte mică sau foarte mare, pentru a calcula maximul/ minimul dintre mai multe numere. Dezavantajul este că biblioteca asta e inclusă cumva automat atunci când rulăm programul cu anumite compilatoare, caz în care sunt șanse mari să uităm să o includem. Asta explică majoritatea erorilor mele de compilare de pe .campion, PbInfo și InfoArena.
+După cum am zis și mai sus, biblioteca [`climits`](https://www.cplusplus.com/reference/climits/) conține constante cu valorile minime/ maxime ce pot fi stocate pe tipurile de date fundamentale. De exemplu, `INT_MIN` și `INT_MAX` sunt constantele corespunzătoare tipului `int`. Sunt utile când vrem să inițializăm o variabilă cu o valoare foarte mică sau foarte mare, pentru a calcula maximul/ minimul dintre mai multe numere. Dezavantajul este că biblioteca asta e inclusă cumva automat atunci când rulăm programul cu anumite compilatoare, caz în care sunt șanse mari să uităm să o includem. Asta explică majoritatea erorilor mele de compilare de pe .campion, PbInfo și InfoArena.
 
 ``` cpp
   int mx = INT_MIN;
@@ -93,7 +93,7 @@ Un alt dezavantaj al folosirii acestor constante în contextul precizat mai sus 
 
 ### `<cassert>`
 
-În [`cassert`](http://www.cplusplus.com/reference/cassert/) este definită funcția `assert(expresie)`. Dacă expresia transmisă ca parametru se evaluează la `0` (`false`), se abandonează execuția programului, afișându-se o eroare de genul `Assertion failed: expresie, file main.cpp, line 7`. Cred că mulți am întâlnit pentru prima dată funcția asta uitându-ne peste sursele oficiale ale problemelor de olimpiadă. Acolo `assert` este folosită la greu de către autorii problemelor pentru a verifica corectitudinea formatului datelor de intrare.
+În [`cassert`](https://www.cplusplus.com/reference/cassert/) este definită funcția `assert(expresie)`. Dacă expresia transmisă ca parametru se evaluează la `0` (`false`), se abandonează execuția programului, afișându-se o eroare de genul `Assertion failed: expresie, file main.cpp, line 7`. Cred că mulți am întâlnit pentru prima dată funcția asta uitându-ne peste sursele oficiale ale problemelor de olimpiadă. Acolo `assert` este folosită la greu de către autorii problemelor pentru a verifica corectitudinea formatului datelor de intrare.
 
 ``` cpp
   assert(cin >> x); // Se verifică dacă x a putut fi citit.
@@ -102,7 +102,7 @@ Un alt dezavantaj al folosirii acestor constante în contextul precizat mai sus 
 
 ### `<ctime>`
 
-Biblioteca [`ctime`](http://www.cplusplus.com/reference/ctime/) se ocupă de lucrul cu unitățile de timp. Dintre funcțiile definite în `ctime`, doar două mi s-au părut mai interesante:
+Biblioteca [`ctime`](https://www.cplusplus.com/reference/ctime/) se ocupă de lucrul cu unitățile de timp. Dintre funcțiile definite în `ctime`, doar două mi s-au părut mai interesante:
 
 #### `time(NULL)`
 
@@ -121,7 +121,7 @@ Returnează numărul de tic-uri ale ceasului trecute de la începerea execuției
 
 ### `<cstdlib>`
 
-Biblioteca [`cstdlib`](http://www.cplusplus.com/reference/cstdlib/) definește niște funcții „comune”, care pot fi grupate astfel:
+Biblioteca [`cstdlib`](https://www.cplusplus.com/reference/cstdlib/) definește niște funcții „comune”, care pot fi grupate astfel:
 
 >>> header
   #### Funcții pentru conversia string-urilor în numere
@@ -214,10 +214,10 @@ Funcția `bsearch(p, v, lg, sz, cmp)` caută binar valoarea indicată de `p` în
 
 ### `<cstdio>`
 
-[`cstdio`](http://www.cplusplus.com/reference/cstdio/) conține funcții specifice pentru lucrul cu fișiere C. Nu voi intra în detalii, pentru că am vorbit deja despre citirea/ afișarea datelor în C [aici](citire-scriere-c-cpp).
+[`cstdio`](https://www.cplusplus.com/reference/cstdio/) conține funcții specifice pentru lucrul cu fișiere C. Nu voi intra în detalii, pentru că am vorbit deja despre citirea/ afișarea datelor în C [aici](citire-scriere-c-cpp).
 
 ### `<cstring>`
 
-[`cstring`](http://www.cplusplus.com/reference/cstring/) conține funcții pentru lucrul cu string-uri C-style. Voi scrie un [articol](siruri-de-caractere-cpp) separat despre șirurile de caractere din C și despre biblioteca `cstring`.
+[`cstring`](https://www.cplusplus.com/reference/cstring/) conține funcții pentru lucrul cu string-uri C-style. Voi scrie un [articol](siruri-de-caractere-cpp) separat despre șirurile de caractere din C și despre biblioteca `cstring`.
 
 Cam astea mi s-au părut mie cele mai utile funcții din biblioteca standard C. Urmează curând un articol despre Standard Template Library :smile:

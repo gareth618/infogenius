@@ -189,7 +189,7 @@ Iată o sursă demonstrativă pentru reținerea unui graf neorientat prin matric
 
 ## Reprezentarea grafurilor prin liste de adiacență
 
-O altă soluție este să reținem câte o listă de adiacență pentru fiecare nod al grafului. Mai exact, lista de adiacență a unui nod va reține nodurile adiacente la acesta. Pentru implementare am putea folosi o matrice, iar fiecare linie $i$ să fie lista de adiacență a nodului $i$. Însă, n-ar fi o idee prea eficientă ca memorie, pentru că s-ar reține o grămadă de poziții libere la finalul fiecărei linii. Listele ar trebui să fie alocate dinamic, ca să nu ocupe decât atâtea elemente câți vecini are nodul respectiv. Ca să simplific lucrurile, pentru liste am folosit container-ul [`vector`](http://www.cplusplus.com/reference/vector/vector/) din STL, căci este perfect pentru ce avem nevoie.
+O altă soluție este să reținem câte o listă de adiacență pentru fiecare nod al grafului. Mai exact, lista de adiacență a unui nod va reține nodurile adiacente la acesta. Pentru implementare am putea folosi o matrice, iar fiecare linie $i$ să fie lista de adiacență a nodului $i$. Însă, n-ar fi o idee prea eficientă ca memorie, pentru că s-ar reține o grămadă de poziții libere la finalul fiecărei linii. Listele ar trebui să fie alocate dinamic, ca să nu ocupe decât atâtea elemente câți vecini are nodul respectiv. Ca să simplific lucrurile, pentru liste am folosit container-ul [`vector`](https://www.cplusplus.com/reference/vector/vector/) din STL, căci este perfect pentru ce avem nevoie.
 
 ![500; Exemplu: Reprezentarea unui graf prin liste de adiacență](exemplu-liste-adiacenta.png)
 

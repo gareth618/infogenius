@@ -3,7 +3,7 @@ AUTHOR: Iulian Oleniuc
 DATE: 29/06/2018
 CATEGORIES: Probleme de olimpiadă
 TAGS: clasa 10, evaluare de expresii, oji 2007, șiruri de caractere, stivă
-DESCRIPTION: Problema dir, de clasa a 10-a, a fost dată în 2007 la OJI. Se consideră un disc ce conține mai multe foldere și fișiere. Un folder poate...
+DESCRIPTION: Problema Dir, de clasa a 10-a, a fost dată în 2007 la OJI. Se consideră un disc ce conține mai multe foldere și fișiere. Un folder poate...
 
 +++ none
 > **Dificultate:** :1/5:
@@ -25,7 +25,7 @@ Pentru structura de fișiere dată, ni se cere afișarea în ordine lexicografic
 
 Vom evalua expresia, reținând pe o stivă numele folderelor ce constituie calea curentă. Pentru fiecare nou fișier găsit, formăm un șir de caractere ce reprezintă calea lui, folosind conținutul stivei și numele fișierului. Adăugăm acest string într-un vector pe care la final îl vom sorta, pentru a-i putea afișa elementele în ordinea cerută.
 
-Am ales să creez un `struct` `Str` pentru șirurile de caractere, ce conține doar un vector de tip `char`, și să supraîncarc operatorul `<`. Asta ca să pot sorta vectorul de șiruri la final. În rest, am aplicat o tehnică folosită și în problema [reteta](problema-reteta-oji-2009-clasa-10). Am ținut o copie a șirului `str` în `aux`, și am aplicat `strtok` pe copie, delimitând numele de fișiere și de foldere de restul codificării. Apoi, am parcurs șirul `str` ca la orice altă problemă de evaluare de expresii, și când am găsit un început de nume, am adăugat valoarea din `aux` pe stivă, trecând la următorul separator.
+Am ales să creez un `struct` `Str` pentru șirurile de caractere, ce conține doar un vector de tip `char`, și să supraîncarc operatorul `<`. Asta ca să pot sorta vectorul de șiruri la final. În rest, am aplicat o tehnică folosită și în problema [Rețeta](problema-reteta-oji-2009-clasa-10). Am ținut o copie a șirului `str` în `aux`, și am aplicat `strtok` pe copie, delimitând numele de fișiere și de foldere de restul codificării. Apoi, am parcurs șirul `str` ca la orice altă problemă de evaluare de expresii, și când am găsit un început de nume, am adăugat valoarea din `aux` pe stivă, trecând la următorul separator.
 
 ## Sursă C++
 

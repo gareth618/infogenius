@@ -46,7 +46,7 @@ Notând cu $\mathrm{dp}[i][j]$ numărul de moduri în care poate fi vopsit un ga
 > $\mathrm{dp}[i][4] = \mathrm{dp}[i - 1][3]$
 ---
 
-Evident, răspunsul va fi $\mathrm{dp}[i][0] + \mathrm{dp}[i][1] + \mathrm{dp}[i][2] + \mathrm{dp}[i][3] + \mathrm{dp}[i][4]$. Trebuie să implementăm suma pe numere mari, deoarece rezultatele vor crește destul de repede. De asemenea, din cauza numerelor mari este nevoie să reținem doar două linii din matricea $\mathrm{dp}$, pentru a economisi memoria. Putem face asta pentru că linia $\mathrm{dp}[i]$ se bazează doar pe linia $\mathrm{dp}[i - 1]$.
+Evident, răspunsul va fi $\mathrm{dp}[i][0] + \cdots + \mathrm{dp}[i][4]$. Trebuie să implementăm suma pe numere mari, deoarece rezultatele vor crește destul de repede. De asemenea, din cauza numerelor mari este nevoie să reținem doar două linii din matricea $\mathrm{dp}$, pentru a economisi memoria. Putem face asta pentru că linia $\mathrm{dp}[i]$ se bazează doar pe linia $\mathrm{dp}[i - 1]$.
 
 ## Sursă C++
 

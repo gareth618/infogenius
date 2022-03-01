@@ -129,7 +129,7 @@ Folosind operatorul `=`, putem atribui unui pointer la `char` adresa de început
 
 ## Funcții predefinite pentru șiruri de caractere
 
-Este destul de simplu să efectuăm operații de bază cu șirurile de caractere, cum ar fi ștergerea unui caracter, determinarea lungimii, concatenarea a două șiruri etc. Însă, aceste operații pot apărea într-un număr foarte mare de locuri în cadrul unui program, așa că C++ ne pune la dispoziție biblioteca [`<cstring>`](http://www.cplusplus.com/reference/cstring/), ce conține un set de funcții pentru prelucrarea șirurilor de caractere. În continuare le voi prezenta pe cele mai importante dintre ele.
+Este destul de simplu să efectuăm operații de bază cu șirurile de caractere, cum ar fi ștergerea unui caracter, determinarea lungimii, concatenarea a două șiruri etc. Însă, aceste operații pot apărea într-un număr foarte mare de locuri în cadrul unui program, așa că C++ ne pune la dispoziție biblioteca [`<cstring>`](https://www.cplusplus.com/reference/cstring/), ce conține un set de funcții pentru prelucrarea șirurilor de caractere. În continuare le voi prezenta pe cele mai importante dintre ele.
 
 >>> header
   ### Funcția `strlen`

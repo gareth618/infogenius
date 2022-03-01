@@ -21,7 +21,7 @@ Aceasta este o problemă de programare dinamică foarte similară cu celebra [pa
 
 $$\mathrm{dp}[i][j] = \bigcup_{i \le k \lt j} \{ |x - y| \mid x \in \mathrm{dp}[i][k], y \in \mathrm{dp}[k + 1][j] \}$$
 
-Mai rămâne să alegem modalitatea de reprezentare a mulțimilor. Putem folosi [`set`](http://www.cplusplus.com/reference/set/set/)-uri din STL fără probleme, însă mai elegant și mai eficient ar fi să folosim [__bitmask__](operatii-pe-biti-cpp/#header-19)-uri. Putem face asta deoarece atât valorile inițiale, cât și cele intermediare, sunt rezonabil de mici (maxim $20$). Astfel, fiecare stare a dinamicii va fi reprezentată printr-un întreg în care bitul $x$ va fi setat la $1$ dacă și numai dacă valoarea $x$ apare în mulțimea $\mathrm{dp}[i][j]$. Complexitatea soluției este $O(n^3 k^2)$, unde $k$ este valoarea maximă din șirul dat, și anume $20$.
+Mai rămâne să alegem modalitatea de reprezentare a mulțimilor. Putem folosi [`set`](https://www.cplusplus.com/reference/set/set/)-uri din STL fără probleme, însă mai elegant și mai eficient ar fi să folosim [__bitmask__](operatii-pe-biti-cpp/#header-19)-uri. Putem face asta deoarece atât valorile inițiale, cât și cele intermediare, sunt rezonabil de mici (maxim $20$). Astfel, fiecare stare a dinamicii va fi reprezentată printr-un întreg în care bitul $x$ va fi setat la $1$ dacă și numai dacă valoarea $x$ apare în mulțimea $\mathrm{dp}[i][j]$. Complexitatea soluției este $O(n^3 k^2)$, unde $k$ este valoarea maximă din șirul dat, și anume $20$.
 
 ## Sursă C++
 

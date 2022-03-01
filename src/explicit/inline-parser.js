@@ -35,8 +35,8 @@ export default function parseInline(str) {
   const rght = new Array(str.length).fill(0);
 
   const markLeaf = (symbol, allowSpaces, valid = () => true) => {
-    const begRegex = new RegExp(`[\\s([{${allowSpaces ? symbol : ''}/*_~^]`);
-    const endRegex = new RegExp(`[\\s)\\]}${allowSpaces ? symbol : ''}.?!,;:/*_~^-]`);
+    const begRegex = new RegExp(`[\\s([{${allowSpaces ? symbol : ''}„/*_~^]`);
+    const endRegex = new RegExp(`[\\s)\\]}${allowSpaces ? symbol : ''}.?!,;:”/*_~^-]`);
     let begin = -1;
     for (let i = 1; i < str.length - 1; i++) {
       if (mark[i] !== ' ') {

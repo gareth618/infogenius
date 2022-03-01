@@ -172,7 +172,7 @@ De exemplu, în cazul de mai sus, cu produsele, operatorul `<` va arăta așa:
 
 Astfel, pentru a sorta un vector `v` de tip `Product`, va fi de ajuns să scriem `sort(v, v + n)`.
 
-Totuși, nu este mereu OK să facem asta. De exemplu, într-o [problemă](problema-zigzag-oni-2012-clasa-7) s-ar putea să avem nevoie de două criterii de sortare pentru același tip de date, caz în care este mai bine să definim două funcții de comparare, `cmp1` și `cmp2`. În plus, pentru tipuri de date standard, ca `int`, ar fi un dezastru să supraîncărcăm operatori. În cazul lor, soluția este să scriem o funcție `cmp`, cum am făcut pentru sortarea descrescătoare.
+Totuși, nu este mereu OK să facem asta. De exemplu, într-o problemă s-ar putea să avem nevoie de două criterii de sortare pentru același tip de date, caz în care este mai bine să definim două funcții de comparare, `cmp1` și `cmp2`. În plus, pentru tipuri de date standard, ca `int`, ar fi un dezastru să supraîncărcăm operatori. În cazul lor, soluția este să scriem o funcție `cmp`, cum am făcut pentru sortarea descrescătoare.
 
 ## Funcția `sort` pe vectori din STL
 
@@ -190,4 +190,4 @@ Desigur, fiind o funcție din STL (Standard Template Library), `sort` funcțione
 
 Funcția `sort` ne face viața mult mai ușoară, și poate fi folosită fără să știm algoritmi de sortare în $O(n \log n)$. Apropo, `sort`-ul din STL este o combinație isteață între QuickSort randomizat și HeapSort, numită __IntroSort__. Ar fi îngrozitor să implementăm noi acest algoritm. Funcția `sort` este cel mai bun mod de a sorta un vector în C++, mai puțin atunci când putem realiza o [sortare prin numărare](sortarea-prin-numarare).
 
-[Aici](http://www.cplusplus.com/reference/algorithm/sort/) găsiți documentația oficială. Dacă aveți vreo întrebare despre funcția `sort` din STL, nu ezitați să o adresați mai jos, în secțiunea de comentarii :smile:
+[Aici](https://www.cplusplus.com/reference/algorithm/sort/) găsiți documentația oficială. Dacă aveți vreo întrebare despre funcția `sort` din STL, nu ezitați să o adresați mai jos, în secțiunea de comentarii :smile:

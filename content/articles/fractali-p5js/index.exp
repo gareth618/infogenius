@@ -1023,7 +1023,7 @@ Pe lângă asta, am mai scris o funcție `keyPressed` care să ne întoarcă la 
   }
 ^^^
 
-După vreo patruzeci de zoom-uri nu se va mai înțelege nimic, pentru că tipul de date standard pentru numere nu permite o precizie a zecimalelor chiar atât de mare. Dar, puteți vedea [aici](https://www.youtube.com/watch?v=PD2XgQOyCCk) un zoom incredibil de detaliat, până la $10^{227} \times$, care a fost randat pe durata a patru săptămâni. Totuși, dacă știți în ce puncte să dați zoom, puteți surprinde imagini interesante și cu aplicația noastră :smile:
+După vreo patruzeci de zoom-uri nu se va mai înțelege nimic, pentru că tipul de date standard pentru numere nu permite o precizie a zecimalelor chiar atât de mare. Dar, puteți vedea [aici](https://www.youtube.com/watch?v=DcBzmdGm-jE) un zoom incredibil de detaliat, până la $10^{227} \times$, care a fost randat pe durata a patru săptămâni. Totuși, dacă știți în ce puncte să dați zoom, puteți surprinde imagini interesante și cu aplicația noastră :smile:
 
 ![1000; Zoom pe Mulțimea lui Mandelbrot](multimea-lui-mandelbrot-zoom.png)
 

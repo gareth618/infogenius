@@ -19,11 +19,11 @@ export const GRAMMAR = {
     pattern: /^ *\$\$.+\$\$$/ms
   },
   'regex link-beg': {
-    pattern: /(^|[^\w])\??\[(?=\S)/,
+    pattern: /(^|[^\w\]])\??\[(?=\S)/,
     lookbehind: true
   },
   'regex link-end': {
-    pattern: /\]\(((?![[\]]).)*\)(TODO)?/
+    pattern: /\]\(((?![[\]])\S)*\)(TODO)?/
   },
   'string span-bold': {
     pattern: /(^|[^*])\*\*(?=$|[^*])/,
